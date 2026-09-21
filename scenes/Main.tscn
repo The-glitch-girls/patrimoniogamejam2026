@@ -1,51 +1,159 @@
-[gd_scene load_steps=4 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=7 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
 [ext_resource type="Script" uid="uid://cay8ncyyqmj3t" path="res://scripts/hud.gd" id="3_0bbpv"]
+[ext_resource type="PackedScene" uid="uid://dk7bebe0sprint2" path="res://scenes/Bebe.tscn" id="4_bebe"]
+[ext_resource type="Script" path="res://scripts/suelo.gd" id="5_suelo"]
+[ext_resource type="PackedScene" uid="uid://bhalcon0sprint3" path="res://scenes/Halcon.tscn" id="6_halcon"]
 
 [node name="Main" type="Node2D"]
+script = ExtResource("5_suelo")
+
+[node name="Suelo" type="ColorRect" parent="."]
+z_index = -20
+offset_left = -2000.0
+offset_top = -2000.0
+offset_right = 2000.0
+offset_bottom = 2000.0
+color = Color(0.05, 0.04, 0.04, 1)
+mouse_filter = 2
 
 [node name="Cavillaca" parent="." instance=ExtResource("1_elqb8")]
 position = Vector2(400, 300)
-motion_mode = 1
-up_direction = Vector2(0.00333332, 0.999994)
 script = ExtResource("2_rvslj")
+
+[node name="Bebe" parent="." instance=ExtResource("4_bebe")]
+position = Vector2(448, 300)
+
+[node name="Halcon" parent="." instance=ExtResource("6_halcon")]
+position = Vector2(840, 270)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("3_0bbpv")
 
-[node name="Label" type="Label" parent="HUD"]
-offset_left = 5.0
-offset_top = 22.0
-offset_right = 75.0
-offset_bottom = 45.0
+[node name="PanelEstado" type="Panel" parent="HUD"]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 428.0
+offset_bottom = 236.0
+mouse_filter = 2
+
+[node name="Encabezado" type="Panel" parent="HUD/PanelEstado"]
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 408.0
+offset_bottom = 44.0
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="HUD/PanelEstado/Encabezado"]
+offset_left = 16.0
+offset_top = 6.0
+offset_right = 388.0
+offset_bottom = 34.0
+text = "ESTADO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="Label" parent="HUD/PanelEstado"]
+offset_left = 20.0
+offset_top = 56.0
+offset_right = 160.0
+offset_bottom = 79.0
 text = "ENERGIA"
 
-[node name="EnergiaBar" type="ProgressBar" parent="HUD"]
-offset_left = 108.0
-offset_top = 22.0
-offset_right = 358.0
-offset_bottom = 49.0
+[node name="EnergiaBar" type="ProgressBar" parent="HUD/PanelEstado"]
+offset_left = 20.0
+offset_top = 80.0
+offset_right = 392.0
+offset_bottom = 98.0
+max_value = 100.0
 value = 100.0
+show_percentage = false
 
-[node name="Label2" type="Label" parent="HUD"]
-offset_left = 5.0
-offset_top = 57.0
-offset_right = 83.0
-offset_bottom = 80.0
+[node name="Label2" type="Label" parent="HUD/PanelEstado"]
+offset_left = 20.0
+offset_top = 106.0
+offset_right = 160.0
+offset_bottom = 129.0
 text = "CORDURA"
 
-[node name="CorduraBar" type="ProgressBar" parent="HUD"]
-offset_left = 108.0
-offset_top = 57.0
-offset_right = 358.0
-offset_bottom = 84.0
+[node name="CorduraBar" type="ProgressBar" parent="HUD/PanelEstado"]
+offset_left = 20.0
+offset_top = 130.0
+offset_right = 392.0
+offset_bottom = 148.0
+max_value = 100.0
 value = 100.0
+show_percentage = false
 
-[node name="TiempoLabel" type="Label" parent="HUD"]
-offset_left = 5.0
-offset_top = 92.0
-offset_right = 106.0
-offset_bottom = 115.0
-text = "Tiempo: 0"
+[node name="TiempoLabel" type="Label" parent="HUD/PanelEstado"]
+offset_left = 20.0
+offset_top = 164.0
+offset_right = 200.0
+offset_bottom = 187.0
+text = "Tiempo  0 s"
+
+[node name="BebeLabel" type="Label" parent="HUD/PanelEstado"]
+offset_left = 210.0
+offset_top = 164.0
+offset_right = 392.0
+offset_bottom = 187.0
+text = "Bebe  en el suelo"
+
+[node name="ZonaLabel" type="Label" parent="HUD/PanelEstado"]
+offset_left = 20.0
+offset_top = 192.0
+offset_right = 392.0
+offset_bottom = 215.0
+text = "Plaza"
+
+[node name="PromptFondo" type="Panel" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -84.0
+offset_right = 110.0
+offset_bottom = -40.0
+mouse_filter = 2
+
+[node name="PromptLabel" type="Label" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -110.0
+offset_top = -84.0
+offset_right = 110.0
+offset_bottom = -40.0
+text = "E  Recoger"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AvisoFondo" type="Panel" parent="HUD"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 28.0
+offset_right = 90.0
+offset_bottom = 72.0
+mouse_filter = 2
+
+[node name="AvisoLabel" type="Label" parent="HUD"]
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 28.0
+offset_right = 90.0
+offset_bottom = 72.0
+text = "Victoria"
+horizontal_alignment = 1
+vertical_alignment = 1
