@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://qfhefd6lfvpa"]
+
+[ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
+[ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
+
+[node name="Main" type="Node2D"]
+
+[node name="Cavillaca" parent="." instance=ExtResource("1_elqb8")]
+position = Vector2(400, 300)
+motion_mode = 1
+up_direction = Vector2(0.00333332, 0.999994)
+script = ExtResource("2_rvslj")
