@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=4 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
+[ext_resource type="Script" uid="uid://cay8ncyyqmj3t" path="res://scripts/hud.gd" id="3_0bbpv"]
 
 [node name="Main" type="Node2D"]
 
@@ -10,3 +11,41 @@ position = Vector2(400, 300)
 motion_mode = 1
 up_direction = Vector2(0.00333332, 0.999994)
 script = ExtResource("2_rvslj")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("3_0bbpv")
+
+[node name="Label" type="Label" parent="HUD"]
+offset_left = 5.0
+offset_top = 22.0
+offset_right = 75.0
+offset_bottom = 45.0
+text = "ENERGIA"
+
+[node name="EnergiaBar" type="ProgressBar" parent="HUD"]
+offset_left = 108.0
+offset_top = 22.0
+offset_right = 358.0
+offset_bottom = 49.0
+value = 100.0
+
+[node name="Label2" type="Label" parent="HUD"]
+offset_left = 5.0
+offset_top = 57.0
+offset_right = 83.0
+offset_bottom = 80.0
+text = "CORDURA"
+
+[node name="CorduraBar" type="ProgressBar" parent="HUD"]
+offset_left = 108.0
+offset_top = 57.0
+offset_right = 358.0
+offset_bottom = 84.0
+value = 100.0
+
+[node name="TiempoLabel" type="Label" parent="HUD"]
+offset_left = 5.0
+offset_top = 92.0
+offset_right = 106.0
+offset_bottom = 115.0
+text = "Tiempo: 0"
