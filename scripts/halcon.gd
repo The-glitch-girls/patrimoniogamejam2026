@@ -81,7 +81,6 @@ func _golpear():
 func _victoria():
 	derrotado = true
 	respawn_t = TIEMPO_RESPAWN
-	Global.recuperar_energia(Global.RECOMPENSA_VICTORIA)
 	Global.mostrar_aviso("Victoria")
 	hide()
 	monitoring = false
