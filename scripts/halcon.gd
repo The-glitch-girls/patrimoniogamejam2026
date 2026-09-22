@@ -18,6 +18,8 @@ var flash_t := 0.0
 var derrotado := false
 var respawn_t := 0.0
 
+const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
+
 func _ready():
 	add_to_group("halcon")
 	origen = global_position
@@ -83,8 +85,14 @@ func _victoria():
 	respawn_t = TIEMPO_RESPAWN
 	Global.mostrar_aviso("Victoria")
 	hide()
-	monitoring = false
-	monitorable = false
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+	#monitoring = false
+	#monitorable = false
+	
+	var flashback := FLASHBACK_ESCENA.instantiate()
+	var hud := get_tree().current_scene.get_node("HUD")
+	hud.add_child(flashback)
 
 
 func _revivir():
