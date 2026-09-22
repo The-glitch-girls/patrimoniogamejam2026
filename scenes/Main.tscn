@@ -164,3 +164,8 @@ offset_bottom = 72.0
 text = "Victoria"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="PresenciaLabel" type="Label" parent="HUD"]
+visible = false
+offset_right = 40.0
+offset_bottom = 23.0

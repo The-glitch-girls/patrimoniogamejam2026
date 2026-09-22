@@ -87,8 +87,6 @@ func _victoria():
 	hide()
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
-	#monitoring = false
-	#monitorable = false
 	
 	var flashback := FLASHBACK_ESCENA.instantiate()
 	var hud := get_tree().current_scene.get_node("HUD")
