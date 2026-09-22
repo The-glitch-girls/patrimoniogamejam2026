@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://bhalcon0sprint3"]
+[gd_scene load_steps=3 format=3 uid="uid://c7hebov1gpk1s"]
 
-[ext_resource type="Script" path="res://scripts/halcon.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://cndoisgfhf7mv" path="res://scripts/halcon.gd" id="1_script"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_halcon"]
 size = Vector2(36, 22)
@@ -16,21 +16,21 @@ offset_left = -16.0
 offset_top = -8.0
 offset_right = -4.0
 offset_bottom = 2.0
-color = Color(0.62, 0.32, 0.16, 1)
 mouse_filter = 2
+color = Color(0.62, 0.32, 0.16, 1)
 
 [node name="AlaDer" type="ColorRect" parent="."]
 offset_left = 8.0
 offset_top = -8.0
 offset_right = 20.0
 offset_bottom = 2.0
-color = Color(0.62, 0.32, 0.16, 1)
 mouse_filter = 2
+color = Color(0.62, 0.32, 0.16, 1)
 
 [node name="Cuerpo" type="ColorRect" parent="."]
 offset_left = -8.0
 offset_top = -10.0
 offset_right = 8.0
 offset_bottom = 8.0
-color = Color(0.78, 0.42, 0.2, 1)
 mouse_filter = 2
+color = Color(0.78, 0.42, 0.2, 1)

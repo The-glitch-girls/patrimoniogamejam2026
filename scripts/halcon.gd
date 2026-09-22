@@ -47,9 +47,10 @@ func _process(delta):
 		var distancia := global_position.distance_to(cavillaca.global_position)
 		cerca = distancia <= RANGO_DETECCION
 		if cerca:
-			var hacia := (cavillaca.global_position - global_position).normalized()
-			global_position += hacia * VELOCIDAD_PERSEGUIR * delta
-			if distancia <= RANGO_GOLPE and lock_golpe <= 0.0:
+			if distancia > RANGO_GOLPE:
+				var hacia := (cavillaca.global_position - global_position).normalized()
+				global_position += hacia * VELOCIDAD_PERSEGUIR * delta
+			elif lock_golpe <= 0.0:
 				_golpear()
 		else:
 			_patrullar(delta)
@@ -74,7 +75,7 @@ func _golpear():
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
 	Global.perder_cordura(Global.DANIO_CORDURA_DERROTA)
-	Global.mostrar_aviso("Derrota")
+	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
 
 func _victoria():
