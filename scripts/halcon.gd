@@ -18,6 +18,8 @@ var flash_t := 0.0
 var derrotado := false
 var respawn_t := 0.0
 
+const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
+
 func _ready():
 	add_to_group("halcon")
 	origen = global_position
@@ -47,9 +49,10 @@ func _process(delta):
 		var distancia := global_position.distance_to(cavillaca.global_position)
 		cerca = distancia <= RANGO_DETECCION
 		if cerca:
-			var hacia := (cavillaca.global_position - global_position).normalized()
-			global_position += hacia * VELOCIDAD_PERSEGUIR * delta
-			if distancia <= RANGO_GOLPE and lock_golpe <= 0.0:
+			if distancia > RANGO_GOLPE:
+				var hacia := (cavillaca.global_position - global_position).normalized()
+				global_position += hacia * VELOCIDAD_PERSEGUIR * delta
+			elif lock_golpe <= 0.0:
 				_golpear()
 		else:
 			_patrullar(delta)
@@ -74,17 +77,20 @@ func _golpear():
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
 	Global.perder_cordura(Global.DANIO_CORDURA_DERROTA)
-	Global.mostrar_aviso("Derrota")
+	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
 
 func _victoria():
 	derrotado = true
 	respawn_t = TIEMPO_RESPAWN
-	Global.recuperar_energia(Global.RECOMPENSA_VICTORIA)
 	Global.mostrar_aviso("Victoria")
 	hide()
-	monitoring = false
-	monitorable = false
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+	
+	var flashback := FLASHBACK_ESCENA.instantiate()
+	var hud := get_tree().current_scene.get_node("HUD")
+	hud.add_child(flashback)
 
 
 func _revivir():

@@ -205,5 +205,10 @@ func _arrojar():
 	lock_arrojar = COOLDOWN_ARROJAR
 	var piedra := PIEDRA_ESCENA.instantiate()
 	piedra.global_position = global_position + facing * 18.0
-	piedra.direccion = facing
+	var halcon := get_tree().get_first_node_in_group("halcon") as Node2D
+	if halcon != null and global_position.distance_to(halcon.global_position) <= 140.0:
+		piedra.direccion = (halcon.global_position - global_position).normalized()
+	else:
+		piedra.direccion = facing
+	
 	get_parent().add_child(piedra)

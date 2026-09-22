@@ -19,7 +19,6 @@ func _ready():
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
 
-
 func _estilar_panel():
 	var panel := StyleBoxFlat.new()
 	panel.bg_color = CREMA
@@ -126,3 +125,14 @@ func _process(delta):
 	if hay_aviso:
 		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else NARANJA_OSCURO
 		_estilar_pildora($AvisoFondo, color_aviso)
+	
+	# Presencia de Cuniraya
+	var nivel_presencia := Global.presencia_cuniraya
+	if nivel_presencia <= 0:
+		$Oscuridad.color.a = 0.0
+	elif nivel_presencia == 1:
+		$Oscuridad.color.a = 0.25
+	elif nivel_presencia == 2:
+		$Oscuridad.color.a = 0.40
+	else:
+		$Oscuridad.color.a = 0.55
