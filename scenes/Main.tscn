@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=8 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://cfa3mx2kxpkdp" path="res://scenes/Bebe.tscn" id="4_bebe"]
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="5_suelo"]
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="6_halcon"]
+[ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="6_nxtc6"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("5_suelo")
@@ -28,6 +29,8 @@ position = Vector2(448, 300)
 
 [node name="Halcon" parent="." instance=ExtResource("6_halcon")]
 position = Vector2(840, 270)
+
+[node name="Cuniraya" parent="." instance=ExtResource("6_nxtc6")]
 
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("3_0bbpv")
@@ -82,15 +85,15 @@ offset_bottom = 98.0
 value = 100.0
 show_percentage = false
 
-[node name="Label2" type="Label" parent="HUD/PanelEstado"]
+[node name="PresenciaLabel" type="Label" parent="HUD/PanelEstado"]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 106.0
 offset_right = 160.0
 offset_bottom = 129.0
-text = "CORDURA"
+text = "PRESENCIA"
 
-[node name="CorduraBar" type="ProgressBar" parent="HUD/PanelEstado"]
+[node name="PresenciaBar" type="ProgressBar" parent="HUD/PanelEstado"]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 130.0

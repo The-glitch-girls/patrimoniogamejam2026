@@ -40,13 +40,13 @@ func _estilar_panel():
 
 func _estilar_barras():
 	_pintar_barra($PanelEstado/EnergiaBar, NARANJA)
-	_pintar_barra($PanelEstado/CorduraBar, Color(0.38, 0.76, 0.72, 1))
+	_pintar_barra($PanelEstado/PresenciaBar, Color(0.38, 0.76, 0.72, 1))
 
 
 func _estilar_textos():
 	for label in [
 		$PanelEstado/Label,
-		$PanelEstado/Label2,
+		$PanelEstado/PresenciaLabel,
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
 		$PanelEstado/ZonaLabel,
@@ -101,7 +101,7 @@ func _capturar():
 
 func _process(delta):
 	$PanelEstado/EnergiaBar.value = Global.energia
-	$PanelEstado/CorduraBar.value = Global.cordura
+	$PanelEstado/PresenciaBar.value = Global.presencia_cuniraya
 	$PanelEstado/TiempoLabel.text = "Tiempo  %.0f s" % Global.tiempo_juego
 	$PanelEstado/BebeLabel.text = "Bebe  cargando" if Global.lleva_bebe else "Bebe  en el suelo"
 	$PanelEstado/ZonaLabel.text = Global.zona_actual

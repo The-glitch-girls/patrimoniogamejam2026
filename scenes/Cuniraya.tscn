@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://h3t7r1b7lw70"]
+
+[ext_resource type="Script" uid="uid://bl5vuao4tnde3" path="res://scripts/cuniraya.gd" id="1_opd77"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k830m"]
+
+[node name="Cuniraya" type="CharacterBody2D"]
+script = ExtResource("1_opd77")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_k830m")
