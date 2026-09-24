@@ -2,7 +2,7 @@ extends Area2D
 
 const RANGO_INTERACCION := 50.0
 const VELOCIDAD_GUIAR := 40.0
-const POSICION_CUEVA := Vector2(200, 200)
+const DISTANCIA_MINIMA := 30.0
 
 var guiando := false
 var paso_t := 0.0
@@ -32,10 +32,15 @@ func _process(delta):
 
 
 func _guiar_hacia_cueva(delta: float):
-	var hacia_cueva := (POSICION_CUEVA - global_position).normalized()
+	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
+	if cueva == null:
+		guiando = false
+		return
+	
+	var hacia_cueva := (cueva.global_position - global_position).normalized()
 	global_position += hacia_cueva * VELOCIDAD_GUIAR * delta
 	
-	if global_position.distance_to(POSICION_CUEVA) < 20.0:
+	if global_position.distance_to(cueva.global_position) < DISTANCIA_MINIMA:
 		guiando = false
 		cueva_desbloqueada = true
 		Global.mostrar_aviso("¡Cueva del zorro desbloqueada!")
