@@ -12,18 +12,24 @@ extends Node
 # ESTADO DEL JUEGO
 # =========================
 var energia: float = 100.0
-var cordura: float = 100.0
 var lleva_bebe: bool = false
 var tiempo_juego: float = 0.0
-var presencia_cuniraya: float = 0.0
+var presencia_cuniraya: int = 0
 var flashbacks_desbloqueados: Array[String] = []
 var prompt_interaccion: String = ""
 var zona_actual: String = "Plaza"
 var halcon_cerca: bool = false
+var zorro_cerca: bool = false
 var aviso_combate: String = ""
+var cueva_zorro_desbloqueada: bool = false
+var descanso_con_zorro: bool = false
+var cuidado_bebe_desbloqueado: bool = false
+
+# Sistema de Recuerdos
+var recuerdos_obtenidos: int = 0
+const RECUERDOS_TOTALES: int = 3
 
 # Temporizadores
-var cordura_temporizador: float = 0.0
 var aviso_temporizador: float = 0.0
 
 # =========================
@@ -31,15 +37,13 @@ var aviso_temporizador: float = 0.0
 # =========================
 
 const ENERGIA_MAX: float = 100.0
-const CORDURA_MAX: float = 100.0
-const PERDIDA_CORDURA_POR_SEGUNDO: float = 0.1 # TEST-MODE: pierde 1 de energia por segundo
 const COSTO_CAMINAR: float = 0.5
 const COSTO_CORRER: float = 2.0
 const COSTO_CARGAR_BEBE: float = 2.0
 const COSTO_ARROJAR: float = 1.0
 const RECOMPENSA_VICTORIA: float = 12.0
 const DANIO_ENERGIA_DERROTA: float = 15.0
-const DANIO_CORDURA_DERROTA: float = 12.0
+const DANIO_PRESENCIA_DERROTA: float = 1
 
 # =========================
 # PROCESO
@@ -47,16 +51,11 @@ const DANIO_CORDURA_DERROTA: float = 12.0
 
 func _process(delta):
 	tiempo_juego += delta
-	cordura_temporizador += delta
 
 	if aviso_temporizador > 0.0:
 		aviso_temporizador = max(aviso_temporizador - delta, 0.0)
 		if aviso_temporizador <= 0.0:
 			aviso_combate = ""
-
-	if cordura_temporizador >= 1.0:
-		cordura_temporizador = 0
-		perder_cordura(PERDIDA_CORDURA_POR_SEGUNDO)
 
 # =========================
 # ENERGÍA
@@ -71,11 +70,32 @@ func recuperar_energia(cantidad: float):
 
 
 # =========================
-# CORDURA
+# PRESENCIA DE CUNIRAYA
 # =========================
 
-func perder_cordura(cantidad: float):
-	cordura = max(cordura - cantidad, 0)
+func aumentar_presencia():
+	presencia_cuniraya = min(presencia_cuniraya + 1, 3)
+
+
+func reducir_presencia():
+	presencia_cuniraya = max(presencia_cuniraya - 1, 0)
+
+
+# =========================
+# RECUERDOS
+# =========================
+
+func obtener_recuerdo():
+	recuerdos_obtenidos = min(recuerdos_obtenidos + 1, RECUERDOS_TOTALES)
+	
+	if recuerdos_obtenidos == 1:
+		cueva_zorro_desbloqueada = true
+		Global.mostrar_aviso("Recuerdo 1/3 - Descanso desbloqueado")
+	elif recuerdos_obtenidos == 2:
+		cuidado_bebe_desbloqueado = true
+		Global.mostrar_aviso("Recuerdo 2/3 - Cuidado bebé desbloqueado")
+	elif recuerdos_obtenidos == 3:
+		Global.mostrar_aviso("Recuerdo 3/3 - Final desbloqueado")
 
 
 func mostrar_aviso(texto: String):

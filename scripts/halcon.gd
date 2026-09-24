@@ -7,6 +7,7 @@ const VELOCIDAD_PERSEGUIR := 72.0
 const VELOCIDAD_PATRULLA := 36.0
 const LOCK_GOLPE := 1.1
 const TIEMPO_RESPAWN := 8.0
+const RANGO_SEGURIDAD_CUEVA := 80.0
 
 var vida := VIDA_MAX
 var origen := Vector2.ZERO
@@ -44,16 +45,26 @@ func _process(delta):
 		$Cuerpo.modulate = Color.WHITE
 
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
 	var cerca := false
 	if cavillaca != null:
 		var distancia := global_position.distance_to(cavillaca.global_position)
-		cerca = distancia <= RANGO_DETECCION
-		if cerca:
-			if distancia > RANGO_GOLPE:
-				var hacia := (cavillaca.global_position - global_position).normalized()
-				global_position += hacia * VELOCIDAD_PERSEGUIR * delta
-			elif lock_golpe <= 0.0:
-				_golpear()
+		var jugador_en_zona_segura := false
+		
+		if cueva != null:
+			var distancia_cueva := cavillaca.global_position.distance_to(cueva.global_position)
+			jugador_en_zona_segura = distancia_cueva < RANGO_SEGURIDAD_CUEVA
+		
+		if not jugador_en_zona_segura:
+			cerca = distancia <= RANGO_DETECCION
+			if cerca:
+				if distancia > RANGO_GOLPE:
+					var hacia := (cavillaca.global_position - global_position).normalized()
+					global_position += hacia * VELOCIDAD_PERSEGUIR * delta
+				elif lock_golpe <= 0.0:
+					_golpear()
+			else:
+				_patrullar(delta)
 		else:
 			_patrullar(delta)
 
@@ -76,7 +87,7 @@ func recibir_golpe(direccion: Vector2):
 func _golpear():
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
-	Global.perder_cordura(Global.DANIO_CORDURA_DERROTA)
+	Global.aumentar_presencia()
 	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
 
@@ -84,6 +95,7 @@ func _victoria():
 	derrotado = true
 	respawn_t = TIEMPO_RESPAWN
 	Global.mostrar_aviso("Victoria")
+	Global.obtener_recuerdo()
 	hide()
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)

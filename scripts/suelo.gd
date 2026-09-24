@@ -27,7 +27,6 @@ func _crear_mapa():
 	_piso(Rect2(240, -80, 360, 120), Color(0.28, 0.38, 0.22, 1), "Jardin")
 
 	_piso(Rect2(80, 250, 200, 100), Color(0.3, 0.24, 0.18, 1), "")
-	_piso(Rect2(-80, 160, 160, 280), Color(0.16, 0.14, 0.22, 1), "Cueva")
 
 	_piso(Rect2(370, 420, 100, 160), Color(0.26, 0.22, 0.2, 1), "")
 	_piso(Rect2(200, 580, 440, 160), Color(0.22, 0.3, 0.34, 1), "Costa")
@@ -57,12 +56,7 @@ func _crear_mapa():
 	_muro(Rect2(222, 40, 148, GROSOR_MURO))
 	_muro(Rect2(470, 40, 148, GROSOR_MURO))
 
-	# Cueva
-	_muro(Rect2(-98, 142, 196, GROSOR_MURO))
-	_muro(Rect2(-98, 440, 196, GROSOR_MURO))
-	_muro(Rect2(-98, 142, GROSOR_MURO, 316))
-	_muro(Rect2(62, 142, GROSOR_MURO, 108))
-	_muro(Rect2(62, 350, GROSOR_MURO, 108))
+
 
 	# Costa y mar
 	_muro(Rect2(182, 562, 188, GROSOR_MURO))

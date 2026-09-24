@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bu6gamljsyvm5"]
+
+[ext_resource type="Script" path="res://scripts/cueva.gd" id="1_script"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cueva"]
+size = Vector2(30, 30)
+
+[node name="Cueva" type="Area2D" unique_id=1840963928]
+script = ExtResource("1_script")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1402617488]
+shape = SubResource("RectangleShape2D_cueva")
+
+[node name="Entrada" type="ColorRect" parent="." unique_id=871233033]
+offset_left = -15.0
+offset_top = -15.0
+offset_right = 15.0
+offset_bottom = 15.0
+mouse_filter = 2
+color = Color(0.35, 0.3, 0.25, 0.8)
+
+[node name="Label" type="Label" parent="." unique_id=941071210]
+offset_left = -20.0
+offset_top = -25.0
+offset_right = 20.0
+offset_bottom = -10.0
+text = "CUEVA"
+horizontal_alignment = 1
+vertical_alignment = 1

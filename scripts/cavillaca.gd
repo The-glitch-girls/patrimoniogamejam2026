@@ -42,8 +42,18 @@ func _physics_process(delta):
 		lock_arrojar = max(lock_arrojar - delta, 0.0)
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
-		if Global.lleva_bebe:
+		var cueva := get_tree().get_first_node_in_group("zona_segura")
+		var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+		
+		if en_cueva and Global.cuidado_bebe_desbloqueado:
+			if Global.lleva_bebe:
+				cueva.dejar_bebe_con_zorro()
+			else:
+				cueva.recoger_bebe_del_zorro()
+		elif Global.lleva_bebe:
 			_dejar_bebe()
+		elif Global.zorro_cerca and not Global.cueva_zorro_desbloqueada:
+			_seguir_zorro()
 		else:
 			_recoger_bebe()
 
@@ -159,12 +169,22 @@ func _actualizar_camara(delta: float):
 
 
 func _actualizar_prompt():
-	if Global.lleva_bebe:
+	var cueva := get_tree().get_first_node_in_group("zona_segura")
+	var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+	
+	if en_cueva and Global.cuidado_bebe_desbloqueado:
+		if Global.lleva_bebe:
+			Global.prompt_interaccion = "E  Dejar con zorro"
+		else:
+			Global.prompt_interaccion = "E  Recoger del zorro"
+	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
 		Global.prompt_interaccion = "E  Recoger"
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
+	elif Global.zorro_cerca and not Global.cueva_zorro_desbloqueada:
+		Global.prompt_interaccion = "E  Seguir zorro"
 	else:
 		Global.prompt_interaccion = ""
 
@@ -198,6 +218,12 @@ func _dejar_bebe():
 	lock_interaccion = LOCK_TRAS_DEJAR
 
 
+func _seguir_zorro():
+	var zorro := get_tree().get_first_node_in_group("zorro")
+	if zorro != null:
+		zorro.iniciar_guia()
+
+
 func _arrojar():
 	if Global.lleva_bebe or lock_arrojar > 0.0 or Global.energia <= 0.0:
 		return
@@ -205,6 +231,7 @@ func _arrojar():
 	lock_arrojar = COOLDOWN_ARROJAR
 	var piedra := PIEDRA_ESCENA.instantiate()
 	piedra.global_position = global_position + facing * 18.0
+	
 	var halcon := get_tree().get_first_node_in_group("halcon") as Node2D
 	if halcon != null and global_position.distance_to(halcon.global_position) <= 140.0:
 		piedra.direccion = (halcon.global_position - global_position).normalized()
