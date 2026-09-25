@@ -133,3 +133,24 @@ func _zona_en(punto: Vector2) -> String:
 		if zona.rect.has_point(punto):
 			return zona.nombre
 	return "Huaca"
+
+func obtener_punto_cuniraya() -> Vector2:
+	var zonas_validas := []
+
+	for zona in zonas:
+		if zona.nombre in ["Jardin", "Plaza", "Costa"]:
+			zonas_validas.append(zona.rect)
+
+	if zonas_validas.is_empty():
+		return global_position
+
+	var rect: Rect2 = zonas_validas.pick_random()
+
+	# Dejamos margen para no generar el punto sobre los muros
+	var margen := GROSOR_MURO + 10.0
+	var rect_seguro := rect.grow(-margen)
+
+	return Vector2(
+		randf_range(rect_seguro.position.x, rect_seguro.end.x),
+		randf_range(rect_seguro.position.y, rect_seguro.end.y)
+	)

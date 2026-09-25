@@ -76,7 +76,6 @@ func recibir_golpe(direccion: Vector2):
 func _golpear():
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
-	Global.perder_cordura(Global.DANIO_CORDURA_DERROTA)
 	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
 

@@ -37,7 +37,6 @@ const COSTO_CORRER: float = 2.0
 const COSTO_CARGAR_BEBE: float = 2.0
 const COSTO_ARROJAR: float = 1.0
 const DANIO_ENERGIA_DERROTA: float = 15.0
-const DANIO_CORDURA_DERROTA: float = 12.0
 # RECOMPENSA
 const RECOMPENSA_VICTORIA: float = 12.0
 
