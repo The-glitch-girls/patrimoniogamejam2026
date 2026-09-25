@@ -21,7 +21,6 @@ var zona_actual: String = "Plaza"
 var halcon_cerca: bool = false
 var zorro_cerca: bool = false
 var aviso_combate: String = ""
-var cueva_zorro_desbloqueada: bool = false
 var descanso_con_zorro: bool = false
 var cuidado_bebe_desbloqueado: bool = false
 
@@ -89,7 +88,6 @@ func obtener_recuerdo():
 	recuerdos_obtenidos = min(recuerdos_obtenidos + 1, RECUERDOS_TOTALES)
 	
 	if recuerdos_obtenidos == 1:
-		cueva_zorro_desbloqueada = true
 		Global.mostrar_aviso("Recuerdo 1/3 - Descanso desbloqueado")
 	elif recuerdos_obtenidos == 2:
 		cuidado_bebe_desbloqueado = true

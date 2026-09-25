@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b8x3k2nan5p7q"]
+[gd_scene load_steps=0 format=3 uid="uid://b8x3k2nan5p7q"]
 
 [ext_resource type="Script" uid="uid://d4e5f6g7h8i9j" path="res://scripts/zorro.gd" id="1_script"]
 

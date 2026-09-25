@@ -52,7 +52,7 @@ func _physics_process(delta):
 				cueva.recoger_bebe_del_zorro()
 		elif Global.lleva_bebe:
 			_dejar_bebe()
-		elif Global.zorro_cerca and not Global.cueva_zorro_desbloqueada:
+		elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
 			_seguir_zorro()
 		else:
 			_recoger_bebe()
@@ -183,7 +183,7 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "E  Recoger"
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
-	elif Global.zorro_cerca and not Global.cueva_zorro_desbloqueada:
+	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
 		Global.prompt_interaccion = "E  Seguir zorro"
 	else:
 		Global.prompt_interaccion = ""

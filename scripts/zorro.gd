@@ -44,7 +44,10 @@ func _guiar_hacia_cueva(delta: float):
 		guiando = false
 		cueva_desbloqueada = true
 		Global.mostrar_aviso("¡Cueva del zorro desbloqueada!")
-		Global.cueva_zorro_desbloqueada = true
+		# Después de un tiempo, volver a permitir seguir al zorro
+		await get_tree().create_timer(5.0).timeout
+		cueva_desbloqueada = false
+	
 
 
 func _esperar_jugador(delta: float):
@@ -68,6 +71,8 @@ func _on_body_entered(body: Node):
 		Global.zorro_cerca = true
 		if not cueva_desbloqueada:
 			Global.prompt_interaccion = "E  Seguir zorro"
+	
+
 
 
 func _on_body_exited(body: Node):

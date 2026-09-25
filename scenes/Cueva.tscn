@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bu6gamljsyvm5"]
+[gd_scene load_steps=0 format=3 uid="uid://bu6gamljsyvm5"]
 
 [ext_resource type="Script" path="res://scripts/cueva.gd" id="1_script"]
 

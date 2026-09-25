@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=9 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -6,8 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cfa3mx2kxpkdp" path="res://scenes/Bebe.tscn" id="4_bebe"]
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="5_suelo"]
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="6_halcon"]
-[ext_resource type="PackedScene" uid="uid://b8x3k2m9n5p7q" path="res://scenes/Zorro.tscn" id="7_zorro"]
-[ext_resource type="PackedScene" uid="uid://bu6gamljsyvm5" path="res://scenes/Cueva.tscn" id="8_cueva"]
+[ext_resource type="PackedScene" path="res://scenes/Zorro.tscn" id="7_zorro"]
+[ext_resource type="PackedScene" path="res://scenes/Cueva.tscn" id="8_cueva"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("5_suelo")
@@ -35,7 +35,7 @@ position = Vector2(800, 300)
 position = Vector2(600, 300)
 
 [node name="Cueva" parent="." instance=ExtResource("8_cueva")]
-position = Vector2(400, 220)
+position = Vector2(300, 400)
 
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("3_0bbpv")

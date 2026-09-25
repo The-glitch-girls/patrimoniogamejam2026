@@ -16,7 +16,7 @@ func _process(delta):
 	var zorro := get_tree().get_first_node_in_group("zorro")
 	var zorro_cerca := zorro != null and global_position.distance_to(zorro.global_position) < RANGO_INTERACCION
 	
-	if zorro_cerca and Global.cueva_zorro_desbloqueada:
+	if zorro_cerca and Global.recuerdos_obtenidos > 0:
 		temporizador_recuperacion += delta
 		if temporizador_recuperacion >= 1.0:
 			temporizador_recuperacion = 0.0
@@ -27,7 +27,7 @@ func _process(delta):
 			$Label.text = "CUEVA ✓ (Bebé seguro)"
 		else:
 			$Label.text = "CUEVA ✓"
-	elif zorro_cerca and not Global.cueva_zorro_desbloqueada:
+	elif zorro_cerca and Global.recuerdos_obtenidos == 0:
 		Global.descanso_con_zorro = false
 		temporizador_recuperacion = 0.0
 		$Label.text = "CUEVA ?"
@@ -78,9 +78,9 @@ func _on_body_entered(body: Node):
 		var zorro := get_tree().get_first_node_in_group("zorro")
 		var zorro_cerca := zorro != null and global_position.distance_to(zorro.global_position) < RANGO_INTERACCION
 		
-		if zorro_cerca and Global.cueva_zorro_desbloqueada:
+		if zorro_cerca and Global.recuerdos_obtenidos > 0:
 			Global.zona_actual = "Cueva del Zorro"
-		elif zorro_cerca and not Global.cueva_zorro_desbloqueada:
+		elif zorro_cerca and Global.recuerdos_obtenidos == 0:
 			Global.zona_actual = "Cueva del Zorro (?)"
 		else:
 			Global.zona_actual = "Cueva del Zorro"
