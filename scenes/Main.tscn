@@ -186,3 +186,9 @@ vertical_alignment = 1
 visible = false
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="SonidoTension" type="AudioStreamPlayer2D" parent="HUD"]
+bus = &"Ambiente"
+
+[node name="LlantoBebe" type="AudioStreamPlayer2D" parent="HUD"]
+bus = &"SFX"

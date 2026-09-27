@@ -10,6 +10,8 @@ const TEXTO_CLARO := Color(1, 0.98, 0.94, 1)
 var prompt_alpha := 0.0
 var prompt_texto := ""
 var material_oscuridad: ShaderMaterial
+@onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
+@onready var llanto_bebe: AudioStreamPlayer2D = $LlantoBebe
 
 func _ready():
 	_estilar_panel()
