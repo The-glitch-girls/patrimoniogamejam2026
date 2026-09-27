@@ -27,7 +27,7 @@ func _ready():
 	_estilar_textos()
 	_estilar_pildora($PromptFondo, NARANJA)
 	_estilar_pildora($AvisoFondo, VERDE)
-	$Oscuridad.size = get_viewport().get_visible_rect().size
+	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
