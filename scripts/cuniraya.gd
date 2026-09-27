@@ -1,6 +1,7 @@
 extends CharacterBody2D
 
 var bebe: Area2D
+var punto_destino: Vector2
 
 const VELOCIDAD := 40.0
 const RANGO_PRESENCIA := 120.0
@@ -15,12 +16,14 @@ func _ready():
 func _colocar_cuniraya():
 	var suelo = get_tree().current_scene
 	global_position = suelo.obtener_punto_cuniraya()
-
+	punto_destino = suelo.obtener_punto_cuniraya()
+	
 	print("Posición inicial Cuniraya: ", global_position)
+	print("Primer destino Cuniraya: ", punto_destino)
 
 func _process(delta):
 	# Movimiento autónomo
-	var direccion = Vector2.RIGHT
+	var direccion = global_position.direction_to(punto_destino)
 	velocity = direccion * VELOCIDAD
 	move_and_slide()
 
@@ -35,6 +38,7 @@ func _process(delta):
 
 	if distancia <= RANGO_PRESENCIA:
 		Global.aumentar_presencia(delta)
+	
 
 
 func _draw():
