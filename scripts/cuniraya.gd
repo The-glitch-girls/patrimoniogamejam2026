@@ -1,10 +1,17 @@
 extends CharacterBody2D
 
 var bebe: Area2D
-var punto_destino: Vector2
-
+var direcciones = [
+			Vector2.UP,
+			Vector2.DOWN,
+			Vector2.LEFT,
+			Vector2.RIGHT
+		]
+var direccion := Vector2.ZERO
+var tiempo_cambio := 0.0
 const VELOCIDAD := 40.0
 const RANGO_PRESENCIA := 120.0
+const TIEMPO_CAMBIO := 2.5
 
 func _ready():
 	print("Cuniraya está en el mapa")
@@ -15,18 +22,25 @@ func _ready():
 
 func _colocar_cuniraya():
 	var suelo = get_tree().current_scene
-	global_position = suelo.obtener_punto_cuniraya()
-	punto_destino = suelo.obtener_punto_cuniraya()
-	
+	global_position = suelo.obtener_punto_cuniraya()	
 	print("Posición inicial Cuniraya: ", global_position)
-	print("Primer destino Cuniraya: ", punto_destino)
 
 func _process(delta):
 	# Movimiento autónomo
-	var direccion = global_position.direction_to(punto_destino)
+	tiempo_cambio -= delta
+	
+	if tiempo_cambio <= 0.0:
+		direccion = direcciones.pick_random()
+		tiempo_cambio = TIEMPO_CAMBIO
+
 	velocity = direccion * VELOCIDAD
 	move_and_slide()
-
+	
+	# Si choca contra una pared, cambia inmediatamente de dirección
+	if get_slide_collision_count() > 0:
+		direccion = direcciones.pick_random()
+		tiempo_cambio = TIEMPO_CAMBIO
+	
 	# Presencia
 	if bebe == null:
 		return
