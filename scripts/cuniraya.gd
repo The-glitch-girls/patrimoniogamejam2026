@@ -40,6 +40,7 @@ func _process(delta):
 		var distancia := global_position.distance_to(bebe.global_position)
 
 		if distancia <= RANGO_PRESENCIA:
+			Global.presencia_activa = true
 			Global.aumentar_presencia(delta)
 
 			# Acercarse al bebé usando solo 4 direcciones
@@ -51,6 +52,10 @@ func _process(delta):
 				direccion = Vector2.DOWN if diferencia.y > 0 else Vector2.UP
 
 			tiempo_cambio = TIEMPO_CAMBIO
+		else:
+			Global.presencia_activa = false
+	else:
+		Global.presencia_activa = false
 	
 	var siguiente_posicion : Vector2 = global_position + direccion * VELOCIDAD * delta
 

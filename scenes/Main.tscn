@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=13 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -8,6 +8,9 @@
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="6_halcon"]
 [ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="6_nxtc6"]
 [ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="8_jlsqs"]
+[ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="9_q8u5g"]
+[ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="10_lhr70"]
+[ext_resource type="AudioStream" uid="uid://k0g0tqnkpegb" path="res://sfx/llanto_bebe.mp3" id="11_wp0k4"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
 shader = ExtResource("8_jlsqs")
@@ -188,7 +191,13 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="SonidoTension" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource("9_q8u5g")
+bus = &"Ambiente"
+
+[node name="PeakTension" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource("10_lhr70")
 bus = &"Ambiente"
 
 [node name="LlantoBebe" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource("11_wp0k4")
 bus = &"SFX"

@@ -15,6 +15,7 @@ var energia: float = 100.0
 var lleva_bebe: bool = false
 var tiempo_juego: float = 0.0
 var presencia_cuniraya: float = 0.0
+var presencia_activa: bool = false
 var flashbacks_desbloqueados: Array[String] = []
 var prompt_interaccion: String = ""
 var zona_actual: String = "Plaza"
