@@ -1,0 +1,262 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/menu_inicio.gd" id="1_menu"]
+
+[node name="MenuInicio" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_menu")
+
+[node name="Fondo" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.18, 0.12, 0.09, 1)
+
+[node name="Glow" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -220.0
+offset_top = -260.0
+offset_right = 220.0
+offset_bottom = 260.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.98, 0.62, 0.14, 0.08)
+
+[node name="PanelPrincipal" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -250.0
+offset_right = 210.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Encabezado" type="Panel" parent="PanelPrincipal"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 416.0
+offset_bottom = 56.0
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="PanelPrincipal/Encabezado"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "CAVILLACA"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Subtitulo" type="Label" parent="PanelPrincipal"]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 72.0
+offset_right = 392.0
+offset_bottom = 100.0
+text = "Patrimonio Game Jam 2026"
+horizontal_alignment = 1
+
+[node name="Columna" type="VBoxContainer" parent="PanelPrincipal"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 120.0
+offset_right = 372.0
+offset_bottom = 460.0
+theme_override_constants/separation = 14
+
+[node name="Jugar" type="Button" parent="PanelPrincipal/Columna"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Jugar"
+
+[node name="Ajustes" type="Button" parent="PanelPrincipal/Columna"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Ajustes"
+
+[node name="Creditos" type="Button" parent="PanelPrincipal/Columna"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Créditos"
+
+[node name="Salir" type="Button" parent="PanelPrincipal/Columna"]
+custom_minimum_size = Vector2(0, 52)
+layout_mode = 2
+text = "Salir"
+
+[node name="PanelAjustes" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -250.0
+offset_right = 230.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Encabezado" type="Panel" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 456.0
+offset_bottom = 52.0
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="PanelAjustes/Encabezado"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SONIDO"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Columna" type="VBoxContainer" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 72.0
+offset_right = 424.0
+offset_bottom = 460.0
+theme_override_constants/separation = 10
+
+[node name="MasterLabel" type="Label" parent="PanelAjustes/Columna"]
+layout_mode = 2
+text = "Master"
+
+[node name="MasterSlider" type="HSlider" parent="PanelAjustes/Columna"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="MusicaLabel" type="Label" parent="PanelAjustes/Columna"]
+layout_mode = 2
+text = "Música"
+
+[node name="MusicaSlider" type="HSlider" parent="PanelAjustes/Columna"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="EfectosLabel" type="Label" parent="PanelAjustes/Columna"]
+layout_mode = 2
+text = "Efectos"
+
+[node name="EfectosSlider" type="HSlider" parent="PanelAjustes/Columna"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="AmbienteLabel" type="Label" parent="PanelAjustes/Columna"]
+layout_mode = 2
+text = "Ambiente"
+
+[node name="AmbienteSlider" type="HSlider" parent="PanelAjustes/Columna"]
+custom_minimum_size = Vector2(0, 28)
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="Espacio" type="Control" parent="PanelAjustes/Columna"]
+custom_minimum_size = Vector2(0, 24)
+layout_mode = 2
+
+[node name="Volver" type="Button" parent="PanelAjustes/Columna"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Volver"
+
+[node name="PanelCreditos" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -250.0
+offset_right = 210.0
+offset_bottom = 250.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Encabezado" type="Panel" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 416.0
+offset_bottom = 52.0
+mouse_filter = 2
+
+[node name="Titulo" type="Label" parent="PanelCreditos/Encabezado"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "CRÉDITOS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Columna" type="VBoxContainer" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 72.0
+offset_right = 384.0
+offset_bottom = 460.0
+theme_override_constants/separation = 18
+
+[node name="Lista" type="Label" parent="PanelCreditos/Columna"]
+layout_mode = 2
+size_flags_vertical = 3
+text = "Melissa Huerta
+Shiara
+Malu
+Ariadna
+Selene
+Miko"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Volver" type="Button" parent="PanelCreditos/Columna"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+text = "Volver"

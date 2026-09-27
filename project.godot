@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="cavillaca-pov"
-run/main_scene="res://scenes/Main.tscn"
+run/main_scene="res://scenes/MenuInicio.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
 
@@ -21,6 +21,7 @@ buses/default_bus_layout="res://tres/default_bus_layout.tres"
 
 [autoload]
 
+Ajustes="*res://scripts/ajustes.gd"
 Global="*res://scripts/global.gd"
 
 [display]

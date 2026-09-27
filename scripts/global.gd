@@ -114,3 +114,21 @@ func obtener_recuerdo():
 func mostrar_aviso(texto: String):
 	aviso_combate = texto
 	aviso_temporizador = 2.0
+
+
+func resetear():
+	energia = ENERGIA_MAX
+	lleva_bebe = false
+	tiempo_juego = 0.0
+	presencia_cuniraya = 0.0
+	presencia_activa = false
+	flashbacks_desbloqueados.clear()
+	prompt_interaccion = ""
+	zona_actual = "Plaza"
+	halcon_cerca = false
+	zorro_cerca = false
+	aviso_combate = ""
+	descanso_con_zorro = false
+	cuidado_bebe_desbloqueado = false
+	recuerdos_obtenidos = 0
+	aviso_temporizador = 0.0
