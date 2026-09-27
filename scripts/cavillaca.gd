@@ -48,8 +48,18 @@ func _physics_process(delta):
 		lock_arrojar = max(lock_arrojar - delta, 0.0)
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
-		if Global.lleva_bebe:
+		var cueva := get_tree().get_first_node_in_group("zona_segura")
+		var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+		
+		if en_cueva and Global.cuidado_bebe_desbloqueado:
+			if Global.lleva_bebe:
+				cueva.dejar_bebe_con_zorro()
+			else:
+				cueva.recoger_bebe_del_zorro()
+		elif Global.lleva_bebe:
 			_dejar_bebe()
+		elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
+			_seguir_zorro()
 		else:
 			_recoger_bebe()
 
@@ -60,7 +70,7 @@ func _physics_process(delta):
 	if direccion != Vector2.ZERO:
 		facing = direccion
 
-	var esta_corriendo := (
+	var esta_corriendo: bool = (
 		not Global.lleva_bebe
 		and Global.energia > 0.0
 		and Input.is_action_pressed("correr")
@@ -175,12 +185,22 @@ func _actualizar_camara(delta: float):
 
 
 func _actualizar_prompt():
-	if Global.lleva_bebe:
+	var cueva := get_tree().get_first_node_in_group("zona_segura")
+	var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+	
+	if en_cueva and Global.cuidado_bebe_desbloqueado:
+		if Global.lleva_bebe:
+			Global.prompt_interaccion = "E  Dejar con zorro"
+		else:
+			Global.prompt_interaccion = "E  Recoger del zorro"
+	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
 		Global.prompt_interaccion = "E  Recoger"
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
+	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
+		Global.prompt_interaccion = "E  Seguir zorro"
 	else:
 		Global.prompt_interaccion = ""
 
@@ -193,6 +213,12 @@ func _actualizar_carga_visual():
 		cuerpo.modulate = Color(1.08, 0.96, 0.88)
 	else:
 		cuerpo.modulate = Color.WHITE
+
+
+func _seguir_zorro():
+	var zorro := get_tree().get_first_node_in_group("zorro")
+	if zorro != null:
+		zorro.iniciar_guia()
 
 
 func _obtener_bebe() -> Node2D:
