@@ -171,8 +171,6 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 
 
 func _actualizar_camara(delta: float):
-	if cam == null:
-		return
 	cam.offset = Vector2.ZERO
 
 
