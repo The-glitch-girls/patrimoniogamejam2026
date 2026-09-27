@@ -11,6 +11,16 @@ var prompt_alpha := 0.0
 var prompt_texto := ""
 var material_oscuridad: ShaderMaterial
 
+# Sonidos ambiente y sfx
+@onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
+@onready var peak_tension: AudioStreamPlayer2D = $PeakTension
+@onready var llanto_bebe: AudioStreamPlayer2D = $LlantoBebe
+var volumen_normal_tension: float = -15.0
+var volumen_normal_peak: float = 0.0
+var volumen_normal_llanto: float = 0.0
+var temporizador_peak: float = 0.0
+var temporizador_llanto: float = 0.0
+
 func _ready():
 	_estilar_panel()
 	_estilar_barras()
@@ -129,7 +139,49 @@ func _process(delta):
 		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else NARANJA_OSCURO
 		_estilar_pildora($AvisoFondo, color_aviso)
 
-	# Presencia de Cuniraya
-	# Presencia de Cuniraya
-	var nivel_presencia := Global.presencia_cuniraya
+	# Presencia de Cuniraya: Oscuridad y Sonido
+	var nivel_presencia : float = Global.presencia_cuniraya
+	var volumen_tension : float = lerp(-10.0, 0.0, nivel_presencia / 100.0)
 	material_oscuridad.set_shader_parameter("intensidad", nivel_presencia / 100.0)
+	sonido_tension.volume_db = volumen_tension
+	
+	if Global.presencia_activa:
+		if not sonido_tension.playing:
+			sonido_tension.volume_db = volumen_normal_tension
+			sonido_tension.play()
+	else:
+		fade_out_audio(sonido_tension, 2.5)
+			
+	# Peaks de tensión
+	if Global.presencia_activa:
+		temporizador_peak -= delta
+
+		if temporizador_peak <= 0.0 and not peak_tension.playing:
+			peak_tension.volume_db = volumen_normal_peak
+			peak_tension.play()
+			temporizador_peak = 8.0
+	else:
+		fade_out_audio(peak_tension, 2.5)
+		temporizador_peak = 0.0
+		
+	# Llanto del bebé
+	if Global.presencia_activa:
+		temporizador_llanto -= delta
+
+		if temporizador_llanto <= 0.0 and not llanto_bebe.playing:
+			llanto_bebe.volume_db = volumen_normal_llanto
+			llanto_bebe.play()
+			temporizador_llanto = 45.0
+	else:
+		fade_out_audio(llanto_bebe, 2.5)
+		temporizador_llanto = 0.0
+		
+func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
+	if not audio.playing:
+		return
+	
+	var tween := create_tween()
+	tween.tween_property(audio, "volume_db", -40.0, duracion)
+	tween.tween_callback(func():
+		audio.stop()
+	)
