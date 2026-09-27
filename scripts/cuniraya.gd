@@ -41,7 +41,7 @@ func _process(delta):
 
 		if distancia <= RANGO_PRESENCIA:
 			Global.presencia_activa = true
-			Global.aumentar_presencia(delta)
+			Global.aumentar_presencia_por_tiempo(delta)
 
 			# Acercarse al bebé usando solo 4 direcciones
 			var diferencia := bebe.global_position - global_position

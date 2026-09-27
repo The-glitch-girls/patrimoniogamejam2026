@@ -1,5 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://qfhefd6lfvpa"]
-[gd_scene load_steps=13 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=15 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -64,7 +63,7 @@ color = Color(0.00392157, 0.00392157, 0.00392157, 0.00392157)
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 428.0
-offset_bottom = 236.0
+offset_bottom = 252.0
 mouse_filter = 2
 
 [node name="Encabezado" type="Panel" parent="HUD/PanelEstado"]
@@ -108,9 +107,14 @@ offset_left = 20.0
 offset_top = 106.0
 offset_right = 160.0
 offset_bottom = 129.0
-text = "RECUERDOS"
+text = "Recuerdos  0/3"
 
 [node name="RecuerdosLabel" type="Label" parent="HUD/PanelEstado"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 192.0
+offset_right = 392.0
+offset_bottom = 215.0
 text = "PRESENCIA"
 
 [node name="PresenciaBar" type="ProgressBar" parent="HUD/PanelEstado"]
@@ -140,9 +144,9 @@ text = "Bebe  en el suelo"
 [node name="ZonaLabel" type="Label" parent="HUD/PanelEstado"]
 layout_mode = 0
 offset_left = 20.0
-offset_top = 192.0
+offset_top = 220.0
 offset_right = 392.0
-offset_bottom = 215.0
+offset_bottom = 243.0
 text = "Plaza"
 
 [node name="PromptFondo" type="Panel" parent="HUD"]

@@ -14,7 +14,6 @@ extends Node
 var energia: float = 100.0
 var lleva_bebe: bool = false
 var tiempo_juego: float = 0.0
-var presencia_cuniraya: int = 0
 var presencia_cuniraya: float = 0.0
 var presencia_activa: bool = false
 var flashbacks_desbloqueados: Array[String] = []
@@ -78,8 +77,8 @@ func recuperar_energia(cantidad: float):
 # PRESENCIA DE CUNIRAYA
 # =========================
 
-func aumentar_presencia():
-	presencia_cuniraya = min(presencia_cuniraya + 1, 3)
+func aumentar_presencia(cantidad: float = 1.0):
+	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
 
 
 func reducir_presencia():
@@ -90,13 +89,11 @@ func reducir_presencia():
 # RECUERDOS
 # PRESENCIA DE CUNIYARA
 # =========================
-func aumentar_presencia(delta: float):
+func aumentar_presencia_por_tiempo(delta: float):
 	presencia_cuniraya = min(
 		presencia_cuniraya + VELOCIDAD_PRESENCIA * delta,
 		PRESENCIA_MAX
 	)
-	
-	print("Presencia: ", presencia_cuniraya)
 
 func obtener_recuerdo():
 	recuerdos_obtenidos = min(recuerdos_obtenidos + 1, RECUERDOS_TOTALES)

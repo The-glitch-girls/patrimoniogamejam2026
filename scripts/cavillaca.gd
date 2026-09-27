@@ -64,7 +64,7 @@ func _physics_process(delta):
 	if direccion != Vector2.ZERO:
 		facing = direccion
 
-	var esta_corriendo := (
+	var esta_corriendo: bool = (
 		not Global.lleva_bebe
 		and Global.energia > 0.0
 		and Input.is_action_pressed("correr")
