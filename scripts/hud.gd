@@ -40,7 +40,6 @@ func _estilar_panel():
 
 func _estilar_barras():
 	_pintar_barra($PanelEstado/EnergiaBar, NARANJA)
-	_pintar_barra($PanelEstado/CorduraBar, Color(0.38, 0.76, 0.72, 1))
 
 
 func _estilar_textos():
@@ -50,6 +49,7 @@ func _estilar_textos():
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
 		$PanelEstado/ZonaLabel,
+		$PanelEstado/RecuerdosLabel,
 	]:
 		label.add_theme_font_size_override("font_size", 15)
 		label.add_theme_color_override("font_color", TEXTO)
@@ -101,10 +101,14 @@ func _capturar():
 
 func _process(delta):
 	$PanelEstado/EnergiaBar.value = Global.energia
-	$PanelEstado/CorduraBar.value = Global.cordura
 	$PanelEstado/TiempoLabel.text = "Tiempo  %.0f s" % Global.tiempo_juego
 	$PanelEstado/BebeLabel.text = "Bebe  cargando" if Global.lleva_bebe else "Bebe  en el suelo"
-	$PanelEstado/ZonaLabel.text = Global.zona_actual
+	$PanelEstado/RecuerdosLabel.text = "Recuerdos  %d/%d" % [Global.recuerdos_obtenidos, Global.RECUERDOS_TOTALES]
+	
+	var texto_zona := Global.zona_actual
+	if Global.descanso_con_zorro:
+		texto_zona += " (Descansando)"
+	$PanelEstado/ZonaLabel.text = texto_zona
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:
