@@ -84,14 +84,14 @@ func _piso(rect: Rect2, color: Color, nombre: String):
 	zonas.append({ "nombre": nombre, "rect": rect })
 	
 	#debug
-	if nombre not in ["Huaca", "Cueva", "Mar"]:
-		var debug_zona := ColorRect.new()
-		debug_zona.position = rect.position
-		debug_zona.size = rect.size
-		debug_zona.color = Color(1, 0, 0, 0.35)
-		debug_zona.z_index = 0
-		debug_zona.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(debug_zona)
+	#if nombre not in ["Huaca", "Cueva", "Mar"]:
+		#var debug_zona := ColorRect.new()
+		#debug_zona.position = rect.position
+		#debug_zona.size = rect.size
+		#debug_zona.color = Color(1, 0, 0, 0.35)
+		#debug_zona.z_index = 0
+		#debug_zona.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#add_child(debug_zona)
 		
 	if nombre != "":
 		var etiqueta := Label.new()
@@ -130,6 +130,9 @@ func _muro(rect: Rect2):
 	add_child(visual)
 
 	var cuerpo := StaticBody2D.new()
+	# permite colisionar con Cuniraya
+	cuerpo.collision_layer = 3
+	cuerpo.collision_mask = 0
 	cuerpo.position = rect.position + rect.size * 0.5
 	var forma := RectangleShape2D.new()
 	forma.size = rect.size
