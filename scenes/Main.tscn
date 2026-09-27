@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=16 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -6,9 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://cfa3mx2kxpkdp" path="res://scenes/Bebe.tscn" id="4_bebe"]
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="5_suelo"]
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="6_halcon"]
+[ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="6_nxtc6"]
 [ext_resource type="PackedScene" path="res://scenes/Zorro.tscn" id="7_zorro"]
 [ext_resource type="PackedScene" path="res://scenes/Cueva.tscn" id="8_cueva"]
-[ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="6_nxtc6"]
 [ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="8_jlsqs"]
 [ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="9_q8u5g"]
 [ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="10_lhr70"]
@@ -47,10 +47,10 @@ position = Vector2(400, 350)
 
 [node name="Cueva" parent="." instance=ExtResource("8_cueva")]
 position = Vector2(350, 380)
+
 [node name="Cuniraya" parent="." instance=ExtResource("6_nxtc6")]
 
 [node name="HUD" type="CanvasLayer" parent="."]
-visible = false
 script = ExtResource("3_0bbpv")
 
 [node name="Oscuridad" type="ColorRect" parent="HUD"]
@@ -126,7 +126,6 @@ offset_left = 20.0
 offset_top = 130.0
 offset_right = 200.0
 offset_bottom = 153.0
-text = "Recuerdos  0/3"
 
 [node name="TiempoLabel" type="Label" parent="HUD/PanelEstado"]
 layout_mode = 0
