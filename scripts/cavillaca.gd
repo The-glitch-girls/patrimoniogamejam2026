@@ -26,7 +26,13 @@ func _ready():
 	motion_mode = MOTION_MODE_FLOATING
 
 	cam = Camera2D.new()
-	cam.zoom = Vector2(3.2, 3.2)
+	cam.zoom = Vector2(1.5, 1.5)
+	# Camara
+	cam.limit_left = 0
+	cam.limit_top = 0
+	cam.limit_right = 4096
+	cam.limit_bottom = 3072
+
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 5.0
 	add_child(cam)
@@ -75,6 +81,18 @@ func _physics_process(delta):
 
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
 	move_and_slide()
+
+	global_position.x = clamp(
+		global_position.x,
+		Global.LIMITE_MAPA.position.x + 20.0,
+		Global.LIMITE_MAPA.end.x - 20.0
+	)
+
+	global_position.y = clamp(
+		global_position.y,
+		Global.LIMITE_MAPA.position.y + 20.0,
+		Global.LIMITE_MAPA.end.y - 20.0
+)
 
 	var esta_caminando := velocity.length() > 12.0
 	_animar_caminata(delta, esta_caminando, esta_corriendo)
@@ -155,7 +173,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 func _actualizar_camara(delta: float):
 	if cam == null:
 		return
-	cam.offset = cam.offset.lerp(facing * 18.0, 1.0 - exp(-5.0 * delta))
+	cam.offset = Vector2.ZERO
 
 
 func _actualizar_prompt():

@@ -23,9 +23,14 @@ func _ready():
 	call_deferred("_colocar_cuniraya")
 
 func _colocar_cuniraya():
-	var suelo = get_tree().current_scene
-	global_position = suelo.obtener_punto_cuniraya()	
+	global_position = Vector2(
+		randf_range(200.0, 3896.0),
+		randf_range(200.0, 2872.0)
+	)
 	print("Posición inicial Cuniraya: ", global_position)
+	
+	#var suelo = get_tree().current_scene
+	#global_position = suelo.obtener_punto_cuniraya()
 
 func _process(delta):
 	# Movimiento autónomo
@@ -65,6 +70,9 @@ func _process(delta):
 	velocity = direccion * VELOCIDAD
 	move_and_slide()
 	
+	global_position.x = clamp(global_position.x, 20.0, 4076.0)
+	global_position.y = clamp(global_position.y, 20.0, 3052.0)
+
 	# Si choca contra una pared, cambia inmediatamente de dirección
 	if get_slide_collision_count() > 0:
 		direccion = direcciones.pick_random()

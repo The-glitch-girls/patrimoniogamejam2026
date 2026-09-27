@@ -28,6 +28,7 @@ var aviso_temporizador: float = 0.0
 # =========================
 # CONFIGURACIÓN
 # =========================
+const LIMITE_MAPA := Rect2(0, 0, 4096, 3072)
 const ENERGIA_MAX: float = 100.0
 # PRESENCIA CUNIRAYA
 const PRESENCIA_MAX := 100.0
