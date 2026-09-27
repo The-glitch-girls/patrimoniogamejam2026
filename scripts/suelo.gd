@@ -6,7 +6,8 @@ const GROSOR_MURO := 18.0
 var zonas: Array[Dictionary] = []
 
 func _ready():
-	_crear_mapa()
+	# _crear_mapa()
+	pass
 
 
 func _process(_delta):
