@@ -9,6 +9,7 @@ const TEXTO_CLARO := Color(1, 0.98, 0.94, 1)
 
 var prompt_alpha := 0.0
 var prompt_texto := ""
+var material_oscuridad: ShaderMaterial
 
 func _ready():
 	_estilar_panel()
@@ -16,6 +17,8 @@ func _ready():
 	_estilar_textos()
 	_estilar_pildora($PromptFondo, NARANJA)
 	_estilar_pildora($AvisoFondo, VERDE)
+	$Oscuridad.size = get_viewport().get_visible_rect().size
+	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
 
@@ -125,14 +128,8 @@ func _process(delta):
 	if hay_aviso:
 		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else NARANJA_OSCURO
 		_estilar_pildora($AvisoFondo, color_aviso)
-	
+
+	# Presencia de Cuniraya
 	# Presencia de Cuniraya
 	var nivel_presencia := Global.presencia_cuniraya
-	if nivel_presencia <= 0:
-		$Oscuridad.color.a = 0.0
-	elif nivel_presencia == 1:
-		$Oscuridad.color.a = 0.25
-	elif nivel_presencia == 2:
-		$Oscuridad.color.a = 0.40
-	else:
-		$Oscuridad.color.a = 0.55
+	material_oscuridad.set_shader_parameter("intensidad", nivel_presencia / 100.0)

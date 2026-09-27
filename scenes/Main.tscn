@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=10 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -7,6 +7,11 @@
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="5_suelo"]
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="6_halcon"]
 [ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="6_nxtc6"]
+[ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="8_jlsqs"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
+shader = ExtResource("8_jlsqs")
+shader_parameter/intensidad = 0.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("5_suelo")
@@ -36,12 +41,13 @@ position = Vector2(840, 270)
 script = ExtResource("3_0bbpv")
 
 [node name="Oscuridad" type="ColorRect" parent="HUD"]
+material = SubResource("ShaderMaterial_q8u5g")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0)
+color = Color(0.00392157, 0.00392157, 0.00392157, 0.00392157)
 
 [node name="PanelEstado" type="Panel" parent="HUD"]
 offset_left = 16.0
