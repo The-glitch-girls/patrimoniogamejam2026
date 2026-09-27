@@ -1,35 +1,32 @@
 # Design — cavillaca-pov
 
+All of You language: round fills, white outline, Fredoka, cream type.
+
 ## Tokens
 
-- Cream panel `#FFF7ED`
-- Orange header / primary `#FA9E24`
-- Orange dark hover `#E67A14`
-- Green accent (play / victory) `#6BC761`
-- Text brown `#6B4724`
-- Text on orange `#FAF9F0`
-- Warm floor `#2E1F17`
-- Corner radius panels `22`, headers `16`, buttons `16`, pills `20`
-- White border `3–4px`, soft drop shadow
+- Cream `#FDF5E6`
+- Purple card `#38336B`
+- Jugar / energia `#7DC24A`
+- Ajustes / dorado `#DBB233`
+- Creditos / presencia `#AB9EED`
+- Salir / ataque `#9E3D5C`
+- Outline white `5–6px`
+- Radius circles `88`, cards `22`, bars `10`
+- Shadow `(0, 4)`
+- Type: Fredoka SemiBold
 
-Owned by `scripts/ui_estilo.gd` (menus) and `scripts/hud.gd` (in-game).
+## Start — `scenes/MenuInicio.tscn`
 
-## Menus — `scenes/MenuInicio.tscn`
-
-- Full-bleed warm dark background; cream centered card with orange header bar
-- Start: title **CAVILLACA**, subtitle Patrimonio Game Jam 2026
-- Buttons: Jugar (green), Ajustes, Créditos, Salir (secondary cream)
-- Settings: Master, Música, Efectos (`SFX`), Ambiente sliders on cream track with orange fill
-- Credits: Melissa Huerta, Shiara, Malu, Ariadna, Selene, Miko
+- Night map + purple wash
+- Title Cavillaca 72
+- Circles: Jugar, Ajustes, Creditos, Salir
+- Captions under the circles
 
 ## HUD — `scripts/hud.gd`
 
-- Cream status card, orange **ESTADO** header
-- Energía orange fill, Presencia teal fill
-- Bottom prompt pill (orange or green for attack), top combat banner
-- Presence shader overlay on `Oscuridad`
-
-## Motion
-
-- Prompt pill fades when `Global.prompt_interaccion` changes
-- Menu panels swap visibility
+- No card, no title
+- Energia: 36px green circle, white bolt `assets/icons/energia.svg`, green pill with 4px white outline
+- Presencia (Cuniraya): 36px lilac circle, white eye, lilac pill; only when value > 0
+- Prompt: 56px green circle, letter E, bottom-right; burgundy if attack
+- Settings: 52px gold circle, white gear `assets/icons/ajustes.svg`, top-right; opens Sonido card
+- Combat banner same pill, only when it fires

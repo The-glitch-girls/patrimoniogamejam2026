@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b5kcmjdfrss43"
-path="res://.godot/imported/tileset.png-c50288acd069fa293d7940a084811264.ctex"
+uid="uid://d2p1n7liqm74e"
+path="res://.godot/imported/volver.svg-4a2acc7e07ce94ea231731d4dbb59304.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tileset.png"
-dest_files=["res://.godot/imported/tileset.png-c50288acd069fa293d7940a084811264.ctex"]
+source_file="res://assets/icons/volver.svg"
+dest_files=["res://.godot/imported/volver.svg-4a2acc7e07ce94ea231731d4dbb59304.ctex"]
 
 [params]
 
@@ -38,3 +38,6 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
+svg/scale=1.0
+editor/scale_with_editor_scale=false
+editor/convert_colors_with_editor_theme=false

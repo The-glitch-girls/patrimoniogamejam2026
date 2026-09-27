@@ -1,6 +1,13 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/menu_inicio.gd" id="1_menu"]
+[ext_resource type="Texture2D" path="res://assets/menu_fondo.jpg" id="2_fondo"]
+[ext_resource type="Script" path="res://scripts/boton_circulo.gd" id="3_circulo"]
+[ext_resource type="Texture2D" path="res://assets/icons/play.svg" id="4_play"]
+[ext_resource type="Texture2D" path="res://assets/icons/musica.svg" id="5_musica"]
+[ext_resource type="Texture2D" path="res://assets/icons/creditos.svg" id="6_creditos"]
+[ext_resource type="Texture2D" path="res://assets/icons/salir.svg" id="7_salir"]
+[ext_resource type="Texture2D" path="res://assets/icons/volver.svg" id="8_volver"]
 
 [node name="MenuInicio" type="Control"]
 layout_mode = 3
@@ -11,7 +18,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_menu")
 
-[node name="Fondo" type="ColorRect" parent="."]
+[node name="Fondo" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,93 +26,128 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-color = Color(0.18, 0.12, 0.09, 1)
+texture = ExtResource("2_fondo")
+expand_mode = 1
+stretch_mode = 6
 
-[node name="Glow" type="ColorRect" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -220.0
-offset_top = -260.0
-offset_right = 220.0
-offset_bottom = 260.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-color = Color(0.98, 0.62, 0.14, 0.08)
-
-[node name="PanelPrincipal" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -210.0
-offset_top = -250.0
-offset_right = 210.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Encabezado" type="Panel" parent="PanelPrincipal"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 416.0
-offset_bottom = 56.0
-mouse_filter = 2
-
-[node name="Titulo" type="Label" parent="PanelPrincipal/Encabezado"]
+[node name="Degradado" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "CAVILLACA"
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Titulo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -210.0
+offset_right = 280.0
+offset_bottom = -110.0
+text = "Cavillaca"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Subtitulo" type="Label" parent="PanelPrincipal"]
-layout_mode = 0
-offset_left = 28.0
-offset_top = 72.0
-offset_right = 392.0
-offset_bottom = 100.0
+[node name="Subtitulo" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -118.0
+offset_right = 280.0
+offset_bottom = -82.0
 text = "Patrimonio Game Jam 2026"
 horizontal_alignment = 1
 
-[node name="Columna" type="VBoxContainer" parent="PanelPrincipal"]
-layout_mode = 0
-offset_left = 48.0
-offset_top = 120.0
-offset_right = 372.0
-offset_bottom = 460.0
-theme_override_constants/separation = 14
+[node name="Fila" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = 8.0
+offset_right = 260.0
+offset_bottom = 104.0
+theme_override_constants/separation = 28
+alignment = 1
 
-[node name="Jugar" type="Button" parent="PanelPrincipal/Columna"]
-custom_minimum_size = Vector2(0, 52)
+[node name="Jugar" type="Control" parent="Fila"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+script = ExtResource("3_circulo")
+color_fondo = Color(0.49, 0.76, 0.29, 1)
+icono = ExtResource("4_play")
+
+[node name="Ajustes" type="Control" parent="Fila"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+script = ExtResource("3_circulo")
+color_fondo = Color(0.86, 0.7, 0.2, 1)
+icono = ExtResource("5_musica")
+
+[node name="Creditos" type="Control" parent="Fila"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+script = ExtResource("3_circulo")
+color_fondo = Color(0.67, 0.62, 0.93, 1)
+icono = ExtResource("6_creditos")
+
+[node name="Salir" type="Control" parent="Fila"]
+custom_minimum_size = Vector2(88, 88)
+layout_mode = 2
+script = ExtResource("3_circulo")
+color_fondo = Color(0.62, 0.24, 0.36, 1)
+icono = ExtResource("7_salir")
+
+[node name="Leyendas" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -260.0
+offset_top = 118.0
+offset_right = 260.0
+offset_bottom = 154.0
+theme_override_constants/separation = 28
+alignment = 1
+
+[node name="Jugar" type="Label" parent="Leyendas"]
+custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
 text = "Jugar"
+horizontal_alignment = 1
 
-[node name="Ajustes" type="Button" parent="PanelPrincipal/Columna"]
-custom_minimum_size = Vector2(0, 52)
+[node name="Ajustes" type="Label" parent="Leyendas"]
+custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
 text = "Ajustes"
+horizontal_alignment = 1
 
-[node name="Creditos" type="Button" parent="PanelPrincipal/Columna"]
-custom_minimum_size = Vector2(0, 52)
+[node name="Creditos" type="Label" parent="Leyendas"]
+custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
-text = "Créditos"
+text = "Creditos"
+horizontal_alignment = 1
 
-[node name="Salir" type="Button" parent="PanelPrincipal/Columna"]
-custom_minimum_size = Vector2(0, 52)
+[node name="Salir" type="Label" parent="Leyendas"]
+custom_minimum_size = Vector2(88, 0)
 layout_mode = 2
 text = "Salir"
+horizontal_alignment = 1
 
 [node name="PanelAjustes" type="Panel" parent="."]
 visible = false
@@ -116,91 +158,100 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -230.0
-offset_top = -250.0
+offset_top = -230.0
 offset_right = 230.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_bottom = 230.0
 
-[node name="Encabezado" type="Panel" parent="PanelAjustes"]
+[node name="Titulo" type="Label" parent="PanelAjustes"]
 layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 456.0
-offset_bottom = 52.0
-mouse_filter = 2
-
-[node name="Titulo" type="Label" parent="PanelAjustes/Encabezado"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "SONIDO"
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 432.0
+offset_bottom = 60.0
+text = "Sonido"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="Columna" type="VBoxContainer" parent="PanelAjustes"]
+[node name="MasterLabel" type="Label" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 36.0
-offset_top = 72.0
+offset_top = 76.0
 offset_right = 424.0
-offset_bottom = 460.0
-theme_override_constants/separation = 10
-
-[node name="MasterLabel" type="Label" parent="PanelAjustes/Columna"]
-layout_mode = 2
+offset_bottom = 100.0
 text = "Master"
 
-[node name="MasterSlider" type="HSlider" parent="PanelAjustes/Columna"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
+[node name="MasterSlider" type="HSlider" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 104.0
+offset_right = 424.0
+offset_bottom = 128.0
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="MusicaLabel" type="Label" parent="PanelAjustes/Columna"]
-layout_mode = 2
-text = "Música"
+[node name="MusicaLabel" type="Label" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 140.0
+offset_right = 424.0
+offset_bottom = 164.0
+text = "Musica"
 
-[node name="MusicaSlider" type="HSlider" parent="PanelAjustes/Columna"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
+[node name="MusicaSlider" type="HSlider" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 168.0
+offset_right = 424.0
+offset_bottom = 192.0
 max_value = 1.0
 step = 0.01
 value = 0.8
 
-[node name="EfectosLabel" type="Label" parent="PanelAjustes/Columna"]
-layout_mode = 2
+[node name="EfectosLabel" type="Label" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 204.0
+offset_right = 424.0
+offset_bottom = 228.0
 text = "Efectos"
 
-[node name="EfectosSlider" type="HSlider" parent="PanelAjustes/Columna"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
+[node name="EfectosSlider" type="HSlider" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 232.0
+offset_right = 424.0
+offset_bottom = 256.0
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="AmbienteLabel" type="Label" parent="PanelAjustes/Columna"]
-layout_mode = 2
+[node name="AmbienteLabel" type="Label" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 268.0
+offset_right = 424.0
+offset_bottom = 292.0
 text = "Ambiente"
 
-[node name="AmbienteSlider" type="HSlider" parent="PanelAjustes/Columna"]
-custom_minimum_size = Vector2(0, 28)
-layout_mode = 2
+[node name="AmbienteSlider" type="HSlider" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 36.0
+offset_top = 296.0
+offset_right = 424.0
+offset_bottom = 320.0
 max_value = 1.0
 step = 0.01
 value = 1.0
 
-[node name="Espacio" type="Control" parent="PanelAjustes/Columna"]
-custom_minimum_size = Vector2(0, 24)
-layout_mode = 2
-
-[node name="Volver" type="Button" parent="PanelAjustes/Columna"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-text = "Volver"
+[node name="Volver" type="Control" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 186.0
+offset_top = 348.0
+offset_right = 274.0
+offset_bottom = 436.0
+script = ExtResource("3_circulo")
+color_fondo = Color(0.62, 0.24, 0.36, 1)
+icono = ExtResource("8_volver")
 
 [node name="PanelCreditos" type="Panel" parent="."]
 visible = false
@@ -211,42 +262,25 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -210.0
-offset_top = -250.0
+offset_top = -230.0
 offset_right = 210.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_bottom = 230.0
 
-[node name="Encabezado" type="Panel" parent="PanelCreditos"]
+[node name="Titulo" type="Label" parent="PanelCreditos"]
 layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 416.0
-offset_bottom = 52.0
-mouse_filter = 2
-
-[node name="Titulo" type="Label" parent="PanelCreditos/Encabezado"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "CRÉDITOS"
+offset_left = 28.0
+offset_top = 24.0
+offset_right = 392.0
+offset_bottom = 60.0
+text = "Creditos"
 horizontal_alignment = 1
-vertical_alignment = 1
 
-[node name="Columna" type="VBoxContainer" parent="PanelCreditos"]
+[node name="Lista" type="Label" parent="PanelCreditos"]
 layout_mode = 0
-offset_left = 36.0
-offset_top = 72.0
-offset_right = 384.0
-offset_bottom = 460.0
-theme_override_constants/separation = 18
-
-[node name="Lista" type="Label" parent="PanelCreditos/Columna"]
-layout_mode = 2
-size_flags_vertical = 3
+offset_left = 28.0
+offset_top = 80.0
+offset_right = 392.0
+offset_bottom = 320.0
 text = "Melissa Huerta
 Shiara
 Malu
@@ -256,7 +290,12 @@ Miko"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Volver" type="Button" parent="PanelCreditos/Columna"]
-custom_minimum_size = Vector2(0, 48)
-layout_mode = 2
-text = "Volver"
+[node name="Volver" type="Control" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 166.0
+offset_top = 348.0
+offset_right = 254.0
+offset_bottom = 436.0
+script = ExtResource("3_circulo")
+color_fondo = Color(0.62, 0.24, 0.36, 1)
+icono = ExtResource("8_volver")
