@@ -81,8 +81,19 @@ func _piso(rect: Rect2, color: Color, nombre: String):
 	piso.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(piso)
 
+	zonas.append({ "nombre": nombre, "rect": rect })
+	
+	#debug
+	#if nombre not in ["Huaca", "Cueva", "Mar"]:
+		#var debug_zona := ColorRect.new()
+		#debug_zona.position = rect.position
+		#debug_zona.size = rect.size
+		#debug_zona.color = Color(1, 0, 0, 0.35)
+		#debug_zona.z_index = 0
+		#debug_zona.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#add_child(debug_zona)
+		
 	if nombre != "":
-		zonas.append({ "nombre": nombre, "rect": rect })
 		var etiqueta := Label.new()
 		etiqueta.text = nombre.to_upper()
 		etiqueta.position = rect.position + Vector2(16, 16)
@@ -119,6 +130,9 @@ func _muro(rect: Rect2):
 	add_child(visual)
 
 	var cuerpo := StaticBody2D.new()
+	# permite colisionar con Cuniraya
+	cuerpo.collision_layer = 3
+	cuerpo.collision_mask = 0
 	cuerpo.position = rect.position + rect.size * 0.5
 	var forma := RectangleShape2D.new()
 	forma.size = rect.size
@@ -133,3 +147,52 @@ func _zona_en(punto: Vector2) -> String:
 		if zona.rect.has_point(punto):
 			return zona.nombre
 	return "Huaca"
+
+func configurar_navegacion():
+	var navigation_region := get_tree().current_scene.get_node("NavigationRegion2D")
+	var navigation_polygon : NavigationPolygon = navigation_region.navigation_polygon
+
+	navigation_polygon.clear()
+
+	var areas_caminables = [
+		Rect2(240, -80, 360, 120), # Jardin
+		Rect2(370, 40, 100, 140),  # Conexion Jardin-Plaza
+		Rect2(280, 180, 280, 240), # Plaza
+		Rect2(370, 420, 100, 160), # Conexion Plaza-Costa
+		Rect2(200, 580, 440, 160)  # Costa
+	]
+
+	for rect in areas_caminables:
+		var vertices := PackedVector2Array([
+			rect.position,
+			Vector2(rect.end.x, rect.position.y),
+			rect.end,
+			Vector2(rect.position.x, rect.end.y)
+		])
+
+		navigation_polygon.add_outline(vertices)
+
+	navigation_polygon.make_polygons_from_outlines()
+	
+func obtener_punto_cuniraya() -> Vector2:
+	var zonas_validas := []
+
+	for zona in zonas:
+		if zona.nombre != "Huaca" and zona.nombre != "Cueva" and zona.nombre != "Mar":
+			zonas_validas.append(zona.rect)
+
+	if zonas_validas.is_empty():
+		return global_position
+
+	var rect: Rect2 = zonas_validas.pick_random()
+
+	# Margen para no generar el punto sobre los muros
+	var margen := 30.0
+	var rect_seguro := rect.grow(-margen)
+	
+	var punto_local := Vector2(
+		randf_range(rect_seguro.position.x, rect_seguro.end.x),
+		randf_range(rect_seguro.position.y, rect_seguro.end.y)
+	)
+
+	return to_global(punto_local)
