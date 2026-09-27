@@ -110,7 +110,7 @@ offset_left = 20.0
 offset_top = 106.0
 offset_right = 160.0
 offset_bottom = 129.0
-text = "Recuerdos  0/3"
+text = "PRESENCIA"
 
 [node name="RecuerdosLabel" type="Label" parent="HUD/PanelEstado"]
 layout_mode = 0
@@ -118,7 +118,7 @@ offset_left = 20.0
 offset_top = 192.0
 offset_right = 392.0
 offset_bottom = 215.0
-text = "PRESENCIA"
+text = "Recuerdos  0/3"
 
 [node name="PresenciaBar" type="ProgressBar" parent="HUD/PanelEstado"]
 layout_mode = 0

@@ -1,17 +1,26 @@
 extends CanvasLayer
 
-const NARANJA := Color(0.98, 0.62, 0.14, 1)
-const NARANJA_OSCURO := Color(0.9, 0.48, 0.08, 1)
-const CREMA := Color(1, 0.97, 0.93, 1)
-const VERDE := Color(0.42, 0.78, 0.38, 1)
-const TEXTO := Color(0.42, 0.28, 0.14, 1)
-const TEXTO_CLARO := Color(1, 0.98, 0.94, 1)
+const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
+const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
+const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
+const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
+const CREMA := Color(0.99, 0.96, 0.9, 1)
+const MORADO := Color(0.22, 0.2, 0.42, 0.92)
+const VERDE := Color(0.49, 0.76, 0.29, 1)
+const LILA := Color(0.67, 0.62, 0.93, 1)
+const DORADO := Color(0.86, 0.7, 0.2, 1)
+const BORDO := Color(0.62, 0.24, 0.36, 1)
 
 var prompt_alpha := 0.0
 var prompt_texto := ""
 var material_oscuridad: ShaderMaterial
+var icono_presencia: TextureRect
+var marco_presencia: Panel
+var barra_energia: ProgressBar
+var barra_presencia: ProgressBar
+var velo_ajustes: ColorRect
+var panel_ajustes: Panel
 
-# Sonidos ambiente y sfx
 @onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
 @onready var llanto_bebe: AudioStreamPlayer2D = $LlantoBebe
@@ -21,43 +30,25 @@ var volumen_normal_llanto: float = 0.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
 
+
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_estilar_panel()
-	_estilar_barras()
 	_estilar_textos()
-	_estilar_pildora($PromptFondo, NARANJA)
+	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
+	_poner_ajustes()
 	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
-	if OS.get_cmdline_user_args().has("--shot"):
+	if OS.get_cmdline_user_args().has("--hudshot"):
 		_capturar()
 
+
 func _estilar_panel():
-	var panel := StyleBoxFlat.new()
-	panel.bg_color = CREMA
-	panel.set_corner_radius_all(22)
-	panel.set_border_width_all(4)
-	panel.border_color = Color(1, 1, 1, 1)
-	panel.shadow_color = Color(0, 0, 0, 0.18)
-	panel.shadow_size = 8
-	panel.shadow_offset = Vector2(0, 4)
-	$PanelEstado.add_theme_stylebox_override("panel", panel)
-
-	var encabezado := StyleBoxFlat.new()
-	encabezado.bg_color = NARANJA
-	encabezado.set_corner_radius_all(16)
-	encabezado.corner_radius_bottom_left = 0
-	encabezado.corner_radius_bottom_right = 0
-	$PanelEstado/Encabezado.add_theme_stylebox_override("panel", encabezado)
-
-
-func _estilar_barras():
-	_pintar_barra($PanelEstado/EnergiaBar, NARANJA)
-	_pintar_barra($PanelEstado/PresenciaBar, Color(0.38, 0.76, 0.72, 1))
-
-
-func _estilar_textos():
-	for label in [
+	$PanelEstado.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	$PanelEstado.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	for nodo in [
+		$PanelEstado/Encabezado,
 		$PanelEstado/Label,
 		$PanelEstado/PresenciaLabel,
 		$PanelEstado/TiempoLabel,
@@ -65,40 +56,206 @@ func _estilar_textos():
 		$PanelEstado/ZonaLabel,
 		$PanelEstado/RecuerdosLabel,
 	]:
-		label.add_theme_font_size_override("font_size", 15)
-		label.add_theme_color_override("font_color", TEXTO)
-	$PanelEstado/Encabezado/Titulo.add_theme_color_override("font_color", TEXTO_CLARO)
-	$PanelEstado/Encabezado/Titulo.add_theme_font_size_override("font_size", 20)
-	$PromptLabel.add_theme_font_size_override("font_size", 18)
-	$PromptLabel.add_theme_color_override("font_color", TEXTO_CLARO)
-	$AvisoLabel.add_theme_font_size_override("font_size", 20)
-	$AvisoLabel.add_theme_color_override("font_color", TEXTO_CLARO)
+		nodo.visible = false
+	if has_node("PresenciaLabel"):
+		$PresenciaLabel.visible = false
+	_poner_icono(ICONO_ENERGIA, Vector2(16, 16), VERDE)
+	barra_energia = $PanelEstado/EnergiaBar
+	_envolver_barra(barra_energia, Vector2(60, 20), VERDE)
+	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 60), LILA)
+	barra_presencia = $PanelEstado/PresenciaBar
+	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 64), LILA)
+	_mostrar_presencia(false)
+
+
+func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
+	var circulo := Panel.new()
+	circulo.position = pos
+	circulo.size = Vector2(36, 36)
+	circulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	circulo.add_theme_stylebox_override("panel", _circulo(color))
+	$PanelEstado.add_child(circulo)
+	var icono := TextureRect.new()
+	icono.texture = textura
+	icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icono.set_anchors_preset(Control.PRESET_CENTER)
+	icono.offset_left = -11
+	icono.offset_top = -11
+	icono.offset_right = 11
+	icono.offset_bottom = 11
+	circulo.add_child(icono)
+	return icono
+
+
+func _circulo(color: Color, radio: int = 36) -> StyleBoxFlat:
+	var caja := StyleBoxFlat.new()
+	caja.bg_color = color
+	caja.set_corner_radius_all(radio)
+	caja.set_border_width_all(4)
+	caja.border_color = Color.WHITE
+	caja.shadow_color = Color(0, 0, 0, 0.22)
+	caja.shadow_size = 8
+	caja.shadow_offset = Vector2(0, 4)
+	return caja
+
+
+func _estilar_prompt() -> void:
+	for nodo in [$PromptFondo, $PromptLabel]:
+		nodo.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+		nodo.offset_left = -76
+		nodo.offset_top = -76
+		nodo.offset_right = -20
+		nodo.offset_bottom = -20
+	$PromptFondo.add_theme_stylebox_override("panel", _circulo(VERDE, 56))
+	_texto($PromptLabel, 22)
+	$PromptLabel.text = "E"
+
+
+func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
+	var marco := Panel.new()
+	marco.position = pos
+	marco.size = Vector2(196, 28)
+	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	marco.add_theme_stylebox_override("panel", _tarjeta(MORADO, 14))
+	$PanelEstado.add_child(marco)
+	barra.reparent(marco)
+	barra.set_anchors_preset(Control.PRESET_FULL_RECT)
+	barra.offset_left = 6
+	barra.offset_top = 6
+	barra.offset_right = -6
+	barra.offset_bottom = -6
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = color
+	fill.set_corner_radius_all(8)
+	barra.add_theme_stylebox_override("fill", fill)
+	barra.add_theme_stylebox_override("background", StyleBoxEmpty.new())
+	barra.show_percentage = false
+	return marco
+
+
+func _mostrar_presencia(visible: bool) -> void:
+	icono_presencia.get_parent().visible = visible
+	marco_presencia.visible = visible
+	barra_presencia.visible = visible
+
+
+func _estilar_textos():
+	_texto($PromptLabel, 16)
+	_texto($AvisoLabel, 18)
+
+
+func _texto(label: Label, tamano: int) -> void:
+	label.add_theme_font_override("font", FUENTE)
+	label.add_theme_font_size_override("font_size", tamano)
+	label.add_theme_color_override("font_color", CREMA)
+
+
+func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
+	var caja := StyleBoxFlat.new()
+	caja.bg_color = color
+	caja.set_corner_radius_all(radio)
+	caja.set_border_width_all(4)
+	caja.border_color = Color.WHITE
+	caja.shadow_color = Color(0, 0, 0, 0.22)
+	caja.shadow_size = 8
+	caja.shadow_offset = Vector2(0, 4)
+	return caja
 
 
 func _estilar_pildora(panel: Panel, color: Color):
-	var caja := StyleBoxFlat.new()
-	caja.bg_color = color
-	caja.set_corner_radius_all(20)
-	caja.set_border_width_all(3)
-	caja.border_color = Color(1, 1, 1, 1)
-	caja.shadow_color = Color(0, 0, 0, 0.16)
-	caja.shadow_size = 6
-	caja.shadow_offset = Vector2(0, 3)
-	panel.add_theme_stylebox_override("panel", caja)
+	panel.add_theme_stylebox_override("panel", _tarjeta(color, 22))
 
 
-func _pintar_barra(barra: ProgressBar, color: Color):
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = color
-	fill.set_corner_radius_all(10)
-	var fondo := StyleBoxFlat.new()
-	fondo.bg_color = Color(0.93, 0.88, 0.8, 1)
-	fondo.set_corner_radius_all(10)
-	fondo.set_border_width_all(2)
-	fondo.border_color = Color(1, 1, 1, 1)
-	barra.add_theme_stylebox_override("fill", fill)
-	barra.add_theme_stylebox_override("background", fondo)
-	barra.show_percentage = false
+func _poner_ajustes() -> void:
+	var boton := BotonCirculo.new()
+	boton.color_fondo = DORADO
+	boton.icono = ICONO_AJUSTES
+	boton.tamano = 52.0
+	boton.pressed.connect(_alternar_ajustes)
+	add_child(boton)
+	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	boton.offset_left = -72
+	boton.offset_top = 16
+	boton.offset_right = -20
+	boton.offset_bottom = 68
+
+	velo_ajustes = ColorRect.new()
+	velo_ajustes.visible = false
+	velo_ajustes.color = Color(0.08, 0.06, 0.16, 0.55)
+	velo_ajustes.set_anchors_preset(Control.PRESET_FULL_RECT)
+	velo_ajustes.mouse_filter = Control.MOUSE_FILTER_STOP
+	add_child(velo_ajustes)
+
+	panel_ajustes = Panel.new()
+	panel_ajustes.visible = false
+	panel_ajustes.set_anchors_preset(Control.PRESET_CENTER)
+	panel_ajustes.offset_left = -220
+	panel_ajustes.offset_top = -210
+	panel_ajustes.offset_right = 220
+	panel_ajustes.offset_bottom = 210
+	panel_ajustes.add_theme_stylebox_override("panel", _tarjeta(MORADO, 28))
+	add_child(panel_ajustes)
+
+	var titulo := Label.new()
+	titulo.text = "Sonido"
+	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.position = Vector2(24, 20)
+	titulo.size = Vector2(392, 36)
+	_texto(titulo, 28)
+	panel_ajustes.add_child(titulo)
+
+	var filas := [
+		["Master", Ajustes.volumen_master, Ajustes.set_volumen_master],
+		["Musica", Ajustes.volumen_musica, Ajustes.set_volumen_musica],
+		["Efectos", Ajustes.volumen_efectos, Ajustes.set_volumen_efectos],
+		["Ambiente", Ajustes.volumen_ambiente, Ajustes.set_volumen_ambiente],
+	]
+	var y := 72.0
+	for fila in filas:
+		var etiqueta := Label.new()
+		etiqueta.text = fila[0]
+		etiqueta.position = Vector2(32, y)
+		etiqueta.size = Vector2(376, 24)
+		_texto(etiqueta, 16)
+		panel_ajustes.add_child(etiqueta)
+		var slider := HSlider.new()
+		slider.min_value = 0.0
+		slider.max_value = 1.0
+		slider.step = 0.01
+		slider.value = fila[1]
+		slider.position = Vector2(32, y + 28)
+		slider.size = Vector2(376, 24)
+		slider.value_changed.connect(fila[2])
+		panel_ajustes.add_child(slider)
+		y += 72
+	move_child(boton, -1)
+
+
+func _alternar_ajustes() -> void:
+	if panel_ajustes.visible:
+		_cerrar_ajustes()
+	else:
+		_abrir_ajustes()
+
+
+func _abrir_ajustes() -> void:
+	velo_ajustes.visible = true
+	panel_ajustes.visible = true
+	get_tree().paused = true
+
+
+func _cerrar_ajustes() -> void:
+	velo_ajustes.visible = false
+	panel_ajustes.visible = false
+	get_tree().paused = false
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_cancel") and panel_ajustes.visible:
+		_cerrar_ajustes()
+		get_viewport().set_input_as_handled()
 
 
 func _capturar():
@@ -109,31 +266,24 @@ func _capturar():
 		cavillaca._recoger_bebe()
 	await get_tree().create_timer(0.55).timeout
 	var imagen := get_viewport().get_texture().get_image()
-	imagen.save_png("screenshot_sprint2.png")
+	imagen.save_png("screenshot_hud.png")
 	get_tree().quit()
 
 
 func _process(delta):
-	$PanelEstado/EnergiaBar.value = Global.energia
-	$PanelEstado/PresenciaBar.value = Global.presencia_cuniraya
-	$PanelEstado/TiempoLabel.text = "Tiempo  %.0f s" % Global.tiempo_juego
-	$PanelEstado/BebeLabel.text = "Bebe  cargando" if Global.lleva_bebe else "Bebe  en el suelo"
-	$PanelEstado/RecuerdosLabel.text = "Recuerdos  %d/%d" % [Global.recuerdos_obtenidos, Global.RECUERDOS_TOTALES]
-	
-	var texto_zona := Global.zona_actual
-	if Global.descanso_con_zorro:
-		texto_zona += " (Descansando)"
-	$PanelEstado/ZonaLabel.text = texto_zona
+	barra_energia.value = Global.energia
+	barra_presencia.value = Global.presencia_cuniraya
+	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:
 			var es_ataque := Global.prompt_interaccion.begins_with("ESPACIO")
-			_estilar_pildora($PromptFondo, VERDE if es_ataque else NARANJA)
+			$PromptFondo.add_theme_stylebox_override("panel", _circulo(BORDO if es_ataque else VERDE, 56))
+			$PromptLabel.text = "E"
 		prompt_texto = Global.prompt_interaccion
 
 	var destino_alpha := 1.0 if Global.prompt_interaccion != "" else 0.0
 	prompt_alpha = move_toward(prompt_alpha, destino_alpha, delta * 8.0)
-	$PromptLabel.text = prompt_texto
 	$PromptLabel.modulate.a = prompt_alpha
 	$PromptFondo.modulate.a = prompt_alpha
 
@@ -142,26 +292,23 @@ func _process(delta):
 	$AvisoFondo.visible = hay_aviso
 	$AvisoLabel.visible = hay_aviso
 	if hay_aviso:
-		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else NARANJA_OSCURO
+		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else BORDO
 		_estilar_pildora($AvisoFondo, color_aviso)
 
-	# Presencia de Cuniraya: Oscuridad y Sonido
 	var nivel_presencia : float = Global.presencia_cuniraya
 	var volumen_tension : float = lerp(-10.0, 0.0, nivel_presencia / 100.0)
 	material_oscuridad.set_shader_parameter("intensidad", nivel_presencia / 100.0)
 	sonido_tension.volume_db = volumen_tension
-	
+
 	if Global.presencia_activa:
 		if not sonido_tension.playing:
 			sonido_tension.volume_db = volumen_normal_tension
 			sonido_tension.play()
 	else:
 		fade_out_audio(sonido_tension, 2.5)
-			
-	# Peaks de tensión
+
 	if Global.presencia_activa:
 		temporizador_peak -= delta
-
 		if temporizador_peak <= 0.0 and not peak_tension.playing:
 			peak_tension.volume_db = volumen_normal_peak
 			peak_tension.play()
@@ -169,11 +316,9 @@ func _process(delta):
 	else:
 		fade_out_audio(peak_tension, 2.5)
 		temporizador_peak = 0.0
-		
-	# Llanto del bebé
+
 	if Global.presencia_activa:
 		temporizador_llanto -= delta
-
 		if temporizador_llanto <= 0.0 and not llanto_bebe.playing:
 			llanto_bebe.volume_db = volumen_normal_llanto
 			llanto_bebe.play()
@@ -181,11 +326,11 @@ func _process(delta):
 	else:
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
-		
+
+
 func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
 	if not audio.playing:
 		return
-	
 	var tween := create_tween()
 	tween.tween_property(audio, "volume_db", -40.0, duracion)
 	tween.tween_callback(func():
