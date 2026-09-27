@@ -1,4 +1,5 @@
 [gd_scene load_steps=9 format=3 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=13 format=3 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -8,6 +9,15 @@
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="6_halcon"]
 [ext_resource type="PackedScene" path="res://scenes/Zorro.tscn" id="7_zorro"]
 [ext_resource type="PackedScene" path="res://scenes/Cueva.tscn" id="8_cueva"]
+[ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="6_nxtc6"]
+[ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="8_jlsqs"]
+[ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="9_q8u5g"]
+[ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="10_lhr70"]
+[ext_resource type="AudioStream" uid="uid://k0g0tqnkpegb" path="res://sfx/llanto_bebe.mp3" id="11_wp0k4"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
+shader = ExtResource("8_jlsqs")
+shader_parameter/intensidad = 0.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("5_suelo")
@@ -36,17 +46,19 @@ position = Vector2(400, 350)
 
 [node name="Cueva" parent="." instance=ExtResource("8_cueva")]
 position = Vector2(350, 380)
+[node name="Cuniraya" parent="." instance=ExtResource("6_nxtc6")]
 
 [node name="HUD" type="CanvasLayer" parent="."]
 script = ExtResource("3_0bbpv")
 
 [node name="Oscuridad" type="ColorRect" parent="HUD"]
+material = SubResource("ShaderMaterial_q8u5g")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0)
+color = Color(0.00392157, 0.00392157, 0.00392157, 0.00392157)
 
 [node name="PanelEstado" type="Panel" parent="HUD"]
 offset_left = 16.0
@@ -90,7 +102,7 @@ offset_bottom = 98.0
 value = 100.0
 show_percentage = false
 
-[node name="Label2" type="Label" parent="HUD/PanelEstado"]
+[node name="PresenciaLabel" type="Label" parent="HUD/PanelEstado"]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 106.0
@@ -99,6 +111,9 @@ offset_bottom = 129.0
 text = "RECUERDOS"
 
 [node name="RecuerdosLabel" type="Label" parent="HUD/PanelEstado"]
+text = "PRESENCIA"
+
+[node name="PresenciaBar" type="ProgressBar" parent="HUD/PanelEstado"]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 130.0
@@ -184,3 +199,15 @@ vertical_alignment = 1
 visible = false
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="SonidoTension" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource("9_q8u5g")
+bus = &"Ambiente"
+
+[node name="PeakTension" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource("10_lhr70")
+bus = &"Ambiente"
+
+[node name="LlantoBebe" type="AudioStreamPlayer2D" parent="HUD"]
+stream = ExtResource("11_wp0k4")
+bus = &"SFX"

@@ -15,6 +15,8 @@ var energia: float = 100.0
 var lleva_bebe: bool = false
 var tiempo_juego: float = 0.0
 var presencia_cuniraya: int = 0
+var presencia_cuniraya: float = 0.0
+var presencia_activa: bool = false
 var flashbacks_desbloqueados: Array[String] = []
 var prompt_interaccion: String = ""
 var zona_actual: String = "Plaza"
@@ -29,20 +31,25 @@ var recuerdos_obtenidos: int = 0
 const RECUERDOS_TOTALES: int = 3
 
 # Temporizadores
+# Temporizadores # EDITAR
 var aviso_temporizador: float = 0.0
 
 # =========================
 # CONFIGURACIÓN
 # =========================
-
 const ENERGIA_MAX: float = 100.0
+# PRESENCIA CUNIRAYA
+const PRESENCIA_MAX := 100.0
+const VELOCIDAD_PRESENCIA := 5.0
+# COSTOS Y DAÑOS
 const COSTO_CAMINAR: float = 0.5
 const COSTO_CORRER: float = 2.0
 const COSTO_CARGAR_BEBE: float = 2.0
 const COSTO_ARROJAR: float = 1.0
-const RECOMPENSA_VICTORIA: float = 12.0
 const DANIO_ENERGIA_DERROTA: float = 15.0
 const DANIO_PRESENCIA_DERROTA: float = 1
+# RECOMPENSA
+const RECOMPENSA_VICTORIA: float = 12.0
 
 # =========================
 # PROCESO
@@ -67,7 +74,6 @@ func perder_energia(cantidad: float):
 func recuperar_energia(cantidad: float):
 	energia = min(energia + cantidad, ENERGIA_MAX)
 
-
 # =========================
 # PRESENCIA DE CUNIRAYA
 # =========================
@@ -82,7 +88,15 @@ func reducir_presencia():
 
 # =========================
 # RECUERDOS
+# PRESENCIA DE CUNIYARA
 # =========================
+func aumentar_presencia(delta: float):
+	presencia_cuniraya = min(
+		presencia_cuniraya + VELOCIDAD_PRESENCIA * delta,
+		PRESENCIA_MAX
+	)
+	
+	print("Presencia: ", presencia_cuniraya)
 
 func obtener_recuerdo():
 	recuerdos_obtenidos = min(recuerdos_obtenidos + 1, RECUERDOS_TOTALES)
@@ -96,6 +110,9 @@ func obtener_recuerdo():
 		Global.mostrar_aviso("Recuerdo 3/3 - Final desbloqueado")
 
 
+# =========================
+# AVISO DE COMBATE
+# =========================
 func mostrar_aviso(texto: String):
 	aviso_combate = texto
 	aviso_temporizador = 2.0
