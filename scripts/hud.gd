@@ -63,6 +63,7 @@ func _estilar_textos():
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
 		$PanelEstado/ZonaLabel,
+		$PanelEstado/RecuerdosLabel,
 	]:
 		label.add_theme_font_size_override("font_size", 15)
 		label.add_theme_color_override("font_color", TEXTO)
@@ -117,7 +118,12 @@ func _process(delta):
 	$PanelEstado/PresenciaBar.value = Global.presencia_cuniraya
 	$PanelEstado/TiempoLabel.text = "Tiempo  %.0f s" % Global.tiempo_juego
 	$PanelEstado/BebeLabel.text = "Bebe  cargando" if Global.lleva_bebe else "Bebe  en el suelo"
-	$PanelEstado/ZonaLabel.text = Global.zona_actual
+	$PanelEstado/RecuerdosLabel.text = "Recuerdos  %d/%d" % [Global.recuerdos_obtenidos, Global.RECUERDOS_TOTALES]
+	
+	var texto_zona := Global.zona_actual
+	if Global.descanso_con_zorro:
+		texto_zona += " (Descansando)"
+	$PanelEstado/ZonaLabel.text = texto_zona
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:
