@@ -22,6 +22,15 @@ All of You language: round fills, white outline, Fredoka, cream type.
 - Circles: Jugar, Ajustes, Creditos, Salir
 - Captions under the circles
 
+## Entities
+
+### Cavillaca — `scenes/Cavillaca.tscn`
+
+- Sprite sheets in `assets/person/`, frames 112x148 in `assets/person/frames/`
+- Front 3, back 3, side 5 (flip for left)
+- Idle uses the standing frame; walk plays the sheet
+- Purple dress, braid, white hem. No ColorRect body.
+
 ## HUD — `scripts/hud.gd`
 
 - No card, no title

@@ -1,6 +1,6 @@
 extends Area2D
 
-const OFFSET_CARGADO := Vector2(16, -12)
+const OFFSET_CARGADO := Vector2(22, -52)
 const SEGUIMIENTO := 14.0
 
 var bob_t := 0.0

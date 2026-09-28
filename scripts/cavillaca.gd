@@ -19,12 +19,28 @@ const PASOS := [
 	preload("res://sfx/paso_2.ogg"),
 ]
 const ATAQUE := preload("res://sfx/ataque.ogg")
+const FRAMES_FRENTE := [
+	preload("res://assets/person/frames/frente_0.png"),
+	preload("res://assets/person/frames/frente_1.png"),
+	preload("res://assets/person/frames/frente_2.png"),
+]
+const FRAMES_ESPALDA := [
+	preload("res://assets/person/frames/espalda_0.png"),
+	preload("res://assets/person/frames/espalda_1.png"),
+	preload("res://assets/person/frames/espalda_2.png"),
+]
+const FRAMES_LADO := [
+	preload("res://assets/person/frames/lado_0.png"),
+	preload("res://assets/person/frames/lado_1.png"),
+	preload("res://assets/person/frames/lado_2.png"),
+	preload("res://assets/person/frames/lado_3.png"),
+	preload("res://assets/person/frames/lado_4.png"),
+]
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
 var lock_interaccion := 0.0
 var lock_arrojar := 0.0
-var paso_t := 0.0
 var paso_acum := 0.0
 var cam: Camera2D
 var sfx_paso: AudioStreamPlayer
@@ -34,6 +50,7 @@ func _ready():
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
 	_armar_sfx()
+	_armar_sprite()
 
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.5, 1.5)
@@ -47,7 +64,7 @@ func _ready():
 	cam.position_smoothing_speed = 5.0
 	add_child(cam)
 	cam.make_current()
-	$Sombra.pivot_offset = Vector2(12, 3)
+	$Sombra.pivot_offset = Vector2(16, 4)
 
 
 func _armar_sfx() -> void:
@@ -60,6 +77,26 @@ func _armar_sfx() -> void:
 	sfx_ataque.stream = ATAQUE
 	sfx_ataque.volume_db = -8.0
 	add_child(sfx_ataque)
+
+
+func _armar_sprite() -> void:
+	var hojas := SpriteFrames.new()
+	_poner_anim(hojas, "idle_frente", [FRAMES_FRENTE[1]], 1.0)
+	_poner_anim(hojas, "walk_frente", FRAMES_FRENTE, 6.0)
+	_poner_anim(hojas, "idle_espalda", [FRAMES_ESPALDA[1]], 1.0)
+	_poner_anim(hojas, "walk_espalda", FRAMES_ESPALDA, 6.0)
+	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[2]], 1.0)
+	_poner_anim(hojas, "walk_lado", FRAMES_LADO, 8.0)
+	$Sprite.sprite_frames = hojas
+	$Sprite.play("idle_frente")
+
+
+func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad: float) -> void:
+	hojas.add_animation(nombre)
+	hojas.set_animation_speed(nombre, velocidad)
+	hojas.set_animation_loop(nombre, true)
+	for textura in texturas:
+		hojas.add_frame(nombre, textura)
 
 
 func _physics_process(delta):
@@ -170,42 +207,28 @@ func _direccion_cuatro() -> Vector2:
 
 
 func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
-	var visual: Node2D = $Visual
-	var pierna_izq: ColorRect = $Visual/PiernaIzq
-	var pierna_der: ColorRect = $Visual/PiernaDer
-	var cara: ColorRect = $Visual/Cara
+	var accion := "walk" if esta_caminando else "idle"
+	var direccion := "lado"
+	if facing == Vector2.UP:
+		direccion = "espalda"
+	elif facing == Vector2.DOWN:
+		direccion = "frente"
+	var anim := "%s_%s" % [accion, direccion]
+	$Sprite.flip_h = facing == Vector2.LEFT
+	$Sprite.speed_scale = 1.35 if esta_corriendo else 0.75 if Global.lleva_bebe else 1.0
+	if $Sprite.animation != anim:
+		$Sprite.play(anim)
 
 	if esta_caminando:
-		var ritmo := 16.0 if esta_corriendo else 10.0
-		if Global.lleva_bebe:
-			ritmo = 7.5
-		paso_t += delta * ritmo
-		var osc := sin(paso_t)
 		paso_acum += delta
 		var intervalo := 0.24 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.36
 		if paso_acum >= intervalo:
 			paso_acum = 0.0
 			_sonar_paso()
-		visual.position.y = -abs(osc) * 2.2
-		pierna_izq.position = Vector2(-8, 8 + osc * 3.5)
-		pierna_der.position = Vector2(2, 8 - osc * 3.5)
-		$Sombra.scale.x = 1.0 + abs(osc) * 0.12
+		$Sombra.scale.x = 1.0 + sin(Time.get_ticks_msec() * 0.012) * 0.06
 	else:
-		paso_t = 0.0
 		paso_acum = 0.0
-		visual.position.y = 0.0
-		pierna_izq.position = Vector2(-8, 8)
-		pierna_der.position = Vector2(2, 8)
 		$Sombra.scale.x = 1.0
-
-	if facing == Vector2.LEFT:
-		cara.position = Vector2(-10, -12)
-	elif facing == Vector2.UP:
-		cara.position = Vector2(-4, -16)
-	elif facing == Vector2.DOWN:
-		cara.position = Vector2(2, -6)
-	else:
-		cara.position = Vector2(2, -12)
 
 
 func _actualizar_camara(delta: float):
@@ -234,13 +257,10 @@ func _actualizar_prompt():
 
 
 func _actualizar_carga_visual():
-	var cuerpo := $Visual/Cuerpo as ColorRect
-	if cuerpo == null:
-		return
 	if Global.lleva_bebe:
-		cuerpo.modulate = Color(1.08, 0.96, 0.88)
+		$Sprite.modulate = Color(1.04, 0.98, 0.94)
 	else:
-		cuerpo.modulate = Color.WHITE
+		$Sprite.modulate = Color.WHITE
 
 
 func _seguir_zorro():
