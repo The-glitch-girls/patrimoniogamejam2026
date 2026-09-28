@@ -25,10 +25,32 @@ var aviso_combate: String = ""
 var partida_terminada: bool = false
 var descanso_con_zorro: bool = false
 var cuidado_bebe_desbloqueado: bool = false
+var hacia_el_mar: bool = false
+var flashback_abierto: bool = false
+var resultado_final: String = ""
 
 # Sistema de Recuerdos
 var recuerdos_obtenidos: int = 0
 const RECUERDOS_TOTALES: int = 3
+const RECUERDOS := {
+	1: {
+		"id": "acoso",
+		"titulo": "Acoso de Cuniraya",
+		"texto": "Cuniraya no se detenía.",
+	},
+	2: {
+		"id": "lucuma",
+		"titulo": "La lúcuma",
+		"texto": "Comió la lúcuma.\nAsí comenzó.",
+	},
+	3: {
+		"id": "gateo",
+		"titulo": "El gateo del bebé",
+		"texto": "El bebé gateó hacia él.\nYa no había duda.",
+	},
+}
+const DESTINO_MAR := Vector2(620, 880)
+const ESCENA_FINAL := "res://scenes/Final.tscn"
 
 # Temporizadores
 # Temporizadores # EDITAR
@@ -49,6 +71,8 @@ const COSTO_CARGAR_BEBE: float = 2.0
 const COSTO_ARROJAR: float = 1.0
 const DANIO_ENERGIA_DERROTA: float = 15.0
 const DANIO_PRESENCIA_DERROTA: float = 1
+const PRESENCIA_CRITICA: float = 75.0
+const DRENAJE_CRITICO: float = 4.0
 # RECOMPENSA
 const RECOMPENSA_VICTORIA: float = 12.0
 
@@ -63,6 +87,11 @@ func _process(delta):
 		aviso_temporizador = max(aviso_temporizador - delta, 0.0)
 		if aviso_temporizador <= 0.0:
 			aviso_combate = ""
+
+	if hacia_el_mar or flashback_abierto or partida_terminada:
+		return
+	if presencia_cuniraya >= PRESENCIA_CRITICA and not lleva_bebe:
+		perder_energia(DRENAJE_CRITICO * delta)
 
 # =========================
 # ENERGÍA
@@ -84,36 +113,28 @@ func recuperar_energia(cantidad: float):
 
 func aumentar_presencia(cantidad: float = 1.0):
 	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
-	if presencia_cuniraya >= PRESENCIA_MAX:
-		terminar("perder")
 
 
 func reducir_presencia():
 	presencia_cuniraya = max(presencia_cuniraya - 1, 0)
 
 
-# =========================
-# RECUERDOS
-# PRESENCIA DE CUNIYARA
-# =========================
 func aumentar_presencia_por_tiempo(delta: float):
 	presencia_cuniraya = min(
 		presencia_cuniraya + VELOCIDAD_PRESENCIA * delta,
 		PRESENCIA_MAX
 	)
-	if presencia_cuniraya >= PRESENCIA_MAX:
-		terminar("perder")
 
-func obtener_recuerdo():
-	recuerdos_obtenidos = min(recuerdos_obtenidos + 1, RECUERDOS_TOTALES)
-	
+
+func obtener_recuerdo() -> int:
+	if recuerdos_obtenidos >= RECUERDOS_TOTALES:
+		return recuerdos_obtenidos
+	recuerdos_obtenidos += 1
 	if recuerdos_obtenidos == 1:
-		Global.mostrar_aviso("Recuerdo 1/3 - Descanso desbloqueado")
+		descanso_con_zorro = true
 	elif recuerdos_obtenidos == 2:
 		cuidado_bebe_desbloqueado = true
-		Global.mostrar_aviso("Recuerdo 2/3 - Cuidado bebé desbloqueado")
-	elif recuerdos_obtenidos == 3:
-		terminar("ganar")
+	return recuerdos_obtenidos
 
 
 # =========================
@@ -125,16 +146,33 @@ func mostrar_aviso(texto: String):
 
 
 func terminar(resultado: String) -> void:
+	if resultado == "ganar":
+		iniciar_hacia_el_mar()
+		return
 	if partida_terminada:
 		return
 	partida_terminada = true
-	if resultado == "ganar":
-		mostrar_aviso("Ganaste")
+	abrir_final("cuniraya")
+
+
+func iniciar_hacia_el_mar() -> void:
+	if hacia_el_mar:
+		return
+	hacia_el_mar = true
+	partida_terminada = true
+	prompt_interaccion = ""
+
+
+func abrir_final(tipo: String) -> void:
+	if resultado_final != "":
+		return
+	resultado_final = tipo
+	partida_terminada = true
+	if tipo == "mar":
 		Musica.tocar("ganar")
 	else:
-		mostrar_aviso("Perdiste")
 		Musica.tocar("perder")
-	aviso_temporizador = 8.0
+	get_tree().change_scene_to_file(ESCENA_FINAL)
 
 
 func resetear():
@@ -154,3 +192,6 @@ func resetear():
 	recuerdos_obtenidos = 0
 	aviso_temporizador = 0.0
 	partida_terminada = false
+	hacia_el_mar = false
+	flashback_abierto = false
+	resultado_final = ""

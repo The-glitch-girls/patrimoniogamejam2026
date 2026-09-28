@@ -27,10 +27,13 @@ func _ready():
 
 
 func _process(delta):
+	if Global.hacia_el_mar:
+		Global.halcon_cerca = false
+		return
 	if derrotado:
 		respawn_t -= delta
 		Global.halcon_cerca = false
-		if respawn_t <= 0.0:
+		if respawn_t <= 0.0 and Global.recuerdos_obtenidos < Global.RECUERDOS_TOTALES:
 			_revivir()
 		return
 
@@ -82,13 +85,17 @@ func _golpear():
 
 func _victoria():
 	derrotado = true
-	respawn_t = TIEMPO_RESPAWN
-	Global.mostrar_aviso("Victoria")
 	hide()
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
-	
+	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
+		Global.mostrar_aviso("Victoria")
+		respawn_t = TIEMPO_RESPAWN
+		return
+	var indice := Global.obtener_recuerdo()
+	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
 	var flashback := FLASHBACK_ESCENA.instantiate()
+	flashback.configurar(indice)
 	var hud := get_tree().current_scene.get_node("HUD")
 	hud.add_child(flashback)
 

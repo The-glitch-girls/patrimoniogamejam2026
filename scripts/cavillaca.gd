@@ -42,6 +42,7 @@ var facing := Vector2.RIGHT
 var lock_interaccion := 0.0
 var lock_arrojar := 0.0
 var paso_acum := 0.0
+var mar_t := 0.0
 var cam: Camera2D
 var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
@@ -100,6 +101,10 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
+	if Global.hacia_el_mar:
+		_caminar_al_mar(delta)
+		return
+
 	if lock_interaccion > 0.0:
 		lock_interaccion = max(lock_interaccion - delta, 0.0)
 
@@ -183,6 +188,52 @@ func _physics_process(delta):
 		Global.perder_energia(Global.COSTO_CORRER)
 	else:
 		Global.perder_energia(Global.COSTO_CAMINAR)
+
+
+func _caminar_al_mar(delta: float) -> void:
+	_cargar_bebe_forzado()
+	mar_t += delta
+	var destino := Global.DESTINO_MAR
+	var hacia := destino - global_position
+	if hacia.length() < 70.0 or mar_t > 8.0:
+		Global.abrir_final("mar")
+		return
+	var direccion := _cardinal(hacia)
+	facing = direccion
+	velocity = velocity.move_toward(direccion * VELOCIDAD_CON_BEBE, ACELERACION_CON_BEBE * delta)
+	move_and_slide()
+	global_position.x = clamp(
+		global_position.x,
+		Global.LIMITE_MAPA.position.x + 20.0,
+		Global.LIMITE_MAPA.end.x - 20.0
+	)
+	global_position.y = clamp(
+		global_position.y,
+		Global.LIMITE_MAPA.position.y + 20.0,
+		Global.LIMITE_MAPA.end.y - 20.0
+	)
+	_animar_caminata(delta, velocity.length() > 12.0, false)
+	_actualizar_camara(delta)
+	_actualizar_carga_visual()
+	Global.prompt_interaccion = ""
+
+
+func _cardinal(hacia: Vector2) -> Vector2:
+	if abs(hacia.x) > abs(hacia.y):
+		return Vector2(sign(hacia.x), 0)
+	return Vector2(0, sign(hacia.y))
+
+
+func _cargar_bebe_forzado() -> void:
+	if Global.lleva_bebe:
+		return
+	var cueva := get_tree().get_first_node_in_group("zona_segura")
+	if cueva != null and cueva.get("bebe_con_zorro"):
+		cueva.recoger_bebe_del_zorro()
+		return
+	var bebe := _obtener_bebe()
+	if bebe != null:
+		bebe.recoger()
 
 
 func esta_cerca_del_bebe() -> bool:

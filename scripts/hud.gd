@@ -20,6 +20,7 @@ var barra_energia: ProgressBar
 var barra_presencia: ProgressBar
 var velo_ajustes: ColorRect
 var panel_ajustes: Panel
+var marcas_recuerdo: Array[Panel] = []
 
 @onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
@@ -44,6 +45,8 @@ func _ready():
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--hudshot"):
 		_capturar()
+	elif OS.get_cmdline_user_args().has("--flashshot"):
+		_capturar_flashback()
 
 
 func _estilar_panel():
@@ -68,6 +71,7 @@ func _estilar_panel():
 	barra_presencia = $PanelEstado/PresenciaBar
 	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 64), LILA)
 	_mostrar_presencia(false)
+	_poner_recuerdos()
 
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
@@ -141,6 +145,38 @@ func _mostrar_presencia(visible: bool) -> void:
 	icono_presencia.get_parent().visible = visible
 	marco_presencia.visible = visible
 	barra_presencia.visible = visible
+
+
+func _poner_recuerdos() -> void:
+	marcas_recuerdo.clear()
+	for i in range(Global.RECUERDOS_TOTALES):
+		var marca := Panel.new()
+		marca.position = Vector2(268 + i * 30, 22)
+		marca.size = Vector2(22, 22)
+		marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		marca.add_theme_stylebox_override("panel", _marca_recuerdo(false))
+		$PanelEstado.add_child(marca)
+		marcas_recuerdo.append(marca)
+
+
+func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
+	var caja := StyleBoxFlat.new()
+	caja.bg_color = DORADO if lleno else MORADO
+	caja.set_corner_radius_all(22)
+	caja.set_border_width_all(3)
+	caja.border_color = Color.WHITE
+	caja.shadow_color = Color(0, 0, 0, 0.18)
+	caja.shadow_size = 4
+	caja.shadow_offset = Vector2(0, 2)
+	return caja
+
+
+func _actualizar_recuerdos() -> void:
+	for i in range(marcas_recuerdo.size()):
+		marcas_recuerdo[i].add_theme_stylebox_override(
+			"panel",
+			_marca_recuerdo(i < Global.recuerdos_obtenidos)
+		)
 
 
 func _estilar_textos():
@@ -266,9 +302,21 @@ func _capturar():
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca")
 	if cavillaca:
 		cavillaca._recoger_bebe()
+	Global.recuerdos_obtenidos = 2
+	_actualizar_recuerdos()
 	await get_tree().create_timer(0.55).timeout
 	var imagen := get_viewport().get_texture().get_image()
 	imagen.save_png("screenshot_hud.png")
+	get_tree().quit()
+
+
+func _capturar_flashback() -> void:
+	var flashback := preload("res://scenes/Flashback.tscn").instantiate()
+	flashback.configurar(1)
+	add_child(flashback)
+	await get_tree().create_timer(0.5).timeout
+	var imagen := get_viewport().get_texture().get_image()
+	imagen.save_png("screenshot_flashback.png")
 	get_tree().quit()
 
 
@@ -276,6 +324,7 @@ func _process(delta):
 	barra_energia.value = Global.energia
 	barra_presencia.value = Global.presencia_cuniraya
 	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
+	_actualizar_recuerdos()
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:

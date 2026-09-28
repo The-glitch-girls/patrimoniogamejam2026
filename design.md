@@ -39,3 +39,18 @@ All of You language: round fills, white outline, Fredoka, cream type.
 - Prompt: 56px green circle, letter E, bottom-right; burgundy if attack
 - Settings: 52px gold circle, white gear `assets/icons/ajustes.svg`, top-right; opens Sonido card
 - Combat banner same pill, only when it fires
+- Recuerdos: three 22px circles to the right of the energy bar. Empty purple `#38336B`, filled gold `#DBB233`, 3px white outline
+
+## Flashbacks — `scenes/Flashback.tscn`
+
+- Purple wash `#1F1A47` at 72%
+- Title 36 Fredoka cream, body 22
+- Continuar: green pill, 22 radius, 5px white outline
+
+## Finales — `scenes/Final.tscn`
+
+- Same night photo + purple wash as the start menu
+- Title 64 cream with 10px outline
+- One line under the title in lilac
+- Green play circle + caption "Volver a jugar"
+
