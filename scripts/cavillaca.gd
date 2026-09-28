@@ -13,17 +13,27 @@ const LOCK_TRAS_DEJAR := 0.35
 const COOLDOWN_ARROJAR := 0.35
 
 const PIEDRA_ESCENA := preload("res://scenes/Piedra.tscn")
+const PASOS := [
+	preload("res://sfx/paso_0.ogg"),
+	preload("res://sfx/paso_1.ogg"),
+	preload("res://sfx/paso_2.ogg"),
+]
+const ATAQUE := preload("res://sfx/ataque.ogg")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
 var lock_interaccion := 0.0
 var lock_arrojar := 0.0
 var paso_t := 0.0
+var paso_acum := 0.0
 var cam: Camera2D
+var sfx_paso: AudioStreamPlayer
+var sfx_ataque: AudioStreamPlayer
 
 func _ready():
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
+	_armar_sfx()
 
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.5, 1.5)
@@ -38,6 +48,18 @@ func _ready():
 	add_child(cam)
 	cam.make_current()
 	$Sombra.pivot_offset = Vector2(12, 3)
+
+
+func _armar_sfx() -> void:
+	sfx_paso = AudioStreamPlayer.new()
+	sfx_paso.bus = "SFX"
+	sfx_paso.volume_db = -6.0
+	add_child(sfx_paso)
+	sfx_ataque = AudioStreamPlayer.new()
+	sfx_ataque.bus = "SFX"
+	sfx_ataque.stream = ATAQUE
+	sfx_ataque.volume_db = -8.0
+	add_child(sfx_ataque)
 
 
 func _physics_process(delta):
@@ -159,12 +181,18 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 			ritmo = 7.5
 		paso_t += delta * ritmo
 		var osc := sin(paso_t)
+		paso_acum += delta
+		var intervalo := 0.24 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.36
+		if paso_acum >= intervalo:
+			paso_acum = 0.0
+			_sonar_paso()
 		visual.position.y = -abs(osc) * 2.2
 		pierna_izq.position = Vector2(-8, 8 + osc * 3.5)
 		pierna_der.position = Vector2(2, 8 - osc * 3.5)
 		$Sombra.scale.x = 1.0 + abs(osc) * 0.12
 	else:
 		paso_t = 0.0
+		paso_acum = 0.0
 		visual.position.y = 0.0
 		pierna_izq.position = Vector2(-8, 8)
 		pierna_der.position = Vector2(2, 8)
@@ -254,3 +282,11 @@ func _arrojar():
 		piedra.direccion = facing
 	
 	get_parent().add_child(piedra)
+	sfx_ataque.pitch_scale = randf_range(0.94, 1.08)
+	sfx_ataque.play()
+
+
+func _sonar_paso() -> void:
+	sfx_paso.stream = PASOS[randi() % PASOS.size()]
+	sfx_paso.pitch_scale = randf_range(0.92, 1.08)
+	sfx_paso.play()

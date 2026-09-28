@@ -22,6 +22,7 @@ var zona_actual: String = "Plaza"
 var halcon_cerca: bool = false
 var zorro_cerca: bool = false
 var aviso_combate: String = ""
+var partida_terminada: bool = false
 var descanso_con_zorro: bool = false
 var cuidado_bebe_desbloqueado: bool = false
 
@@ -68,7 +69,10 @@ func _process(delta):
 # =========================
 
 func perder_energia(cantidad: float):
+	var antes := energia
 	energia = max(energia - cantidad, 0)
+	if antes > 0.0 and energia <= 0.0:
+		terminar("perder")
 
 
 func recuperar_energia(cantidad: float):
@@ -80,6 +84,8 @@ func recuperar_energia(cantidad: float):
 
 func aumentar_presencia(cantidad: float = 1.0):
 	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
+	if presencia_cuniraya >= PRESENCIA_MAX:
+		terminar("perder")
 
 
 func reducir_presencia():
@@ -95,6 +101,8 @@ func aumentar_presencia_por_tiempo(delta: float):
 		presencia_cuniraya + VELOCIDAD_PRESENCIA * delta,
 		PRESENCIA_MAX
 	)
+	if presencia_cuniraya >= PRESENCIA_MAX:
+		terminar("perder")
 
 func obtener_recuerdo():
 	recuerdos_obtenidos = min(recuerdos_obtenidos + 1, RECUERDOS_TOTALES)
@@ -105,7 +113,7 @@ func obtener_recuerdo():
 		cuidado_bebe_desbloqueado = true
 		Global.mostrar_aviso("Recuerdo 2/3 - Cuidado bebé desbloqueado")
 	elif recuerdos_obtenidos == 3:
-		Global.mostrar_aviso("Recuerdo 3/3 - Final desbloqueado")
+		terminar("ganar")
 
 
 # =========================
@@ -114,6 +122,19 @@ func obtener_recuerdo():
 func mostrar_aviso(texto: String):
 	aviso_combate = texto
 	aviso_temporizador = 2.0
+
+
+func terminar(resultado: String) -> void:
+	if partida_terminada:
+		return
+	partida_terminada = true
+	if resultado == "ganar":
+		mostrar_aviso("Ganaste")
+		Musica.tocar("ganar")
+	else:
+		mostrar_aviso("Perdiste")
+		Musica.tocar("perder")
+	aviso_temporizador = 8.0
 
 
 func resetear():
@@ -132,3 +153,4 @@ func resetear():
 	cuidado_bebe_desbloqueado = false
 	recuerdos_obtenidos = 0
 	aviso_temporizador = 0.0
+	partida_terminada = false
