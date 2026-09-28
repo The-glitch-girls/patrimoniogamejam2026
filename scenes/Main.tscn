@@ -33,11 +33,11 @@ mouse_filter = 2
 color = Color(0.05, 0.04, 0.04, 1)
 
 [node name="Cavillaca" parent="." instance=ExtResource("1_elqb8")]
-position = Vector2(400, 300)
+position = Vector2(620, 420)
 script = ExtResource("2_rvslj")
 
 [node name="Bebe" parent="." instance=ExtResource("4_bebe")]
-position = Vector2(448, 300)
+position = Vector2(668, 420)
 
 [node name="Halcon" parent="." instance=ExtResource("6_halcon")]
 position = Vector2(840, 270)
