@@ -73,7 +73,6 @@ func _estilar_panel():
 	_mostrar_presencia(false)
 	_poner_recuerdos()
 
-
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
 	circulo.position = pos
@@ -157,7 +156,11 @@ func _poner_recuerdos() -> void:
 		marca.add_theme_stylebox_override("panel", _marca_recuerdo(false))
 		$PanelEstado.add_child(marca)
 		marcas_recuerdo.append(marca)
-
+	
+	var ancho_pantalla = get_viewport().get_visible_rect().size.x
+	var canvas_group := $CanvasGroup
+	canvas_group.position.x = ancho_pantalla - 300
+	canvas_group.position.y = 10
 
 func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
