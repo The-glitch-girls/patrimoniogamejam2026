@@ -24,6 +24,9 @@ func _ready() -> void:
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
+	elif OS.get_cmdline_user_args().has("--finalshot"):
+		Global.resultado_final = "mar"
+		get_tree().change_scene_to_file.call_deferred("res://scenes/Final.tscn")
 
 
 func _capturar() -> void:
