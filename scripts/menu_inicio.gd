@@ -21,6 +21,7 @@ func _ready() -> void:
 	_degradado()
 	_conectar()
 	_mostrar_inicio()
+	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
 
@@ -145,6 +146,7 @@ func _abrir_creditos() -> void:
 
 func _jugar() -> void:
 	Global.resetear()
+	Musica.tocar("juego")
 	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 
 

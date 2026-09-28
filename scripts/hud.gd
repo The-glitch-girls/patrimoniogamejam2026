@@ -38,6 +38,8 @@ func _ready():
 	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
 	_poner_ajustes()
+	if not Global.partida_terminada:
+		Musica.tocar("juego")
 	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--hudshot"):
