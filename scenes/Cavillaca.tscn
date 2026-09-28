@@ -1,7 +1,7 @@
 [gd_scene load_steps=2 format=3 uid="uid://cqgtkxob80eht"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_th60e"]
-size = Vector2(28, 42)
+size = Vector2(36, 20)
 
 [node name="Cavillaca" type="CharacterBody2D"]
 collision_mask = 5
@@ -17,7 +17,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0.28)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -8)
+position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_th60e")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
