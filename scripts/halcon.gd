@@ -25,7 +25,8 @@ func _ready():
 	origen = global_position
 	body_entered.connect(_on_body_entered)
 
-
+	$AnimatedSprite2D.play("lado")
+	
 func _process(delta):
 	if Global.hacia_el_mar:
 		Global.halcon_cerca = false
@@ -40,11 +41,11 @@ func _process(delta):
 	vuelo_t += delta
 	if lock_golpe > 0.0:
 		lock_golpe = max(lock_golpe - delta, 0.0)
-	if flash_t > 0.0:
-		flash_t = max(flash_t - delta, 0.0)
-		$Cuerpo.modulate = Color(1.4, 0.7, 0.5)
-	else:
-		$Cuerpo.modulate = Color.WHITE
+	#if flash_t > 0.0:
+		#flash_t = max(flash_t - delta, 0.0)
+		#$Cuerpo.modulate = Color(1.4, 0.7, 0.5)
+	#else:
+		#$Cuerpo.modulate = Color.WHITE
 
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	var cerca := false
@@ -61,10 +62,6 @@ func _process(delta):
 			_patrullar(delta)
 
 	Global.halcon_cerca = cerca
-	$Cuerpo.position.y = -10 + sin(vuelo_t * 7.0) * 3.0
-	$AlaIzq.position = Vector2(-16, -8 + sin(vuelo_t * 12.0) * 4.0)
-	$AlaDer.position = Vector2(8, -8 + sin(vuelo_t * 12.0 + PI) * 4.0)
-
 
 func recibir_golpe(direccion: Vector2):
 	if derrotado:
@@ -77,11 +74,11 @@ func recibir_golpe(direccion: Vector2):
 
 
 func _golpear():
+	$AnimatedSprite2D.play("frente")
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
 	Global.aumentar_presencia()
-	Global.mostrar_aviso("¡Halcón ha golpeado!")
-
+	Global.mostrar_aviso("¡Halcón ha golpeado!")	
 
 func _victoria():
 	derrotado = true

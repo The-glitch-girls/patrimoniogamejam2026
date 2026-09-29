@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjcw7bb2dqxqp"
-path="res://.godot/imported/lado_4.png-e31caa6f3d2483312aabf1c67352615e.ctex"
+uid="uid://df2a7vs1ox5tp"
+path="res://.godot/imported/halconlado_lado.png-2abf271b9b5a04c61f3268b65855f426.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/person/frames/lado_4.png"
-dest_files=["res://.godot/imported/lado_4.png-e31caa6f3d2483312aabf1c67352615e.ctex"]
+source_file="res://assets/enemigos/halconlado_lado.png"
+dest_files=["res://.godot/imported/halconlado_lado.png-2abf271b9b5a04c61f3268b65855f426.ctex"]
 
 [params]
 
