@@ -53,4 +53,3 @@ All of You language: round fills, white outline, Fredoka, cream type.
 - Title 64 cream with 10px outline
 - One line under the title in lilac
 - Green play circle + caption "Volver a jugar"
-

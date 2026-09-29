@@ -19,23 +19,14 @@ const PASOS := [
 	preload("res://sfx/paso_2.ogg"),
 ]
 const ATAQUE := preload("res://sfx/ataque.ogg")
-const FRAMES_FRENTE := [
-	preload("res://assets/person/frames/frente_0.png"),
-	preload("res://assets/person/frames/frente_1.png"),
-	preload("res://assets/person/frames/frente_2.png"),
-]
-const FRAMES_ESPALDA := [
-	preload("res://assets/person/frames/espalda_0.png"),
-	preload("res://assets/person/frames/espalda_1.png"),
-	preload("res://assets/person/frames/espalda_2.png"),
-]
-const FRAMES_LADO := [
-	preload("res://assets/person/frames/lado_0.png"),
-	preload("res://assets/person/frames/lado_1.png"),
-	preload("res://assets/person/frames/lado_2.png"),
-	preload("res://assets/person/frames/lado_3.png"),
-	preload("res://assets/person/frames/lado_4.png"),
-]
+
+var FRAMES_FRENTE: Array[Texture2D]
+var FRAMES_ESPALDA: Array[Texture2D]
+var FRAMES_LADO: Array[Texture2D]
+
+var sheet_frente := preload("res://assets/person/cavillaca_frente.png")
+var sheet_espalda := preload("res://assets/person/cavillaca_espalda.png")
+var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
@@ -48,11 +39,17 @@ var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
 
 func _ready():
+	FRAMES_FRENTE = _crear_frames_sheet(sheet_frente, 3)
+	FRAMES_ESPALDA = _crear_frames_sheet(sheet_espalda, 3)
+	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360 )
+	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
 	_armar_sfx()
 	_armar_sprite()
-
+	$Sprite.scale = Vector2(0.052, 0.052)
+	$Sprite.position.y = -100
+	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.5, 1.5)
 	# Camara
@@ -66,6 +63,7 @@ func _ready():
 	add_child(cam)
 	cam.make_current()
 	$Sombra.pivot_offset = Vector2(16, 4)
+	
 
 
 func _armar_sfx() -> void:
@@ -82,11 +80,21 @@ func _armar_sfx() -> void:
 
 func _armar_sprite() -> void:
 	var hojas := SpriteFrames.new()
-	_poner_anim(hojas, "idle_frente", [FRAMES_FRENTE[1]], 1.0)
-	_poner_anim(hojas, "walk_frente", FRAMES_FRENTE, 6.0)
+	_poner_anim(hojas, "idle_frente", [FRAMES_FRENTE[2]], 1.0)
+	_poner_anim(hojas, "walk_frente", [
+		FRAMES_FRENTE[0],
+		FRAMES_FRENTE[2],
+		FRAMES_FRENTE[1],
+		FRAMES_FRENTE[2]
+	], 6.0)
 	_poner_anim(hojas, "idle_espalda", [FRAMES_ESPALDA[1]], 1.0)
-	_poner_anim(hojas, "walk_espalda", FRAMES_ESPALDA, 6.0)
-	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[2]], 1.0)
+	_poner_anim(hojas, "walk_espalda", [
+		FRAMES_ESPALDA[0],
+		FRAMES_ESPALDA[1],
+		FRAMES_ESPALDA[2],
+		FRAMES_ESPALDA[1]
+	], 6.0)
+	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[0]], 1.0)
 	_poner_anim(hojas, "walk_lado", FRAMES_LADO, 8.0)
 	$Sprite.sprite_frames = hojas
 	$Sprite.play("idle_frente")
@@ -365,3 +373,31 @@ func _sonar_paso() -> void:
 	sfx_paso.stream = PASOS[randi() % PASOS.size()]
 	sfx_paso.pitch_scale = randf_range(0.92, 1.08)
 	sfx_paso.play()
+
+func _crear_frames_sheet(
+	sheet: Texture2D,
+	cantidad: int,
+	ancho_personalizado: float = -1.0
+) -> Array[Texture2D]:
+
+	var frames: Array[Texture2D] = []
+
+	var ancho_frame := sheet.get_width() / cantidad
+
+	if ancho_personalizado > 0:
+		ancho_frame = ancho_personalizado
+
+	var alto_frame := sheet.get_height()
+
+	for i in range(cantidad):
+		var atlas := AtlasTexture.new()
+		atlas.atlas = sheet
+		atlas.region = Rect2(
+			i * ancho_frame,
+			0,
+			ancho_frame,
+			alto_frame
+		)
+		frames.append(atlas)
+
+	return frames
