@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do5kkrtq0imhv"
-path="res://.godot/imported/halcon_frente.png-77d4033644d6a7d775b3b561226f0631.ctex"
+uid="uid://q8i87bepi6ll"
+path="res://.godot/imported/Caminata_Cavillaca_lateral.png-3d9e1644e4291c244aad8069243f1bdc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/enemigos/halcon_frente.png"
-dest_files=["res://.godot/imported/halcon_frente.png-77d4033644d6a7d775b3b561226f0631.ctex"]
+source_file="res://assets/person/Caminata_Cavillaca_lateral.png"
+dest_files=["res://.godot/imported/Caminata_Cavillaca_lateral.png-3d9e1644e4291c244aad8069243f1bdc.ctex"]
 
 [params]
 

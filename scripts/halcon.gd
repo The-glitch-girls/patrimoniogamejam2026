@@ -1,28 +1,33 @@
 extends Area2D
 
 const VIDA_MAX := 3
-const RANGO_DETECCION := 120.0
-const RANGO_CORTE := 220.0
-const RANGO_GOLPE := 24.0
-const VELOCIDAD_PERSEGUIR := 58.0
+const RANGO_DETECCION := 150.0
+const RANGO_CORTE := 260.0
+const RADIO_REVOLOTEO := 72.0
+const AMPLITUD_REVOLOTEO := 36.0
+const VELOCIDAD_REVOLOTEO := 110.0
 const VELOCIDAD_PATRULLA := 36.0
 const VELOCIDAD_RETIRADA := 110.0
-const TIEMPO_PERSECUCION := 1.5
-const DESCANSO_PERSECUCION := 2.8
+const DESCANSO_PERSECUCION := 1.4
 const LOCK_GOLPE := 1.1
 const TIEMPO_RESPAWN := 8.0
 const TIEMPO_EN_ZONA := 10.0
-const DISTANCIA_RESPAWN := 640.0
+const PASO_MIN := 600.0
+const PASO_MAX := 1400.0
+const SEPARACION := 480.0
 
 var vida := VIDA_MAX
 var origen := Vector2.ZERO
-var puntos_respawn: Array[Vector2] = []
+var inicio := Vector2.ZERO
+var profundidad := 0.0
+var puntos_abiertos: Array[Vector2] = []
 var patrol_dir := Vector2.RIGHT
 var patrol_t := 0.0
 var vuelo_t := 0.0
 var lock_golpe := 0.0
-var persecucion_t := 0.0
 var descanso_t := 0.0
+var rondando := false
+var angulo := 0.0
 var zona_t := 0.0
 var flash_t := 0.0
 var derrotado := false
@@ -33,7 +38,8 @@ const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
 func _ready():
 	add_to_group("halcon")
 	origen = global_position
-	puntos_respawn = _recoger_puntos_abiertos()
+	inicio = global_position
+	call_deferred("_armar_puntos")
 	body_entered.connect(_on_body_entered)
 
 	$AnimatedSprite2D.play("lado")
@@ -70,20 +76,14 @@ func _process(delta):
 	var cerca := false
 	if cavillaca != null:
 		var distancia := global_position.distance_to(cavillaca.global_position)
-		if persecucion_t > 0.0 or distancia <= RANGO_DETECCION:
-			if persecucion_t <= 0.0:
-				persecucion_t = TIEMPO_PERSECUCION
-				zona_t = 0.0
-			persecucion_t = max(persecucion_t - delta, 0.0)
-			if distancia > RANGO_CORTE or persecucion_t <= 0.0:
-				_empezar_descanso()
-			else:
-				cerca = true
-				if distancia > RANGO_GOLPE:
-					var hacia := (cavillaca.global_position - global_position).normalized()
-					global_position += hacia * VELOCIDAD_PERSEGUIR * delta
-				elif lock_golpe <= 0.0:
-					_golpear()
+		if rondando and distancia > RANGO_CORTE:
+			rondando = false
+			_empezar_descanso()
+		elif rondando or distancia <= RANGO_DETECCION:
+			rondando = true
+			zona_t = 0.0
+			cerca = true
+			_revolotear(delta, cavillaca)
 		else:
 			_patrullar(delta)
 
@@ -128,7 +128,6 @@ func _revivir():
 	vida = VIDA_MAX
 	lock_golpe = 0.0
 	_aparecer_en_otro_lado()
-	persecucion_t = 0.0
 	descanso_t = 0.0
 	$AnimatedSprite2D.play("lado")
 	show()
@@ -136,59 +135,85 @@ func _revivir():
 	monitorable = true
 
 
-func _recoger_puntos_abiertos() -> Array[Vector2]:
-	var puntos: Array[Vector2] = []
+func _armar_puntos() -> void:
+	puntos_abiertos.clear()
 	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
 	if suelo == null:
-		return puntos
-
+		return
 	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
+	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
 	for celda in suelo.get_used_cells():
 		if bordes != null and bordes.get_cell_source_id(celda) != -1:
 			continue
-		puntos.append(suelo.to_global(suelo.map_to_local(celda)))
-	return puntos
-
-
-func _elegir_punto_respawn() -> Vector2:
-	if puntos_respawn.is_empty():
-		return origen
-
-	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
-	var lejos: Array[Vector2] = []
-	for punto in puntos_respawn:
-		if punto.distance_to(origen) < DISTANCIA_RESPAWN:
-			continue
-		if cavillaca != null and punto.distance_to(cavillaca.global_position) < DISTANCIA_RESPAWN:
-			continue
+		var punto := suelo.to_global(suelo.map_to_local(celda))
 		if cueva != null and punto.distance_to(cueva.global_position) < 180.0:
 			continue
-		lejos.append(punto)
-
-	if not lejos.is_empty():
-		return lejos.pick_random()
-
-	var fuera_del_jugador: Array[Vector2] = []
-	for punto in puntos_respawn:
-		if cavillaca != null and punto.distance_to(cavillaca.global_position) < RANGO_DETECCION:
-			continue
-		fuera_del_jugador.append(punto)
-	if fuera_del_jugador.is_empty():
-		return origen
-	return fuera_del_jugador.pick_random()
+		puntos_abiertos.append(punto)
 
 
 func _aparecer_en_otro_lado() -> void:
-	origen = _elegir_punto_respawn()
-	global_position = origen
+	if puntos_abiertos.is_empty():
+		_armar_puntos()
+	var punto := _elegir_mas_adelante()
+	origen = punto
+	global_position = punto
+	profundidad = inicio.distance_to(punto)
 	patrol_t = 0.0
 	zona_t = 0.0
+	rondando = false
 	$AnimatedSprite2D.play("lado")
 
 
+func _elegir_mas_adelante() -> Vector2:
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+	var banda: Array[Vector2] = []
+	var mas_lejos: Array[Vector2] = []
+	for punto in puntos_abiertos:
+		if not _sirve(punto, cavillaca):
+			continue
+		var avance := inicio.distance_to(punto) - profundidad
+		if avance >= PASO_MIN and avance <= PASO_MAX:
+			banda.append(punto)
+		elif avance > PASO_MAX:
+			mas_lejos.append(punto)
+	if not banda.is_empty():
+		return banda.pick_random()
+	if not mas_lejos.is_empty():
+		return mas_lejos.pick_random()
+	var fondo: Array[Vector2] = []
+	for punto in puntos_abiertos:
+		if not _sirve(punto, cavillaca):
+			continue
+		if inicio.distance_to(punto) > profundidad * 0.7:
+			fondo.append(punto)
+	if fondo.is_empty():
+		return origen
+	return fondo.pick_random()
+
+
+func _sirve(punto: Vector2, cavillaca: Node2D) -> bool:
+	if punto.distance_to(origen) < SEPARACION:
+		return false
+	if cavillaca != null and punto.distance_to(cavillaca.global_position) < SEPARACION:
+		return false
+	return true
+
+
+func _revolotear(delta: float, cavillaca: Node2D) -> void:
+	angulo += delta * 2.4
+	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
+	var destino := cavillaca.global_position + Vector2.from_angle(angulo) * radio
+	var antes := global_position
+	global_position = global_position.move_toward(destino, VELOCIDAD_REVOLOTEO * delta)
+	var hacia := global_position - antes
+	if abs(hacia.x) > 0.2:
+		$AnimatedSprite2D.flip_h = hacia.x < 0.0
+	if $AnimatedSprite2D.animation != "lado":
+		$AnimatedSprite2D.play("lado")
+
+
 func _empezar_descanso() -> void:
-	persecucion_t = 0.0
+	rondando = false
 	descanso_t = DESCANSO_PERSECUCION
 	$AnimatedSprite2D.play("lado")
 
