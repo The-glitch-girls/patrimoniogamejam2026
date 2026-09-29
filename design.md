@@ -27,8 +27,8 @@ All of You language: round fills, white outline, Fredoka, cream type.
 ### Halcón — `scenes/Halcon.tscn`
 
 - Frames 1024×600, sprite scale `0.24`
-- Dive lasts 1.5s at 58 px/s, then it peels away for 2.8s and appears on another open tile
-- If it patrols one spot for 10s, it appears elsewhere, at least 640px from Cavillaca
+- Dive lasts 1.5s at 58 px/s, then it peels away for 2.8s and appears at a random open tile 600–1400px further from where it started
+- If it patrols one spot for 10s, it does the same. It does not return to the previous coordinate
 
 ### Cavillaca — `scenes/Cavillaca.tscn`
 
