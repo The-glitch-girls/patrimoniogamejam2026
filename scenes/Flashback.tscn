@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://viy73o76wr6w"]
+[gd_scene load_steps=3 format=3 uid="uid://viy73o76wr6w"]
 
 [ext_resource type="Script" uid="uid://bm7bd60tyv004" path="res://scripts/flashback.gd" id="1_ubat7"]
+[ext_resource type="AudioStream" uid="uid://22875en0h2fg" path="res://sfx/revelar.ogg" id="2_vr83p"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -20,6 +21,16 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.819608, 0.741176, 0.498039)
 
+[node name="RecuerdoIlustracion" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
+
 [node name="Titulo" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
@@ -30,7 +41,6 @@ offset_top = 100.0
 offset_right = 280.0
 offset_bottom = 150.0
 grow_horizontal = 2
-text = "Acoso de Cuniraya"
 horizontal_alignment = 1
 
 [node name="Texto" type="Label" parent="."]
@@ -46,10 +56,10 @@ offset_right = 280.0
 offset_bottom = 60.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Cuniraya no se detenía."
 horizontal_alignment = 1
 
 [node name="Continuar" type="Button" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -63,3 +73,6 @@ offset_bottom = -139.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "CONTINUAR"
+
+[node name="RecuerdoSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_vr83p")

@@ -18,10 +18,18 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Global.flashback_abierto = true
 	get_tree().paused = true
-	_aplicar_texto()
+	
+	_reproducir_sfx()
+	if indice == 1:
+		_cargar_ilustracion()
+	else:
+		_aplicar_texto()
 	_estilar()
+	_reproducir_sfx()
 	$Continuar.pressed.connect(_continuar)
-
+	
+	await get_tree().create_timer(1.0, true, false, true).timeout
+	$Continuar.visible = true
 
 func _aplicar_texto() -> void:
 	var dato: Dictionary = Global.RECUERDOS[indice]
@@ -58,6 +66,13 @@ func _estilar() -> void:
 	$Continuar.offset_top = -120
 	$Continuar.offset_bottom = -72
 
+func _cargar_ilustracion():
+	$RecuerdoIlustracion.texture = load(
+		"res://assets/cinematicas/recuerdo_%d.png" % indice
+	)
+
+func _reproducir_sfx():
+	$RecuerdoSFX.play()
 
 func _continuar():
 	var dato: Dictionary = Global.RECUERDOS[indice]
