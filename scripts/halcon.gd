@@ -5,6 +5,7 @@ const RANGO_DETECCION := 150.0
 const RANGO_CORTE := 260.0
 const RADIO_REVOLOTEO := 72.0
 const AMPLITUD_REVOLOTEO := 36.0
+const RANGO_GOLPE := 52.0
 const VELOCIDAD_REVOLOTEO := 110.0
 const VELOCIDAD_PATRULLA := 36.0
 const VELOCIDAD_RETIRADA := 110.0
@@ -208,7 +209,9 @@ func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	var hacia := global_position - antes
 	if abs(hacia.x) > 0.2:
 		$AnimatedSprite2D.flip_h = hacia.x < 0.0
-	if $AnimatedSprite2D.animation != "lado":
+	if lock_golpe <= 0.0 and global_position.distance_to(cavillaca.global_position) <= RANGO_GOLPE:
+		_golpear()
+	if lock_golpe <= 0.0 and $AnimatedSprite2D.animation != "lado":
 		$AnimatedSprite2D.play("lado")
 
 
