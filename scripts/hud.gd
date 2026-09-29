@@ -140,10 +140,10 @@ func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
 	return marco
 
 
-func _mostrar_presencia(visible: bool) -> void:
-	icono_presencia.get_parent().visible = visible
-	marco_presencia.visible = visible
-	barra_presencia.visible = visible
+func _mostrar_presencia(es_visible: bool) -> void:
+	icono_presencia.get_parent().visible = es_visible
+	marco_presencia.visible = es_visible
+	barra_presencia.visible = es_visible
 
 
 func _poner_recuerdos() -> void:

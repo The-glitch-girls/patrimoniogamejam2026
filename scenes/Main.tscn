@@ -13,7 +13,7 @@
 [ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="9_q8u5g"]
 [ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="10_lhr70"]
 [ext_resource type="AudioStream" uid="uid://k0g0tqnkpegb" path="res://sfx/llanto_bebe.mp3" id="11_wp0k4"]
-[ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://tres/tileset.tres" id="12_bjd11"]
+[ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="12_bjd11"]
 [ext_resource type="Texture2D" uid="uid://dix21bawdw0ft" path="res://assets/ui/recuerdos/recuerdos_x.png" id="14_3p2gp"]
 [ext_resource type="Texture2D" uid="uid://j2httxt2ujoh" path="res://assets/ui/recuerdos/star_1.png" id="15_bb450"]
 [ext_resource type="Texture2D" uid="uid://dcbsc3eyy2d2l" path="res://assets/ui/recuerdos/star_2.png" id="16_nfivy"]
@@ -235,6 +235,7 @@ anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
 [node name="recuerdos_x" type="TextureRect" parent="HUD/RecuerdosContainer"]
+layout_mode = 0
 offset_left = 124.0
 offset_top = 20.0
 offset_right = 298.0
@@ -243,6 +244,7 @@ texture = ExtResource("14_3p2gp")
 
 [node name="star_1" type="TextureRect" parent="HUD/RecuerdosContainer"]
 visible = false
+layout_mode = 0
 offset_left = 226.0
 offset_top = 16.0
 offset_right = 266.0
@@ -252,6 +254,7 @@ texture = ExtResource("15_bb450")
 
 [node name="star_2" type="TextureRect" parent="HUD/RecuerdosContainer"]
 visible = false
+layout_mode = 0
 offset_left = 118.0
 offset_top = 76.0
 offset_right = 171.0
@@ -261,6 +264,7 @@ texture = ExtResource("16_nfivy")
 
 [node name="star_3" type="TextureRect" parent="HUD/RecuerdosContainer"]
 visible = false
+layout_mode = 0
 offset_left = 104.0
 offset_top = 6.0
 offset_right = 229.0
@@ -268,6 +272,7 @@ offset_bottom = 98.0
 texture = ExtResource("17_1nqs0")
 
 [node name="RecuerdosContador" type="Label" parent="HUD/RecuerdosContainer"]
+layout_mode = 0
 offset_left = 312.0
 offset_top = -8.0
 offset_right = 370.0
