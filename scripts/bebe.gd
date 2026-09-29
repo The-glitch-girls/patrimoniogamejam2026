@@ -1,4 +1,4 @@
-extends Area2D
+extends StaticBody2D
 
 const OFFSET_CARGADO := Vector2(22, -52)
 const SEGUIMIENTO := 14.0
@@ -26,6 +26,9 @@ func _process(delta):
 		$AnimatedSprite2D.modulate = Color(1.18, 1.12, 0.95)
 	else:
 		$AnimatedSprite2D.modulate = Color.WHITE
+	
+	# Utilizado para mostrar detras de Cavillaca
+	z_index = int($CollisionShape2D.global_position.y)
 
 func recoger():
 	Global.lleva_bebe = true

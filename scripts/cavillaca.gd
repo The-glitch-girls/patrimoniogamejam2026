@@ -165,6 +165,9 @@ func _physics_process(delta):
 
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
 	move_and_slide()
+	
+	# Utilizado para mostrar delante del bebe
+	z_index = int($CollisionShape2D.global_position.y)
 
 	if cam.global_position.y <= cam.limit_top:
 		global_position.y = min(global_position.y, cam.global_position.y)
@@ -319,7 +322,7 @@ func _actualizar_prompt():
 	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
-		Global.prompt_interaccion = "E  Recoger"
+		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:

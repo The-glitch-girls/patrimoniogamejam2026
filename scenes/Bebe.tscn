@@ -89,7 +89,7 @@ animations = [{
 "speed": 4.0
 }]
 
-[node name="Bebe" type="Area2D"]
+[node name="Bebe" type="StaticBody2D"]
 scale = Vector2(0.05, 0.05)
 script = ExtResource("1_script")
 
@@ -112,4 +112,4 @@ position = Vector2(20, -100)
 scale = Vector2(1, 1)
 sprite_frames = SubResource("SpriteFrames_inh41")
 animation = &"llorando"
-frame_progress = 0.152692
+frame_progress = 0.821615
