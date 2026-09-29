@@ -24,6 +24,12 @@ All of You language: round fills, white outline, Fredoka, cream type.
 
 ## Entities
 
+### Halcón — `scenes/Halcon.tscn`
+
+- Frames 1024×600, sprite scale `0.24`
+- Dive lasts 1.5s at 58 px/s, then it peels away for 2.8s and appears on another open tile
+- If it patrols one spot for 10s, it appears elsewhere, at least 640px from Cavillaca
+
 ### Cavillaca — `scenes/Cavillaca.tscn`
 
 - Sprite sheets in `assets/person/`, frames 112x148 in `assets/person/frames/`

@@ -159,7 +159,7 @@ script = ExtResource("1_script")
 shape = SubResource("RectangleShape2D_halcon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-scale = Vector2(0.35, 0.35)
+scale = Vector2(0.24, 0.24)
 sprite_frames = SubResource("SpriteFrames_7c8nx")
 animation = &"lado"
 frame_progress = 0.686428
