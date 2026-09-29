@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=22 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="1_elqb8"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="2_rvslj"]
@@ -18,10 +18,16 @@
 [ext_resource type="Texture2D" uid="uid://j2httxt2ujoh" path="res://assets/ui/recuerdos/star_1.png" id="15_bb450"]
 [ext_resource type="Texture2D" uid="uid://dcbsc3eyy2d2l" path="res://assets/ui/recuerdos/star_2.png" id="16_nfivy"]
 [ext_resource type="Texture2D" uid="uid://dys7rt56fhj8k" path="res://assets/ui/recuerdos/star_3.png" id="17_1nqs0"]
+[ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="18_nfivy"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
 shader = ExtResource("8_jlsqs")
 shader_parameter/intensidad = 0.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_1nqs0"]
+font = ExtResource("18_nfivy")
+font_size = 96
+font_color = Color(0.913725, 0.85098, 1, 1)
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true
@@ -223,17 +229,20 @@ bus = &"Ambiente"
 stream = ExtResource("11_wp0k4")
 bus = &"SFX"
 
-[node name="CanvasGroup" type="CanvasGroup" parent="HUD"]
+[node name="RecuerdosContainer" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
-[node name="recuerdos_x" type="TextureRect" parent="HUD/CanvasGroup"]
+[node name="recuerdos_x" type="TextureRect" parent="HUD/RecuerdosContainer"]
 offset_left = 124.0
 offset_top = 20.0
 offset_right = 298.0
 offset_bottom = 100.0
 texture = ExtResource("14_3p2gp")
 
-[node name="star_1" type="TextureRect" parent="HUD/CanvasGroup"]
+[node name="star_1" type="TextureRect" parent="HUD/RecuerdosContainer"]
+visible = false
 offset_left = 226.0
 offset_top = 16.0
 offset_right = 266.0
@@ -241,7 +250,8 @@ offset_bottom = 56.0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("15_bb450")
 
-[node name="star_2" type="TextureRect" parent="HUD/CanvasGroup"]
+[node name="star_2" type="TextureRect" parent="HUD/RecuerdosContainer"]
+visible = false
 offset_left = 118.0
 offset_top = 76.0
 offset_right = 171.0
@@ -249,12 +259,21 @@ offset_bottom = 129.0
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("16_nfivy")
 
-[node name="star_3" type="TextureRect" parent="HUD/CanvasGroup"]
+[node name="star_3" type="TextureRect" parent="HUD/RecuerdosContainer"]
+visible = false
 offset_left = 104.0
 offset_top = 6.0
 offset_right = 229.0
 offset_bottom = 98.0
 texture = ExtResource("17_1nqs0")
+
+[node name="RecuerdosContador" type="Label" parent="HUD/RecuerdosContainer"]
+offset_left = 312.0
+offset_top = -8.0
+offset_right = 370.0
+offset_bottom = 115.0
+text = "0"
+label_settings = SubResource("LabelSettings_1nqs0")
 
 [node name="SueloTiles" type="TileMapLayer" parent="."]
 z_index = -20

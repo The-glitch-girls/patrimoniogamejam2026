@@ -147,20 +147,14 @@ func _mostrar_presencia(visible: bool) -> void:
 
 
 func _poner_recuerdos() -> void:
-	marcas_recuerdo.clear()
-	for i in range(Global.RECUERDOS_TOTALES):
-		var marca := Panel.new()
-		marca.position = Vector2(268 + i * 30, 22)
-		marca.size = Vector2(22, 22)
-		marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		marca.add_theme_stylebox_override("panel", _marca_recuerdo(false))
-		$PanelEstado.add_child(marca)
-		marcas_recuerdo.append(marca)
-	
-	var ancho_pantalla = get_viewport().get_visible_rect().size.x
-	var canvas_group := $CanvasGroup
-	canvas_group.position.x = ancho_pantalla - 300
-	canvas_group.position.y = 10
+	var recuerdos_container := $RecuerdosContainer
+	recuerdos_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	var viewport_size := get_viewport().get_visible_rect().size
+
+	recuerdos_container.position = Vector2(
+		viewport_size.x - 280,
+		20
+	)
 
 func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -175,11 +169,10 @@ func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 
 
 func _actualizar_recuerdos() -> void:
-	for i in range(marcas_recuerdo.size()):
-		marcas_recuerdo[i].add_theme_stylebox_override(
-			"panel",
-			_marca_recuerdo(i < Global.recuerdos_obtenidos)
-		)
+	$RecuerdosContainer/RecuerdosContador.text = str(Global.recuerdos_obtenidos)
+	$RecuerdosContainer/star_1.visible = Global.recuerdos_obtenidos >= 1
+	$RecuerdosContainer/star_2.visible = Global.recuerdos_obtenidos >= 2
+	$RecuerdosContainer/star_3.visible = Global.recuerdos_obtenidos >= 3
 
 
 func _estilar_textos():
