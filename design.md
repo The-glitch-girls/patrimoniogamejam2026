@@ -35,6 +35,7 @@ All of You language: round fills, white outline, Fredoka, cream type.
 - Sprite sheets in `assets/person/`, frames 112x148 in `assets/person/frames/`
 - Front 3, back 3, side 5 (flip for left)
 - Idle uses the standing frame; walk plays the sheet
+- Walk 200 px/s, sprite `speed_scale` 1.7. Shift run 300 px/s, sprite `speed_scale` 2.0
 - Purple dress, braid, white hem. No ColorRect body.
 
 ## HUD — `scripts/hud.gd`

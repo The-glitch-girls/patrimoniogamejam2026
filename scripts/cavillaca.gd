@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 const LIMITE_ARRIBA_JUGADOR := 180.0
 const LIMITE_ABAJO_JUGADOR := 180.0
-const VELOCIDAD_CAMINAR := 100.0
-const VELOCIDAD_CORRER := 180.0
+const VELOCIDAD_CAMINAR := 200.0
+const VELOCIDAD_CORRER := 300.0
 const VELOCIDAD_CON_BEBE := 70.0
 const VELOCIDAD_SIN_ENERGIA := 55.0
 const DISTANCIA_RECOGER := 56.0
@@ -64,7 +64,7 @@ func _ready():
 	cam.limit_bottom = 3072
 
 	cam.position_smoothing_enabled = true
-	cam.position_smoothing_speed = 5.0
+	cam.position_smoothing_speed = 8.0
 	add_child(cam)
 	cam.make_current()
 
@@ -292,13 +292,13 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		direccion = "frente"
 	var anim := "%s_%s" % [accion, direccion]
 	$Sprite.flip_h = facing == Vector2.LEFT
-	$Sprite.speed_scale = 1.35 if esta_corriendo else 0.75 if Global.lleva_bebe else 1.0
+	$Sprite.speed_scale = 2.0 if esta_corriendo else 0.75 if Global.lleva_bebe else 1.7
 	if $Sprite.animation != anim:
 		$Sprite.play(anim)
 
 	if esta_caminando:
 		paso_acum += delta
-		var intervalo := 0.24 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.36
+		var intervalo := 0.16 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.22
 		if paso_acum >= intervalo:
 			paso_acum = 0.0
 			_sonar_paso()
