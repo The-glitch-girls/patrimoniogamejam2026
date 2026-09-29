@@ -1,11 +1,96 @@
-[gd_scene load_steps=3 format=3 uid="uid://cfa3mx2kxpkdp"]
+[gd_scene load_steps=12 format=3 uid="uid://cfa3mx2kxpkdp"]
 
 [ext_resource type="Script" uid="uid://ddlow1eb20p27" path="res://scripts/bebe.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://vsyqxkgaf3nq" path="res://assets/person/bebe_llorando.png" id="2_kvb4v"]
+[ext_resource type="Texture2D" uid="uid://cy6sss6gmw5gh" path="res://assets/person/bebe_normal.png" id="3_inh41"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bebe"]
-size = Vector2(28, 28)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_inh41"]
+size = Vector2(2420, 340)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xoaaa"]
+atlas = ExtResource("2_kvb4v")
+region = Rect2(0, 0, 2518, 1675)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5s7p5"]
+atlas = ExtResource("2_kvb4v")
+region = Rect2(2518, 0, 2518, 1675)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vnuqn"]
+atlas = ExtResource("2_kvb4v")
+region = Rect2(5036, 0, 2518, 1675)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_w61h7"]
+atlas = ExtResource("3_inh41")
+region = Rect2(5082, 0, 2541, 1803)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkrwv"]
+atlas = ExtResource("3_inh41")
+region = Rect2(2541, 0, 2541, 1803)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qqahu"]
+atlas = ExtResource("3_inh41")
+region = Rect2(0, 0, 2541, 1803)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_inh41"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xoaaa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s7p5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vnuqn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s7p5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vnuqn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s7p5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xoaaa")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5s7p5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vnuqn")
+}],
+"loop": true,
+"name": &"llorando",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w61h7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkrwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_w61h7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkrwv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qqahu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkrwv")
+}],
+"loop": true,
+"name": &"normal",
+"speed": 4.0
+}]
 
 [node name="Bebe" type="Area2D"]
+scale = Vector2(0.05, 0.05)
 script = ExtResource("1_script")
 
 [node name="Sombra" type="ColorRect" parent="."]
@@ -18,12 +103,13 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0.3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_bebe")
+position = Vector2(50, 470)
+scale = Vector2(0.999999, 0.999999)
+shape = SubResource("RectangleShape2D_inh41")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -12.0
-offset_top = -14.0
-offset_right = 12.0
-offset_bottom = 10.0
-mouse_filter = 2
-color = Color(0.95, 0.72, 0.55, 1)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(20, -100)
+scale = Vector2(1, 1)
+sprite_frames = SubResource("SpriteFrames_inh41")
+animation = &"llorando"
+frame_progress = 0.152692
