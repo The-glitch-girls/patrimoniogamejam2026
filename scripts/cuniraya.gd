@@ -16,8 +16,6 @@ const CUEVA := Rect2(-80, 160, 160, 280)
 const MAR := Rect2(160, 740, 520, 180)
 
 func _ready():
-	print("Cuniraya está en el mapa")
-
 	bebe = get_tree().get_first_node_in_group("bebe") as StaticBody2D
 
 	call_deferred("_colocar_cuniraya")
@@ -27,10 +25,7 @@ func _colocar_cuniraya():
 		randf_range(200.0, 3896.0),
 		randf_range(200.0, 2872.0)
 	)
-	print("Posición inicial Cuniraya: ", global_position)
-	
-	#var suelo = get_tree().current_scene
-	#global_position = suelo.obtener_punto_cuniraya()
+	# Cuniraya permanece invisible. Su cercanía se lee en el bebé.
 
 func _process(delta):
 	# Movimiento autónomo
@@ -80,5 +75,3 @@ func _process(delta):
 		direccion = direcciones.pick_random()
 		tiempo_cambio = TIEMPO_CAMBIO
 
-func _draw():
-	draw_circle(Vector2.ZERO, 10.0, Color(1, 0, 0))
