@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://do5kkrtq0imhv"
-path="res://.godot/imported/halcon_frente.png-77d4033644d6a7d775b3b561226f0631.ctex"
+uid="uid://dk3x7ogrgiq45"
+path="res://.godot/imported/CAMINATA_FRENTE.png-da3afd05d5fa7156a7f64256bf99bc78.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/enemigos/halcon_frente.png"
-dest_files=["res://.godot/imported/halcon_frente.png-77d4033644d6a7d775b3b561226f0631.ctex"]
+source_file="res://assets/person/CAMINATA_FRENTE.png"
+dest_files=["res://.godot/imported/CAMINATA_FRENTE.png-da3afd05d5fa7156a7f64256bf99bc78.ctex"]
 
 [params]
 
