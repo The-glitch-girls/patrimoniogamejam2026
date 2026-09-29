@@ -44,7 +44,7 @@ func dejar(posicion: Vector2):
 	Global.lleva_bebe = false
 	$AnimatedSprite2D.position = Vector2(0, -14)
 	$AnimatedSprite2D.modulate = Color.WHITE
-	$StaticBody2D/CollisionShape2D.set_deferred("disabled", false)
+	$CollisionShape2D.set_deferred("disabled", false)
 
 
 func _seguir_carga(cavillaca: Node2D, delta: float):

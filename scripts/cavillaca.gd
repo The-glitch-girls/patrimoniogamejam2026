@@ -259,9 +259,10 @@ func esta_cerca_del_bebe() -> bool:
 
 	# Zona de interacción alrededor de la imagen del bebé.
 	return (
-		abs(diferencia.x) <= 100.0
-		and diferencia.y >= -100.0
-		and diferencia.y <= 30.0
+		diferencia.x >= -100.0 and
+		diferencia.x <= 160.0 and
+		diferencia.y >= -200.0 and
+		diferencia.y <= 30.0
 	)	
 	
 	
