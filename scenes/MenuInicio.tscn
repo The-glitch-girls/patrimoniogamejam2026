@@ -1,13 +1,13 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=9 format=3 uid="uid://cbtq1xaqc2wx6"]
 
-[ext_resource type="Script" path="res://scripts/menu_inicio.gd" id="1_menu"]
-[ext_resource type="Texture2D" path="res://assets/menu_fondo.jpg" id="2_fondo"]
-[ext_resource type="Script" path="res://scripts/boton_circulo.gd" id="3_circulo"]
-[ext_resource type="Texture2D" path="res://assets/icons/play.svg" id="4_play"]
-[ext_resource type="Texture2D" path="res://assets/icons/musica.svg" id="5_musica"]
-[ext_resource type="Texture2D" path="res://assets/icons/creditos.svg" id="6_creditos"]
-[ext_resource type="Texture2D" path="res://assets/icons/salir.svg" id="7_salir"]
-[ext_resource type="Texture2D" path="res://assets/icons/volver.svg" id="8_volver"]
+[ext_resource type="Script" uid="uid://ehqvx8843itb" path="res://scripts/menu_inicio.gd" id="1_menu"]
+[ext_resource type="Texture2D" uid="uid://cpq5wkxq7spr4" path="res://assets/menu_principal.png" id="2_uj8md"]
+[ext_resource type="Script" uid="uid://g5xyunpibift" path="res://scripts/boton_circulo.gd" id="3_circulo"]
+[ext_resource type="Texture2D" uid="uid://dgsc1kb1mqal3" path="res://assets/icons/play.svg" id="4_play"]
+[ext_resource type="Texture2D" uid="uid://c4nrjotwg7m3a" path="res://assets/icons/musica.svg" id="5_musica"]
+[ext_resource type="Texture2D" uid="uid://g12svqs6lvh0" path="res://assets/icons/creditos.svg" id="6_creditos"]
+[ext_resource type="Texture2D" uid="uid://cf6eahw4u5inu" path="res://assets/icons/salir.svg" id="7_salir"]
+[ext_resource type="Texture2D" uid="uid://d2p1n7liqm74e" path="res://assets/icons/volver.svg" id="8_volver"]
 
 [node name="MenuInicio" type="Control"]
 layout_mode = 3
@@ -26,21 +26,25 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_fondo")
+texture = ExtResource("2_uj8md")
 expand_mode = 1
 stretch_mode = 6
 
 [node name="Degradado" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 expand_mode = 1
 
 [node name="Titulo" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -51,11 +55,14 @@ offset_left = -280.0
 offset_top = -210.0
 offset_right = 280.0
 offset_bottom = -110.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Cavillaca"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Subtitulo" type="Label" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -66,6 +73,8 @@ offset_left = -280.0
 offset_top = -118.0
 offset_right = 280.0
 offset_bottom = -82.0
+grow_horizontal = 2
+grow_vertical = 2
 text = "Patrimonio Game Jam 2026"
 horizontal_alignment = 1
 
@@ -76,10 +85,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = 8.0
-offset_right = 260.0
-offset_bottom = 104.0
+offset_left = -512.0
+offset_top = 62.0
+offset_right = 8.0
+offset_bottom = 158.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 28
 alignment = 1
 
@@ -87,7 +98,6 @@ alignment = 1
 custom_minimum_size = Vector2(88, 88)
 layout_mode = 2
 script = ExtResource("3_circulo")
-color_fondo = Color(0.49, 0.76, 0.29, 1)
 icono = ExtResource("4_play")
 
 [node name="Ajustes" type="Control" parent="Fila"]
@@ -118,10 +128,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = 118.0
-offset_right = 260.0
-offset_bottom = 154.0
+offset_left = -512.0
+offset_top = 193.0
+offset_right = 8.0
+offset_bottom = 229.0
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_constants/separation = 28
 alignment = 1
 
@@ -161,6 +173,8 @@ offset_left = -230.0
 offset_top = -230.0
 offset_right = 230.0
 offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Titulo" type="Label" parent="PanelAjustes"]
 layout_mode = 0
@@ -244,7 +258,7 @@ step = 0.01
 value = 1.0
 
 [node name="Volver" type="Control" parent="PanelAjustes"]
-layout_mode = 0
+anchors_preset = 0
 offset_left = 186.0
 offset_top = 348.0
 offset_right = 274.0
@@ -265,6 +279,8 @@ offset_left = -210.0
 offset_top = -230.0
 offset_right = 210.0
 offset_bottom = 230.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Titulo" type="Label" parent="PanelCreditos"]
 layout_mode = 0
@@ -291,7 +307,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Volver" type="Control" parent="PanelCreditos"]
-layout_mode = 0
+anchors_preset = 0
 offset_left = 166.0
 offset_top = 348.0
 offset_right = 254.0

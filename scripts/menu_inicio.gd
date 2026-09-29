@@ -38,14 +38,14 @@ func _capturar() -> void:
 
 
 func _tipografia() -> void:
-	$Titulo.add_theme_font_override("font", FUENTE)
-	$Titulo.add_theme_font_size_override("font_size", 72)
-	$Titulo.add_theme_color_override("font_color", CREMA)
-	$Titulo.add_theme_color_override("font_outline_color", Color(0.12, 0.1, 0.18, 1))
-	$Titulo.add_theme_constant_override("outline_size", 10)
-	$Subtitulo.add_theme_font_override("font", FUENTE)
-	$Subtitulo.add_theme_font_size_override("font_size", 20)
-	$Subtitulo.add_theme_color_override("font_color", LILA)
+	#$Titulo.add_theme_font_override("font", FUENTE)
+	#$Titulo.add_theme_font_size_override("font_size", 72)
+	#$Titulo.add_theme_color_override("font_color", CREMA)
+	#$Titulo.add_theme_color_override("font_outline_color", Color(0.12, 0.1, 0.18, 1))
+	#$Titulo.add_theme_constant_override("outline_size", 10)
+	#$Subtitulo.add_theme_font_override("font", FUENTE)
+	#$Subtitulo.add_theme_font_size_override("font_size", 20)
+	#$Subtitulo.add_theme_color_override("font_color", LILA)
 	for caption in $Leyendas.get_children():
 		caption.add_theme_font_override("font", FUENTE)
 		caption.add_theme_font_size_override("font_size", 18)
@@ -124,8 +124,6 @@ func _conectar() -> void:
 func _mostrar_inicio() -> void:
 	$Fila.visible = true
 	$Leyendas.visible = true
-	$Titulo.visible = true
-	$Subtitulo.visible = true
 	$PanelAjustes.visible = false
 	$PanelCreditos.visible = false
 	$Fila/Jugar.enfocar()

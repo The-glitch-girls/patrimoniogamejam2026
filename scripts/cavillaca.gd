@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+const LIMITE_ARRIBA_JUGADOR := 180.0
+const LIMITE_ABAJO_JUGADOR := 180.0
 const VELOCIDAD_CAMINAR := 100.0
 const VELOCIDAD_CORRER := 180.0
 const VELOCIDAD_CON_BEBE := 70.0
@@ -19,23 +21,15 @@ const PASOS := [
 	preload("res://sfx/paso_2.ogg"),
 ]
 const ATAQUE := preload("res://sfx/ataque.ogg")
-const FRAMES_FRENTE := [
-	preload("res://assets/person/frames/frente_0.png"),
-	preload("res://assets/person/frames/frente_1.png"),
-	preload("res://assets/person/frames/frente_2.png"),
-]
-const FRAMES_ESPALDA := [
-	preload("res://assets/person/frames/espalda_0.png"),
-	preload("res://assets/person/frames/espalda_1.png"),
-	preload("res://assets/person/frames/espalda_2.png"),
-]
-const FRAMES_LADO := [
-	preload("res://assets/person/frames/lado_0.png"),
-	preload("res://assets/person/frames/lado_1.png"),
-	preload("res://assets/person/frames/lado_2.png"),
-	preload("res://assets/person/frames/lado_3.png"),
-	preload("res://assets/person/frames/lado_4.png"),
-]
+
+var FRAMES_FRENTE: Array[Texture2D]
+var FRAMES_ESPALDA: Array[Texture2D]
+var FRAMES_LADO: Array[Texture2D]
+
+var frames_espalda := preload("res://resources/cavillaca_espalda.tres")
+var sheet_frente := preload("res://assets/person/cavillaca_frente.png")
+var sheet_espalda := preload("res://assets/person/cavillaca_espalda.png")
+var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
@@ -48,11 +42,18 @@ var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
 
 func _ready():
+	FRAMES_FRENTE = _crear_frames_sheet(sheet_frente, 3)
+	FRAMES_ESPALDA = _crear_frames_sheet(sheet_espalda, 3)
+	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360 )
+	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
 	_armar_sfx()
 	_armar_sprite()
 
+	$Sprite.scale = Vector2(0.052, 0.052)
+	$Sprite.position.y = -10
+	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.5, 1.5)
 	# Camara
@@ -65,8 +66,6 @@ func _ready():
 	cam.position_smoothing_speed = 5.0
 	add_child(cam)
 	cam.make_current()
-	$Sombra.pivot_offset = Vector2(16, 4)
-
 
 func _armar_sfx() -> void:
 	sfx_paso = AudioStreamPlayer.new()
@@ -82,11 +81,21 @@ func _armar_sfx() -> void:
 
 func _armar_sprite() -> void:
 	var hojas := SpriteFrames.new()
-	_poner_anim(hojas, "idle_frente", [FRAMES_FRENTE[1]], 1.0)
-	_poner_anim(hojas, "walk_frente", FRAMES_FRENTE, 6.0)
+	_poner_anim(hojas, "idle_frente", [FRAMES_FRENTE[2]], 1.0)
+	_poner_anim(hojas, "walk_frente", [
+		FRAMES_FRENTE[0],
+		FRAMES_FRENTE[2],
+		FRAMES_FRENTE[1],
+		FRAMES_FRENTE[2]
+	], 6.0)
 	_poner_anim(hojas, "idle_espalda", [FRAMES_ESPALDA[1]], 1.0)
-	_poner_anim(hojas, "walk_espalda", FRAMES_ESPALDA, 6.0)
-	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[2]], 1.0)
+	_poner_anim(hojas, "walk_espalda", [
+		FRAMES_ESPALDA[0],
+		FRAMES_ESPALDA[1],
+		FRAMES_ESPALDA[2],
+		FRAMES_ESPALDA[1]
+	], 6.0)
+	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[0]], 1.0)
 	_poner_anim(hojas, "walk_lado", FRAMES_LADO, 8.0)
 	$Sprite.sprite_frames = hojas
 	$Sprite.play("idle_frente")
@@ -156,6 +165,9 @@ func _physics_process(delta):
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
 	move_and_slide()
 
+	if cam.global_position.y <= cam.limit_top:
+		global_position.y = min(global_position.y, cam.global_position.y)
+	
 	if get_slide_collision_count() > 0:
 		var colision := get_slide_collision(0)
 		print("CHOCA CON: ", colision.get_collider().name)
@@ -168,9 +180,9 @@ func _physics_process(delta):
 
 	global_position.y = clamp(
 		global_position.y,
-		Global.LIMITE_MAPA.position.y + 20.0,
-		Global.LIMITE_MAPA.end.y - 20.0
-)
+		Global.LIMITE_MAPA.position.y + LIMITE_ARRIBA_JUGADOR,
+		Global.LIMITE_MAPA.end.y - LIMITE_ABAJO_JUGADOR
+	)
 
 	var esta_caminando := velocity.length() > 12.0
 	_animar_caminata(delta, esta_caminando, esta_corriendo)
@@ -280,10 +292,8 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		if paso_acum >= intervalo:
 			paso_acum = 0.0
 			_sonar_paso()
-		$Sombra.scale.x = 1.0 + sin(Time.get_ticks_msec() * 0.012) * 0.06
 	else:
 		paso_acum = 0.0
-		$Sombra.scale.x = 1.0
 
 
 func _actualizar_camara(delta: float):
@@ -365,3 +375,35 @@ func _sonar_paso() -> void:
 	sfx_paso.stream = PASOS[randi() % PASOS.size()]
 	sfx_paso.pitch_scale = randf_range(0.92, 1.08)
 	sfx_paso.play()
+
+func _crear_frames_sheet(
+	sheet: Texture2D,
+	cantidad: int,
+	ancho_personalizado: float = -1.0,
+	y_inicio: float = 0.0,
+	alto_personalizado: float = -1.0
+) -> Array[Texture2D]:
+
+	var frames: Array[Texture2D] = []
+
+	var ancho_frame := sheet.get_width() / cantidad
+
+	if ancho_personalizado > 0:
+		ancho_frame = ancho_personalizado
+	
+	var alto_frame := sheet.get_height() - y_inicio
+	if alto_personalizado > 0:
+		alto_frame = alto_personalizado
+		
+	for i in range(cantidad):
+		var atlas := AtlasTexture.new()
+		atlas.atlas = sheet
+		atlas.region = Rect2(
+			i * ancho_frame,
+			0,
+			ancho_frame,
+			alto_frame
+		)
+		frames.append(atlas)
+
+	return frames

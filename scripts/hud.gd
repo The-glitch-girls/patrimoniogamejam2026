@@ -73,7 +73,6 @@ func _estilar_panel():
 	_mostrar_presencia(false)
 	_poner_recuerdos()
 
-
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
 	circulo.position = pos
@@ -141,23 +140,21 @@ func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
 	return marco
 
 
-func _mostrar_presencia(visible: bool) -> void:
-	icono_presencia.get_parent().visible = visible
-	marco_presencia.visible = visible
-	barra_presencia.visible = visible
+func _mostrar_presencia(es_visible: bool) -> void:
+	icono_presencia.get_parent().visible = es_visible
+	marco_presencia.visible = es_visible
+	barra_presencia.visible = es_visible
 
 
 func _poner_recuerdos() -> void:
-	marcas_recuerdo.clear()
-	for i in range(Global.RECUERDOS_TOTALES):
-		var marca := Panel.new()
-		marca.position = Vector2(268 + i * 30, 22)
-		marca.size = Vector2(22, 22)
-		marca.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		marca.add_theme_stylebox_override("panel", _marca_recuerdo(false))
-		$PanelEstado.add_child(marca)
-		marcas_recuerdo.append(marca)
+	var recuerdos_container := $RecuerdosContainer
+	recuerdos_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	var viewport_size := get_viewport().get_visible_rect().size
 
+	recuerdos_container.position = Vector2(
+		viewport_size.x - 280,
+		20
+	)
 
 func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -172,11 +169,10 @@ func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 
 
 func _actualizar_recuerdos() -> void:
-	for i in range(marcas_recuerdo.size()):
-		marcas_recuerdo[i].add_theme_stylebox_override(
-			"panel",
-			_marca_recuerdo(i < Global.recuerdos_obtenidos)
-		)
+	$RecuerdosContainer/RecuerdosContador.text = str(Global.recuerdos_obtenidos)
+	$RecuerdosContainer/star_1.visible = Global.recuerdos_obtenidos >= 1
+	$RecuerdosContainer/star_2.visible = Global.recuerdos_obtenidos >= 2
+	$RecuerdosContainer/star_3.visible = Global.recuerdos_obtenidos >= 3
 
 
 func _estilar_textos():

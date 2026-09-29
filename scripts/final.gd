@@ -2,7 +2,7 @@ extends Control
 
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const ICONO_JUGAR := preload("res://assets/icons/play.svg")
-const FONDO := preload("res://assets/menu_fondo.jpg")
+const FONDO := preload("res://assets/menu_principal.png")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const LILA := Color(0.72, 0.68, 0.95, 1)
 const VERDE := Color(0.49, 0.76, 0.29, 1)

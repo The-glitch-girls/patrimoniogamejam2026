@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqgtkxob80eht"]
+[gd_scene load_steps=3 format=3 uid="uid://cqgtkxob80eht"]
+
+[ext_resource type="Texture2D" uid="uid://6nk8l3bs60x2" path="res://assets/person/cavillaca_frente.png" id="1_werjt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_th60e"]
 size = Vector2(36, 20)
@@ -7,15 +9,6 @@ size = Vector2(36, 20)
 collision_mask = 5
 motion_mode = 1
 
-[node name="Sombra" type="ColorRect" parent="."]
-z_index = -1
-offset_left = -16.0
-offset_top = 8.0
-offset_right = 16.0
-offset_bottom = 16.0
-mouse_filter = 2
-color = Color(0, 0, 0, 0.28)
-
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_th60e")
@@ -23,3 +16,9 @@ shape = SubResource("RectangleShape2D_th60e")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -62)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+texture = ExtResource("1_werjt")
+region_enabled = true
+region_rect = Rect2(264, 685, 1758, 4096)

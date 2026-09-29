@@ -1,0 +1,35 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://chmpng5iccrvx"]
+
+[ext_resource type="Texture2D" uid="uid://c3qcexme86nqv" path="res://assets/person/cavillaca_espalda.png" id="1_gtaqb"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rfmxj"]
+atlas = ExtResource("1_gtaqb")
+region = Rect2(120, 460, 2380, 4500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6yhtn"]
+atlas = ExtResource("1_gtaqb")
+region = Rect2(2520, 460, 2380, 4500)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_emeac"]
+atlas = ExtResource("1_gtaqb")
+region = Rect2(4920, 460, 2380, 4500)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rfmxj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6yhtn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_emeac")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6yhtn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
