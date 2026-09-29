@@ -18,6 +18,7 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Global.flashback_abierto = true
 	get_tree().paused = true
+	$RecuerdoSFX.play()
 	
 	_aplicar_texto()
 	_aplicar_asset()
