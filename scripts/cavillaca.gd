@@ -53,6 +53,7 @@ func _ready():
 
 	$Sprite.scale = Vector2(0.052, 0.052)
 	$Sprite.position.y = -10
+	$CollisionShape2D.position.y = 90
 	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.5, 1.5)
@@ -164,13 +165,12 @@ func _physics_process(delta):
 
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
 	move_and_slide()
+	
+	# Utilizado para mostrar delante del bebe
+	z_index = int($CollisionShape2D.global_position.y)
 
 	if cam.global_position.y <= cam.limit_top:
 		global_position.y = min(global_position.y, cam.global_position.y)
-	
-	if get_slide_collision_count() > 0:
-		var colision := get_slide_collision(0)
-		print("CHOCA CON: ", colision.get_collider().name)
 
 	global_position.x = clamp(
 		global_position.x,
@@ -256,9 +256,19 @@ func esta_cerca_del_bebe() -> bool:
 	var bebe := _obtener_bebe()
 	if bebe == null or Global.lleva_bebe:
 		return false
-	return global_position.distance_to(bebe.global_position) <= DISTANCIA_RECOGER
 
+	var sprite_bebe := bebe.get_node("AnimatedSprite2D") as Node2D
+	var diferencia := global_position - sprite_bebe.global_position
 
+	# Zona de interacción alrededor de la imagen del bebé.
+	return (
+		diferencia.x >= -100.0 and
+		diferencia.x <= 160.0 and
+		diferencia.y >= -200.0 and
+		diferencia.y <= 30.0
+	)	
+	
+	
 func _direccion_cuatro() -> Vector2:
 	var horizontal := Input.get_axis("mover_izquierda", "mover_derecha")
 	var vertical := Input.get_axis("mover_arriba", "mover_abajo")
@@ -312,7 +322,7 @@ func _actualizar_prompt():
 	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
-		Global.prompt_interaccion = "E  Recoger"
+		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:

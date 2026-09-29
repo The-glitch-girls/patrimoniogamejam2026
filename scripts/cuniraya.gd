@@ -57,6 +57,7 @@ func _process(delta):
 				direccion = Vector2.DOWN if diferencia.y > 0 else Vector2.UP
 
 			tiempo_cambio = TIEMPO_CAMBIO
+			bebe.cambiar_llanto(true)
 		else:
 			Global.presencia_activa = false
 	else:
