@@ -1,14 +1,14 @@
 extends Area2D
 
 const VIDA_MAX := 3
-const RANGO_DETECCION := 120.0
-const RANGO_CORTE := 220.0
-const RANGO_GOLPE := 24.0
-const VELOCIDAD_PERSEGUIR := 58.0
+const RANGO_DETECCION := 150.0
+const RANGO_CORTE := 260.0
+const RADIO_REVOLOTEO := 72.0
+const AMPLITUD_REVOLOTEO := 36.0
+const VELOCIDAD_REVOLOTEO := 110.0
 const VELOCIDAD_PATRULLA := 36.0
 const VELOCIDAD_RETIRADA := 110.0
-const TIEMPO_PERSECUCION := 1.5
-const DESCANSO_PERSECUCION := 2.8
+const DESCANSO_PERSECUCION := 1.4
 const LOCK_GOLPE := 1.1
 const TIEMPO_RESPAWN := 8.0
 const TIEMPO_EN_ZONA := 10.0
@@ -25,8 +25,9 @@ var patrol_dir := Vector2.RIGHT
 var patrol_t := 0.0
 var vuelo_t := 0.0
 var lock_golpe := 0.0
-var persecucion_t := 0.0
 var descanso_t := 0.0
+var rondando := false
+var angulo := 0.0
 var zona_t := 0.0
 var flash_t := 0.0
 var derrotado := false
@@ -75,20 +76,14 @@ func _process(delta):
 	var cerca := false
 	if cavillaca != null:
 		var distancia := global_position.distance_to(cavillaca.global_position)
-		if persecucion_t > 0.0 or distancia <= RANGO_DETECCION:
-			if persecucion_t <= 0.0:
-				persecucion_t = TIEMPO_PERSECUCION
-				zona_t = 0.0
-			persecucion_t = max(persecucion_t - delta, 0.0)
-			if distancia > RANGO_CORTE or persecucion_t <= 0.0:
-				_empezar_descanso()
-			else:
-				cerca = true
-				if distancia > RANGO_GOLPE:
-					var hacia := (cavillaca.global_position - global_position).normalized()
-					global_position += hacia * VELOCIDAD_PERSEGUIR * delta
-				elif lock_golpe <= 0.0:
-					_golpear()
+		if rondando and distancia > RANGO_CORTE:
+			rondando = false
+			_empezar_descanso()
+		elif rondando or distancia <= RANGO_DETECCION:
+			rondando = true
+			zona_t = 0.0
+			cerca = true
+			_revolotear(delta, cavillaca)
 		else:
 			_patrullar(delta)
 
@@ -133,7 +128,6 @@ func _revivir():
 	vida = VIDA_MAX
 	lock_golpe = 0.0
 	_aparecer_en_otro_lado()
-	persecucion_t = 0.0
 	descanso_t = 0.0
 	$AnimatedSprite2D.play("lado")
 	show()
@@ -166,6 +160,7 @@ func _aparecer_en_otro_lado() -> void:
 	profundidad = inicio.distance_to(punto)
 	patrol_t = 0.0
 	zona_t = 0.0
+	rondando = false
 	$AnimatedSprite2D.play("lado")
 
 
@@ -204,8 +199,21 @@ func _sirve(punto: Vector2, cavillaca: Node2D) -> bool:
 	return true
 
 
+func _revolotear(delta: float, cavillaca: Node2D) -> void:
+	angulo += delta * 2.4
+	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
+	var destino := cavillaca.global_position + Vector2.from_angle(angulo) * radio
+	var antes := global_position
+	global_position = global_position.move_toward(destino, VELOCIDAD_REVOLOTEO * delta)
+	var hacia := global_position - antes
+	if abs(hacia.x) > 0.2:
+		$AnimatedSprite2D.flip_h = hacia.x < 0.0
+	if $AnimatedSprite2D.animation != "lado":
+		$AnimatedSprite2D.play("lado")
+
+
 func _empezar_descanso() -> void:
-	persecucion_t = 0.0
+	rondando = false
 	descanso_t = DESCANSO_PERSECUCION
 	$AnimatedSprite2D.play("lado")
 

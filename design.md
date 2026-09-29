@@ -27,8 +27,9 @@ All of You language: round fills, white outline, Fredoka, cream type.
 ### Halcón — `scenes/Halcon.tscn`
 
 - Frames 1024×600, sprite scale `0.24`
-- Dive lasts 1.5s at 58 px/s, then it peels away for 2.8s and appears at a random open tile 600–1400px further from where it started
-- If it patrols one spot for 10s, it does the same. It does not return to the previous coordinate
+- Orbits Cavillaca at about 36–108px. A bump costs energy. It does not dive in to strike
+- If she leaves that circle, it peels off and appears at a random open tile 600–1400px further ahead
+- Same flutter at each later point. Stones still hit it while it is circling
 
 ### Cavillaca — `scenes/Cavillaca.tscn`
 
@@ -46,6 +47,7 @@ All of You language: round fills, white outline, Fredoka, cream type.
 - Prompt: 56px green circle, letter E, bottom-right; burgundy if attack
 - Settings: 52px gold circle, white gear `assets/icons/ajustes.svg`, top-right; opens Sonido card
 - Combat banner same pill, only when it fires
+- Baby guide: green pill, radius 22, 4px white outline, white arrow and cream distance in Fredoka 18. Sits on the screen edge toward the baby when it is off-camera and Cavillaca is not carrying it. 2.2 px = 1 m, rounded to 10 m
 - Recuerdos: three 22px circles to the right of the energy bar. Empty purple `#38336B`, filled gold `#DBB233`, 3px white outline
 
 ## Flashbacks — `scenes/Flashback.tscn`
