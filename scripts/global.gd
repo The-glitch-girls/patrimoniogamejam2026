@@ -35,18 +35,23 @@ const RECUERDOS_TOTALES: int = 3
 const RECUERDOS := {
 	1: {
 		"id": "acoso",
-		"titulo": "Acoso de Cuniraya",
-		"texto": "Cuniraya no se detenía.",
+		"titulo": "El que observaba",
+		"texto": "Cuniraya la observaba desde lejos.
+				Tomaba la forma de distintos animales para acercarse sin ser visto.
+				Él lo llamaba amor. Cavillaca nunca lo pidió.",
+		"asset": "res://assets/cinematicas/recuerdo_1.png"
 	},
 	2: {
 		"id": "lucuma",
 		"titulo": "La lúcuma",
-		"texto": "Comió la lúcuma.\nAsí comenzó.",
+		"texto": "Comió la lúcuma.\nAsí comenzó."
+		#"asset": "res://assets/cinematicas/recuerdo_2.png"
 	},
 	3: {
 		"id": "gateo",
 		"titulo": "El gateo del bebé",
-		"texto": "El bebé gateó hacia él.\nYa no había duda.",
+		"texto": "El bebé gateó hacia él.\nYa no había duda."
+		#"asset": "res://assets/cinematicas/recuerdo_3.png"
 	},
 }
 const DESTINO_MAR := Vector2(620, 880)

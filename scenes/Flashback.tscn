@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://viy73o76wr6w"]
+[gd_scene load_steps=3 format=3 uid="uid://viy73o76wr6w"]
 
 [ext_resource type="Script" uid="uid://bm7bd60tyv004" path="res://scripts/flashback.gd" id="1_ubat7"]
+[ext_resource type="AudioStream" uid="uid://b3tw08j2ap4ya" path="res://sfx/revelar.ogg" id="2_vr83p"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -10,6 +11,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ubat7")
+
+[node name="AssetRecuerdo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 1
+stretch_mode = 6
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -25,12 +36,12 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -280.0
-offset_top = 100.0
-offset_right = 280.0
-offset_bottom = 150.0
+offset_left = -117.0
+offset_top = 48.0
+offset_right = 115.0
+offset_bottom = 98.0
 grow_horizontal = 2
-text = "Acoso de Cuniraya"
+text = "El que observaba"
 horizontal_alignment = 1
 
 [node name="Texto" type="Label" parent="."]
@@ -40,13 +51,12 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -60.0
-offset_right = 280.0
-offset_bottom = 60.0
+offset_left = -431.0
+offset_top = 59.0
+offset_right = 461.0
+offset_bottom = 179.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Cuniraya no se detenía."
 horizontal_alignment = 1
 
 [node name="Continuar" type="Button" parent="."]
@@ -56,10 +66,14 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -51.5
-offset_top = -170.0
-offset_right = 51.5
-offset_bottom = -139.0
+offset_left = -50.0
+offset_top = -89.0
+offset_right = 53.0
+offset_bottom = -58.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "CONTINUAR"
+
+[node name="RecuerdoSFX" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_vr83p")
+bus = &"SFX"

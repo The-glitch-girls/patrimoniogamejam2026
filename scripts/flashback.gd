@@ -6,9 +6,9 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
+const TIEMPO_CONTINUAR := 2.0
 
 var indice := 1
-
 
 func configurar(n: int) -> void:
 	indice = clampi(n, 1, Global.RECUERDOS_TOTALES)
@@ -18,15 +18,38 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Global.flashback_abierto = true
 	get_tree().paused = true
+	
 	_aplicar_texto()
+	_aplicar_asset()
 	_estilar()
+
+	$Continuar.visible = false
 	$Continuar.pressed.connect(_continuar)
 
+	_mostrar_continuar()
 
 func _aplicar_texto() -> void:
 	var dato: Dictionary = Global.RECUERDOS[indice]
 	$Titulo.text = dato.titulo
 	$Texto.text = dato.texto
+
+func _aplicar_asset() -> void:
+	var dato: Dictionary = Global.RECUERDOS[indice]
+
+	if dato.has("asset"):
+		$AssetRecuerdo.texture = load(dato.asset)
+		$AssetRecuerdo.visible = true
+		$ColorRect.visible = false
+	else:
+		$AssetRecuerdo.visible = false
+		$ColorRect.visible = true
+		
+
+func _mostrar_continuar() -> void:
+	await get_tree().create_timer(TIEMPO_CONTINUAR, true).timeout
+
+	if is_instance_valid($Continuar):
+		$Continuar.visible = true
 
 
 func _estilar() -> void:
