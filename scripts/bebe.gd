@@ -42,7 +42,8 @@ func dejar(posicion: Vector2):
 	if cavillaca == null:
 		return
 
-	global_position = cavillaca.global_position + Vector2(0, 20)
+	var pies := cavillaca.get_node("CollisionShape2D") as CollisionShape2D
+	global_position = pies.global_position
 
 	Global.lleva_bebe = false
 	$AnimatedSprite2D.position = Vector2(0, -14)
