@@ -19,6 +19,7 @@ func _ready():
 	Global.flashback_abierto = true
 	get_tree().paused = true
 	$RecuerdoSFX.play()
+	$RecuerdoMusica.play()
 	
 	_aplicar_texto()
 	_aplicar_asset()
@@ -84,6 +85,7 @@ func _estilar() -> void:
 
 
 func _continuar():
+	$RecuerdoMusica.stop()
 	var dato: Dictionary = Global.RECUERDOS[indice]
 	var id: String = dato.id
 	if not id in Global.flashbacks_desbloqueados:
