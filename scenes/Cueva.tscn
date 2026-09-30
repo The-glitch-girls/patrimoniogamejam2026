@@ -6,9 +6,6 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_entrada"]
 size = Vector2(64, 56)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_puerta"]
-size = Vector2(128, 400)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_arbol_superior"]
 size = Vector2(384, 128)
 
@@ -21,6 +18,9 @@ size = Vector2(128, 256)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_margen_cavillaca"]
 size = Vector2(105, 256)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_puerta"]
+size = Vector2(128, 400)
+
 [node name="Cueva" type="Area2D"]
 z_index = -1
 script = ExtResource("1_script")
@@ -31,20 +31,18 @@ scale = Vector2(0.4, 0.4)
 shape = SubResource("RectangleShape2D_entrada")
 
 [node name="Arbol" type="TileMapLayer" parent="."]
+y_sort_enabled = true
 position = Vector2(-76.8, -170)
 scale = Vector2(0.4, 0.4)
-y_sort_enabled = true
-collision_enabled = false
 tile_set = ExtResource("2_tileset")
+collision_enabled = false
 
 [node name="Puerta" type="TileMapLayer" parent="."]
-position = Vector2(-76.8, -170)
-scale = Vector2(0.4, 0.4)
 z_index = 1
+position = Vector2(-76.8, -170)
 tile_set = ExtResource("2_tileset")
 
 [node name="ColisionArbol" type="StaticBody2D" parent="."]
-collision_layer = 1
 collision_mask = 0
 
 [node name="Superior" type="CollisionShape2D" parent="ColisionArbol"]
@@ -72,7 +70,6 @@ scale = Vector2(0.4, 0.4)
 shape = SubResource("RectangleShape2D_margen_cavillaca")
 
 [node name="ColisionPuerta" type="StaticBody2D" parent="."]
-collision_layer = 1
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ColisionPuerta"]

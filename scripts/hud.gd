@@ -10,6 +10,7 @@ const VERDE := Color(0.49, 0.76, 0.29, 1)
 const LILA := Color(0.67, 0.62, 0.93, 1)
 const DORADO := Color(0.86, 0.7, 0.2, 1)
 const BORDO := Color(0.62, 0.24, 0.36, 1)
+const NARANJA_CUEVA := Color(1.0, 0.58, 0.24, 1)
 
 var prompt_alpha := 0.0
 var prompt_texto := ""
@@ -27,6 +28,11 @@ var guia_flecha: FlechaGuia
 var guia_metros: Label
 var guia_alpha := 0.0
 var guia_colocada := false
+var guia_cueva: Control
+var guia_flecha_cueva: FlechaGuia
+var guia_metros_cueva: Label
+var guia_alpha_cueva := 0.0
+var guia_cueva_colocada := false
 
 @onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
@@ -45,6 +51,7 @@ func _ready():
 	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
 	_poner_guia_bebe()
+	_poner_guia_cueva()
 	_poner_ajustes()
 	if not Global.partida_terminada:
 		Musica.tocar("juego")
@@ -195,6 +202,25 @@ func _texto(label: Label, tamano: int) -> void:
 	label.add_theme_color_override("font_color", CREMA)
 
 
+func _ajustar_banner_aviso() -> void:
+	var label := $AvisoLabel as Label
+	var fondo := $AvisoFondo as Panel
+	var tamano_fuente := label.get_theme_font_size("font_size")
+	var fuente := label.get_theme_font("font")
+	var ancho_texto := fuente.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano_fuente).x
+	var alto_texto := fuente.get_height(tamano_fuente)
+	var ancho_banner := ancho_texto + 40.0
+	var alto_banner := alto_texto + 20.0
+
+	fondo.offset_left = -ancho_banner * 0.5
+	fondo.offset_right = ancho_banner * 0.5
+	fondo.offset_bottom = fondo.offset_top + alto_banner
+	label.offset_left = -ancho_texto * 0.5
+	label.offset_right = ancho_texto * 0.5
+	label.offset_top = fondo.offset_top + 10.0
+	label.offset_bottom = label.offset_top + alto_texto
+
+
 func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
 	caja.bg_color = color
@@ -240,6 +266,37 @@ func _poner_guia_bebe() -> void:
 	guia_metros.text = "300 m"
 	_texto(guia_metros, 18)
 	guia_bebe.add_child(guia_metros)
+
+
+func _poner_guia_cueva() -> void:
+	guia_cueva = Control.new()
+	guia_cueva.visible = false
+	guia_cueva.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_cueva.size = Vector2(150, 44)
+	add_child(guia_cueva)
+
+	var fondo := Panel.new()
+	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	fondo.add_theme_stylebox_override("panel", _tarjeta(NARANJA_CUEVA, 22))
+	guia_cueva.add_child(fondo)
+
+	guia_flecha_cueva = FlechaGuia.new()
+	guia_flecha_cueva.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_flecha_cueva.size = Vector2(22, 22)
+	guia_flecha_cueva.pivot_offset = guia_flecha_cueva.size * 0.5
+	guia_cueva.add_child(guia_flecha_cueva)
+
+	guia_metros_cueva = Label.new()
+	guia_metros_cueva.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_metros_cueva.set_anchors_preset(Control.PRESET_FULL_RECT)
+	guia_metros_cueva.offset_left = 42
+	guia_metros_cueva.offset_right = -14
+	guia_metros_cueva.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	guia_metros_cueva.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	guia_metros_cueva.text = "Cueva"
+	_texto(guia_metros_cueva, 18)
+	guia_cueva.add_child(guia_metros_cueva)
 
 
 func _actualizar_guia_bebe(delta: float) -> void:
@@ -298,6 +355,82 @@ func _actualizar_guia_bebe(delta: float) -> void:
 	var centro_flecha := Vector2(x_flecha, 22) + direccion * empuje
 	guia_flecha.position = centro_flecha - guia_flecha.pivot_offset
 	guia_flecha.rotation = direccion.angle()
+
+
+func _actualizar_guia_cueva(delta: float) -> void:
+	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+	var camara := get_viewport().get_camera_2d()
+	var mostrar := false
+	var direccion := Vector2.RIGHT
+	var esquina := guia_cueva.position
+	var vista := get_viewport().get_visible_rect()
+	var zona := Rect2()
+
+	if not Global.flashback_abierto and not Global.partida_terminada:
+		if cueva != null and cavillaca != null and camara != null:
+			var pantalla := get_viewport().get_canvas_transform() * cueva.global_position
+			if not vista.grow(-56).has_point(pantalla):
+				mostrar = true
+				direccion = pantalla - vista.get_center()
+				var metros := _metros_hasta(cavillaca.global_position.distance_to(cueva.global_position))
+				guia_metros_cueva.text = "Cueva %d m" % metros
+				var ancho := maxf(guia_metros_cueva.get_minimum_size().x + 58.0, 150.0)
+				guia_cueva.size = Vector2(ancho, 44)
+				var mitad := guia_cueva.size * 0.5
+				zona = Rect2(
+					Vector2(16.0 + mitad.x, 84.0 + mitad.y),
+					Vector2(vista.size.x - 32.0 - guia_cueva.size.x, vista.size.y - 176.0 - guia_cueva.size.y)
+				)
+				var borde := _borde_de(vista.get_center(), pantalla, zona)
+				esquina = borde - mitad
+				esquina = _separar_guias(esquina, guia_cueva.size, zona)
+
+	guia_alpha_cueva = move_toward(guia_alpha_cueva, 1.0 if mostrar else 0.0, delta * 6.0)
+	guia_cueva.modulate.a = guia_alpha_cueva
+	guia_cueva.visible = guia_alpha_cueva > 0.02
+	if not mostrar:
+		guia_cueva_colocada = false
+		return
+
+	if guia_cueva_colocada:
+		guia_cueva.position = guia_cueva.position.lerp(esquina, 1.0 - exp(-12.0 * delta))
+	else:
+		guia_cueva.position = esquina
+		guia_cueva_colocada = true
+
+	direccion = direccion.normalized() if direccion.length_squared() >= 0.001 else Vector2.RIGHT
+	var empuje := sin(Time.get_ticks_msec() * 0.006) * 3.0
+	var a_la_derecha := direccion.x >= 0.0
+	var x_flecha := 24.0
+	if a_la_derecha:
+		guia_metros_cueva.offset_left = 16
+		guia_metros_cueva.offset_right = -40
+		x_flecha = guia_cueva.size.x - 24.0
+	else:
+		guia_metros_cueva.offset_left = 40
+		guia_metros_cueva.offset_right = -16
+	var centro_flecha := Vector2(x_flecha, 22) + direccion * empuje
+	guia_flecha_cueva.position = centro_flecha - guia_flecha.pivot_offset
+	guia_flecha_cueva.rotation = direccion.angle()
+
+
+func _separar_guias(esquina: Vector2, tamano: Vector2, zona: Rect2) -> Vector2:
+	if not guia_bebe.visible:
+		return esquina
+
+	var rect_bebe := Rect2(guia_bebe.position, guia_bebe.size)
+	if not Rect2(esquina, tamano).intersects(rect_bebe):
+		return esquina
+
+	var desplazamientos: Array[Vector2] = [Vector2(0, 56), Vector2(0, -56), Vector2(152, 0), Vector2(-152, 0)]
+	for desplazamiento in desplazamientos:
+		var alternativa := esquina + desplazamiento
+		alternativa.x = clampf(alternativa.x, zona.position.x, zona.end.x - tamano.x)
+		alternativa.y = clampf(alternativa.y, zona.position.y, zona.end.y - tamano.y)
+		if not Rect2(alternativa, tamano).intersects(rect_bebe):
+			return alternativa
+	return esquina
 
 
 func _metros_hasta(pixeles: float) -> int:
@@ -455,6 +588,7 @@ func _process(delta):
 	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
 	_actualizar_recuerdos()
 	_actualizar_guia_bebe(delta)
+	_actualizar_guia_cueva(delta)
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:
@@ -473,6 +607,7 @@ func _process(delta):
 	$AvisoFondo.visible = hay_aviso
 	$AvisoLabel.visible = hay_aviso
 	if hay_aviso:
+		_ajustar_banner_aviso()
 		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else BORDO
 		_estilar_pildora($AvisoFondo, color_aviso)
 
