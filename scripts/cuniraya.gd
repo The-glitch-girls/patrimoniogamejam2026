@@ -74,4 +74,3 @@ func _process(delta):
 	if get_slide_collision_count() > 0:
 		direccion = direcciones.pick_random()
 		tiempo_cambio = TIEMPO_CAMBIO
-

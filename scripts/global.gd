@@ -36,22 +36,22 @@ const RECUERDOS := {
 	1: {
 		"id": "acoso",
 		"titulo": "El que observaba",
-		"texto": "Cuniraya la observaba desde lejos.
-				Tomaba la forma de distintos animales para acercarse sin ser visto.
+		"texto": "Cuniraya tomaba la forma de distintos animales para acercarse sin ser visto.
 				Él lo llamaba amor. Cavillaca nunca lo pidió.",
 		"asset": "res://assets/cinematicas/recuerdo_1.png"
 	},
 	2: {
 		"id": "lucuma",
-		"titulo": "La lúcuma",
-		"texto": "Comió la lúcuma.\nAsí comenzó."
+		"titulo": "La semilla del engaño",
+		"texto": "Cuniraya dejó una lúcuma entre las ramas.\nCavillaca la comió sin saber lo que llevaba dentro.",
+		#,
 		#"asset": "res://assets/cinematicas/recuerdo_2.png"
 	},
 	3: {
 		"id": "gateo",
-		"titulo": "El gateo del bebé",
-		"texto": "El bebé gateó hacia él.\nYa no había duda."
-		#"asset": "res://assets/cinematicas/recuerdo_3.png"
+		"titulo": "Ya no había duda",
+		"texto": "El bebé gateó hacia él.\nCavillaca comprendió quién era su padre.",
+		"asset": "res://assets/cinematicas/recuerdo_3.png"
 	},
 }
 const DESTINO_MAR := Vector2(620, 880)

@@ -59,11 +59,6 @@ func _process(delta):
 	vuelo_t += delta
 	if lock_golpe > 0.0:
 		lock_golpe = max(lock_golpe - delta, 0.0)
-	#if flash_t > 0.0:
-		#flash_t = max(flash_t - delta, 0.0)
-		#$Cuerpo.modulate = Color(1.4, 0.7, 0.5)
-	#else:
-		#$Cuerpo.modulate = Color.WHITE
 
 	if descanso_t > 0.0:
 		descanso_t = max(descanso_t - delta, 0.0)
@@ -251,3 +246,16 @@ func _on_body_entered(body: Node):
 		return
 	if body.is_in_group("cavillaca"):
 		_golpear()
+
+
+func _input(event):
+	if event.is_action_pressed("debug_halcon"):
+		var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+		if cavillaca != null:
+			global_position = cavillaca.global_position + Vector2(100, 0)
+			show()
+			derrotado = false
+			vida = VIDA_MAX
+			monitoring = true
+			monitorable = true
+			$AnimatedSprite2D.play("lado")

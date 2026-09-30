@@ -109,7 +109,6 @@ shape = SubResource("RectangleShape2D_inh41")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(20, -100)
-scale = Vector2(1, 1)
 sprite_frames = SubResource("SpriteFrames_inh41")
 animation = &"llorando"
 frame_progress = 0.752481
