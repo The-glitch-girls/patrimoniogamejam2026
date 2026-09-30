@@ -2,39 +2,88 @@ extends Area2D
 
 const RECUPERACION_ENERGIA_POR_SEGUNDO := 8.0
 const RANGO_INTERACCION := 40.0
+const RANGO_ZORRO_DESCANSO := 150.0
+const RANGO_ENTRADA := 150.0
 
-var temporizador_recuperacion := 0.0
 var bebe_con_zorro := false
+var jugador_en_entrada := false
+var puerta_abierta := true
+
+@onready var arbol: TileMapLayer = $Arbol
+@onready var puerta: TileMapLayer = $Puerta
+@onready var colision_puerta: CollisionShape2D = $ColisionPuerta/CollisionShape2D
 
 func _ready():
 	add_to_group("zona_segura")
+	_crear_arbol_y_puerta()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 
 
-func _process(delta):
-	var zorro := get_tree().get_first_node_in_group("zorro")
-	var zorro_cerca := zorro != null and global_position.distance_to(zorro.global_position) < RANGO_INTERACCION
-	
-	if zorro_cerca and Global.recuerdos_obtenidos > 0:
-		temporizador_recuperacion += delta
-		if temporizador_recuperacion >= 1.0:
-			temporizador_recuperacion = 0.0
-			Global.recuperar_energia(RECUPERACION_ENERGIA_POR_SEGUNDO)
-		Global.descanso_con_zorro = true
-		
-		if bebe_con_zorro:
-			$Label.text = "CUEVA ✓ (Bebé seguro)"
+func _process(delta: float) -> void:
+	jugador_en_entrada = _cavillaca_en_entrada()
+	var puerta_abierta_ahora := jugador_en_entrada and Global.recuerdos_obtenidos > 0
+	_cambiar_puerta(puerta_abierta_ahora)
+
+	if puerta_abierta_ahora:
+		Global.recuperar_energia(RECUPERACION_ENERGIA_POR_SEGUNDO * delta)
+	Global.descanso_con_zorro = puerta_abierta_ahora
+
+
+func descansar() -> void:
+	if not _cavillaca_en_entrada():
+		Global.mostrar_aviso("Acércate a la entrada para descansar")
+		return
+	if Global.recuerdos_obtenidos < 1:
+		Global.mostrar_aviso("El zorro aún no te ofrece descanso")
+		return
+	if not _zorro_en_rango_de_descanso():
+		Global.mostrar_aviso("Acércate al zorro para descansar")
+		return
+	if Global.energia >= Global.ENERGIA_MAX:
+		Global.mostrar_aviso("Tu energía ya está completa")
+		return
+	Global.mostrar_aviso("Descansando junto al zorro")
+
+
+func puede_descansar() -> bool:
+	return _cavillaca_en_entrada() and _zorro_en_rango_de_descanso() and Global.recuerdos_obtenidos > 0
+
+
+func _cavillaca_en_entrada() -> bool:
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+	return (
+		cavillaca != null
+		and cavillaca.global_position.distance_to(colision_puerta.global_position) <= RANGO_ENTRADA
+	)
+
+
+func _zorro_en_rango_de_descanso() -> bool:
+	var zorro := get_tree().get_first_node_in_group("zorro") as Node2D
+	return zorro != null and colision_puerta.global_position.distance_to(zorro.global_position) < RANGO_ZORRO_DESCANSO
+
+
+func _crear_arbol_y_puerta() -> void:
+	for fila in range(3):
+		for columna in range(3):
+			arbol.set_cell(Vector2i(columna, fila), 0, Vector2i(9 + columna, fila))
+	_cambiar_puerta(false)
+
+
+func _cambiar_puerta(abierta: bool) -> void:
+	if puerta_abierta == abierta:
+		return
+	puerta_abierta = abierta
+	for fila in range(1, 3):
+		# La puerta del atlas va sobre el hueco oscuro del árbol.
+		var celda := Vector2i(1, fila)
+		if abierta:
+			puerta.erase_cell(celda)
 		else:
-			$Label.text = "CUEVA ✓"
-	elif zorro_cerca and Global.recuerdos_obtenidos == 0:
-		Global.descanso_con_zorro = false
-		temporizador_recuperacion = 0.0
-		$Label.text = "CUEVA ?"
-	else:
-		Global.descanso_con_zorro = false
-		temporizador_recuperacion = 0.0
-		$Label.text = "CUEVA"
+			puerta.set_cell(celda, 0, Vector2i(12, fila))
+	# La puerta se oculta al desbloquearse, pero la colisión conserva el límite
+	# físico para que Cavillaca no atraviese el tronco.
+	colision_puerta.set_deferred("disabled", false)
 
 
 func dejar_bebe_con_zorro():

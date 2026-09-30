@@ -132,9 +132,19 @@ func _physics_process(delta):
 		elif Global.lleva_bebe:
 			_dejar_bebe()
 		elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-			_seguir_zorro()
+			_hablar_con_zorro()
 		else:
 			_recoger_bebe()
+
+	if Input.is_action_just_pressed("hablar_zorro") and Global.zorro_cerca:
+		var zorro := get_tree().get_first_node_in_group("zorro")
+		if zorro != null:
+			zorro.hablar()
+
+	if Input.is_action_just_pressed("descansar"):
+		var cueva_descanso := get_tree().get_first_node_in_group("zona_segura")
+		if cueva_descanso != null:
+			cueva_descanso.descansar()
 
 	if Input.is_action_just_pressed("atacar"):
 		_arrojar()
@@ -304,7 +314,16 @@ func _actualizar_prompt():
 	var cueva := get_tree().get_first_node_in_group("zona_segura")
 	var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
 	
-	if en_cueva and Global.cuidado_bebe_desbloqueado:
+	if Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
+		if cueva != null and cueva.puede_descansar():
+			Global.prompt_interaccion = "F Hablar  |  R Descansar"
+		else:
+			Global.prompt_interaccion = "F Hablar"
+	elif cueva != null and cueva.puede_descansar():
+		Global.prompt_interaccion = "R  Descansar"
+	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
+		Global.prompt_interaccion = "E  Hablar con zorro"
+	elif en_cueva and Global.cuidado_bebe_desbloqueado:
 		if Global.lleva_bebe:
 			Global.prompt_interaccion = "E  Dejar con zorro"
 		else:
@@ -315,8 +334,6 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "E  Recoger"
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
-	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-		Global.prompt_interaccion = "E  Seguir zorro"
 	else:
 		Global.prompt_interaccion = ""
 
@@ -328,10 +345,10 @@ func _actualizar_carga_visual():
 		$Sprite.modulate = Color.WHITE
 
 
-func _seguir_zorro():
+func _hablar_con_zorro():
 	var zorro := get_tree().get_first_node_in_group("zorro")
 	if zorro != null:
-		zorro.iniciar_guia()
+		zorro.hablar()
 
 
 func _obtener_bebe() -> Node2D:
