@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dk3x7ogrgiq45"
-path="res://.godot/imported/CAMINATA_FRENTE.png-da3afd05d5fa7156a7f64256bf99bc78.ctex"
+uid="uid://c6e081xsed7x4"
+path="res://.godot/imported/screenshot_guia.png-827487b8c62fd8a7f6ec4ccdf041a66e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/person/CAMINATA_FRENTE.png"
-dest_files=["res://.godot/imported/CAMINATA_FRENTE.png-da3afd05d5fa7156a7f64256bf99bc78.ctex"]
+source_file="res://screenshot_guia.png"
+dest_files=["res://.godot/imported/screenshot_guia.png-827487b8c62fd8a7f6ec4ccdf041a66e.ctex"]
 
 [params]
 

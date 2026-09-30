@@ -286,7 +286,16 @@ func _actualizar_guia_bebe(delta: float) -> void:
 		direccion = Vector2.RIGHT
 	direccion = direccion.normalized()
 	var empuje := sin(Time.get_ticks_msec() * 0.006) * 3.0
-	var centro_flecha := Vector2(24, 22) + direccion * empuje
+	var a_la_derecha := direccion.x >= 0.0
+	var x_flecha := 24.0
+	if a_la_derecha:
+		guia_metros.offset_left = 16
+		guia_metros.offset_right = -40
+		x_flecha = guia_bebe.size.x - 24.0
+	else:
+		guia_metros.offset_left = 40
+		guia_metros.offset_right = -16
+	var centro_flecha := Vector2(x_flecha, 22) + direccion * empuje
 	guia_flecha.position = centro_flecha - guia_flecha.pivot_offset
 	guia_flecha.rotation = direccion.angle()
 
