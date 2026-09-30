@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://do5kkrtq0imhv" path="res://assets/enemigos/halcon_frente.png" id="3_fjv6f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_halcon"]
-size = Vector2(36, 22)
+size = Vector2(145, 71)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7c8nx"]
 atlas = ExtResource("2_gwswh")
@@ -156,6 +156,7 @@ animations = [{
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-5.5, 14.5)
 shape = SubResource("RectangleShape2D_halcon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
