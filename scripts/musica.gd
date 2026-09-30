@@ -1,17 +1,18 @@
 extends Node
 
 const PISTAS := {
-	"menu": "res://sfx/musica_menu.ogg",
-	"juego": "res://sfx/musica_juego.ogg",
-	"ganar": "res://sfx/musica_ganar.ogg",
-	"perder": "res://sfx/musica_perder.ogg",
+	"menu": "res://sfx/aa_menu_juego.ogg",
+	"juego": "res://sfx/aa_gameplay_juego.ogg",
+	"ganar": "res://sfx/aa_perder.ogg",
+	"perder": "res://sfx/aa_perder.ogg",
 }
 
 const VOLUMEN := {
-	"menu": -10.0,
-	"juego": -12.0,
+	"menu": -8.0,
+	"juego": -8.0,
+	"recuerdo": -8.0,
 	"ganar": -8.0,
-	"perder": -10.0,
+	"perder": -5.0,
 }
 
 var reproductor: AudioStreamPlayer

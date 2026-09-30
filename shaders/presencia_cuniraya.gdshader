@@ -4,7 +4,7 @@ uniform float intensidad = 0.0;
 
 void fragment() {
 	vec2 uv = UV;
-	
+
 	float distancia_borde = min(
 		min(uv.x, 1.0 - uv.x),
 		min(uv.y, 1.0 - uv.y)

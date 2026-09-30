@@ -44,8 +44,7 @@ const RECUERDOS := {
 		"id": "lucuma",
 		"titulo": "La semilla del engaño",
 		"texto": "Cuniraya dejó una lúcuma entre las ramas.\nCavillaca la comió sin saber lo que llevaba dentro.",
-		#,
-		#"asset": "res://assets/cinematicas/recuerdo_2.png"
+		"asset": "res://assets/cinematicas/recuerdo_2.png"
 	},
 	3: {
 		"id": "gateo",
