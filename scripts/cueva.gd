@@ -8,6 +8,7 @@ const RANGO_ENTRADA := 150.0
 var bebe_con_zorro := false
 var jugador_en_entrada := false
 var puerta_abierta := true
+var aviso_energia_mostrado := false
 
 @onready var arbol: TileMapLayer = $Arbol
 @onready var puerta: TileMapLayer = $Puerta
@@ -22,6 +23,10 @@ func _ready():
 
 func _process(delta: float) -> void:
 	jugador_en_entrada = _cavillaca_en_entrada()
+	if jugador_en_entrada and not aviso_energia_mostrado:
+		Global.mostrar_aviso("Con un recuerdo, la cueva recarga tu energía")
+	aviso_energia_mostrado = jugador_en_entrada
+
 	var puerta_abierta_ahora := jugador_en_entrada and Global.recuerdos_obtenidos > 0
 	_cambiar_puerta(puerta_abierta_ahora)
 
