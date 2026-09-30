@@ -25,11 +25,15 @@ const ATAQUE := preload("res://sfx/ataque.ogg")
 var FRAMES_FRENTE: Array[Texture2D]
 var FRAMES_ESPALDA: Array[Texture2D]
 var FRAMES_LADO: Array[Texture2D]
+var FRAMES_BEBE_ESPALDA: Array[Texture2D]
+var FRAMES_BEBE_FRENTE:  Array[Texture2D]
 
 var frames_espalda := preload("res://resources/cavillaca_espalda.tres")
 var sheet_frente := preload("res://assets/person/cavillaca_frente.png")
 var sheet_espalda := preload("res://assets/person/cavillaca_espalda.png")
 var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
+var sheet_bebe_espalda := preload("res://assets/person/cavillaca_bebe_espalda.png")
+var sheet_bebe_frente := preload("res://assets/person/cavillaca_bebe_frente.png")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
@@ -45,6 +49,8 @@ func _ready():
 	FRAMES_FRENTE = _crear_frames_sheet(sheet_frente, 3)
 	FRAMES_ESPALDA = _crear_frames_sheet(sheet_espalda, 3)
 	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360 )
+	FRAMES_BEBE_ESPALDA = _crear_frames_sheet(sheet_bebe_espalda, 3)
+	FRAMES_BEBE_FRENTE = _crear_frames_sheet(sheet_bebe_frente, 3)
 	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
@@ -98,6 +104,8 @@ func _armar_sprite() -> void:
 	], 6.0)
 	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[0]], 1.0)
 	_poner_anim(hojas, "walk_lado", FRAMES_LADO, 8.0)
+	_poner_anim(hojas, "cavilaca_bebe_espalda", FRAMES_BEBE_ESPALDA, 6.0)
+	_poner_anim(hojas, "cavilaca_bebe_frente", FRAMES_BEBE_FRENTE, 6.0)
 	$Sprite.sprite_frames = hojas
 	$Sprite.play("idle_frente")
 
@@ -284,28 +292,77 @@ func _direccion_cuatro() -> Vector2:
 
 
 func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
+
+	# =========================
+	# CON BEBÉ
+	# =========================
+	if Global.lleva_bebe:
+
+		if facing == Vector2.UP:
+			if $Sprite.animation != "cavilaca_bebe_espalda":
+				$Sprite.play("cavilaca_bebe_espalda")
+			$Sprite.flip_h = false
+
+		elif facing == Vector2.DOWN:
+			if $Sprite.animation != "cavilaca_bebe_frente":
+				$Sprite.play("cavilaca_bebe_frente")
+			$Sprite.flip_h = false
+
+		else:
+			# Todavía no tenemos sprite lateral con bebé
+			var accion := "walk" if esta_caminando else "idle"
+			var anim_lado := "%s_lado" % accion
+
+			if $Sprite.animation != anim_lado:
+				$Sprite.play(anim_lado)
+
+			$Sprite.flip_h = facing == Vector2.LEFT
+
+		$Sprite.speed_scale = 0.75
+
+		# SFX de pasos con bebé
+		if esta_caminando:
+			paso_acum += delta
+
+			if paso_acum >= 0.5:
+				paso_acum = 0.0
+				_sonar_paso()
+		else:
+			paso_acum = 0.0
+
+		return
+
+
+	# =========================
+	# SIN BEBÉ
+	# =========================
+
 	var accion := "walk" if esta_caminando else "idle"
 	var direccion := "lado"
+
 	if facing == Vector2.UP:
 		direccion = "espalda"
 	elif facing == Vector2.DOWN:
 		direccion = "frente"
+
 	var anim := "%s_%s" % [accion, direccion]
+
 	$Sprite.flip_h = facing == Vector2.LEFT
-	$Sprite.speed_scale = 2.0 if esta_corriendo else 0.75 if Global.lleva_bebe else 1.7
+	$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
+
 	if $Sprite.animation != anim:
 		$Sprite.play(anim)
 
 	if esta_caminando:
 		paso_acum += delta
-		var intervalo := 0.16 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.22
+
+		var intervalo := 0.16 if esta_corriendo else 0.22
+
 		if paso_acum >= intervalo:
 			paso_acum = 0.0
 			_sonar_paso()
 	else:
 		paso_acum = 0.0
-
-
 func _actualizar_camara(delta: float):
 	cam.offset = Vector2.ZERO
 
@@ -353,6 +410,10 @@ func _recoger_bebe():
 	if bebe == null or not esta_cerca_del_bebe():
 		return
 	bebe.recoger()
+	
+	cambiar_sprite_bebe(true)
+	var sprite_bebe := bebe.get_node("AnimatedSprite2D")
+	sprite_bebe.hide()
 
 
 func _dejar_bebe():
@@ -360,6 +421,12 @@ func _dejar_bebe():
 	if bebe == null:
 		return
 	bebe.dejar(global_position + facing * DISTANCIA_DEJAR)
+	Global.lleva_bebe = false
+	cambiar_sprite_bebe(false)
+	
+	var sprite_bebe := bebe.get_node("AnimatedSprite2D")
+	sprite_bebe.show()
+	
 	lock_interaccion = LOCK_TRAS_DEJAR
 
 
@@ -417,3 +484,7 @@ func _crear_frames_sheet(
 		frames.append(atlas)
 
 	return frames
+
+func cambiar_sprite_bebe(cargado: bool) -> void:
+	if not cargado:
+		$Sprite.play("idle_frente")
