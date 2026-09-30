@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var bebe: Area2D
+var bebe: StaticBody2D
 var direcciones = [
 			Vector2.UP,
 			Vector2.DOWN,
@@ -16,9 +16,7 @@ const CUEVA := Rect2(-80, 160, 160, 280)
 const MAR := Rect2(160, 740, 520, 180)
 
 func _ready():
-	print("Cuniraya está en el mapa")
-
-	bebe = get_tree().get_first_node_in_group("bebe") as Area2D
+	bebe = get_tree().get_first_node_in_group("bebe") as StaticBody2D
 
 	call_deferred("_colocar_cuniraya")
 
@@ -27,10 +25,7 @@ func _colocar_cuniraya():
 		randf_range(200.0, 3896.0),
 		randf_range(200.0, 2872.0)
 	)
-	print("Posición inicial Cuniraya: ", global_position)
-	
-	#var suelo = get_tree().current_scene
-	#global_position = suelo.obtener_punto_cuniraya()
+	# Cuniraya permanece invisible. Su cercanía se lee en el bebé.
 
 func _process(delta):
 	# Movimiento autónomo
@@ -42,14 +37,15 @@ func _process(delta):
 	
 	# Presencia y acercamiento al bebé
 	if bebe != null and not Global.lleva_bebe:
-		var distancia := global_position.distance_to(bebe.global_position)
+		var sprite_bebe := bebe.get_node("AnimatedSprite2D") as Node2D
+		var distancia := global_position.distance_to(sprite_bebe.global_position)
 
 		if distancia <= RANGO_PRESENCIA:
 			Global.presencia_activa = true
 			Global.aumentar_presencia_por_tiempo(delta)
 
 			# Acercarse al bebé usando solo 4 direcciones
-			var diferencia := bebe.global_position - global_position
+			var diferencia := sprite_bebe.global_position - global_position
 
 			if abs(diferencia.x) > abs(diferencia.y):
 				direccion = Vector2.RIGHT if diferencia.x > 0 else Vector2.LEFT
@@ -57,6 +53,7 @@ func _process(delta):
 				direccion = Vector2.DOWN if diferencia.y > 0 else Vector2.UP
 
 			tiempo_cambio = TIEMPO_CAMBIO
+			bebe.cambiar_llanto(true)
 		else:
 			Global.presencia_activa = false
 	else:
@@ -77,6 +74,3 @@ func _process(delta):
 	if get_slide_collision_count() > 0:
 		direccion = direcciones.pick_random()
 		tiempo_cambio = TIEMPO_CAMBIO
-
-func _draw():
-	draw_circle(Vector2.ZERO, 10.0, Color(1, 0, 0))

@@ -21,6 +21,12 @@ var barra_presencia: ProgressBar
 var velo_ajustes: ColorRect
 var panel_ajustes: Panel
 var marcas_recuerdo: Array[Panel] = []
+var guia_bebe: Control
+var guia_fondo: Panel
+var guia_flecha: FlechaGuia
+var guia_metros: Label
+var guia_alpha := 0.0
+var guia_colocada := false
 
 @onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
@@ -38,6 +44,7 @@ func _ready():
 	_estilar_textos()
 	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
+	_poner_guia_bebe()
 	_poner_ajustes()
 	if not Global.partida_terminada:
 		Musica.tocar("juego")
@@ -47,6 +54,8 @@ func _ready():
 		_capturar()
 	elif OS.get_cmdline_user_args().has("--flashshot"):
 		_capturar_flashback()
+	elif OS.get_cmdline_user_args().has("--guiashot"):
+		_capturar_guia()
 
 
 func _estilar_panel():
@@ -202,6 +211,122 @@ func _estilar_pildora(panel: Panel, color: Color):
 	panel.add_theme_stylebox_override("panel", _tarjeta(color, 22))
 
 
+func _poner_guia_bebe() -> void:
+	guia_bebe = Control.new()
+	guia_bebe.visible = false
+	guia_bebe.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_bebe.size = Vector2(132, 44)
+	add_child(guia_bebe)
+
+	guia_fondo = Panel.new()
+	guia_fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
+	guia_fondo.add_theme_stylebox_override("panel", _tarjeta(VERDE, 22))
+	guia_bebe.add_child(guia_fondo)
+
+	guia_flecha = FlechaGuia.new()
+	guia_flecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_flecha.size = Vector2(22, 22)
+	guia_flecha.pivot_offset = guia_flecha.size * 0.5
+	guia_bebe.add_child(guia_flecha)
+
+	guia_metros = Label.new()
+	guia_metros.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	guia_metros.set_anchors_preset(Control.PRESET_FULL_RECT)
+	guia_metros.offset_left = 42
+	guia_metros.offset_right = -14
+	guia_metros.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	guia_metros.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	guia_metros.text = "300 m"
+	_texto(guia_metros, 18)
+	guia_bebe.add_child(guia_metros)
+
+
+func _actualizar_guia_bebe(delta: float) -> void:
+	var mostrar := false
+	var direccion := Vector2.RIGHT
+	var esquina := guia_bebe.position
+	if not Global.lleva_bebe and not Global.flashback_abierto and not Global.partida_terminada:
+		var bebe := get_tree().get_first_node_in_group("bebe") as Node2D
+		var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+		var camara := get_viewport().get_camera_2d()
+		if bebe != null and cavillaca != null and camara != null:
+			var pantalla := get_viewport().get_canvas_transform() * bebe.global_position
+			var vista := get_viewport().get_visible_rect()
+			if not vista.grow(-56).has_point(pantalla):
+				mostrar = true
+				var metros := _metros_hasta(cavillaca.global_position.distance_to(bebe.global_position))
+				guia_metros.text = "%d m" % metros
+				var ancho := maxf(guia_metros.get_minimum_size().x + 58.0, 124.0)
+				guia_bebe.size = Vector2(ancho, 44)
+				var mitad := guia_bebe.size * 0.5
+				var zona := Rect2(
+					Vector2(16.0 + mitad.x, 84.0 + mitad.y),
+					Vector2(vista.size.x - 32.0 - guia_bebe.size.x, vista.size.y - 176.0 - guia_bebe.size.y)
+				)
+				var borde := _borde_de(vista.get_center(), pantalla, zona)
+				esquina = borde - guia_bebe.size * 0.5
+				direccion = pantalla - vista.get_center()
+
+	var destino_alpha := 1.0 if mostrar else 0.0
+	guia_alpha = move_toward(guia_alpha, destino_alpha, delta * 6.0)
+	guia_bebe.modulate.a = guia_alpha
+	guia_bebe.visible = guia_alpha > 0.02
+	if not mostrar:
+		guia_colocada = false
+		return
+
+	if guia_colocada:
+		guia_bebe.position = guia_bebe.position.lerp(esquina, 1.0 - exp(-12.0 * delta))
+	else:
+		guia_bebe.position = esquina
+		guia_colocada = true
+
+	if direccion.length_squared() < 0.001:
+		direccion = Vector2.RIGHT
+	direccion = direccion.normalized()
+	var empuje := sin(Time.get_ticks_msec() * 0.006) * 3.0
+	var a_la_derecha := direccion.x >= 0.0
+	var x_flecha := 24.0
+	if a_la_derecha:
+		guia_metros.offset_left = 16
+		guia_metros.offset_right = -40
+		x_flecha = guia_bebe.size.x - 24.0
+	else:
+		guia_metros.offset_left = 40
+		guia_metros.offset_right = -16
+	var centro_flecha := Vector2(x_flecha, 22) + direccion * empuje
+	guia_flecha.position = centro_flecha - guia_flecha.pivot_offset
+	guia_flecha.rotation = direccion.angle()
+
+
+func _metros_hasta(pixeles: float) -> int:
+	var metros := pixeles / 2.2
+	if metros < 15.0:
+		return maxi(int(round(metros)), 1)
+	return int(round(metros / 10.0) * 10.0)
+
+
+func _borde_de(origen: Vector2, destino: Vector2, zona: Rect2) -> Vector2:
+	var dir := destino - origen
+	var mejor := INF
+	var punto := zona.get_center()
+	if absf(dir.x) > 0.001:
+		var tx := (zona.position.x - origen.x) / dir.x if dir.x < 0.0 else (zona.end.x - origen.x) / dir.x
+		if tx > 0.0:
+			var y := origen.y + dir.y * tx
+			if y >= zona.position.y and y <= zona.end.y and tx < mejor:
+				mejor = tx
+				punto = origen + dir * tx
+	if absf(dir.y) > 0.001:
+		var ty := (zona.position.y - origen.y) / dir.y if dir.y < 0.0 else (zona.end.y - origen.y) / dir.y
+		if ty > 0.0 and ty < mejor:
+			var x := origen.x + dir.x * ty
+			if x >= zona.position.x and x <= zona.end.x:
+				punto = origen + dir * ty
+	return punto
+
+
 func _poner_ajustes() -> void:
 	var boton := BotonCirculo.new()
 	boton.color_fondo = DORADO
@@ -306,6 +431,14 @@ func _capturar():
 	get_tree().quit()
 
 
+func _capturar_guia() -> void:
+	await get_tree().process_frame
+	await get_tree().create_timer(0.6).timeout
+	var imagen := get_viewport().get_texture().get_image()
+	imagen.save_png("screenshot_guia.png")
+	get_tree().quit()
+
+
 func _capturar_flashback() -> void:
 	var flashback := preload("res://scenes/Flashback.tscn").instantiate()
 	flashback.configurar(1)
@@ -321,6 +454,7 @@ func _process(delta):
 	barra_presencia.value = Global.presencia_cuniraya
 	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
 	_actualizar_recuerdos()
+	_actualizar_guia_bebe(delta)
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:
@@ -373,6 +507,17 @@ func _process(delta):
 	else:
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
+
+
+class FlechaGuia extends Control:
+	func _draw() -> void:
+		var medio := size.y * 0.5
+		draw_rect(Rect2(0, medio - 2.5, size.x * 0.46, 5), Color.WHITE, true)
+		draw_colored_polygon(PackedVector2Array([
+			Vector2(size.x * 0.34, medio - 7),
+			Vector2(size.x - 1, medio),
+			Vector2(size.x * 0.34, medio + 7),
+		]), Color.WHITE)
 
 
 func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:

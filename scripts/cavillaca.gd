@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 const LIMITE_ARRIBA_JUGADOR := 180.0
 const LIMITE_ABAJO_JUGADOR := 180.0
-const VELOCIDAD_CAMINAR := 100.0
-const VELOCIDAD_CORRER := 180.0
+const VELOCIDAD_CAMINAR := 200.0
+const VELOCIDAD_CORRER := 300.0
 const VELOCIDAD_CON_BEBE := 70.0
 const VELOCIDAD_SIN_ENERGIA := 55.0
 const DISTANCIA_RECOGER := 56.0
@@ -53,6 +53,7 @@ func _ready():
 
 	$Sprite.scale = Vector2(0.052, 0.052)
 	$Sprite.position.y = -10
+	$CollisionShape2D.position.y = 90
 	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.5, 1.5)
@@ -63,7 +64,7 @@ func _ready():
 	cam.limit_bottom = 3072
 
 	cam.position_smoothing_enabled = true
-	cam.position_smoothing_speed = 5.0
+	cam.position_smoothing_speed = 8.0
 	add_child(cam)
 	cam.make_current()
 
@@ -174,13 +175,12 @@ func _physics_process(delta):
 
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
 	move_and_slide()
+	
+	# Utilizado para mostrar delante del bebe
+	z_index = int($CollisionShape2D.global_position.y)
 
 	if cam.global_position.y <= cam.limit_top:
 		global_position.y = min(global_position.y, cam.global_position.y)
-	
-	if get_slide_collision_count() > 0:
-		var colision := get_slide_collision(0)
-		print("CHOCA CON: ", colision.get_collider().name)
 
 	global_position.x = clamp(
 		global_position.x,
@@ -266,9 +266,19 @@ func esta_cerca_del_bebe() -> bool:
 	var bebe := _obtener_bebe()
 	if bebe == null or Global.lleva_bebe:
 		return false
-	return global_position.distance_to(bebe.global_position) <= DISTANCIA_RECOGER
 
+	var sprite_bebe := bebe.get_node("AnimatedSprite2D") as Node2D
+	var diferencia := global_position - sprite_bebe.global_position
 
+	# Zona de interacción alrededor de la imagen del bebé.
+	return (
+		diferencia.x >= -100.0 and
+		diferencia.x <= 160.0 and
+		diferencia.y >= -200.0 and
+		diferencia.y <= 30.0
+	)	
+	
+	
 func _direccion_cuatro() -> Vector2:
 	var horizontal := Input.get_axis("mover_izquierda", "mover_derecha")
 	var vertical := Input.get_axis("mover_arriba", "mover_abajo")
@@ -292,13 +302,13 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		direccion = "frente"
 	var anim := "%s_%s" % [accion, direccion]
 	$Sprite.flip_h = facing == Vector2.LEFT
-	$Sprite.speed_scale = 1.35 if esta_corriendo else 0.75 if Global.lleva_bebe else 1.0
+	$Sprite.speed_scale = 2.0 if esta_corriendo else 0.75 if Global.lleva_bebe else 1.7
 	if $Sprite.animation != anim:
 		$Sprite.play(anim)
 
 	if esta_caminando:
 		paso_acum += delta
-		var intervalo := 0.24 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.36
+		var intervalo := 0.16 if esta_corriendo else 0.5 if Global.lleva_bebe else 0.22
 		if paso_acum >= intervalo:
 			paso_acum = 0.0
 			_sonar_paso()
@@ -331,7 +341,7 @@ func _actualizar_prompt():
 	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
-		Global.prompt_interaccion = "E  Recoger"
+		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
 	elif Global.halcon_cerca:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
 	else:

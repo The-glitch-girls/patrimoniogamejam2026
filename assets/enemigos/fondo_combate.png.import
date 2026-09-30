@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://h1l4vy3chj1q"
-path="res://.godot/imported/lado_0.png-524bac77f5d507b2444f62de3562ec61.ctex"
+uid="uid://b7ayeghs46tju"
+path="res://.godot/imported/fondo_combate.png-06d5d65955e509812cee3a06fe876e75.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/person/frames/lado_0.png"
-dest_files=["res://.godot/imported/lado_0.png-524bac77f5d507b2444f62de3562ec61.ctex"]
+source_file="res://assets/enemigos/fondo_combate.png"
+dest_files=["res://.godot/imported/fondo_combate.png-06d5d65955e509812cee3a06fe876e75.ctex"]
 
 [params]
 
