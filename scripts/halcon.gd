@@ -1,8 +1,8 @@
 extends Area2D
 
 const VIDA_MAX := 3
-const RANGO_DETECCION := 150.0
-const RANGO_CORTE := 260.0
+const RANGO_DETECCION := 300.0
+const RANGO_CORTE := 400.0
 const RADIO_REVOLOTEO := 72.0
 const AMPLITUD_REVOLOTEO := 36.0
 const RANGO_GOLPE := 52.0
@@ -72,6 +72,7 @@ func _process(delta):
 	var cerca := false
 	if cavillaca != null:
 		var distancia := global_position.distance_to(cavillaca.global_position)
+		print("🦅 distancia Cavillaca-halcon: ", distancia)
 		if rondando and distancia > RANGO_CORTE:
 			rondando = false
 			_empezar_descanso()
@@ -88,10 +89,16 @@ func _process(delta):
 func recibir_golpe(direccion: Vector2):
 	if derrotado:
 		return
+
 	vida -= 1
 	flash_t = 0.12
+
+	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
+
 	global_position += direccion.normalized() * 20.0
+
 	if vida <= 0:
+		print("🦅 HALCÓN VA A MORIR")
 		_victoria()
 
 
@@ -102,11 +109,15 @@ func _golpear():
 	Global.aumentar_presencia()
 	Global.mostrar_aviso("¡Halcón ha golpeado!")	
 
+
 func _victoria():
+	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
+
 	derrotado = true
 	hide()
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
+
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
 		Global.mostrar_aviso("Victoria")
 		respawn_t = TIEMPO_RESPAWN
@@ -158,6 +169,7 @@ func _aparecer_en_otro_lado() -> void:
 	zona_t = 0.0
 	rondando = false
 	$AnimatedSprite2D.play("lado")
+	print("🦅 SPAWN HALCÓN EN: ", punto)
 
 
 func _elegir_mas_adelante() -> Vector2:
