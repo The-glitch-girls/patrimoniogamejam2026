@@ -238,66 +238,35 @@ func _estilar_pildora(panel: Panel, color: Color):
 
 
 func _poner_guia_bebe() -> void:
-	guia_bebe = Control.new()
-	guia_bebe.visible = false
-	guia_bebe.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_bebe.size = Vector2(132, 44)
-	add_child(guia_bebe)
+	guia_bebe = guia_navegacion.new()
 
-	guia_fondo = Panel.new()
-	guia_fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
-	guia_fondo.add_theme_stylebox_override("panel", _tarjeta(VERDE, 22))
-	guia_bebe.add_child(guia_fondo)
+	guia_bebe.configurar(
+		VERDE,
+		"300 m",
+		Vector2(132, 44),
+		FUENTE,
+		CREMA
+	)
 
-	guia_flecha = FlechaGuia.new()
-	guia_flecha.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_flecha.size = Vector2(22, 22)
-	guia_flecha.pivot_offset = guia_flecha.size * 0.5
-	guia_bebe.add_child(guia_flecha)
+	guia_flecha = guia_bebe.flecha
+	guia_metros = guia_bebe.texto
 
-	guia_metros = Label.new()
-	guia_metros.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_metros.set_anchors_preset(Control.PRESET_FULL_RECT)
-	guia_metros.offset_left = 42
-	guia_metros.offset_right = -14
-	guia_metros.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	guia_metros.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	guia_metros.text = "300 m"
-	_texto(guia_metros, 18)
-	guia_bebe.add_child(guia_metros)
-
+	$Guias.add_child(guia_bebe)
 
 func _poner_guia_cueva() -> void:
-	guia_cueva = Control.new()
-	guia_cueva.visible = false
-	guia_cueva.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_cueva.size = Vector2(150, 44)
-	add_child(guia_cueva)
-
-	var fondo := Panel.new()
-	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
-	fondo.add_theme_stylebox_override("panel", _tarjeta(NARANJA_CUEVA, 22))
-	guia_cueva.add_child(fondo)
-
-	guia_flecha_cueva = FlechaGuia.new()
-	guia_flecha_cueva.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_flecha_cueva.size = Vector2(22, 22)
-	guia_flecha_cueva.pivot_offset = guia_flecha_cueva.size * 0.5
-	guia_cueva.add_child(guia_flecha_cueva)
-
-	guia_metros_cueva = Label.new()
-	guia_metros_cueva.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	guia_metros_cueva.set_anchors_preset(Control.PRESET_FULL_RECT)
-	guia_metros_cueva.offset_left = 42
-	guia_metros_cueva.offset_right = -14
-	guia_metros_cueva.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	guia_metros_cueva.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	guia_metros_cueva.text = "Cueva"
-	_texto(guia_metros_cueva, 18)
-	guia_cueva.add_child(guia_metros_cueva)
-
+	guia_cueva = guia_navegacion.new()
+	
+	guia_cueva.configurar(
+		NARANJA_CUEVA,
+		"Cueva",
+		Vector2(150, 44),
+		FUENTE,
+		CREMA
+	)
+	
+	guia_flecha_cueva = guia_cueva.flecha
+	guia_metros_cueva = guia_cueva.texto
+	$Guias.add_child(guia_cueva)
 
 func _actualizar_guia_bebe(delta: float) -> void:
 	var mostrar := false
@@ -644,15 +613,15 @@ func _process(delta):
 		temporizador_llanto = 0.0
 
 
-class FlechaGuia extends Control:
-	func _draw() -> void:
-		var medio := size.y * 0.5
-		draw_rect(Rect2(0, medio - 2.5, size.x * 0.46, 5), Color.WHITE, true)
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(size.x * 0.34, medio - 7),
-			Vector2(size.x - 1, medio),
-			Vector2(size.x * 0.34, medio + 7),
-		]), Color.WHITE)
+#class FlechaGuia extends Control:
+	#func _draw() -> void:
+		#var medio := size.y * 0.5
+		#draw_rect(Rect2(0, medio - 2.5, size.x * 0.46, 5), Color.WHITE, true)
+		#draw_colored_polygon(PackedVector2Array([
+			#Vector2(size.x * 0.34, medio - 7),
+			#Vector2(size.x - 1, medio),
+			#Vector2(size.x * 0.34, medio + 7),
+		#]), Color.WHITE)
 
 
 func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
