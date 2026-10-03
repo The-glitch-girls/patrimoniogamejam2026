@@ -236,172 +236,6 @@ func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
 func _estilar_pildora(panel: Panel, color: Color):
 	panel.add_theme_stylebox_override("panel", _tarjeta(color, 22))
 
-
-func _poner_guia_bebe() -> void:
-	guia_bebe = guia_navegacion.new()
-
-	guia_bebe.configurar(
-		VERDE,
-		"300 m",
-		Vector2(132, 44),
-		FUENTE,
-		CREMA
-	)
-
-	guia_flecha = guia_bebe.flecha
-	guia_metros = guia_bebe.texto
-
-	$Guias.add_child(guia_bebe)
-
-func _poner_guia_cueva() -> void:
-	guia_cueva = guia_navegacion.new()
-	
-	guia_cueva.configurar(
-		NARANJA_CUEVA,
-		"Cueva",
-		Vector2(150, 44),
-		FUENTE,
-		CREMA
-	)
-	
-	guia_flecha_cueva = guia_cueva.flecha
-	guia_metros_cueva = guia_cueva.texto
-	$Guias.add_child(guia_cueva)
-
-func _actualizar_guia_bebe(delta: float) -> void:
-	var mostrar := false
-	var direccion := Vector2.RIGHT
-	var esquina := guia_bebe.position
-	if not Global.lleva_bebe and not Global.flashback_abierto and not Global.partida_terminada:
-		var bebe := get_tree().get_first_node_in_group("bebe") as Node2D
-		var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-		var camara := get_viewport().get_camera_2d()
-		if bebe != null and cavillaca != null and camara != null:
-			var pantalla := get_viewport().get_canvas_transform() * bebe.global_position
-			var vista := get_viewport().get_visible_rect()
-			if not vista.grow(-56).has_point(pantalla):
-				mostrar = true
-				var metros := _metros_hasta(cavillaca.global_position.distance_to(bebe.global_position))
-				guia_metros.text = "%d m" % metros
-				var ancho := maxf(guia_metros.get_minimum_size().x + 58.0, 124.0)
-				guia_bebe.size = Vector2(ancho, 44)
-				var mitad := guia_bebe.size * 0.5
-				var zona := Rect2(
-					Vector2(16.0 + mitad.x, 84.0 + mitad.y),
-					Vector2(vista.size.x - 32.0 - guia_bebe.size.x, vista.size.y - 176.0 - guia_bebe.size.y)
-				)
-				var borde := _borde_de(vista.get_center(), pantalla, zona)
-				esquina = borde - guia_bebe.size * 0.5
-				direccion = pantalla - vista.get_center()
-
-	var destino_alpha := 1.0 if mostrar else 0.0
-	guia_alpha = move_toward(guia_alpha, destino_alpha, delta * 6.0)
-	guia_bebe.modulate.a = guia_alpha
-	guia_bebe.visible = guia_alpha > 0.02
-	if not mostrar:
-		guia_colocada = false
-		return
-
-	if guia_colocada:
-		guia_bebe.position = guia_bebe.position.lerp(esquina, 1.0 - exp(-12.0 * delta))
-	else:
-		guia_bebe.position = esquina
-		guia_colocada = true
-
-	if direccion.length_squared() < 0.001:
-		direccion = Vector2.RIGHT
-	direccion = direccion.normalized()
-	var empuje := sin(Time.get_ticks_msec() * 0.006) * 3.0
-	var a_la_derecha := direccion.x >= 0.0
-	var x_flecha := 24.0
-	if a_la_derecha:
-		guia_metros.offset_left = 16
-		guia_metros.offset_right = -40
-		x_flecha = guia_bebe.size.x - 24.0
-	else:
-		guia_metros.offset_left = 40
-		guia_metros.offset_right = -16
-	var centro_flecha := Vector2(x_flecha, 22) + direccion * empuje
-	guia_flecha.position = centro_flecha - guia_flecha.pivot_offset
-	guia_flecha.rotation = direccion.angle()
-
-
-func _actualizar_guia_cueva(delta: float) -> void:
-	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
-	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-	var camara := get_viewport().get_camera_2d()
-	var mostrar := false
-	var direccion := Vector2.RIGHT
-	var esquina := guia_cueva.position
-	var vista := get_viewport().get_visible_rect()
-	var zona := Rect2()
-
-	if not Global.flashback_abierto and not Global.partida_terminada:
-		if cueva != null and cavillaca != null and camara != null:
-			var pantalla := get_viewport().get_canvas_transform() * cueva.global_position
-			if not vista.grow(-56).has_point(pantalla):
-				mostrar = true
-				direccion = pantalla - vista.get_center()
-				var metros := _metros_hasta(cavillaca.global_position.distance_to(cueva.global_position))
-				guia_metros_cueva.text = "Cueva %d m" % metros
-				var ancho := maxf(guia_metros_cueva.get_minimum_size().x + 58.0, 150.0)
-				guia_cueva.size = Vector2(ancho, 44)
-				var mitad := guia_cueva.size * 0.5
-				zona = Rect2(
-					Vector2(16.0 + mitad.x, 84.0 + mitad.y),
-					Vector2(vista.size.x - 32.0 - guia_cueva.size.x, vista.size.y - 176.0 - guia_cueva.size.y)
-				)
-				var borde := _borde_de(vista.get_center(), pantalla, zona)
-				esquina = borde - mitad
-				esquina = _separar_guias(esquina, guia_cueva.size, zona)
-
-	guia_alpha_cueva = move_toward(guia_alpha_cueva, 1.0 if mostrar else 0.0, delta * 6.0)
-	guia_cueva.modulate.a = guia_alpha_cueva
-	guia_cueva.visible = guia_alpha_cueva > 0.02
-	if not mostrar:
-		guia_cueva_colocada = false
-		return
-
-	if guia_cueva_colocada:
-		guia_cueva.position = guia_cueva.position.lerp(esquina, 1.0 - exp(-12.0 * delta))
-	else:
-		guia_cueva.position = esquina
-		guia_cueva_colocada = true
-
-	direccion = direccion.normalized() if direccion.length_squared() >= 0.001 else Vector2.RIGHT
-	var empuje := sin(Time.get_ticks_msec() * 0.006) * 3.0
-	var a_la_derecha := direccion.x >= 0.0
-	var x_flecha := 24.0
-	if a_la_derecha:
-		guia_metros_cueva.offset_left = 16
-		guia_metros_cueva.offset_right = -40
-		x_flecha = guia_cueva.size.x - 24.0
-	else:
-		guia_metros_cueva.offset_left = 40
-		guia_metros_cueva.offset_right = -16
-	var centro_flecha := Vector2(x_flecha, 22) + direccion * empuje
-	guia_flecha_cueva.position = centro_flecha - guia_flecha.pivot_offset
-	guia_flecha_cueva.rotation = direccion.angle()
-
-
-func _separar_guias(esquina: Vector2, tamano: Vector2, zona: Rect2) -> Vector2:
-	if not guia_bebe.visible:
-		return esquina
-
-	var rect_bebe := Rect2(guia_bebe.position, guia_bebe.size)
-	if not Rect2(esquina, tamano).intersects(rect_bebe):
-		return esquina
-
-	var desplazamientos: Array[Vector2] = [Vector2(0, 56), Vector2(0, -56), Vector2(152, 0), Vector2(-152, 0)]
-	for desplazamiento in desplazamientos:
-		var alternativa := esquina + desplazamiento
-		alternativa.x = clampf(alternativa.x, zona.position.x, zona.end.x - tamano.x)
-		alternativa.y = clampf(alternativa.y, zona.position.y, zona.end.y - tamano.y)
-		if not Rect2(alternativa, tamano).intersects(rect_bebe):
-			return alternativa
-	return esquina
-
-
 func _metros_hasta(pixeles: float) -> int:
 	var metros := pixeles / 2.2
 	if metros < 15.0:
@@ -612,18 +446,6 @@ func _process(delta):
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
 
-
-#class FlechaGuia extends Control:
-	#func _draw() -> void:
-		#var medio := size.y * 0.5
-		#draw_rect(Rect2(0, medio - 2.5, size.x * 0.46, 5), Color.WHITE, true)
-		#draw_colored_polygon(PackedVector2Array([
-			#Vector2(size.x * 0.34, medio - 7),
-			#Vector2(size.x - 1, medio),
-			#Vector2(size.x * 0.34, medio + 7),
-		#]), Color.WHITE)
-
-
 func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
 	if not audio.playing:
 		return
@@ -632,3 +454,60 @@ func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
 	tween.tween_callback(func():
 		audio.stop()
 	)
+
+# Guias de bebe y cueva utilizando la clase GuiaNavegacion
+func _poner_guia_bebe() -> void:
+	guia_bebe = GuiaNavegacion.new()
+
+	guia_bebe.configurar(
+		_tarjeta(VERDE, 22),
+		"300 m",
+		Vector2(132, 44),
+		FUENTE,
+		CREMA
+	)
+	
+	guia_flecha = guia_bebe.flecha
+	guia_metros = guia_bebe.texto
+	
+	$Guias.add_child(guia_bebe)
+
+func _poner_guia_cueva() -> void:
+	guia_cueva = GuiaNavegacion.new()
+
+	guia_cueva.configurar(
+		_tarjeta(NARANJA_CUEVA, 22),
+		"Cueva",
+		Vector2(150, 44),
+		FUENTE,
+		CREMA
+	)
+	
+	guia_flecha_cueva = guia_cueva.flecha
+	guia_metros_cueva = guia_cueva.texto
+
+	$Guias.add_child(guia_cueva)
+
+func _actualizar_guia_bebe(delta: float) -> void:
+	var vista := get_viewport().get_visible_rect()
+
+	if Global.lleva_bebe or Global.flashback_abierto or Global.partida_terminada:
+		guia_bebe.actualizar(null, null, vista, delta)
+		return
+
+	var bebe := get_tree().get_first_node_in_group("bebe") as Node2D
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+
+	guia_bebe.actualizar(bebe, cavillaca, vista, delta)
+
+func _actualizar_guia_cueva(delta: float) -> void:
+	var vista := get_viewport().get_visible_rect()
+
+	if Global.flashback_abierto or Global.partida_terminada:
+		guia_cueva.actualizar(null, null, vista, delta)
+		return
+
+	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+
+	guia_cueva.actualizar(cueva, cavillaca, vista, delta, guia_bebe)
