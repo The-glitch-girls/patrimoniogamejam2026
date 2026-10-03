@@ -71,8 +71,10 @@ func _process(delta):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	var cerca := false
 	if cavillaca != null:
-		var distancia := global_position.distance_to(cavillaca.global_position)
+		var objetivo := _obtener_punto_objetivo(cavillaca)
+		var distancia := global_position.distance_to(objetivo)
 		print("🦅 distancia Cavillaca-halcon: ", distancia)
+		
 		if rondando and distancia > RANGO_CORTE:
 			rondando = false
 			_empezar_descanso()
@@ -202,22 +204,30 @@ func _elegir_mas_adelante() -> Vector2:
 func _sirve(punto: Vector2, cavillaca: Node2D) -> bool:
 	if punto.distance_to(origen) < SEPARACION:
 		return false
-	if cavillaca != null and punto.distance_to(cavillaca.global_position) < SEPARACION:
-		return false
+	if cavillaca != null:
+		var objetivo := _obtener_punto_objetivo(cavillaca)
+
+		if punto.distance_to(objetivo) < SEPARACION:
+			return false
+
 	return true
 
 
 func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	angulo += delta * 2.4
+	var objetivo := _obtener_punto_objetivo(cavillaca)
 	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
-	var destino := cavillaca.global_position + Vector2.from_angle(angulo) * radio
+	var destino := objetivo + Vector2.from_angle(angulo) * radio
 	var antes := global_position
 	global_position = global_position.move_toward(destino, VELOCIDAD_REVOLOTEO * delta)
+	
 	var hacia := global_position - antes
 	if abs(hacia.x) > 0.2:
 		$AnimatedSprite2D.flip_h = hacia.x < 0.0
-	if lock_golpe <= 0.0 and global_position.distance_to(cavillaca.global_position) <= RANGO_GOLPE:
-		_golpear()
+	
+	# No golpea
+	#if lock_golpe <= 0.0 and global_position.distance_to(objetivo) <= RANGO_GOLPE:
+		#_golpear()
 	if lock_golpe <= 0.0 and $AnimatedSprite2D.animation != "lado":
 		$AnimatedSprite2D.play("lado")
 
@@ -231,12 +241,13 @@ func _empezar_descanso() -> void:
 func _retirarse(delta: float) -> void:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	var hacia := Vector2.RIGHT
+	
 	if cavillaca != null:
 		hacia = global_position - cavillaca.global_position
 	if hacia.length_squared() < 16.0:
 		hacia = Vector2.RIGHT
+		
 	global_position += hacia.normalized() * VELOCIDAD_RETIRADA * delta
-
 
 func _patrullar(delta: float):
 	zona_t += delta
@@ -254,17 +265,28 @@ func _patrullar(delta: float):
 
 
 func _on_body_entered(body: Node):
-	if derrotado or lock_golpe > 0.0 or descanso_t > 0.0:
+	if derrotado or descanso_t > 0.0: #or lock_golpe > 0.0
 		return
 	if body.is_in_group("cavillaca"):
-		_golpear()
+		Global.halcon_cerca = true
+		#_golpear()
 
 
+func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
+	var punto := cavillaca.get_node_or_null("PuntoObjetivoHalcón") as Node2D
+	
+	if punto != null:
+		return punto.global_position
+	
+	return cavillaca.global_position
+
+# Debug funcionamiento de halcon
 func _input(event):
 	if event.is_action_pressed("debug_halcon"):
 		var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 		if cavillaca != null:
-			global_position = cavillaca.global_position + Vector2(100, 0)
+			var objetivo := _obtener_punto_objetivo(cavillaca)
+			global_position = objetivo + Vector2(100, 0)
 			show()
 			derrotado = false
 			vida = VIDA_MAX
