@@ -110,18 +110,6 @@ func _process(delta):
 
 	Global.halcon_cerca = cerca
 
-
-# EVALUAR IMPLEMENTACION EN PRIMERA PERSONA
-func _golpear():
-	$AnimatedSprite2D.play("frente")
-	lock_golpe = LOCK_GOLPE
-	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
-	Global.aumentar_presencia()
-	Global.mostrar_aviso("¡Halcón ha golpeado!")
-
-
-
-
 func _revivir():
 	derrotado = false
 	en_muerte = false
