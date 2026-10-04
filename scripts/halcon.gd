@@ -33,6 +33,7 @@ var flash_t := 0.0
 var respawn_t := 0.0
 var escala_original := Vector2.ONE
 
+
 # estados
 var rondando := false
 var en_combate := false
@@ -266,7 +267,9 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 func entrar_en_combate():
 	var combate := get_tree().current_scene.get_node("CombateHalcon")
 	var punto := combate.get_node("PuntoHalcon") as Node2D
-	
+	#var punto_izquierda := combate.get_node("PuntoHalconIzquierda") as Node2D
+	#var punto_derecha := combate.get_node("PuntoHalconDerecha") as Node2D
+
 	padre_original = get_parent()
 	posicion_original = global_position
 	en_combate = true
@@ -301,7 +304,30 @@ func recibir_golpe(direccion: Vector2):
 	if vida <= 0:
 		print("🦅 HALCÓN VA A MORIR")
 		_victoria()
-		
+
+func esquivar_hacia(punto: Node2D):
+	var tween := create_tween()
+	tween.tween_property(
+		self,
+		"position",
+		punto.position,
+		0.2
+	)
+	
+	await tween.finished
+	
+	var combate := get_tree().current_scene.get_node("CombateHalcon")
+	var centro := combate.get_node("PuntoHalcon") as Node2D
+
+	var tween_vuelta := create_tween()
+	tween_vuelta.tween_property(
+		self,
+		"position",
+		centro.position,
+		0.4
+	)
+	
+
 func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 
