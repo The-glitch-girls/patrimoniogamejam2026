@@ -98,22 +98,8 @@ func _process(delta):
 
 	Global.halcon_cerca = cerca
 
-func recibir_golpe(direccion: Vector2):
-	if derrotado:
-		return
 
-	vida -= 1
-	flash_t = 0.12
-
-	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
-
-	global_position += direccion.normalized() * 20.0
-
-	if vida <= 0:
-		print("🦅 HALCÓN VA A MORIR")
-		_victoria()
-
-
+# EVALUAR IMPLEMENTACION EN PRIMERA PERSONA
 func _golpear():
 	$AnimatedSprite2D.play("frente")
 	lock_golpe = LOCK_GOLPE
@@ -121,31 +107,7 @@ func _golpear():
 	Global.aumentar_presencia()
 	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
-func _victoria():
-	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 
-	derrotado = true
-	
-	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
-	if combate != null:
-		combate.hide()
-	
-	salir_de_combate()
-	
-	hide()
-	set_deferred("monitoring", false)
-	set_deferred("monitorable", false)
-
-	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
-		Global.mostrar_aviso("Victoria")
-		respawn_t = TIEMPO_RESPAWN
-		return
-	var indice := Global.obtener_recuerdo()
-	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
-	var flashback := FLASHBACK_ESCENA.instantiate()
-	flashback.configurar(indice)
-	var hud := get_tree().current_scene.get_node("HUD")
-	hud.add_child(flashback)
 
 
 func _revivir():
@@ -282,8 +244,6 @@ func _on_body_entered(body: Node):
 		return
 	if body.is_in_group("cavillaca"):
 		Global.halcon_cerca = true
-		#_golpear()
-
 
 func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 	var punto := cavillaca.get_node_or_null("PuntoObjetivoHalcón") as Node2D
@@ -293,6 +253,7 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 	
 	return cavillaca.global_position
 	
+# Funciones utilizadas en combate
 func entrar_en_combate():
 	var combate := get_tree().current_scene.get_node("CombateHalcon")
 	var punto := combate.get_node("PuntoHalcon") as Node2D
@@ -303,7 +264,7 @@ func entrar_en_combate():
 	reparent(combate)
 	position = punto.position
 	monitoring = false # desactiva que el Area2D detecte cuerpos/áreas.
-	monitorable = false # hace que otras áreas no puedan detectarlo.
+	monitorable = true # permite que piedra detecte halcon
 	
 	$AnimatedSprite2D.flip_h = false
 	$AnimatedSprite2D.play("frente")
@@ -316,6 +277,47 @@ func salir_de_combate():
 		global_position = posicion_original
 	
 	$AnimatedSprite2D.play("lado")
+
+func recibir_golpe(direccion: Vector2):
+	if derrotado:
+		return
+
+	vida -= 1
+	flash_t = 0.12
+
+	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
+
+	global_position += direccion.normalized() * 5.0
+
+	if vida <= 0:
+		print("🦅 HALCÓN VA A MORIR")
+		_victoria()
+		
+func _victoria():
+	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
+
+	derrotado = true
+	
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	if combate != null:
+		combate.hide()
+	
+	salir_de_combate()
+	
+	hide()
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+
+	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
+		Global.mostrar_aviso("Victoria")
+		respawn_t = TIEMPO_RESPAWN
+		return
+	var indice := Global.obtener_recuerdo()
+	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
+	var flashback := FLASHBACK_ESCENA.instantiate()
+	flashback.configurar(indice)
+	var hud := get_tree().current_scene.get_node("HUD")
+	hud.add_child(flashback)
 	
 # Debug funcionamiento de halcon
 #func _input(event):

@@ -452,20 +452,35 @@ func _arrojar_en_combate():
 	var combate := get_tree().current_scene.get_node("CombateHalcon")
 	var punto := combate.get_node("PuntoLanzamiento") as Node2D
 	var halcon := get_tree().get_first_node_in_group("halcon") as Node2D
-
+	
+	if halcon == null:
+		return
+	
 	var piedra := PIEDRA_ESCENA.instantiate()
-
 	combate.add_child(piedra)
 
 	piedra.global_position = punto.global_position
-
-	if halcon != null:
-		piedra.direccion = (
-			halcon.global_position - piedra.global_position
-		).normalized()
-
+	piedra.scale = Vector2(3.0, 3.0)
+	piedra.combate = true
+	
 	sfx_ataque.pitch_scale = randf_range(0.94, 1.08)
 	sfx_ataque.play()
+	
+	var tween := create_tween()
+	tween.tween_property(
+		piedra,
+		"global_position",
+		halcon.global_position,
+		0.25
+	)
+	
+	await tween.finished
+
+	if is_instance_valid(halcon):
+		halcon.recibir_golpe(Vector2.UP)
+
+	if is_instance_valid(piedra):
+		piedra.queue_free()
 
 func _sonar_paso() -> void:
 	sfx_paso.stream = PASOS[randi() % PASOS.size()]
@@ -520,7 +535,6 @@ func _controlar_ataque() -> bool:
 		if halcon != null:
 			if halcon.en_combate:
 				_arrojar_en_combate()
-				halcon.recibir_golpe(Vector2.UP)
 			elif Global.halcon_cerca and not Global.lleva_bebe:
 				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")
 				combate_halcon.show()
