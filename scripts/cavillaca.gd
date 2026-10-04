@@ -20,7 +20,7 @@ const PASOS := [
 	preload("res://sfx/paso_1.ogg"),
 	preload("res://sfx/paso_2.ogg"),
 ]
-const ATAQUE := preload("res://sfx/ataque.ogg")
+const ATAQUE := preload("res://sfx/combate/piedra_lanzada.ogg")
 
 var FRAMES_FRENTE: Array[Texture2D]
 var FRAMES_ESPALDA: Array[Texture2D]
@@ -500,6 +500,7 @@ func _arrojar_en_combate():
 	if halcon == null:
 		return
 	
+	Global.perder_energia(2.0)
 	var destino := halcon.global_position
 	var piedra := PIEDRA_ESCENA.instantiate()
 	combate.add_child(piedra)
@@ -515,8 +516,8 @@ func _arrojar_en_combate():
 	tween.tween_property(
 		piedra,
 		"global_position",
-		halcon.global_position,
-		0.4
+		destino,
+		0.3
 	)
 	
 	# El halcón esquiva mientras la piedra está en el aire

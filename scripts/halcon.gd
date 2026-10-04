@@ -59,7 +59,7 @@ func _process(delta):
 	# Animacion de golpeado
 	if flash_t > 0.0:
 		flash_t -= delta
-		$AnimatedSprite2D.scale = escala_original * Vector2(1.15, 0.85)
+		$AnimatedSprite2D.scale = escala_original * Vector2(1.35, 0.8)
 	else:
 		$AnimatedSprite2D.scale = escala_original
 	
@@ -296,7 +296,7 @@ func recibir_golpe(direccion: Vector2):
 
 	vida -= 1
 	flash_t = 0.12
-
+	
 	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
 
 	global_position += direccion.normalized() * 5.0
@@ -304,6 +304,8 @@ func recibir_golpe(direccion: Vector2):
 	if vida <= 0:
 		print("🦅 HALCÓN VA A MORIR")
 		_victoria()
+	else:
+		$SFX_Ataque.play()
 
 func esquivar_hacia(punto: Node2D):
 	var tween := create_tween()
@@ -330,8 +332,11 @@ func esquivar_hacia(punto: Node2D):
 
 func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
-
 	derrotado = true
+	
+	$SFX_Muerte.play()
+	await get_tree().create_timer(2.0).timeout
+	$SFX_Muerte.stop()
 	
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
 	if combate != null:
