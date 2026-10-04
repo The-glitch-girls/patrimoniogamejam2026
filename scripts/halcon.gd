@@ -33,10 +33,12 @@ var flash_t := 0.0
 var respawn_t := 0.0
 var escala_original := Vector2.ONE
 
+
 # estados
 var rondando := false
-var en_combate := false
 var derrotado := false
+var en_combate := false
+var en_muerte := false
 
 # posicion para combate
 var padre_original: Node
@@ -56,11 +58,12 @@ func _ready():
 	
 func _process(delta):
 	# Animacion de golpeado
-	if flash_t > 0.0:
-		flash_t -= delta
-		$AnimatedSprite2D.scale = escala_original * Vector2(1.15, 0.85)
-	else:
-		$AnimatedSprite2D.scale = escala_original
+	if not en_muerte:
+		if flash_t > 0.0:
+			flash_t -= delta
+			$AnimatedSprite2D.scale = escala_original * Vector2(1.35, 0.8)
+		else:
+			$AnimatedSprite2D.scale = escala_original
 	
 	if en_combate:
 		return
@@ -107,20 +110,9 @@ func _process(delta):
 
 	Global.halcon_cerca = cerca
 
-
-# EVALUAR IMPLEMENTACION EN PRIMERA PERSONA
-func _golpear():
-	$AnimatedSprite2D.play("frente")
-	lock_golpe = LOCK_GOLPE
-	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
-	Global.aumentar_presencia()
-	Global.mostrar_aviso("¡Halcón ha golpeado!")
-
-
-
-
 func _revivir():
 	derrotado = false
+	en_muerte = false
 	vida = VIDA_MAX
 	lock_golpe = 0.0
 	_aparecer_en_otro_lado()
@@ -266,7 +258,9 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 func entrar_en_combate():
 	var combate := get_tree().current_scene.get_node("CombateHalcon")
 	var punto := combate.get_node("PuntoHalcon") as Node2D
-	
+	#var punto_izquierda := combate.get_node("PuntoHalconIzquierda") as Node2D
+	#var punto_derecha := combate.get_node("PuntoHalconDerecha") as Node2D
+
 	padre_original = get_parent()
 	posicion_original = global_position
 	en_combate = true
@@ -287,13 +281,24 @@ func salir_de_combate():
 	
 	$AnimatedSprite2D.play("lado")
 
+func _actualizar_vidas():
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	
+	if combate == null:
+		return
+	
+	combate.get_node("VidasHalcon/Vida1").visible = vida >= 1
+	combate.get_node("VidasHalcon/Vida2").visible = vida >= 2
+	combate.get_node("VidasHalcon/Vida3").visible = vida >= 3
+
 func recibir_golpe(direccion: Vector2):
 	if derrotado:
 		return
 
 	vida -= 1
+	_actualizar_vidas()
 	flash_t = 0.12
-
+	
 	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
 
 	global_position += direccion.normalized() * 5.0
@@ -301,11 +306,54 @@ func recibir_golpe(direccion: Vector2):
 	if vida <= 0:
 		print("🦅 HALCÓN VA A MORIR")
 		_victoria()
-		
+	else:
+		$SFX_Ataque.play()
+
+func esquivar_hacia(punto: Node2D):
+	var tween := create_tween()
+	tween.tween_property(
+		self,
+		"position",
+		punto.position,
+		0.2
+	)
+	
+	await tween.finished
+	
+	var combate := get_tree().current_scene.get_node("CombateHalcon")
+	var centro := combate.get_node("PuntoHalcon") as Node2D
+
+	var tween_vuelta := create_tween()
+	tween_vuelta.tween_property(
+		self,
+		"position",
+		centro.position,
+		0.4
+	)
+
 func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
-
 	derrotado = true
+	en_muerte = true
+	
+	$SFX_Muerte.play()
+	
+	var tween := create_tween()
+	tween.tween_property(
+		$AnimatedSprite2D,
+		"scale",
+		escala_original * 1.2,
+		0.1
+	)
+	tween.tween_property(
+		$AnimatedSprite2D,
+		"scale",
+		escala_original * 0.0,
+		0.8
+	)
+
+	await get_tree().create_timer(2.0).timeout
+	$SFX_Muerte.stop()
 	
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
 	if combate != null:

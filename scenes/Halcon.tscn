@@ -1,9 +1,11 @@
-[gd_scene load_steps=25 format=3 uid="uid://c7hebov1gpk1s"]
+[gd_scene load_steps=27 format=3 uid="uid://c7hebov1gpk1s"]
 
 [ext_resource type="Script" uid="uid://cndoisgfhf7mv" path="res://scripts/halcon.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://df2a7vs1ox5tp" path="res://assets/enemigos/halconlado_lado.png" id="2_4bbn4"]
 [ext_resource type="Texture2D" uid="uid://d36ymgsgphijy" path="res://assets/enemigos/halcon_espalda.png" id="2_gwswh"]
 [ext_resource type="Texture2D" uid="uid://do5kkrtq0imhv" path="res://assets/enemigos/halcon_frente.png" id="3_fjv6f"]
+[ext_resource type="AudioStream" uid="uid://cp132jf430y36" path="res://sfx/combate/halcon_atacado.ogg" id="5_ee0wm"]
+[ext_resource type="AudioStream" uid="uid://snpxuq0svoxs" path="res://sfx/combate/halcon_muerte.ogg" id="6_6on7q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_halcon"]
 size = Vector2(145, 71)
@@ -164,3 +166,11 @@ scale = Vector2(0.24, 0.24)
 sprite_frames = SubResource("SpriteFrames_7c8nx")
 animation = &"lado"
 frame_progress = 0.686428
+
+[node name="SFX_Ataque" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_ee0wm")
+bus = &"SFX"
+
+[node name="SFX_Muerte" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_6on7q")
+bus = &"SFX"
