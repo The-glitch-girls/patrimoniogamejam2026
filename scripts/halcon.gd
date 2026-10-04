@@ -37,6 +37,10 @@ var rondando := false
 var en_combate := false
 var derrotado := false
 
+# posicion para combate
+var padre_original: Node
+var posicion_original := Vector2.ZERO
+	
 const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
 
 func _ready():
@@ -287,7 +291,18 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 	return cavillaca.global_position
 	
 func entrar_en_combate():
+	var combate := get_tree().current_scene.get_node("CombateHalcon")
+	var punto := combate.get_node("PuntoHalcon") as Node2D
+	
+	padre_original = get_parent()
+	posicion_original = global_position
 	en_combate = true
+	reparent(combate)
+	position = punto.position
+	monitoring = false # desactiva que el Area2D detecte cuerpos/áreas.
+	monitorable = false # hace que otras áreas no puedan detectarlo.
+	
+	$AnimatedSprite2D.flip_h = false
 	$AnimatedSprite2D.play("frente")
 	
 func salir_de_combate():

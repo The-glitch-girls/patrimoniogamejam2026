@@ -119,10 +119,7 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
-	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
-
-	if combate != null and combate.visible:
-		velocity = Vector2.ZERO
+	if _controlar_ataque():
 		return
 		
 	if Global.hacia_el_mar:
@@ -160,11 +157,6 @@ func _physics_process(delta):
 		var cueva_descanso := get_tree().get_first_node_in_group("zona_segura")
 		if cueva_descanso != null:
 			cueva_descanso.descansar()
-
-	if Input.is_action_just_pressed("atacar"):
-		if Global.halcon_cerca and not Global.lleva_bebe:
-			var main := get_tree().current_scene
-			combate.show()
 
 	var direccion := _direccion_cuatro()
 	if direccion != Vector2.ZERO:
@@ -515,3 +507,27 @@ func _crear_frames_sheet(
 func cambiar_sprite_bebe(cargado: bool) -> void:
 	if not cargado:
 		$Sprite.play("idle_frente")
+
+# Funciones de input
+func _controlar_ataque() -> bool:
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	
+	# Ataque: funciona tanto para entrar al combate
+	# como para golpear al halcón dentro del combate.
+	if Input.is_action_just_pressed("atacar"):
+		var halcon := get_tree().get_first_node_in_group("halcon")
+
+		if halcon != null:
+			if halcon.en_combate:
+				halcon.recibir_golpe(Vector2.UP)
+			elif Global.halcon_cerca and not Global.lleva_bebe:
+				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")
+				combate_halcon.show()
+				halcon.entrar_en_combate()
+				
+	# Mientras hay combate, Cavillaca no puede moverse.
+	if combate != null and combate.visible:
+		velocity = Vector2.ZERO
+		return true
+	
+	return false

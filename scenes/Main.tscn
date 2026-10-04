@@ -305,3 +305,4 @@ tile_map_data = PackedByteArray("AAAAAAEAAAAJAA4AAAADAAEAAAAJAA4AAAADAAAAAAAJAA0
 tile_set = ExtResource("12_bjd11")
 
 [node name="CombateHalcon" parent="." instance=ExtResource("20_1nqs0")]
+visible = false
