@@ -126,6 +126,13 @@ func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 
 	derrotado = true
+	
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	if combate != null:
+		combate.hide()
+	
+	salir_de_combate()
+	
 	hide()
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
@@ -307,6 +314,11 @@ func entrar_en_combate():
 	
 func salir_de_combate():
 	en_combate = false
+	
+	if padre_original != null:
+		reparent(padre_original)
+		global_position = posicion_original
+	
 	$AnimatedSprite2D.play("lado")
 	
 # Debug funcionamiento de halcon
