@@ -31,6 +31,7 @@ var angulo := 0.0
 var zona_t := 0.0
 var flash_t := 0.0
 var respawn_t := 0.0
+var escala_original := Vector2.ONE
 
 # estados
 var rondando := false
@@ -47,12 +48,20 @@ func _ready():
 	add_to_group("halcon")
 	origen = global_position
 	inicio = global_position
+	escala_original = $AnimatedSprite2D.scale
 	call_deferred("_armar_puntos")
 	body_entered.connect(_on_body_entered)
 
 	$AnimatedSprite2D.play("lado")
 	
 func _process(delta):
+	# Animacion de golpeado
+	if flash_t > 0.0:
+		flash_t -= delta
+		$AnimatedSprite2D.scale = escala_original * Vector2(1.15, 0.85)
+	else:
+		$AnimatedSprite2D.scale = escala_original
+	
 	if en_combate:
 		return
 	
