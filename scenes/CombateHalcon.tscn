@@ -26,3 +26,28 @@ position = Vector2(1183, 315)
 
 [node name="PuntoLanzamiento" type="Marker2D" parent="."]
 position = Vector2(641, 730)
+
+[node name="VidasHalcon" type="HBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 42.0
+offset_bottom = 42.0
+grow_horizontal = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Vida1" type="Label" parent="VidasHalcon"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "♥"
+
+[node name="Vida2" type="Label" parent="VidasHalcon"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "♥"
+
+[node name="Vida3" type="Label" parent="VidasHalcon"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "♥"

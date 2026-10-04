@@ -500,7 +500,6 @@ func _arrojar_en_combate():
 	if halcon == null:
 		return
 	
-	Global.perder_energia(2.0)
 	var destino := halcon.global_position
 	var piedra := PIEDRA_ESCENA.instantiate()
 	combate.add_child(piedra)
@@ -541,7 +540,9 @@ func _arrojar_en_combate():
 		var distancia : float = piedra.global_position.distance_to(halcon.global_position)
 		if distancia < 30.0:
 			halcon.recibir_golpe(Vector2.UP)
+			Global.perder_energia(2.0)
 		else:
+			Global.perder_energia(5.0)
 			print("🪨 ¡El halcón esquivó!")
 
 	if is_instance_valid(piedra):

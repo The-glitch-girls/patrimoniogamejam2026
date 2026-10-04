@@ -281,11 +281,22 @@ func salir_de_combate():
 	
 	$AnimatedSprite2D.play("lado")
 
+func _actualizar_vidas():
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	
+	if combate == null:
+		return
+	
+	combate.get_node("VidasHalcon/Vida1").visible = vida >= 1
+	combate.get_node("VidasHalcon/Vida2").visible = vida >= 2
+	combate.get_node("VidasHalcon/Vida3").visible = vida >= 3
+
 func recibir_golpe(direccion: Vector2):
 	if derrotado:
 		return
 
 	vida -= 1
+	_actualizar_vidas()
 	flash_t = 0.12
 	
 	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
@@ -319,7 +330,6 @@ func esquivar_hacia(punto: Node2D):
 		centro.position,
 		0.4
 	)
-	
 
 func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
