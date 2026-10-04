@@ -36,8 +36,9 @@ var escala_original := Vector2.ONE
 
 # estados
 var rondando := false
-var en_combate := false
 var derrotado := false
+var en_combate := false
+var en_muerte := false
 
 # posicion para combate
 var padre_original: Node
@@ -57,11 +58,12 @@ func _ready():
 	
 func _process(delta):
 	# Animacion de golpeado
-	if flash_t > 0.0:
-		flash_t -= delta
-		$AnimatedSprite2D.scale = escala_original * Vector2(1.35, 0.8)
-	else:
-		$AnimatedSprite2D.scale = escala_original
+	if not en_muerte:
+		if flash_t > 0.0:
+			flash_t -= delta
+			$AnimatedSprite2D.scale = escala_original * Vector2(1.35, 0.8)
+		else:
+			$AnimatedSprite2D.scale = escala_original
 	
 	if en_combate:
 		return
@@ -122,6 +124,7 @@ func _golpear():
 
 func _revivir():
 	derrotado = false
+	en_muerte = false
 	vida = VIDA_MAX
 	lock_golpe = 0.0
 	_aparecer_en_otro_lado()
@@ -333,8 +336,24 @@ func esquivar_hacia(punto: Node2D):
 func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 	derrotado = true
+	en_muerte = true
 	
 	$SFX_Muerte.play()
+	
+	var tween := create_tween()
+	tween.tween_property(
+		$AnimatedSprite2D,
+		"scale",
+		escala_original * 1.2,
+		0.1
+	)
+	tween.tween_property(
+		$AnimatedSprite2D,
+		"scale",
+		escala_original * 0.0,
+		0.8
+	)
+
 	await get_tree().create_timer(2.0).timeout
 	$SFX_Muerte.stop()
 	
