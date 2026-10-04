@@ -27,12 +27,15 @@ var patrol_t := 0.0
 var vuelo_t := 0.0
 var lock_golpe := 0.0
 var descanso_t := 0.0
-var rondando := false
 var angulo := 0.0
 var zona_t := 0.0
 var flash_t := 0.0
-var derrotado := false
 var respawn_t := 0.0
+
+# estados
+var rondando := false
+var en_combate := false
+var derrotado := false
 
 const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
 
@@ -46,6 +49,9 @@ func _ready():
 	$AnimatedSprite2D.play("lado")
 	
 func _process(delta):
+	if en_combate:
+		return
+	
 	if Global.hacia_el_mar:
 		Global.halcon_cerca = false
 		return
@@ -279,7 +285,15 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 		return punto.global_position
 	
 	return cavillaca.global_position
-
+	
+func entrar_en_combate():
+	en_combate = true
+	$AnimatedSprite2D.play("frente")
+	
+func salir_de_combate():
+	en_combate = false
+	$AnimatedSprite2D.play("lado")
+	
 # Debug funcionamiento de halcon
 #func _input(event):
 	#if event.is_action_pressed("debug_halcon"):

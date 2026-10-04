@@ -446,6 +446,14 @@ func _process(delta):
 	else:
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
+		
+	# Ocultar guias si esta en combate
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+
+	if combate != null and combate.visible:
+		$Guias.visible = false
+	else:
+		$Guias.visible = true
 
 func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
 	if not audio.playing:

@@ -119,6 +119,12 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+
+	if combate != null and combate.visible:
+		velocity = Vector2.ZERO
+		return
+		
 	if Global.hacia_el_mar:
 		_caminar_al_mar(delta)
 		return
@@ -158,7 +164,6 @@ func _physics_process(delta):
 	if Input.is_action_just_pressed("atacar"):
 		if Global.halcon_cerca and not Global.lleva_bebe:
 			var main := get_tree().current_scene
-			var combate := main.get_node("CombateHalcon")
 			combate.show()
 
 	var direccion := _direccion_cuatro()
