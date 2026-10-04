@@ -119,8 +119,7 @@ func _golpear():
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
 	Global.aumentar_presencia()
-	Global.mostrar_aviso("¡Halcón ha golpeado!")	
-
+	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
 func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
@@ -242,9 +241,6 @@ func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	if abs(hacia.x) > 0.2:
 		$AnimatedSprite2D.flip_h = hacia.x < 0.0
 	
-	# No golpea
-	#if lock_golpe <= 0.0 and global_position.distance_to(objetivo) <= RANGO_GOLPE:
-		#_golpear()
 	if lock_golpe <= 0.0 and $AnimatedSprite2D.animation != "lado":
 		$AnimatedSprite2D.play("lado")
 

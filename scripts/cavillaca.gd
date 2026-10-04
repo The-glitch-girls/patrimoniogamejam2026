@@ -448,24 +448,24 @@ func _dejar_bebe():
 	
 	lock_interaccion = LOCK_TRAS_DEJAR
 
-
-func _arrojar():
-	if Global.lleva_bebe or lock_arrojar > 0.0 or Global.energia <= 0.0:
-		return
-	Global.perder_energia(Global.COSTO_ARROJAR)
-	lock_arrojar = COOLDOWN_ARROJAR
-	var piedra := PIEDRA_ESCENA.instantiate()
-	piedra.global_position = global_position + facing * 18.0
+func _arrojar_en_combate():
+	var combate := get_tree().current_scene.get_node("CombateHalcon")
+	var punto := combate.get_node("PuntoLanzamiento") as Node2D
 	var halcon := get_tree().get_first_node_in_group("halcon") as Node2D
-	if halcon != null and global_position.distance_to(halcon.global_position) <= 140.0:
-		piedra.direccion = (halcon.global_position - global_position).normalized()
-	else:
-		piedra.direccion = facing
-	
-	get_parent().add_child(piedra)
+
+	var piedra := PIEDRA_ESCENA.instantiate()
+
+	combate.add_child(piedra)
+
+	piedra.global_position = punto.global_position
+
+	if halcon != null:
+		piedra.direccion = (
+			halcon.global_position - piedra.global_position
+		).normalized()
+
 	sfx_ataque.pitch_scale = randf_range(0.94, 1.08)
 	sfx_ataque.play()
-
 
 func _sonar_paso() -> void:
 	sfx_paso.stream = PASOS[randi() % PASOS.size()]
@@ -519,6 +519,7 @@ func _controlar_ataque() -> bool:
 
 		if halcon != null:
 			if halcon.en_combate:
+				_arrojar_en_combate()
 				halcon.recibir_golpe(Vector2.UP)
 			elif Global.halcon_cerca and not Global.lleva_bebe:
 				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")

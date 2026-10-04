@@ -17,3 +17,6 @@ stretch_mode = 6
 
 [node name="PuntoHalcon" type="Node2D" parent="."]
 position = Vector2(637, 342)
+
+[node name="PuntoLanzamiento" type="Marker2D" parent="."]
+position = Vector2(641, 730)
