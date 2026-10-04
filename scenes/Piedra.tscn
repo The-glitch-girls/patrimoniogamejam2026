@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://cwhe8pi1y0no2" path="res://scripts/piedra.gd" id="1_script"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_piedra"]
-radius = 5.0
+radius = 8.0
 
 [node name="Piedra" type="Area2D"]
 script = ExtResource("1_script")
@@ -11,10 +11,14 @@ script = ExtResource("1_script")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_piedra")
 
-[node name="ColorRect" type="ColorRect" parent="."]
-offset_left = -4.0
-offset_top = -4.0
-offset_right = 4.0
-offset_bottom = 4.0
-mouse_filter = 2
-color = Color(0.72, 0.58, 0.36, 1)
+[node name="Polygon2D" type="Polygon2D" parent="."]
+position = Vector2(-1.14286, 0)
+scale = Vector2(1.14286, 1.14286)
+color = Color(0.2484, 0.2484, 0.2484, 1)
+polygon = PackedVector2Array(-6, 1, -6, 1, -5, 4, -5, 5, -3, 6, -2, 7, 4, 7, 6, 6, 6, 6, 7, 4, 7.125, 1.75, 8, 0, 8, -0.875, 7.125, -2.625, 7.125, -3.5, 7, -5, 7, -5, 4, -6, 4, -6, 2, -7, -1, -7, -2, -6, -5, -5, -5, -4, -5, -2, -6, -2, -6, 0)
+
+[node name="Polygon2D2" type="Polygon2D" parent="."]
+position = Vector2(-3, 0)
+scale = Vector2(1.30612, 1.30612)
+color = Color(0.0587231, 0.0587231, 0.0587231, 1)
+polygon = PackedVector2Array(6.89062, -0.765625, 7.125, 1.75, 8, 0, 8, -0.875, 2.64062, -4.59375, -1.95313, -3.0625)

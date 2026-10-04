@@ -119,6 +119,9 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
+	if _controlar_ataque():
+		return
+		
 	if Global.hacia_el_mar:
 		_caminar_al_mar(delta)
 		return
@@ -154,9 +157,6 @@ func _physics_process(delta):
 		var cueva_descanso := get_tree().get_first_node_in_group("zona_segura")
 		if cueva_descanso != null:
 			cueva_descanso.descansar()
-
-	if Input.is_action_just_pressed("atacar"):
-		_arrojar()
 
 	var direccion := _direccion_cuatro()
 	if direccion != Vector2.ZERO:
@@ -403,6 +403,8 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "ESPACIO  Atacar"
 	else:
 		Global.prompt_interaccion = ""
+	
+	print("HALCON CERCA: ", Global.halcon_cerca)
 
 
 func _actualizar_carga_visual():
@@ -446,24 +448,39 @@ func _dejar_bebe():
 	
 	lock_interaccion = LOCK_TRAS_DEJAR
 
-
-func _arrojar():
-	if Global.lleva_bebe or lock_arrojar > 0.0 or Global.energia <= 0.0:
-		return
-	Global.perder_energia(Global.COSTO_ARROJAR)
-	lock_arrojar = COOLDOWN_ARROJAR
-	var piedra := PIEDRA_ESCENA.instantiate()
-	piedra.global_position = global_position + facing * 18.0
+func _arrojar_en_combate():
+	var combate := get_tree().current_scene.get_node("CombateHalcon")
+	var punto := combate.get_node("PuntoLanzamiento") as Node2D
 	var halcon := get_tree().get_first_node_in_group("halcon") as Node2D
-	if halcon != null and global_position.distance_to(halcon.global_position) <= 140.0:
-		piedra.direccion = (halcon.global_position - global_position).normalized()
-	else:
-		piedra.direccion = facing
 	
-	get_parent().add_child(piedra)
+	if halcon == null:
+		return
+	
+	var piedra := PIEDRA_ESCENA.instantiate()
+	combate.add_child(piedra)
+
+	piedra.global_position = punto.global_position
+	piedra.scale = Vector2(3.0, 3.0)
+	piedra.combate = true
+	
 	sfx_ataque.pitch_scale = randf_range(0.94, 1.08)
 	sfx_ataque.play()
+	
+	var tween := create_tween()
+	tween.tween_property(
+		piedra,
+		"global_position",
+		halcon.global_position,
+		0.25
+	)
+	
+	await tween.finished
 
+	if is_instance_valid(halcon):
+		halcon.recibir_golpe(Vector2.UP)
+
+	if is_instance_valid(piedra):
+		piedra.queue_free()
 
 func _sonar_paso() -> void:
 	sfx_paso.stream = PASOS[randi() % PASOS.size()]
@@ -505,3 +522,27 @@ func _crear_frames_sheet(
 func cambiar_sprite_bebe(cargado: bool) -> void:
 	if not cargado:
 		$Sprite.play("idle_frente")
+
+# Funciones de input
+func _controlar_ataque() -> bool:
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	
+	# Ataque: funciona tanto para entrar al combate
+	# como para golpear al halcón dentro del combate.
+	if Input.is_action_just_pressed("atacar"):
+		var halcon := get_tree().get_first_node_in_group("halcon")
+
+		if halcon != null:
+			if halcon.en_combate:
+				_arrojar_en_combate()
+			elif Global.halcon_cerca and not Global.lleva_bebe:
+				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")
+				combate_halcon.show()
+				halcon.entrar_en_combate()
+				
+	# Mientras hay combate, Cavillaca no puede moverse.
+	if combate != null and combate.visible:
+		velocity = Vector2.ZERO
+		return true
+	
+	return false

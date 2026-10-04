@@ -27,25 +27,44 @@ var patrol_t := 0.0
 var vuelo_t := 0.0
 var lock_golpe := 0.0
 var descanso_t := 0.0
-var rondando := false
 var angulo := 0.0
 var zona_t := 0.0
 var flash_t := 0.0
-var derrotado := false
 var respawn_t := 0.0
+var escala_original := Vector2.ONE
 
+# estados
+var rondando := false
+var en_combate := false
+var derrotado := false
+
+# posicion para combate
+var padre_original: Node
+var posicion_original := Vector2.ZERO
+	
 const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
 
 func _ready():
 	add_to_group("halcon")
 	origen = global_position
 	inicio = global_position
+	escala_original = $AnimatedSprite2D.scale
 	call_deferred("_armar_puntos")
 	body_entered.connect(_on_body_entered)
 
 	$AnimatedSprite2D.play("lado")
 	
 func _process(delta):
+	# Animacion de golpeado
+	if flash_t > 0.0:
+		flash_t -= delta
+		$AnimatedSprite2D.scale = escala_original * Vector2(1.15, 0.85)
+	else:
+		$AnimatedSprite2D.scale = escala_original
+	
+	if en_combate:
+		return
+	
 	if Global.hacia_el_mar:
 		Global.halcon_cerca = false
 		return
@@ -71,8 +90,10 @@ func _process(delta):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	var cerca := false
 	if cavillaca != null:
-		var distancia := global_position.distance_to(cavillaca.global_position)
+		var objetivo := _obtener_punto_objetivo(cavillaca)
+		var distancia := global_position.distance_to(objetivo)
 		print("🦅 distancia Cavillaca-halcon: ", distancia)
+		
 		if rondando and distancia > RANGO_CORTE:
 			rondando = false
 			_empezar_descanso()
@@ -86,48 +107,16 @@ func _process(delta):
 
 	Global.halcon_cerca = cerca
 
-func recibir_golpe(direccion: Vector2):
-	if derrotado:
-		return
 
-	vida -= 1
-	flash_t = 0.12
-
-	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
-
-	global_position += direccion.normalized() * 20.0
-
-	if vida <= 0:
-		print("🦅 HALCÓN VA A MORIR")
-		_victoria()
-
-
+# EVALUAR IMPLEMENTACION EN PRIMERA PERSONA
 func _golpear():
 	$AnimatedSprite2D.play("frente")
 	lock_golpe = LOCK_GOLPE
 	Global.perder_energia(Global.DANIO_ENERGIA_DERROTA)
 	Global.aumentar_presencia()
-	Global.mostrar_aviso("¡Halcón ha golpeado!")	
+	Global.mostrar_aviso("¡Halcón ha golpeado!")
 
 
-func _victoria():
-	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
-
-	derrotado = true
-	hide()
-	set_deferred("monitoring", false)
-	set_deferred("monitorable", false)
-
-	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
-		Global.mostrar_aviso("Victoria")
-		respawn_t = TIEMPO_RESPAWN
-		return
-	var indice := Global.obtener_recuerdo()
-	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
-	var flashback := FLASHBACK_ESCENA.instantiate()
-	flashback.configurar(indice)
-	var hud := get_tree().current_scene.get_node("HUD")
-	hud.add_child(flashback)
 
 
 func _revivir():
@@ -202,22 +191,27 @@ func _elegir_mas_adelante() -> Vector2:
 func _sirve(punto: Vector2, cavillaca: Node2D) -> bool:
 	if punto.distance_to(origen) < SEPARACION:
 		return false
-	if cavillaca != null and punto.distance_to(cavillaca.global_position) < SEPARACION:
-		return false
+	if cavillaca != null:
+		var objetivo := _obtener_punto_objetivo(cavillaca)
+
+		if punto.distance_to(objetivo) < SEPARACION:
+			return false
+
 	return true
 
 
 func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	angulo += delta * 2.4
+	var objetivo := _obtener_punto_objetivo(cavillaca)
 	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
-	var destino := cavillaca.global_position + Vector2.from_angle(angulo) * radio
+	var destino := objetivo + Vector2.from_angle(angulo) * radio
 	var antes := global_position
 	global_position = global_position.move_toward(destino, VELOCIDAD_REVOLOTEO * delta)
+	
 	var hacia := global_position - antes
 	if abs(hacia.x) > 0.2:
 		$AnimatedSprite2D.flip_h = hacia.x < 0.0
-	if lock_golpe <= 0.0 and global_position.distance_to(cavillaca.global_position) <= RANGO_GOLPE:
-		_golpear()
+	
 	if lock_golpe <= 0.0 and $AnimatedSprite2D.animation != "lado":
 		$AnimatedSprite2D.play("lado")
 
@@ -231,12 +225,13 @@ func _empezar_descanso() -> void:
 func _retirarse(delta: float) -> void:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	var hacia := Vector2.RIGHT
+	
 	if cavillaca != null:
 		hacia = global_position - cavillaca.global_position
 	if hacia.length_squared() < 16.0:
 		hacia = Vector2.RIGHT
+		
 	global_position += hacia.normalized() * VELOCIDAD_RETIRADA * delta
-
 
 func _patrullar(delta: float):
 	zona_t += delta
@@ -254,20 +249,95 @@ func _patrullar(delta: float):
 
 
 func _on_body_entered(body: Node):
-	if derrotado or lock_golpe > 0.0 or descanso_t > 0.0:
+	if derrotado or descanso_t > 0.0: #or lock_golpe > 0.0
 		return
 	if body.is_in_group("cavillaca"):
-		_golpear()
+		Global.halcon_cerca = true
 
+func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
+	var punto := cavillaca.get_node_or_null("PuntoObjetivoHalcón") as Node2D
+	
+	if punto != null:
+		return punto.global_position
+	
+	return cavillaca.global_position
+	
+# Funciones utilizadas en combate
+func entrar_en_combate():
+	var combate := get_tree().current_scene.get_node("CombateHalcon")
+	var punto := combate.get_node("PuntoHalcon") as Node2D
+	
+	padre_original = get_parent()
+	posicion_original = global_position
+	en_combate = true
+	reparent(combate)
+	position = punto.position
+	monitoring = false # desactiva que el Area2D detecte cuerpos/áreas.
+	monitorable = true # permite que piedra detecte halcon
+	
+	$AnimatedSprite2D.flip_h = false
+	$AnimatedSprite2D.play("frente")
+	
+func salir_de_combate():
+	en_combate = false
+	
+	if padre_original != null:
+		reparent(padre_original)
+		global_position = posicion_original
+	
+	$AnimatedSprite2D.play("lado")
 
-func _input(event):
-	if event.is_action_pressed("debug_halcon"):
-		var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-		if cavillaca != null:
-			global_position = cavillaca.global_position + Vector2(100, 0)
-			show()
-			derrotado = false
-			vida = VIDA_MAX
-			monitoring = true
-			monitorable = true
-			$AnimatedSprite2D.play("lado")
+func recibir_golpe(direccion: Vector2):
+	if derrotado:
+		return
+
+	vida -= 1
+	flash_t = 0.12
+
+	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
+
+	global_position += direccion.normalized() * 5.0
+
+	if vida <= 0:
+		print("🦅 HALCÓN VA A MORIR")
+		_victoria()
+		
+func _victoria():
+	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
+
+	derrotado = true
+	
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+	if combate != null:
+		combate.hide()
+	
+	salir_de_combate()
+	
+	hide()
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
+
+	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
+		Global.mostrar_aviso("Victoria")
+		respawn_t = TIEMPO_RESPAWN
+		return
+	var indice := Global.obtener_recuerdo()
+	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
+	var flashback := FLASHBACK_ESCENA.instantiate()
+	flashback.configurar(indice)
+	var hud := get_tree().current_scene.get_node("HUD")
+	hud.add_child(flashback)
+	
+# Debug funcionamiento de halcon
+#func _input(event):
+	#if event.is_action_pressed("debug_halcon"):
+		#var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+		#if cavillaca != null:
+			#var objetivo := _obtener_punto_objetivo(cavillaca)
+			#global_position = objetivo + Vector2(100, 0)
+			#show()
+			#derrotado = false
+			#vida = VIDA_MAX
+			#monitoring = true
+			#monitorable = true
+			#$AnimatedSprite2D.play("lado")

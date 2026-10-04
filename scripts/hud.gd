@@ -125,13 +125,14 @@ func _circulo(color: Color, radio: int = 36) -> StyleBoxFlat:
 func _estilar_prompt() -> void:
 	for nodo in [$PromptFondo, $PromptLabel]:
 		nodo.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-		nodo.offset_left = -76
+		nodo.offset_left = -260
 		nodo.offset_top = -76
 		nodo.offset_right = -20
 		nodo.offset_bottom = -20
+	
 	$PromptFondo.add_theme_stylebox_override("panel", _circulo(VERDE, 56))
 	_texto($PromptLabel, 22)
-	$PromptLabel.text = "E"
+	$PromptLabel.text = Global.prompt_interaccion
 
 
 func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
@@ -397,7 +398,7 @@ func _process(delta):
 		if prompt_texto != Global.prompt_interaccion:
 			var es_ataque := Global.prompt_interaccion.begins_with("ESPACIO")
 			$PromptFondo.add_theme_stylebox_override("panel", _circulo(BORDO if es_ataque else VERDE, 56))
-			$PromptLabel.text = "E"
+			$PromptLabel.text = Global.prompt_interaccion
 		prompt_texto = Global.prompt_interaccion
 
 	var destino_alpha := 1.0 if Global.prompt_interaccion != "" else 0.0
@@ -445,6 +446,14 @@ func _process(delta):
 	else:
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
+		
+	# Ocultar guias si esta en combate
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
+
+	if combate != null and combate.visible:
+		$Guias.visible = false
+	else:
+		$Guias.visible = true
 
 func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
 	if not audio.playing:

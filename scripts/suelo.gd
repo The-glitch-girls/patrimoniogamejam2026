@@ -1,11 +1,14 @@
 extends Node2D
 
+@onready var combate_halcon = $CombateHalcon
+
 const MURO := Color(0.08, 0.06, 0.05, 1)
 const GROSOR_MURO := 18.0
 
 var zonas: Array[Dictionary] = []
 
 func _ready():
+	combate_halcon.hide()
 	zonas.append({ "nombre": "Mar", "rect": Rect2(500, 820, 400, 220) })
 
 
@@ -18,7 +21,7 @@ func _process(_delta):
 
 func _crear_mapa():
 	_piso(Rect2(280, 180, 280, 240), Color(0.42, 0.3, 0.2, 1), "Plaza")
-	_ajedrez(Rect2(280, 180, 280, 240), Color(0.36, 0.25, 0.16, 1))
+	#_ajedrez(Rect2(280, 180, 280, 240), Color(0.36, 0.25, 0.16, 1))
 
 	_piso(Rect2(560, 250, 160, 100), Color(0.32, 0.22, 0.18, 1), "")
 	_piso(Rect2(720, 160, 280, 280), Color(0.48, 0.22, 0.16, 1), "Huaca")
@@ -76,16 +79,6 @@ func _piso(rect: Rect2, color: Color, nombre: String):
 	add_child(piso)
 
 	zonas.append({ "nombre": nombre, "rect": rect })
-	
-	#debug
-	#if nombre not in ["Huaca", "Cueva", "Mar"]:
-		#var debug_zona := ColorRect.new()
-		#debug_zona.position = rect.position
-		#debug_zona.size = rect.size
-		#debug_zona.color = Color(1, 0, 0, 0.35)
-		#debug_zona.z_index = 0
-		#debug_zona.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		#add_child(debug_zona)
 		
 	if nombre != "":
 		var etiqueta := Label.new()
@@ -97,21 +90,21 @@ func _piso(rect: Rect2, color: Color, nombre: String):
 		add_child(etiqueta)
 
 
-func _ajedrez(rect: Rect2, color: Color):
-	var tam := 48
-	var cols := int(rect.size.x / tam)
-	var filas := int(rect.size.y / tam)
-	for x in range(cols):
-		for y in range(filas):
-			if (x + y) % 2 == 0:
-				continue
-			var losa := ColorRect.new()
-			losa.position = rect.position + Vector2(x * tam, y * tam)
-			losa.size = Vector2(tam - 2, tam - 2)
-			losa.color = color
-			losa.z_index = -18
-			losa.mouse_filter = Control.MOUSE_FILTER_IGNORE
-			add_child(losa)
+#func _ajedrez(rect: Rect2, color: Color):
+	#var tam := 48
+	#var cols := int(rect.size.x / tam)
+	#var filas := int(rect.size.y / tam)
+	#for x in range(cols):
+		#for y in range(filas):
+			#if (x + y) % 2 == 0:
+				#continue
+			#var losa := ColorRect.new()
+			#losa.position = rect.position + Vector2(x * tam, y * tam)
+			#losa.size = Vector2(tam - 2, tam - 2)
+			#losa.color = color
+			#losa.z_index = -18
+			#losa.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			#add_child(losa)
 
 
 func _muro(rect: Rect2):
@@ -190,3 +183,10 @@ func obtener_punto_cuniraya() -> Vector2:
 	)
 
 	return to_global(punto_local)
+	
+func mostrar_combate_halcon() -> void:
+	combate_halcon.show()
+	
+func _input(event):
+	if event is InputEventKey and event.pressed and event.keycode == KEY_F:
+		combate_halcon.show()
