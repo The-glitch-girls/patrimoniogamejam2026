@@ -403,6 +403,8 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "ESPACIO  Atacar"
 	else:
 		Global.prompt_interaccion = ""
+	
+	print("HALCON CERCA: ", Global.halcon_cerca)
 
 
 func _actualizar_carga_visual():
