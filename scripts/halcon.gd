@@ -281,15 +281,15 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 	return cavillaca.global_position
 
 # Debug funcionamiento de halcon
-func _input(event):
-	if event.is_action_pressed("debug_halcon"):
-		var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-		if cavillaca != null:
-			var objetivo := _obtener_punto_objetivo(cavillaca)
-			global_position = objetivo + Vector2(100, 0)
-			show()
-			derrotado = false
-			vida = VIDA_MAX
-			monitoring = true
-			monitorable = true
-			$AnimatedSprite2D.play("lado")
+#func _input(event):
+	#if event.is_action_pressed("debug_halcon"):
+		#var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+		#if cavillaca != null:
+			#var objetivo := _obtener_punto_objetivo(cavillaca)
+			#global_position = objetivo + Vector2(100, 0)
+			#show()
+			#derrotado = false
+			#vida = VIDA_MAX
+			#monitoring = true
+			#monitorable = true
+			#$AnimatedSprite2D.play("lado")

@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://ctipp4cjs4yuu"]
+
+[ext_resource type="Texture2D" uid="uid://b7ayeghs46tju" path="res://assets/enemigos/fondo_combate.png" id="1_5y5ie"]
+
+[node name="CombateHalcon" type="CanvasLayer"]
+layer = 5
+
+[node name="TextureRect" type="Sprite2D" parent="."]
+position = Vector2(640, 360)
+scale = Vector2(0.333, 0.333)
+texture = ExtResource("1_5y5ie")

@@ -156,7 +156,10 @@ func _physics_process(delta):
 			cueva_descanso.descansar()
 
 	if Input.is_action_just_pressed("atacar"):
-		_arrojar()
+		if Global.halcon_cerca and not Global.lleva_bebe:
+			var main := get_tree().current_scene
+			var combate := main.get_node("CombateHalcon")
+			combate.show()
 
 	var direccion := _direccion_cuatro()
 	if direccion != Vector2.ZERO:

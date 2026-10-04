@@ -1,6 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqgtkxob80eht"]
-
-[ext_resource type="Texture2D" uid="uid://6nk8l3bs60x2" path="res://assets/person/cavillaca_frente.png" id="1_werjt"]
+[gd_scene load_steps=2 format=3 uid="uid://cqgtkxob80eht"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_th60e"]
 size = Vector2(36, 20)
@@ -17,8 +15,5 @@ shape = SubResource("RectangleShape2D_th60e")
 texture_filter = 1
 position = Vector2(0, -62)
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-visible = false
-texture = ExtResource("1_werjt")
-region_enabled = true
-region_rect = Rect2(264, 685, 1758, 4096)
+[node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
+position = Vector2(0, -80)
