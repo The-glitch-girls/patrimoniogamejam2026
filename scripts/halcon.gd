@@ -307,7 +307,7 @@ func recibir_golpe(direccion: Vector2):
 		print("🦅 HALCÓN VA A MORIR")
 		_victoria()
 	else:
-		$SFX_Ataque.play()
+		$AtaqueSFX.play()
 
 func esquivar_hacia(punto: Node2D):
 	var tween := create_tween()
@@ -336,7 +336,7 @@ func _victoria():
 	derrotado = true
 	en_muerte = true
 	
-	$SFX_Muerte.play()
+	$MuerteSFX.play()
 	
 	var tween := create_tween()
 	tween.tween_property(
@@ -353,7 +353,7 @@ func _victoria():
 	)
 
 	await get_tree().create_timer(2.0).timeout
-	$SFX_Muerte.stop()
+	$MuerteSFX.stop()
 	
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
 	if combate != null:
