@@ -1,0 +1,62 @@
+{
+  "play": {
+	"es": "Jugar",
+	"en": "Play",
+	"fr": "Jouer"
+  },
+  "settings": {
+	"es": "Ajustes",
+	"en": "Settings",
+	"fr": "Paramètres"
+  },
+  "credits": {
+	"es": "Créditos",
+	"en": "Credits",
+	"fr": "Crédits"
+  },
+  "back": {
+	"es": "Volver",
+	"en": "Back",
+	"fr": "Retour"
+  },
+  "restart": {
+	"es": "Reiniciar",
+	"en": "Restart",
+	"fr": "Recommencer"
+  },
+  "music": {
+	"es": "Música",
+	"en": "Music",
+	"fr": "Musique"
+  },
+  "sfx": {
+	"es": "SFX",
+	"en": "SFX",
+	"fr": "SFX"
+  },
+  "pause": {
+	"es": "Pausa",
+	"en": "Pause",
+	"fr": "Pause"
+  },
+  "start": {
+	"es": "Inicio",
+	"en": "Start",
+	"fr": "Démarrer"
+  },
+  "attack": {
+	"es": "Atacar",
+	"en": "Attack",
+	"fr": "Attaquer"
+  },
+  "carry_baby": {
+	"es": "Cargar",
+	"en": "Carry",
+	"fr": "Porter"
+  },
+	"exit": {
+	  "es": "Salir",
+	  "en": "Exit",
+	  "fr": "Quitter"
+	}
+}
