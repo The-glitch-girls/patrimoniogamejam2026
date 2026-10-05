@@ -51,10 +51,12 @@ layout_mode = 2
 [node name="Ajustes" parent="Fila" instance=ExtResource("8_cmsus")]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+clave = "settings"
 
 [node name="Creditos" parent="Fila" instance=ExtResource("8_cmsus")]
 custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
+clave = "credits"
 
 [node name="Salir" type="Control" parent="Fila"]
 visible = false

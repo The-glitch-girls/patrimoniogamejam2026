@@ -51,6 +51,7 @@ func _ready() -> void:
 	
 	_set_color_normal()
 	_actualizar_textura()
+	_actualizar_texto()
 
 func _al_entrar() -> void:
 	_mouse_dentro = true
@@ -98,4 +99,8 @@ func _set_color_pressed() -> void:
 		_label_settings.font_color = COLOR_PRESSED
 
 func _actualizar_texto() -> void:
-	pass
+	print("CLAVE: ", clave)
+	print("IDIOMA: ", Global.idioma_actual)
+	print("TEXTO: ", Traducciones.obtener(clave))
+
+	texto.text = Traducciones.obtener(clave)

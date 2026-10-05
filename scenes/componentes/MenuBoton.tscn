@@ -45,5 +45,4 @@ mouse_filter = 2
 
 [node name="Texto" type="Label" parent="Centro"]
 layout_mode = 2
-text = "Jugar"
 label_settings = SubResource("LabelSettings_u7pha")
