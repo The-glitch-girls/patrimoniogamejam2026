@@ -1,12 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://cbtq1xaqc2wx6"]
+[gd_scene load_steps=7 format=3 uid="uid://cbtq1xaqc2wx6"]
 
 [ext_resource type="Script" uid="uid://ehqvx8843itb" path="res://scripts/menu_inicio.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://cpq5wkxq7spr4" path="res://assets/menu_principal.png" id="2_uj8md"]
 [ext_resource type="Script" uid="uid://g5xyunpibift" path="res://scripts/boton_circulo.gd" id="3_circulo"]
-[ext_resource type="Texture2D" uid="uid://dgsc1kb1mqal3" path="res://assets/icons/play.svg" id="4_play"]
-[ext_resource type="Texture2D" uid="uid://c4nrjotwg7m3a" path="res://assets/icons/musica.svg" id="5_musica"]
-[ext_resource type="Texture2D" uid="uid://g12svqs6lvh0" path="res://assets/icons/creditos.svg" id="6_creditos"]
 [ext_resource type="Texture2D" uid="uid://cf6eahw4u5inu" path="res://assets/icons/salir.svg" id="7_salir"]
+[ext_resource type="PackedScene" uid="uid://xnnaq0yup0e6" path="res://scenes/componentes/MenuBoton.tscn" id="8_cmsus"]
 [ext_resource type="Texture2D" uid="uid://d2p1n7liqm74e" path="res://assets/icons/volver.svg" id="8_volver"]
 
 [node name="MenuInicio" type="Control"]
@@ -30,136 +28,43 @@ texture = ExtResource("2_uj8md")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="Degradado" type="TextureRect" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_top = 1.0
-offset_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-expand_mode = 1
-
-[node name="Titulo" type="Label" parent="."]
-visible = false
+[node name="Fila" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -210.0
-offset_right = 280.0
-offset_bottom = -110.0
+offset_left = -472.0
+offset_top = 16.0
+offset_right = -36.0
+offset_bottom = 290.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "Cavillaca"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Subtitulo" type="Label" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -118.0
-offset_right = 280.0
-offset_bottom = -82.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Patrimonio Game Jam 2026"
-horizontal_alignment = 1
-
-[node name="Fila" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = 62.0
-offset_right = 8.0
-offset_bottom = 158.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 28
+theme_override_constants/separation = 0
 alignment = 1
 
-[node name="Jugar" type="Control" parent="Fila"]
-custom_minimum_size = Vector2(88, 88)
+[node name="Jugar" parent="Fila" instance=ExtResource("8_cmsus")]
+custom_minimum_size = Vector2(370, 80)
 layout_mode = 2
-script = ExtResource("3_circulo")
-icono = ExtResource("4_play")
 
-[node name="Ajustes" type="Control" parent="Fila"]
-custom_minimum_size = Vector2(88, 88)
+[node name="Ajustes" parent="Fila" instance=ExtResource("8_cmsus")]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-script = ExtResource("3_circulo")
-color_fondo = Color(0.86, 0.7, 0.2, 1)
-icono = ExtResource("5_musica")
+clave = "settings"
 
-[node name="Creditos" type="Control" parent="Fila"]
-custom_minimum_size = Vector2(88, 88)
+[node name="Creditos" parent="Fila" instance=ExtResource("8_cmsus")]
+custom_minimum_size = Vector2(0, 80)
 layout_mode = 2
-script = ExtResource("3_circulo")
-color_fondo = Color(0.67, 0.62, 0.93, 1)
-icono = ExtResource("6_creditos")
+clave = "credits"
 
 [node name="Salir" type="Control" parent="Fila"]
+visible = false
 custom_minimum_size = Vector2(88, 88)
 layout_mode = 2
 script = ExtResource("3_circulo")
 color_fondo = Color(0.62, 0.24, 0.36, 1)
 icono = ExtResource("7_salir")
-
-[node name="Leyendas" type="HBoxContainer" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = 193.0
-offset_right = 8.0
-offset_bottom = 229.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/separation = 28
-alignment = 1
-
-[node name="Jugar" type="Label" parent="Leyendas"]
-custom_minimum_size = Vector2(88, 0)
-layout_mode = 2
-text = "Jugar"
-horizontal_alignment = 1
-
-[node name="Ajustes" type="Label" parent="Leyendas"]
-custom_minimum_size = Vector2(88, 0)
-layout_mode = 2
-text = "Ajustes"
-horizontal_alignment = 1
-
-[node name="Creditos" type="Label" parent="Leyendas"]
-custom_minimum_size = Vector2(88, 0)
-layout_mode = 2
-text = "Creditos"
-horizontal_alignment = 1
-
-[node name="Salir" type="Label" parent="Leyendas"]
-custom_minimum_size = Vector2(88, 0)
-layout_mode = 2
-text = "Salir"
-horizontal_alignment = 1
 
 [node name="PanelAjustes" type="Panel" parent="."]
 visible = false

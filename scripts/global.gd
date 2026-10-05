@@ -8,6 +8,8 @@ extends Node
 # "atacar": Espacio
 # "mover_*": flechas o WASD
 
+var idioma_actual := "es"
+
 # =========================
 # ESTADO DEL JUEGO
 # =========================

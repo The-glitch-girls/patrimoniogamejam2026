@@ -18,7 +18,6 @@ const LILA := Color(0.72, 0.68, 0.95, 1)
 func _ready() -> void:
 	theme = Theme.new()
 	_tipografia()
-	_degradado()
 	_conectar()
 	_mostrar_inicio()
 	Musica.tocar("menu")
@@ -38,18 +37,6 @@ func _capturar() -> void:
 
 
 func _tipografia() -> void:
-	#$Titulo.add_theme_font_override("font", FUENTE)
-	#$Titulo.add_theme_font_size_override("font_size", 72)
-	#$Titulo.add_theme_color_override("font_color", CREMA)
-	#$Titulo.add_theme_color_override("font_outline_color", Color(0.12, 0.1, 0.18, 1))
-	#$Titulo.add_theme_constant_override("outline_size", 10)
-	#$Subtitulo.add_theme_font_override("font", FUENTE)
-	#$Subtitulo.add_theme_font_size_override("font_size", 20)
-	#$Subtitulo.add_theme_color_override("font_color", LILA)
-	for caption in $Leyendas.get_children():
-		caption.add_theme_font_override("font", FUENTE)
-		caption.add_theme_font_size_override("font_size", 18)
-		caption.add_theme_color_override("font_color", CREMA)
 	$PanelAjustes/Titulo.add_theme_font_override("font", FUENTE)
 	$PanelAjustes/Titulo.add_theme_font_size_override("font_size", 28)
 	$PanelAjustes/Titulo.add_theme_color_override("font_color", CREMA)
@@ -88,22 +75,6 @@ func _tarjeta(panel: Panel) -> void:
 	caja.content_margin_bottom = 24
 	panel.add_theme_stylebox_override("panel", caja)
 
-
-func _degradado() -> void:
-	var gradiente := Gradient.new()
-	gradiente.colors = PackedColorArray([
-		Color(0.18, 0.12, 0.36, 0.55),
-		Color(0.12, 0.1, 0.28, 0.72),
-	])
-	var textura := GradientTexture2D.new()
-	textura.gradient = gradiente
-	textura.fill_from = Vector2(0.5, 0.0)
-	textura.fill_to = Vector2(0.5, 1.0)
-	textura.width = 8
-	textura.height = 256
-	$Degradado.texture = textura
-
-
 func _conectar() -> void:
 	$Fila/Jugar.pressed.connect(_jugar)
 	$Fila/Ajustes.pressed.connect(_abrir_ajustes)
@@ -120,18 +91,18 @@ func _conectar() -> void:
 	$PanelAjustes/EfectosSlider.value = Ajustes.volumen_efectos
 	$PanelAjustes/AmbienteSlider.value = Ajustes.volumen_ambiente
 
+	#$Fila/Jugar.pressed.connect(_jugar)
+	#$Fila/Ajustes.pressed.connect(_abrir_ajustes)
+	#$Fila/Creditos.pressed.connect(_abrir_creditos)
+	#$Fila/Salir.pressed.connect(_salir)
 
 func _mostrar_inicio() -> void:
 	$Fila.visible = true
-	$Leyendas.visible = true
 	$PanelAjustes.visible = false
 	$PanelCreditos.visible = false
-	$Fila/Jugar.enfocar()
-
 
 func _abrir_ajustes() -> void:
 	$Fila.visible = false
-	$Leyendas.visible = false
 	$PanelAjustes.visible = true
 	$PanelCreditos.visible = false
 	$PanelAjustes/MasterSlider.grab_focus()
@@ -139,7 +110,6 @@ func _abrir_ajustes() -> void:
 
 func _abrir_creditos() -> void:
 	$Fila.visible = false
-	$Leyendas.visible = false
 	$PanelAjustes.visible = false
 	$PanelCreditos.visible = true
 	$PanelCreditos/Volver.enfocar()

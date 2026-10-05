@@ -167,10 +167,10 @@ sprite_frames = SubResource("SpriteFrames_7c8nx")
 animation = &"lado"
 frame_progress = 0.686428
 
-[node name="SFX_Ataque" type="AudioStreamPlayer2D" parent="."]
+[node name="AtaqueSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("5_ee0wm")
 bus = &"SFX"
 
-[node name="SFX_Muerte" type="AudioStreamPlayer2D" parent="."]
+[node name="MuerteSFX" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("6_6on7q")
 bus = &"SFX"

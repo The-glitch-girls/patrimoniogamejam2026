@@ -24,6 +24,7 @@ buses/default_bus_layout="res://resources/default_bus_layout.tres"
 Ajustes="*res://scripts/ajustes.gd"
 Global="*res://scripts/global.gd"
 Musica="*res://scripts/musica.gd"
+Traducciones="*res://scripts/traducciones.gd"
 
 [display]
 
