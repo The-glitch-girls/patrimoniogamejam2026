@@ -20,6 +20,7 @@ offset_right = -920.0
 offset_bottom = -650.0
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(0.5, 0.5)
 script = ExtResource("1_ewvl0")
 
 [node name="Boton" type="TextureButton" parent="."]
