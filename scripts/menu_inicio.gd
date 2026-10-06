@@ -13,12 +13,13 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const MORADO := Color(0.22, 0.2, 0.42, 1)
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const LILA := Color(0.72, 0.68, 0.95, 1)
-
+@onready var version_label := $Version
 
 func _ready() -> void:
 	theme = Theme.new()
 	_tipografia()
 	_conectar()
+	_set_version()
 	_mostrar_inicio()
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
@@ -26,6 +27,7 @@ func _ready() -> void:
 	elif OS.get_cmdline_user_args().has("--finalshot"):
 		Global.resultado_final = "mar"
 		get_tree().change_scene_to_file.call_deferred("res://scenes/Final.tscn")
+	
 
 
 func _capturar() -> void:
@@ -123,3 +125,7 @@ func _jugar() -> void:
 
 func _salir() -> void:
 	get_tree().quit()
+
+func _set_version() -> void:
+	var project_version = ProjectSettings.get_setting("application/config/version", "0.0.0")
+	version_label.text = "v " + project_version
