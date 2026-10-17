@@ -39,9 +39,6 @@ func _capturar() -> void:
 
 
 func _tipografia() -> void:
-	$PanelAjustes/Titulo.add_theme_font_override("font", FUENTE)
-	$PanelAjustes/Titulo.add_theme_font_size_override("font_size", 28)
-	$PanelAjustes/Titulo.add_theme_color_override("font_color", CREMA)
 	$PanelCreditos/Titulo.add_theme_font_override("font", FUENTE)
 	$PanelCreditos/Titulo.add_theme_font_size_override("font_size", 28)
 	$PanelCreditos/Titulo.add_theme_color_override("font_color", CREMA)
@@ -49,16 +46,15 @@ func _tipografia() -> void:
 	$PanelCreditos/Lista.add_theme_font_size_override("font_size", 22)
 	$PanelCreditos/Lista.add_theme_color_override("font_color", CREMA)
 	$PanelCreditos/Lista.text = "\n".join(CREDITS)
+	# Panel Ajustes
 	for label in [
-		$PanelAjustes/MasterLabel,
-		$PanelAjustes/MusicaLabel,
-		$PanelAjustes/EfectosLabel,
-		$PanelAjustes/AmbienteLabel,
+		$OverlayAjustes/PanelAjustes/MusicaLabel,
+		$OverlayAjustes/PanelAjustes/SFXLabel,
 	]:
 		label.add_theme_font_override("font", FUENTE)
 		label.add_theme_font_size_override("font_size", 16)
 		label.add_theme_color_override("font_color", CREMA)
-	_tarjeta($PanelAjustes)
+	
 	_tarjeta($PanelCreditos)
 
 
@@ -82,37 +78,26 @@ func _conectar() -> void:
 	$Fila/Ajustes.pressed.connect(_abrir_ajustes)
 	$Fila/Creditos.pressed.connect(_abrir_creditos)
 	$Fila/Salir.pressed.connect(_salir)
-	$PanelAjustes/Volver.pressed.connect(_mostrar_inicio)
+	$OverlayAjustes/PanelAjustes/Volver.pressed.connect(_mostrar_inicio)
 	$PanelCreditos/Volver.pressed.connect(_mostrar_inicio)
-	$PanelAjustes/MasterSlider.value_changed.connect(Ajustes.set_volumen_master)
-	$PanelAjustes/MusicaSlider.value_changed.connect(Ajustes.set_volumen_musica)
-	$PanelAjustes/EfectosSlider.value_changed.connect(Ajustes.set_volumen_efectos)
-	$PanelAjustes/AmbienteSlider.value_changed.connect(Ajustes.set_volumen_ambiente)
-	$PanelAjustes/MasterSlider.value = Ajustes.volumen_master
-	$PanelAjustes/MusicaSlider.value = Ajustes.volumen_musica
-	$PanelAjustes/EfectosSlider.value = Ajustes.volumen_efectos
-	$PanelAjustes/AmbienteSlider.value = Ajustes.volumen_ambiente
-
-	#$Fila/Jugar.pressed.connect(_jugar)
-	#$Fila/Ajustes.pressed.connect(_abrir_ajustes)
-	#$Fila/Creditos.pressed.connect(_abrir_creditos)
-	#$Fila/Salir.pressed.connect(_salir)
+	$OverlayAjustes/PanelAjustes/MusicaSlider.value_changed.connect(Ajustes.set_volumen_musica)
+	$OverlayAjustes/PanelAjustes/SFXSlider.value_changed.connect(Ajustes.set_volumen_efectos)
+	$OverlayAjustes/PanelAjustes/MusicaSlider.value = Ajustes.volumen_musica
+	$OverlayAjustes/PanelAjustes/SFXSlider.value = Ajustes.volumen_efectos
 
 func _mostrar_inicio() -> void:
 	$Fila.visible = true
-	$PanelAjustes.visible = false
+	$OverlayAjustes.visible = false
 	$PanelCreditos.visible = false
 
 func _abrir_ajustes() -> void:
 	$Fila.visible = false
-	$PanelAjustes.visible = true
+	$OverlayAjustes.visible = true
 	$PanelCreditos.visible = false
-	$PanelAjustes/MasterSlider.grab_focus()
-
 
 func _abrir_creditos() -> void:
 	$Fila.visible = false
-	$PanelAjustes.visible = false
+	$OverlayAjustes.visible = false
 	$PanelCreditos.visible = true
 	$PanelCreditos/Volver.enfocar()
 
