@@ -50,7 +50,6 @@ func dejar(_posicion: Vector2):
 	$AnimatedSprite2D.modulate = Color.WHITE
 	$CollisionShape2D.set_deferred("disabled", false)
 
-
 func _seguir_carga(cavillaca: Node2D, delta: float):
 	if cavillaca == null:
 		return

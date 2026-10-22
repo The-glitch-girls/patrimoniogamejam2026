@@ -1,4 +1,4 @@
-extends Area2D
+extends CharacterBody2D
 
 const VIDA_MAX := 3
 const RANGO_DETECCION := 300.0
@@ -52,18 +52,20 @@ func _ready():
 	inicio = global_position
 	escala_original = $AnimatedSprite2D.scale
 	call_deferred("_armar_puntos")
-	body_entered.connect(_on_body_entered)
+	$Detector.add_to_group("halcon")
+	$Detector.body_entered.connect(_on_body_entered)
 
 	$AnimatedSprite2D.play("lado")
 	
 func _process(delta):
 	# Animacion de golpeado
 	if not en_muerte:
+		var escala_base := escala_original * (1.5 if en_combate else 1.0)
 		if flash_t > 0.0:
 			flash_t -= delta
-			$AnimatedSprite2D.scale = escala_original * Vector2(1.35, 0.8)
+			$AnimatedSprite2D.scale = escala_base * Vector2(1.35, 0.8)
 		else:
-			$AnimatedSprite2D.scale = escala_original
+			$AnimatedSprite2D.scale = escala_base
 	
 	if en_combate:
 		return
@@ -119,8 +121,8 @@ func _revivir():
 	descanso_t = 0.0
 	$AnimatedSprite2D.play("lado")
 	show()
-	monitoring = true
-	monitorable = true
+	$Detector.monitoring = true
+	$Detector.monitorable = true
 
 
 func _armar_puntos() -> void:
@@ -196,9 +198,11 @@ func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	angulo += delta * 2.4
 	var objetivo := _obtener_punto_objetivo(cavillaca)
 	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
-	var destino := objetivo + Vector2.from_angle(angulo) * radio
+	var desplazamiento_orbita := Vector2(cos(angulo) * radio, sin(angulo) * radio * 0.35)
+	var destino := objetivo + desplazamiento_orbita
 	var antes := global_position
-	global_position = global_position.move_toward(destino, VELOCIDAD_REVOLOTEO * delta)
+	var desplazamiento := (destino - global_position).limit_length(VELOCIDAD_REVOLOTEO * delta)
+	_mover_con_colision(desplazamiento, delta)
 	
 	var hacia := global_position - antes
 	if abs(hacia.x) > 0.2:
@@ -223,7 +227,7 @@ func _retirarse(delta: float) -> void:
 	if hacia.length_squared() < 16.0:
 		hacia = Vector2.RIGHT
 		
-	global_position += hacia.normalized() * VELOCIDAD_RETIRADA * delta
+	_mover_con_colision(hacia.normalized() * VELOCIDAD_RETIRADA * delta, delta)
 
 func _patrullar(delta: float):
 	zona_t += delta
@@ -235,9 +239,17 @@ func _patrullar(delta: float):
 	if patrol_t > 1.6:
 		patrol_t = 0.0
 		patrol_dir *= -1.0
-	global_position += patrol_dir * VELOCIDAD_PATRULLA * delta
+	_mover_con_colision(patrol_dir * VELOCIDAD_PATRULLA * delta, delta)
 	if global_position.distance_to(origen) > 70.0:
-		global_position = global_position.move_toward(origen, 40.0 * delta)
+		var desplazamiento := (origen - global_position).limit_length(40.0 * delta)
+		_mover_con_colision(desplazamiento, delta)
+
+
+func _mover_con_colision(desplazamiento: Vector2, delta: float) -> void:
+	if delta <= 0.0:
+		return
+	velocity = desplazamiento / delta
+	move_and_slide()
 
 
 func _on_body_entered(body: Node):
@@ -247,7 +259,7 @@ func _on_body_entered(body: Node):
 		Global.halcon_cerca = true
 
 func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
-	var punto := cavillaca.get_node_or_null("PuntoObjetivoHalcón") as Node2D
+	var punto := cavillaca.get_node_or_null("PuntoObjetivoHalcon") as Node2D
 	
 	if punto != null:
 		return punto.global_position
@@ -264,16 +276,24 @@ func entrar_en_combate():
 	padre_original = get_parent()
 	posicion_original = global_position
 	en_combate = true
+	Global.halcon_cerca = false
+	Global.prompt_interaccion = "ESPACIO  Atacar"
 	reparent(combate)
 	position = punto.position
-	monitoring = false # desactiva que el Area2D detecte cuerpos/áreas.
-	monitorable = true # permite que piedra detecte halcon
+	$AnimatedSprite2D.scale = escala_original * 1.5
+	collision_mask = 0
+	$Detector.monitoring = false # desactiva detecciones durante el combate.
+	$Detector.monitorable = true # permite que piedra detecte al halcón.
 	
 	$AnimatedSprite2D.flip_h = false
 	$AnimatedSprite2D.play("frente")
 	
 func salir_de_combate():
 	en_combate = false
+	Global.halcon_cerca = false
+	Global.prompt_interaccion = ""
+	$AnimatedSprite2D.scale = escala_original
+	collision_mask = 5
 	
 	if padre_original != null:
 		reparent(padre_original)
@@ -362,8 +382,8 @@ func _victoria():
 	salir_de_combate()
 	
 	hide()
-	set_deferred("monitoring", false)
-	set_deferred("monitorable", false)
+	$Detector.set_deferred("monitoring", false)
+	$Detector.set_deferred("monitorable", false)
 
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
 		Global.mostrar_aviso("Victoria")

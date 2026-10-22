@@ -21,5 +21,7 @@ func _on_area_entered(area: Area2D):
 		return
 
 	if area.is_in_group("halcon"):
-		area.recibir_golpe(direccion)
+		var halcon := area.get_parent()
+		if halcon != null and halcon.has_method("recibir_golpe"):
+			halcon.recibir_golpe(direccion)
 		queue_free()

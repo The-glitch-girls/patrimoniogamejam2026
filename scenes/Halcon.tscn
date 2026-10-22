@@ -10,6 +10,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_halcon"]
 size = Vector2(145, 71)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_detector_halcon"]
+size = Vector2(145, 71)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_7c8nx"]
 atlas = ExtResource("2_gwswh")
 region = Rect2(0, 140, 1024, 600)
@@ -154,12 +157,23 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="Halcon" type="Area2D"]
+[node name="Halcon" type="CharacterBody2D"]
+collision_layer = 0
+collision_mask = 5
+motion_mode = 1
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-5.5, 14.5)
 shape = SubResource("RectangleShape2D_halcon")
+
+[node name="Detector" type="Area2D" parent="."]
+collision_layer = 1
+collision_mask = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
+position = Vector2(-5.5, 14.5)
+shape = SubResource("RectangleShape2D_detector_halcon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.24, 0.24)

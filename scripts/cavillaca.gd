@@ -2,10 +2,10 @@ extends CharacterBody2D
 
 const LIMITE_ARRIBA_JUGADOR := 180.0
 const LIMITE_ABAJO_JUGADOR := 180.0
-const VELOCIDAD_CAMINAR := 200.0
-const VELOCIDAD_CORRER := 300.0
-const VELOCIDAD_CON_BEBE := 70.0
-const VELOCIDAD_SIN_ENERGIA := 55.0
+const VELOCIDAD_CAMINAR := 250.0
+const VELOCIDAD_CORRER := 375.0
+const VELOCIDAD_CON_BEBE := 170.0
+const VELOCIDAD_SIN_ENERGIA := 100.0
 const DISTANCIA_RECOGER := 56.0
 const DISTANCIA_DEJAR := 40.0
 const ACELERACION := 900.0
@@ -400,7 +400,7 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
 		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
-	elif Global.halcon_cerca:
+	elif Global.halcon_cerca and not Global.lleva_bebe:
 		Global.prompt_interaccion = "ESPACIO  Atacar"
 	else:
 		Global.prompt_interaccion = ""

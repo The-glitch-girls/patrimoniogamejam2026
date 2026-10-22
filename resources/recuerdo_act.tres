@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://divcgq2kq0y5y"]
+
+[ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="1_pkdub"]
+
+[resource]
+font = ExtResource("1_pkdub")
+font_size = 96
+font_color = Color(0.913725, 0.85098, 1, 1)

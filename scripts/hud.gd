@@ -74,7 +74,6 @@ func _estilar_panel():
 		$PanelEstado/PresenciaLabel,
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
-		$PanelEstado/ZonaLabel,
 		$PanelEstado/RecuerdosLabel,
 	]:
 		nodo.visible = false
@@ -169,7 +168,7 @@ func _poner_recuerdos() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 
 	recuerdos_container.position = Vector2(
-		viewport_size.x - 280,
+		viewport_size.x - 320,
 		20
 	)
 
