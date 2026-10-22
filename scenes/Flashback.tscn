@@ -1,8 +1,10 @@
-[gd_scene load_steps=4 format=3 uid="uid://viy73o76wr6w"]
+[gd_scene load_steps=6 format=3 uid="uid://viy73o76wr6w"]
 
 [ext_resource type="Script" uid="uid://bm7bd60tyv004" path="res://scripts/flashback.gd" id="1_ubat7"]
+[ext_resource type="Texture2D" uid="uid://wfsrnjb0u26y" path="res://assets/cinematicas/recuerdo_1.png" id="2_ib4ad"]
 [ext_resource type="AudioStream" uid="uid://b3tw08j2ap4ya" path="res://sfx/revelar.ogg" id="2_vr83p"]
 [ext_resource type="AudioStream" uid="uid://drhe82oc6lf12" path="res://sfx/aa_recuerdo.ogg" id="3_mk5yg"]
+[ext_resource type="LabelSettings" uid="uid://bm1tqv5ct8jes" path="res://resources/recuerdo_texto.tres" id="3_xqk6w"]
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -20,6 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+texture = ExtResource("2_ib4ad")
 expand_mode = 1
 stretch_mode = 6
 
@@ -46,19 +49,17 @@ text = "El que observaba"
 horizontal_alignment = 1
 
 [node name="Texto" type="Label" parent="."]
+custom_minimum_size = Vector2(20, 0)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -431.0
-offset_top = 59.0
-offset_right = 461.0
-offset_bottom = 179.0
-grow_horizontal = 2
-grow_vertical = 2
-horizontal_alignment = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 37.0
+offset_top = -98.0
+offset_right = 759.0
+offset_bottom = -47.0
+grow_vertical = 0
+label_settings = ExtResource("3_xqk6w")
 
 [node name="Continuar" type="Button" parent="."]
 layout_mode = 1
@@ -79,6 +80,6 @@ text = "CONTINUAR"
 stream = ExtResource("2_vr83p")
 bus = &"SFX"
 
-[node name="RecuerdoMusica" type="AudioStreamPlayer2D" parent="."]
+[node name="RecuerdoMusica" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_mk5yg")
 bus = &"SFX"

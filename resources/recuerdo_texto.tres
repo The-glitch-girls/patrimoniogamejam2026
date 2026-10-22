@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://bm1tqv5ct8jes"]
+
+[ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="1_ngb8d"]
+
+[resource]
+font = ExtResource("1_ngb8d")
+font_size = 14

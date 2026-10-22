@@ -36,7 +36,7 @@ func recoger():
 	$AnimatedSprite2D.play("normal")
 
 
-func dejar(posicion: Vector2):
+func dejar(_posicion: Vector2):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	
 	if cavillaca == null:
@@ -49,7 +49,6 @@ func dejar(posicion: Vector2):
 	$AnimatedSprite2D.position = Vector2(0, -14)
 	$AnimatedSprite2D.modulate = Color.WHITE
 	$CollisionShape2D.set_deferred("disabled", false)
-
 
 func _seguir_carga(cavillaca: Node2D, delta: float):
 	if cavillaca == null:

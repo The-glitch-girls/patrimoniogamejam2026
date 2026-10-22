@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt5hfdgv55jeq"
-path="res://.godot/imported/menu_btn_pressed.png-1a3a74c0d9240a854b1bba9376443f27.ctex"
+uid="uid://b5tk8ff2tx8s1"
+path="res://.godot/imported/cavillaca_bebe_lado.png-2fd96dd03368731b0c7262b25e279f17.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/menu_btn_pressed.png"
-dest_files=["res://.godot/imported/menu_btn_pressed.png-1a3a74c0d9240a854b1bba9376443f27.ctex"]
+source_file="res://assets/person/cavillaca_bebe_lado.png"
+dest_files=["res://.godot/imported/cavillaca_bebe_lado.png-2fd96dd03368731b0c7262b25e279f17.ctex"]
 
 [params]
 

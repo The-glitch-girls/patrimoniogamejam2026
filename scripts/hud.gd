@@ -1,9 +1,14 @@
 extends CanvasLayer
 
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
+const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
+const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
+const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
+const PROMPT_CARGAR := preload("res://assets/ui/botones/cargar_btn.png")
+const PROMPT_CARGAR_PRESIONADO := preload("res://assets/ui/botones/cargar_btn_pressed.png")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
@@ -14,6 +19,9 @@ const NARANJA_CUEVA := Color(1.0, 0.58, 0.24, 1)
 
 var prompt_alpha := 0.0
 var prompt_texto := ""
+var prompt_idioma := ""
+var prompt_icono: TextureRect
+var prompt_titulo: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
@@ -48,6 +56,7 @@ func _ready():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_estilar_panel()
 	_estilar_textos()
+	_crear_prompt_icono()
 	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
 	_poner_guia_bebe()
@@ -74,7 +83,6 @@ func _estilar_panel():
 		$PanelEstado/PresenciaLabel,
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
-		$PanelEstado/ZonaLabel,
 		$PanelEstado/RecuerdosLabel,
 	]:
 		nodo.visible = false
@@ -135,6 +143,75 @@ func _estilar_prompt() -> void:
 	$PromptLabel.text = Global.prompt_interaccion
 
 
+func _crear_prompt_icono() -> void:
+	prompt_icono = TextureRect.new()
+	prompt_icono.name = "PromptAccionIcono"
+	prompt_icono.z_index = 10
+	prompt_icono.visible = false
+	prompt_icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	prompt_icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	prompt_icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	prompt_icono.scale = Vector2(1.5, 1.5)
+	prompt_icono.pivot_offset = Vector2(42, 42)
+	prompt_icono.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	prompt_icono.offset_left = -134
+	prompt_icono.offset_top = -176
+	prompt_icono.offset_right = -50
+	prompt_icono.offset_bottom = -92
+	add_child(prompt_icono)
+
+	prompt_titulo = Label.new()
+	prompt_titulo.name = "PromptAccionTitulo"
+	prompt_titulo.z_index = 10
+	prompt_titulo.visible = false
+	prompt_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	prompt_titulo.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	prompt_titulo.offset_left = -171
+	prompt_titulo.offset_top = -56
+	prompt_titulo.offset_right = -13
+	prompt_titulo.offset_bottom = -28
+	_texto(prompt_titulo, 18)
+	prompt_titulo.add_theme_font_override("font", FUENTE_PROMPT)
+	prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	add_child(prompt_titulo)
+
+
+func _tipo_prompt_con_imagen() -> String:
+	var texto := Global.prompt_interaccion.to_lower()
+	if texto.contains("atacar"):
+		return "attack"
+	if texto.contains("recoger"):
+		return "pickup"
+	return ""
+
+
+func _actualizar_prompt_visual() -> void:
+	# Mantiene el último prompt mientras se desvanece para evitar que aparezca
+	# el botón de texto antiguo por un instante al salir del rango o del combate.
+	if Global.prompt_interaccion.is_empty():
+		return
+
+	var tipo := _tipo_prompt_con_imagen()
+	var usa_imagen := tipo != ""
+	$PromptFondo.visible = not usa_imagen
+	$PromptLabel.visible = not usa_imagen
+	prompt_icono.visible = usa_imagen
+	prompt_titulo.visible = usa_imagen
+	if not usa_imagen:
+		return
+
+	var presionado := Input.is_action_pressed("atacar") if tipo == "attack" else Input.is_action_pressed("interactuar")
+	if tipo == "attack":
+		prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
+		prompt_titulo.text = Traducciones.obtener("attack")
+	else:
+		prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
+		prompt_titulo.text = Traducciones.obtener("pickup")
+
+
 func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
 	var marco := Panel.new()
 	marco.position = pos
@@ -169,7 +246,7 @@ func _poner_recuerdos() -> void:
 	var viewport_size := get_viewport().get_visible_rect().size
 
 	recuerdos_container.position = Vector2(
-		viewport_size.x - 280,
+		viewport_size.x - 320,
 		20
 	)
 
@@ -396,15 +473,25 @@ func _process(delta):
 
 	if Global.prompt_interaccion != "":
 		if prompt_texto != Global.prompt_interaccion:
-			var es_ataque := Global.prompt_interaccion.begins_with("ESPACIO")
+			var es_ataque := Global.prompt_interaccion.to_lower().contains("atacar")
 			$PromptFondo.add_theme_stylebox_override("panel", _circulo(BORDO if es_ataque else VERDE, 56))
 			$PromptLabel.text = Global.prompt_interaccion
 		prompt_texto = Global.prompt_interaccion
+	if prompt_idioma != Global.idioma_actual:
+		prompt_idioma = Global.idioma_actual
+	_actualizar_prompt_visual()
 
 	var destino_alpha := 1.0 if Global.prompt_interaccion != "" else 0.0
 	prompt_alpha = move_toward(prompt_alpha, destino_alpha, delta * 8.0)
 	$PromptLabel.modulate.a = prompt_alpha
 	$PromptFondo.modulate.a = prompt_alpha
+	prompt_icono.modulate.a = prompt_alpha
+	prompt_titulo.modulate.a = prompt_alpha
+	if destino_alpha == 0.0 and prompt_alpha <= 0.0:
+		$PromptFondo.visible = false
+		$PromptLabel.visible = false
+		prompt_icono.visible = false
+		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""
 	$AvisoLabel.text = Global.aviso_combate

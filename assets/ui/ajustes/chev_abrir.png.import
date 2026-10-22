@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqf8qqr0yekfv"
-path="res://.godot/imported/menu_btn_hover.png-404d88041ecfc887650de38ac6706c29.ctex"
+uid="uid://kfujc5dh1o6j"
+path="res://.godot/imported/chev_abrir.png-20ce6643441682a4a8072a97ee426dcf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/menu_btn_hover.png"
-dest_files=["res://.godot/imported/menu_btn_hover.png-404d88041ecfc887650de38ac6706c29.ctex"]
+source_file="res://assets/ui/ajustes/chev_abrir.png"
+dest_files=["res://.godot/imported/chev_abrir.png-20ce6643441682a4a8072a97ee426dcf.ctex"]
 
 [params]
 

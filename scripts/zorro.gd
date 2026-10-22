@@ -13,7 +13,6 @@ var pausa := 0.0
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var deteccion: Area2D = $Deteccion
 
-
 func _ready() -> void:
 	add_to_group("zorro")
 	posicion_cueva = global_position
@@ -110,7 +109,6 @@ func _elegir_destino() -> void:
 
 func hablar() -> void:
 	Global.mostrar_aviso("El zorro te observa con calma")
-
 
 func _poner_animacion(caminando: bool) -> void:
 	var animacion := "caminar" if caminando else "quieto"

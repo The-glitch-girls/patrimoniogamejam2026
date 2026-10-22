@@ -5,7 +5,7 @@ extends Node
 # =========================
 # "correr": Shift
 # "interactuar": E
-# "atacar": Espacio
+# "atacar": E
 # "mover_*": flechas o WASD
 
 var idioma_actual := "es"
@@ -37,21 +37,20 @@ const RECUERDOS_TOTALES: int = 3
 const RECUERDOS := {
 	1: {
 		"id": "acoso",
-		"titulo": "El que observaba",
-		"texto": "Cuniraya tomaba la forma de distintos animales para acercarse sin ser visto.
-				Él lo llamaba amor. Cavillaca nunca lo pidió.",
+		"titulo": "memory_1_title",
+		"texto": "memory_1_text",
 		"asset": "res://assets/cinematicas/recuerdo_1.png"
 	},
 	2: {
 		"id": "lucuma",
-		"titulo": "La semilla del engaño",
-		"texto": "Cuniraya dejó una lúcuma entre las ramas.\nCavillaca la comió sin saber lo que llevaba dentro.",
+		"titulo": "memory_2_title",
+		"texto": "memory_2_text",
 		"asset": "res://assets/cinematicas/recuerdo_2.png"
 	},
 	3: {
 		"id": "gateo",
-		"titulo": "Ya no había duda",
-		"texto": "El bebé gateó hacia él.\nCavillaca comprendió quién era su padre.",
+		"titulo": "memory_3_title",
+		"texto": "memory_3_text",
 		"asset": "res://assets/cinematicas/recuerdo_3.png"
 	},
 }

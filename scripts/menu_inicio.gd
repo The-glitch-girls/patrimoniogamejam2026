@@ -13,13 +13,18 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const MORADO := Color(0.22, 0.2, 0.42, 1)
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const LILA := Color(0.72, 0.68, 0.95, 1)
-
+@onready var version_label := $Version
+const ESCENA_MAIN := "res://scenes/Main.tscn"
+var iniciando_juego := false
 
 func _ready() -> void:
 	theme = Theme.new()
 	_tipografia()
 	_conectar()
+	_set_version()
 	_mostrar_inicio()
+	ResourceLoader.load_threaded_request("res://resources/cavillaca.tres")
+	ResourceLoader.load_threaded_request(ESCENA_MAIN) # Cargar en segundo plano
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
@@ -37,9 +42,6 @@ func _capturar() -> void:
 
 
 func _tipografia() -> void:
-	$PanelAjustes/Titulo.add_theme_font_override("font", FUENTE)
-	$PanelAjustes/Titulo.add_theme_font_size_override("font_size", 28)
-	$PanelAjustes/Titulo.add_theme_color_override("font_color", CREMA)
 	$PanelCreditos/Titulo.add_theme_font_override("font", FUENTE)
 	$PanelCreditos/Titulo.add_theme_font_size_override("font_size", 28)
 	$PanelCreditos/Titulo.add_theme_color_override("font_color", CREMA)
@@ -47,16 +49,15 @@ func _tipografia() -> void:
 	$PanelCreditos/Lista.add_theme_font_size_override("font_size", 22)
 	$PanelCreditos/Lista.add_theme_color_override("font_color", CREMA)
 	$PanelCreditos/Lista.text = "\n".join(CREDITS)
+	# Panel Ajustes
 	for label in [
-		$PanelAjustes/MasterLabel,
-		$PanelAjustes/MusicaLabel,
-		$PanelAjustes/EfectosLabel,
-		$PanelAjustes/AmbienteLabel,
+		$OverlayAjustes/PanelAjustes/MusicaLabel,
+		$OverlayAjustes/PanelAjustes/SFXLabel,
 	]:
 		label.add_theme_font_override("font", FUENTE)
 		label.add_theme_font_size_override("font_size", 16)
 		label.add_theme_color_override("font_color", CREMA)
-	_tarjeta($PanelAjustes)
+	
 	_tarjeta($PanelCreditos)
 
 
@@ -80,46 +81,70 @@ func _conectar() -> void:
 	$Fila/Ajustes.pressed.connect(_abrir_ajustes)
 	$Fila/Creditos.pressed.connect(_abrir_creditos)
 	$Fila/Salir.pressed.connect(_salir)
-	$PanelAjustes/Volver.pressed.connect(_mostrar_inicio)
+	$OverlayAjustes/PanelAjustes/Volver.pressed.connect(_mostrar_inicio)
 	$PanelCreditos/Volver.pressed.connect(_mostrar_inicio)
-	$PanelAjustes/MasterSlider.value_changed.connect(Ajustes.set_volumen_master)
-	$PanelAjustes/MusicaSlider.value_changed.connect(Ajustes.set_volumen_musica)
-	$PanelAjustes/EfectosSlider.value_changed.connect(Ajustes.set_volumen_efectos)
-	$PanelAjustes/AmbienteSlider.value_changed.connect(Ajustes.set_volumen_ambiente)
-	$PanelAjustes/MasterSlider.value = Ajustes.volumen_master
-	$PanelAjustes/MusicaSlider.value = Ajustes.volumen_musica
-	$PanelAjustes/EfectosSlider.value = Ajustes.volumen_efectos
-	$PanelAjustes/AmbienteSlider.value = Ajustes.volumen_ambiente
-
-	#$Fila/Jugar.pressed.connect(_jugar)
-	#$Fila/Ajustes.pressed.connect(_abrir_ajustes)
-	#$Fila/Creditos.pressed.connect(_abrir_creditos)
-	#$Fila/Salir.pressed.connect(_salir)
+	$OverlayAjustes/PanelAjustes/MusicaSlider.value_changed.connect(Ajustes.set_volumen_musica)
+	$OverlayAjustes/PanelAjustes/SFXSlider.value_changed.connect(Ajustes.set_volumen_efectos)
+	$OverlayAjustes/PanelAjustes/MusicaSlider.value = Ajustes.volumen_musica
+	$OverlayAjustes/PanelAjustes/SFXSlider.value = Ajustes.volumen_efectos
 
 func _mostrar_inicio() -> void:
 	$Fila.visible = true
-	$PanelAjustes.visible = false
+	$OverlayAjustes.visible = false
 	$PanelCreditos.visible = false
 
 func _abrir_ajustes() -> void:
 	$Fila.visible = false
-	$PanelAjustes.visible = true
+	$OverlayAjustes.visible = true
 	$PanelCreditos.visible = false
-	$PanelAjustes/MasterSlider.grab_focus()
-
 
 func _abrir_creditos() -> void:
 	$Fila.visible = false
-	$PanelAjustes.visible = false
+	$OverlayAjustes.visible = false
 	$PanelCreditos.visible = true
 	$PanelCreditos/Volver.enfocar()
 
-
 func _jugar() -> void:
+	if iniciando_juego:
+		return
+	iniciando_juego = true
 	Global.resetear()
 	Musica.tocar("juego")
-	get_tree().change_scene_to_file("res://scenes/Main.tscn")
+	$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("loading")
+	await get_tree().process_frame
 
+	var estado := ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+	if estado == ResourceLoader.THREAD_LOAD_FAILED:
+		var solicitud := ResourceLoader.load_threaded_request(ESCENA_MAIN)
+		if solicitud != OK:
+			push_error("No se pudo iniciar la carga de Main.tscn (código %d)" % solicitud)
+			$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
+			iniciando_juego = false
+			return
+		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+	while estado == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+
+	var escena: PackedScene
+	if estado == ResourceLoader.THREAD_LOAD_LOADED:
+		escena = ResourceLoader.load_threaded_get(ESCENA_MAIN) as PackedScene
+	else:
+		push_error("Falló la carga en segundo plano de Main.tscn (estado %d)" % estado)
+		$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
+		iniciando_juego = false
+		return
+	if escena == null:
+		push_error("No se pudo cargar Main.tscn")
+		$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
+		iniciando_juego = false
+		return
+
+	get_tree().change_scene_to_packed(escena)
 
 func _salir() -> void:
 	get_tree().quit()
+
+func _set_version() -> void:
+	var project_version = ProjectSettings.get_setting("application/config/version", "0.0.0")
+	version_label.text = "v " + project_version
