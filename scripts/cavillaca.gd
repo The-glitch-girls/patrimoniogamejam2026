@@ -335,7 +335,8 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 
 		if not $Sprite.sprite_frames.has_animation(anim_bebe):
 			anim_bebe = &"walk_lado" if esta_caminando else &"idle_lado"
-		$Sprite.flip_h = facing.x < 0.0 if anim_bebe in [&"walk_lado", &"idle_lado"] else false
+		var es_animacion_lateral := anim_bebe in [&"lado_bebe", &"walk_lado", &"idle_lado"]
+		$Sprite.flip_h = es_animacion_lateral and facing == Vector2.LEFT
 
 		if $Sprite.animation != anim_bebe:
 			$Sprite.play(anim_bebe)

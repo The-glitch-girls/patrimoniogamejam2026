@@ -68,5 +68,35 @@
 	  "es": "Salir",
 	  "en": "Exit",
 	  "fr": "Quitter"
+	},
+	"memory_1_title": {
+	  "es": "El que observaba",
+	  "en": "The One Who Watched",
+	  "fr": "Celui qui observait"
+	},
+	"memory_1_text": {
+	  "es": "Cuniraya tomaba la forma de distintos animales para acercarse sin ser visto.\nÉl lo llamaba amor. Cavillaca nunca lo pidió.",
+	  "en": "Cuniraya took the shape of different animals to approach without being seen.\nHe called it love. Cavillaca never asked for it.",
+	  "fr": "Cuniraya prenait la forme de différents animaux pour s'approcher sans être vu.\nIl appelait cela de l'amour. Cavillaca ne l'avait jamais demandé."
+	},
+	"memory_2_title": {
+	  "es": "La semilla del engaño",
+	  "en": "The Seed of Deceit",
+	  "fr": "La graine de la tromperie"
+	},
+	"memory_2_text": {
+	  "es": "Cuniraya dejó una lúcuma entre las ramas.\nCavillaca la comió sin saber lo que llevaba dentro.",
+	  "en": "Cuniraya left a lúcuma among the branches.\nCavillaca ate it without knowing what it held inside.",
+	  "fr": "Cuniraya déposa une lúcuma parmi les branches.\nCavillaca la mangea sans savoir ce qu'elle renfermait."
+	},
+	"memory_3_title": {
+	  "es": "Ya no había duda",
+	  "en": "There Was No Doubt",
+	  "fr": "Il n'y avait plus de doute"
+	},
+	"memory_3_text": {
+	  "es": "El bebé gateó hacia él.\nCavillaca comprendió quién era su padre.",
+	  "en": "The baby crawled toward him.\nCavillaca understood who his father was.",
+	  "fr": "Le bébé rampa vers lui.\nCavillaca comprit qui était son père."
 	}
 }

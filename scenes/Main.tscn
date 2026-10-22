@@ -25,6 +25,8 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
 shader = ExtResource("8_jlsqs")
 shader_parameter/intensidad = 0.0
+shader_parameter/radio_claro = 0.25
+shader_parameter/radio_sombra = 0.55
 
 [node name="Main" type="Node2D"]
 y_sort_enabled = true

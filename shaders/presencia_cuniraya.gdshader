@@ -1,16 +1,14 @@
 shader_type canvas_item;
 
 uniform float intensidad = 0.0;
+uniform float radio_claro = 0.25;
+uniform float radio_sombra = 0.55;
 
 void fragment() {
-	vec2 uv = UV;
+	float aspecto = SCREEN_PIXEL_SIZE.y / SCREEN_PIXEL_SIZE.x;
+	vec2 centro = (UV - vec2(0.5)) * vec2(aspecto, 1.0);
+	float distancia = length(centro);
+	float sombra = smoothstep(radio_claro, radio_sombra, distancia);
 
-	float distancia_borde = min(
-		min(uv.x, 1.0 - uv.x),
-		min(uv.y, 1.0 - uv.y)
-	);
-
-	float borde = 1.0 - smoothstep(0.0, 0.35, distancia_borde);
-
-	COLOR = vec4(0.0, 0.0, 0.0, borde * intensidad);
+	COLOR = vec4(0.0, 0.0, 0.0, sombra * intensidad);
 }
