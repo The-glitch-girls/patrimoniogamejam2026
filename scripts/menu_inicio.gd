@@ -23,7 +23,7 @@ func _ready() -> void:
 	_conectar()
 	_set_version()
 	_mostrar_inicio()
-	ResourceLoader.load_threaded_request(ESCENA_MAIN)
+	ResourceLoader.load_threaded_request(ESCENA_MAIN) # Cargar en segundo plano
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()

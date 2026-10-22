@@ -167,6 +167,7 @@ text = "v 1"
 label_settings = SubResource("LabelSettings_cmsus")
 
 [node name="OverlayAjustes" type="Control" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
