@@ -63,7 +63,7 @@ func _ready():
 	$CollisionShape2D.position.y = 90
 	
 	cam = Camera2D.new()
-	cam.zoom = Vector2(1.5, 1.5)
+	cam.zoom = Vector2(1.0, 1.0)
 	# Camara
 	cam.limit_left = 0
 	cam.limit_top = 0
@@ -405,7 +405,7 @@ func _actualizar_prompt():
 	else:
 		Global.prompt_interaccion = ""
 	
-	print("HALCON CERCA: ", Global.halcon_cerca)
+	#print("HALCON CERCA: ", Global.halcon_cerca)
 
 
 func _actualizar_carga_visual():

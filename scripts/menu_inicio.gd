@@ -14,6 +14,8 @@ const MORADO := Color(0.22, 0.2, 0.42, 1)
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const LILA := Color(0.72, 0.68, 0.95, 1)
 @onready var version_label := $Version
+const ESCENA_MAIN := "res://scenes/Main.tscn"
+var iniciando_juego := false
 
 func _ready() -> void:
 	theme = Theme.new()
@@ -21,6 +23,7 @@ func _ready() -> void:
 	_conectar()
 	_set_version()
 	_mostrar_inicio()
+	ResourceLoader.load_threaded_request(ESCENA_MAIN)
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
@@ -101,20 +104,28 @@ func _abrir_creditos() -> void:
 	$PanelCreditos/Volver.enfocar()
 
 func _jugar() -> void:
+	if iniciando_juego:
+		return
+	iniciando_juego = true
 	Global.resetear()
 	Musica.tocar("juego")
 
-	print("ANTES DE CARGAR MAIN")
+	var estado := ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+	while estado == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+		await get_tree().process_frame
+		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
 
-	var escena: PackedScene = load("res://scenes/Main.tscn")
+	var escena: PackedScene
+	if estado == ResourceLoader.THREAD_LOAD_LOADED:
+		escena = ResourceLoader.load_threaded_get(ESCENA_MAIN) as PackedScene
+	else:
+		escena = load(ESCENA_MAIN) as PackedScene
 	if escena == null:
 		push_error("No se pudo cargar Main.tscn")
+		iniciando_juego = false
 		return
 
-	print("MAIN CARGADA")
-
-	var error := get_tree().change_scene_to_packed(escena)
-	print("RESULTADO DEL CAMBIO: ", error)
+	get_tree().change_scene_to_packed(escena)
 
 func _salir() -> void:
 	get_tree().quit()

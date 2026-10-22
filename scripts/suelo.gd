@@ -11,32 +11,11 @@ func _ready():
 	combate_halcon.hide()
 	zonas.append({ "nombre": "Mar", "rect": Rect2(500, 820, 400, 220) })
 
-
 func _process(_delta):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	if cavillaca == null:
 		return
 	Global.zona_actual = _zona_en(cavillaca.global_position)
-
-func _piso(rect: Rect2, color: Color, nombre: String):
-	var piso := ColorRect.new()
-	piso.position = rect.position
-	piso.size = rect.size
-	piso.color = color
-	piso.z_index = -19
-	piso.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(piso)
-
-	zonas.append({ "nombre": nombre, "rect": rect })
-		
-	if nombre != "":
-		var etiqueta := Label.new()
-		etiqueta.text = nombre.to_upper()
-		etiqueta.position = rect.position + Vector2(16, 16)
-		etiqueta.modulate = Color(1, 1, 1, 0.28)
-		etiqueta.z_index = -9
-		etiqueta.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		add_child(etiqueta)
 
 func _zona_en(punto: Vector2) -> String:
 	for zona in zonas:
