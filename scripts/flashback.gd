@@ -7,6 +7,7 @@ const CREMA := Color(0.99, 0.96, 0.9, 1)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
 
 var indice := 1
+var cerrando := false
 
 func configurar(n: int) -> void:
 	indice = clampi(n, 1, Global.RECUERDOS_TOTALES)
@@ -129,8 +130,27 @@ func _estilar() -> void:
 	$Continuar.offset_bottom = -40
 
 
-func _continuar():
+func _continuar() -> void:
+	if cerrando:
+		return
+	cerrando = true
+	$Continuar.disabled = true
+	$ColorRect.visible = true
+	$ColorRect.color = Color(0.12, 0.1, 0.28, 0.0)
+
+	var tween_cierre := create_tween()
+	tween_cierre.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tween_cierre.set_parallel(true)
+	tween_cierre.tween_property($ColorRect, "color:a", 1.0, 0.65)
+	tween_cierre.tween_property($Titulo, "modulate:a", 0.0, 0.4)
+	tween_cierre.tween_property($Texto, "modulate:a", 0.0, 0.4)
+	tween_cierre.tween_property($Continuar, "modulate:a", 0.0, 0.3)
+	tween_cierre.tween_property($RecuerdoMusica, "volume_db", -50.0, 0.65)
+	if $AssetRecuerdo.visible:
+		tween_cierre.tween_property($AssetRecuerdo, "scale", Vector2(1.035, 1.035), 0.65)
+	await tween_cierre.finished
 	$RecuerdoMusica.stop()
+
 	var dato: Dictionary = Global.RECUERDOS[indice]
 	var id: String = dato.id
 	if not id in Global.flashbacks_desbloqueados:
