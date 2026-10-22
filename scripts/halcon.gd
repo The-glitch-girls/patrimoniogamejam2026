@@ -52,11 +52,19 @@ func _ready():
 	inicio = global_position
 	escala_original = $AnimatedSprite2D.scale
 	call_deferred("_armar_puntos")
+	call_deferred("_ignorar_colision_con_cavillaca")
 	$Detector.add_to_group("halcon")
 	$Detector.body_entered.connect(_on_body_entered)
 
 	$AnimatedSprite2D.play("lado")
 	
+
+func _ignorar_colision_con_cavillaca() -> void:
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as CharacterBody2D
+	if cavillaca != null:
+		add_collision_exception_with(cavillaca)
+
+
 func _process(delta):
 	# Animacion de golpeado
 	if not en_muerte:
@@ -333,8 +341,8 @@ func esquivar_hacia(punto: Node2D):
 	var tween := create_tween()
 	tween.tween_property(
 		self,
-		"position",
-		punto.position,
+		"global_position",
+		punto.global_position,
 		0.2
 	)
 	
@@ -346,8 +354,8 @@ func esquivar_hacia(punto: Node2D):
 	var tween_vuelta := create_tween()
 	tween_vuelta.tween_property(
 		self,
-		"position",
-		centro.position,
+		"global_position",
+		centro.global_position,
 		0.4
 	)
 

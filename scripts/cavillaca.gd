@@ -22,18 +22,10 @@ const PASOS := [
 ]
 const ATAQUE := preload("res://sfx/combate/piedra_lanzada.ogg")
 
-var FRAMES_FRENTE: Array[Texture2D]
-var FRAMES_ESPALDA: Array[Texture2D]
 var FRAMES_LADO: Array[Texture2D]
-var FRAMES_BEBE_ESPALDA: Array[Texture2D]
-var FRAMES_BEBE_FRENTE:  Array[Texture2D]
 
-var frames_espalda := preload("res://resources/cavillaca_espalda.tres")
-var sheet_frente := preload("res://assets/person/cavillaca_frente.png")
-var sheet_espalda := preload("res://assets/person/cavillaca_espalda.png")
+var animaciones_con_bebe: SpriteFrames = preload("res://resources/cavillaca.tres")
 var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
-var sheet_bebe_espalda := preload("res://assets/person/cavillaca_bebe_espalda.png")
-var sheet_bebe_frente := preload("res://assets/person/cavillaca_bebe_frente.png")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
@@ -47,11 +39,7 @@ var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
 
 func _ready():
-	FRAMES_FRENTE = _crear_frames_sheet(sheet_frente, 3)
-	FRAMES_ESPALDA = _crear_frames_sheet(sheet_espalda, 3)
 	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360 )
-	FRAMES_BEBE_ESPALDA = _crear_frames_sheet(sheet_bebe_espalda, 3)
-	FRAMES_BEBE_FRENTE = _crear_frames_sheet(sheet_bebe_frente, 3)
 	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
@@ -89,26 +77,27 @@ func _armar_sfx() -> void:
 
 func _armar_sprite() -> void:
 	var hojas := SpriteFrames.new()
-	_poner_anim(hojas, "idle_frente", [FRAMES_FRENTE[2]], 1.0)
-	_poner_anim(hojas, "walk_frente", [
-		FRAMES_FRENTE[0],
-		FRAMES_FRENTE[2],
-		FRAMES_FRENTE[1],
-		FRAMES_FRENTE[2]
-	], 6.0)
-	_poner_anim(hojas, "idle_espalda", [FRAMES_ESPALDA[1]], 1.0)
-	_poner_anim(hojas, "walk_espalda", [
-		FRAMES_ESPALDA[0],
-		FRAMES_ESPALDA[1],
-		FRAMES_ESPALDA[2],
-		FRAMES_ESPALDA[1]
-	], 6.0)
 	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[0]], 1.0)
 	_poner_anim(hojas, "walk_lado", FRAMES_LADO, 8.0)
-	_poner_anim(hojas, "cavilaca_bebe_espalda", FRAMES_BEBE_ESPALDA, 6.0)
-	_poner_anim(hojas, "cavilaca_bebe_frente", FRAMES_BEBE_FRENTE, 6.0)
+	_copiar_animacion(hojas, "espalda")
+	_copiar_animacion(hojas, "frente")
+	_copiar_animacion(hojas, "espalda_bebe")
+	_copiar_animacion(hojas, "frente_bebe")
+	_copiar_animacion(hojas, "lado_bebe")
 	$Sprite.sprite_frames = hojas
-	$Sprite.play("idle_frente")
+	$Sprite.play("idle_lado")
+
+
+func _copiar_animacion(destino: SpriteFrames, nombre: StringName) -> void:
+	destino.add_animation(nombre)
+	destino.set_animation_speed(nombre, animaciones_con_bebe.get_animation_speed(nombre))
+	destino.set_animation_loop(nombre, animaciones_con_bebe.get_animation_loop(nombre))
+	for indice in range(animaciones_con_bebe.get_frame_count(nombre)):
+		destino.add_frame(
+			nombre,
+			animaciones_con_bebe.get_frame_texture(nombre, indice),
+			animaciones_con_bebe.get_frame_duration(nombre, indice)
+		)
 
 
 func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad: float) -> void:
@@ -308,28 +297,30 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 	# CON BEBÉ
 	# =========================
 	if Global.lleva_bebe:
-
+		var anim_bebe: StringName
 		if facing == Vector2.UP:
-			if $Sprite.animation != "cavilaca_bebe_espalda":
-				$Sprite.play("cavilaca_bebe_espalda")
+			anim_bebe = &"espalda_bebe"
 			$Sprite.flip_h = false
 
 		elif facing == Vector2.DOWN:
-			if $Sprite.animation != "cavilaca_bebe_frente":
-				$Sprite.play("cavilaca_bebe_frente")
+			anim_bebe = &"frente_bebe"
 			$Sprite.flip_h = false
 
 		else:
-			# Todavía no tenemos sprite lateral con bebé
-			var accion_lateral := "walk" if esta_caminando else "idle"
-			var anim_lado := "%s_lado" % accion_lateral
-
-			if $Sprite.animation != anim_lado:
-				$Sprite.play(anim_lado)
-
+			anim_bebe = &"lado_bebe"
 			$Sprite.flip_h = facing == Vector2.LEFT
 
-		$Sprite.speed_scale = 0.75
+		if $Sprite.animation != anim_bebe:
+			$Sprite.play(anim_bebe)
+
+		if esta_caminando:
+			if not $Sprite.is_playing():
+				$Sprite.play()
+			$Sprite.speed_scale = 1.0
+		else:
+			$Sprite.stop()
+			$Sprite.frame = 0
+			$Sprite.frame_progress = 0.0
 
 		# SFX de pasos con bebé
 		if esta_caminando:
@@ -348,21 +339,25 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 	# SIN BEBÉ
 	# =========================
 
-	var accion := "walk" if esta_caminando else "idle"
-	var direccion := "lado"
-
-	if facing == Vector2.UP:
-		direccion = "espalda"
-	elif facing == Vector2.DOWN:
-		direccion = "frente"
-
-	var anim := "%s_%s" % [accion, direccion]
-
-	$Sprite.flip_h = facing == Vector2.LEFT
-	$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
-
-	if $Sprite.animation != anim:
-		$Sprite.play(anim)
+	if facing == Vector2.UP or facing == Vector2.DOWN:
+		var anim_vertical: StringName = &"espalda" if facing == Vector2.UP else &"frente"
+		$Sprite.flip_h = false
+		if $Sprite.animation != anim_vertical:
+			$Sprite.play(anim_vertical)
+		if esta_caminando:
+			if not $Sprite.is_playing():
+				$Sprite.play()
+			$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
+		else:
+			$Sprite.stop()
+			$Sprite.frame = 0
+			$Sprite.frame_progress = 0.0
+	else:
+		var anim_lado := "walk_lado" if esta_caminando else "idle_lado"
+		$Sprite.flip_h = facing == Vector2.LEFT
+		$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
+		if $Sprite.animation != anim_lado:
+			$Sprite.play(anim_lado)
 
 	if esta_caminando:
 		paso_acum += delta
@@ -488,8 +483,10 @@ func _crear_frames_sheet(
 	return frames
 
 func cambiar_sprite_bebe(cargado: bool) -> void:
-	if not cargado:
-		$Sprite.play("idle_frente")
+	if cargado:
+		_animar_caminata(0.0, velocity.length() > 12.0, false)
+	else:
+		_animar_caminata(0.0, false, false)
 
 # Funciones en combate
 func _arrojar_en_combate():
