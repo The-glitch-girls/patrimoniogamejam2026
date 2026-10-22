@@ -321,8 +321,8 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 
 		else:
 			# Todavía no tenemos sprite lateral con bebé
-			var accion := "walk" if esta_caminando else "idle"
-			var anim_lado := "%s_lado" % accion
+			var accion_lateral := "walk" if esta_caminando else "idle"
+			var anim_lado := "%s_lado" % accion_lateral
 
 			if $Sprite.animation != anim_lado:
 				$Sprite.play(anim_lado)
@@ -374,7 +374,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 			_sonar_paso()
 	else:
 		paso_acum = 0.0
-func _actualizar_camara(delta: float):
+func _actualizar_camara(_delta: float):
 	cam.offset = Vector2.ZERO
 
 
@@ -465,7 +465,7 @@ func _crear_frames_sheet(
 
 	var frames: Array[Texture2D] = []
 
-	var ancho_frame := sheet.get_width() / cantidad
+	var ancho_frame: float = float(sheet.get_width()) / cantidad
 
 	if ancho_personalizado > 0:
 		ancho_frame = ancho_personalizado

@@ -36,7 +36,7 @@ func recoger():
 	$AnimatedSprite2D.play("normal")
 
 
-func dejar(posicion: Vector2):
+func dejar(_posicion: Vector2):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	
 	if cavillaca == null:
