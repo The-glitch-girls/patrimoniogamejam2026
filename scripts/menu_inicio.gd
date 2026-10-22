@@ -27,7 +27,6 @@ func _ready() -> void:
 	elif OS.get_cmdline_user_args().has("--finalshot"):
 		Global.resultado_final = "mar"
 		get_tree().change_scene_to_file.call_deferred("res://scenes/Final.tscn")
-	
 
 
 func _capturar() -> void:
@@ -101,12 +100,21 @@ func _abrir_creditos() -> void:
 	$PanelCreditos.visible = true
 	$PanelCreditos/Volver.enfocar()
 
-
 func _jugar() -> void:
 	Global.resetear()
 	Musica.tocar("juego")
-	get_tree().change_scene_to_file("res://scenes/Main.tscn")
 
+	print("ANTES DE CARGAR MAIN")
+
+	var escena: PackedScene = load("res://scenes/Main.tscn")
+	if escena == null:
+		push_error("No se pudo cargar Main.tscn")
+		return
+
+	print("MAIN CARGADA")
+
+	var error := get_tree().change_scene_to_packed(escena)
+	print("RESULTADO DEL CAMBIO: ", error)
 
 func _salir() -> void:
 	get_tree().quit()

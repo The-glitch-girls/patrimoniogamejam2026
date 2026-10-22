@@ -1,0 +1,46 @@
+[gd_resource type="SpriteFrames" load_steps=7 format=3 uid="uid://yu8sdinxc6p2"]
+
+[ext_resource type="Texture2D" uid="uid://b5tk8ff2tx8s1" path="res://assets/person/cavillaca_bebe_lado.png" id="1_lyu2e"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_08ely"]
+atlas = ExtResource("1_lyu2e")
+region = Rect2(700, 0, 2500, 4961)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pdqfp"]
+atlas = ExtResource("1_lyu2e")
+region = Rect2(8200, 0, 2500, 4961)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3yrjf"]
+atlas = ExtResource("1_lyu2e")
+region = Rect2(10700, 0, 2500, 4961)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pfrmo"]
+atlas = ExtResource("1_lyu2e")
+region = Rect2(3200, 0, 2500, 4961)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s14nc"]
+atlas = ExtResource("1_lyu2e")
+region = Rect2(5700, 0, 2500, 4961)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_08ely")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pdqfp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3yrjf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pfrmo")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s14nc")
+}],
+"loop": true,
+"name": &"lado_bebe",
+"speed": 5.0
+}]

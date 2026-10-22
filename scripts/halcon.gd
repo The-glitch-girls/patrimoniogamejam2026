@@ -95,7 +95,7 @@ func _process(delta):
 	if cavillaca != null:
 		var objetivo := _obtener_punto_objetivo(cavillaca)
 		var distancia := global_position.distance_to(objetivo)
-		print("🦅 distancia Cavillaca-halcon: ", distancia)
+		#print("🦅 distancia Cavillaca-halcon: ", distancia)
 		
 		if rondando and distancia > RANGO_CORTE:
 			rondando = false
