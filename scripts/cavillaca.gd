@@ -24,7 +24,9 @@ const ATAQUE := preload("res://sfx/combate/piedra_lanzada.ogg")
 
 var FRAMES_LADO: Array[Texture2D]
 
-var animaciones_con_bebe: SpriteFrames = preload("res://resources/cavillaca.tres")
+const RUTA_ANIMACIONES := "res://resources/cavillaca.tres"
+var animaciones_cavillaca: SpriteFrames
+var animaciones_cargadas := false
 var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
 
 var energia_temporizador := 0.0
@@ -45,6 +47,7 @@ func _ready():
 	motion_mode = MOTION_MODE_FLOATING
 	_armar_sfx()
 	_armar_sprite()
+	_solicitar_animaciones()
 
 	$Sprite.scale = Vector2(0.052, 0.052)
 	$Sprite.position.y = -10
@@ -63,6 +66,33 @@ func _ready():
 	add_child(cam)
 	cam.make_current()
 
+
+func _solicitar_animaciones() -> void:
+	var estado := ResourceLoader.load_threaded_get_status(RUTA_ANIMACIONES)
+	if estado == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE or estado == ResourceLoader.THREAD_LOAD_FAILED:
+		var resultado := ResourceLoader.load_threaded_request(RUTA_ANIMACIONES)
+		if resultado != OK:
+			push_error("No se pudo iniciar la carga de las animaciones de Cavillaca")
+		return
+	if estado == ResourceLoader.THREAD_LOAD_LOADED:
+		_aplicar_animaciones_cargadas()
+
+
+func _procesar_carga_animaciones() -> void:
+	if animaciones_cargadas:
+		return
+	if ResourceLoader.load_threaded_get_status(RUTA_ANIMACIONES) == ResourceLoader.THREAD_LOAD_LOADED:
+		_aplicar_animaciones_cargadas()
+
+
+func _aplicar_animaciones_cargadas() -> void:
+	animaciones_cavillaca = ResourceLoader.load_threaded_get(RUTA_ANIMACIONES) as SpriteFrames
+	if animaciones_cavillaca == null:
+		return
+	for nombre in [&"espalda", &"frente", &"espalda_bebe", &"frente_bebe", &"lado_bebe"]:
+		_copiar_animacion($Sprite.sprite_frames, nombre)
+	animaciones_cargadas = true
+
 func _armar_sfx() -> void:
 	sfx_paso = AudioStreamPlayer.new()
 	sfx_paso.bus = "SFX"
@@ -79,24 +109,19 @@ func _armar_sprite() -> void:
 	var hojas := SpriteFrames.new()
 	_poner_anim(hojas, "idle_lado", [FRAMES_LADO[0]], 1.0)
 	_poner_anim(hojas, "walk_lado", FRAMES_LADO, 8.0)
-	_copiar_animacion(hojas, "espalda")
-	_copiar_animacion(hojas, "frente")
-	_copiar_animacion(hojas, "espalda_bebe")
-	_copiar_animacion(hojas, "frente_bebe")
-	_copiar_animacion(hojas, "lado_bebe")
 	$Sprite.sprite_frames = hojas
 	$Sprite.play("idle_lado")
 
 
 func _copiar_animacion(destino: SpriteFrames, nombre: StringName) -> void:
 	destino.add_animation(nombre)
-	destino.set_animation_speed(nombre, animaciones_con_bebe.get_animation_speed(nombre))
-	destino.set_animation_loop(nombre, animaciones_con_bebe.get_animation_loop(nombre))
-	for indice in range(animaciones_con_bebe.get_frame_count(nombre)):
+	destino.set_animation_speed(nombre, animaciones_cavillaca.get_animation_speed(nombre))
+	destino.set_animation_loop(nombre, animaciones_cavillaca.get_animation_loop(nombre))
+	for indice in range(animaciones_cavillaca.get_frame_count(nombre)):
 		destino.add_frame(
 			nombre,
-			animaciones_con_bebe.get_frame_texture(nombre, indice),
-			animaciones_con_bebe.get_frame_duration(nombre, indice)
+			animaciones_cavillaca.get_frame_texture(nombre, indice),
+			animaciones_cavillaca.get_frame_duration(nombre, indice)
 		)
 
 
@@ -109,6 +134,7 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
+	_procesar_carga_animaciones()
 	if _controlar_ataque():
 		return
 		
@@ -300,15 +326,16 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		var anim_bebe: StringName
 		if facing == Vector2.UP:
 			anim_bebe = &"espalda_bebe"
-			$Sprite.flip_h = false
 
 		elif facing == Vector2.DOWN:
 			anim_bebe = &"frente_bebe"
-			$Sprite.flip_h = false
 
 		else:
 			anim_bebe = &"lado_bebe"
-			$Sprite.flip_h = facing == Vector2.LEFT
+
+		if not $Sprite.sprite_frames.has_animation(anim_bebe):
+			anim_bebe = &"walk_lado" if esta_caminando else &"idle_lado"
+		$Sprite.flip_h = facing.x < 0.0 if anim_bebe in [&"walk_lado", &"idle_lado"] else false
 
 		if $Sprite.animation != anim_bebe:
 			$Sprite.play(anim_bebe)
@@ -341,7 +368,9 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 
 	if facing == Vector2.UP or facing == Vector2.DOWN:
 		var anim_vertical: StringName = &"espalda" if facing == Vector2.UP else &"frente"
-		$Sprite.flip_h = false
+		if not $Sprite.sprite_frames.has_animation(anim_vertical):
+			anim_vertical = &"walk_lado" if esta_caminando else &"idle_lado"
+		$Sprite.flip_h = anim_vertical in [&"walk_lado", &"idle_lado"] and facing.x < 0.0
 		if $Sprite.animation != anim_vertical:
 			$Sprite.play(anim_vertical)
 		if esta_caminando:
@@ -396,7 +425,7 @@ func _actualizar_prompt():
 	elif esta_cerca_del_bebe():
 		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
 	elif Global.halcon_cerca and not Global.lleva_bebe:
-		Global.prompt_interaccion = "ESPACIO  Atacar"
+		Global.prompt_interaccion = "E  Atacar"
 	else:
 		Global.prompt_interaccion = ""
 	
@@ -457,9 +486,7 @@ func _crear_frames_sheet(
 	y_inicio: float = 0.0,
 	alto_personalizado: float = -1.0
 ) -> Array[Texture2D]:
-
 	var frames: Array[Texture2D] = []
-
 	var ancho_frame: float = float(sheet.get_width()) / cantidad
 
 	if ancho_personalizado > 0:

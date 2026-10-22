@@ -68,7 +68,7 @@ func _ignorar_colision_con_cavillaca() -> void:
 func _process(delta):
 	# Animacion de golpeado
 	if not en_muerte:
-		var escala_base := escala_original * (1.5 if en_combate else 1.0)
+		var escala_base := escala_original * (2.0 if en_combate else 1.0)
 		if flash_t > 0.0:
 			flash_t -= delta
 			$AnimatedSprite2D.scale = escala_base * Vector2(1.35, 0.8)
@@ -285,10 +285,10 @@ func entrar_en_combate():
 	posicion_original = global_position
 	en_combate = true
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = "ESPACIO  Atacar"
+	Global.prompt_interaccion = "E  Atacar"
 	reparent(combate)
 	position = punto.position
-	$AnimatedSprite2D.scale = escala_original * 1.5
+	$AnimatedSprite2D.scale = escala_original * 2.0
 	collision_mask = 0
 	$Detector.monitoring = false # desactiva detecciones durante el combate.
 	$Detector.monitorable = true # permite que piedra detecte al halcón.

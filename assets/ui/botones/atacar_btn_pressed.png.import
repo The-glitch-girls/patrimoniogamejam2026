@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bt5hfdgv55jeq"
-path="res://.godot/imported/menu_btn_pressed.png-1a3a74c0d9240a854b1bba9376443f27.ctex"
+uid="uid://c1h0p7fws7sk1"
+path="res://.godot/imported/atacar_btn_pressed.png-61a120a07551ffeb014689d9372f4b11.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/menu_btn_pressed.png"
-dest_files=["res://.godot/imported/menu_btn_pressed.png-1a3a74c0d9240a854b1bba9376443f27.ctex"]
+source_file="res://assets/ui/botones/atacar_btn_pressed.png"
+dest_files=["res://.godot/imported/atacar_btn_pressed.png-61a120a07551ffeb014689d9372f4b11.ctex"]
 
 [params]
 

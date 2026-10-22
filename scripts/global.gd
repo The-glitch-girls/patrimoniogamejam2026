@@ -5,7 +5,7 @@ extends Node
 # =========================
 # "correr": Shift
 # "interactuar": E
-# "atacar": Espacio
+# "atacar": E
 # "mover_*": flechas o WASD
 
 var idioma_actual := "es"

@@ -23,6 +23,7 @@ func _ready() -> void:
 	_conectar()
 	_set_version()
 	_mostrar_inicio()
+	ResourceLoader.load_threaded_request("res://resources/cavillaca.tres")
 	ResourceLoader.load_threaded_request(ESCENA_MAIN) # Cargar en segundo plano
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
@@ -109,8 +110,18 @@ func _jugar() -> void:
 	iniciando_juego = true
 	Global.resetear()
 	Musica.tocar("juego")
+	$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("loading")
+	await get_tree().process_frame
 
 	var estado := ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+	if estado == ResourceLoader.THREAD_LOAD_FAILED:
+		var solicitud := ResourceLoader.load_threaded_request(ESCENA_MAIN)
+		if solicitud != OK:
+			push_error("No se pudo iniciar la carga de Main.tscn (código %d)" % solicitud)
+			$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
+			iniciando_juego = false
+			return
+		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
 	while estado == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await get_tree().process_frame
 		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
@@ -119,9 +130,13 @@ func _jugar() -> void:
 	if estado == ResourceLoader.THREAD_LOAD_LOADED:
 		escena = ResourceLoader.load_threaded_get(ESCENA_MAIN) as PackedScene
 	else:
-		escena = load(ESCENA_MAIN) as PackedScene
+		push_error("Falló la carga en segundo plano de Main.tscn (estado %d)" % estado)
+		$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
+		iniciando_juego = false
+		return
 	if escena == null:
 		push_error("No se pudo cargar Main.tscn")
+		$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
 		iniciando_juego = false
 		return
 

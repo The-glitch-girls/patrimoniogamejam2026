@@ -4,6 +4,11 @@
 	"en": "Play",
 	"fr": "Jouer"
   },
+	"loading": {
+	  "es": "Cargando...",
+	  "en": "Loading...",
+	  "fr": "Chargement..."
+	},
   "settings": {
 	"es": "Ajustes",
 	"en": "Settings",
@@ -54,6 +59,11 @@
 	"en": "Carry",
 	"fr": "Porter"
   },
+	"pickup": {
+	  "es": "Recoger",
+	  "en": "Pick up",
+	  "fr": "Ramasser"
+	},
 	"exit": {
 	  "es": "Salir",
 	  "en": "Exit",
