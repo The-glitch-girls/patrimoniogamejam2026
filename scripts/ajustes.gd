@@ -6,6 +6,7 @@ var volumen_master: float = 1.0
 var volumen_musica: float = 0.8
 var volumen_efectos: float = 1.0
 var volumen_ambiente: float = 1.0
+var idioma: String = "es"
 
 
 func _ready() -> void:
@@ -21,6 +22,9 @@ func cargar() -> void:
 	volumen_musica = float(cfg.get_value("audio", "musica", volumen_musica))
 	volumen_efectos = float(cfg.get_value("audio", "sfx", volumen_efectos))
 	volumen_ambiente = float(cfg.get_value("audio", "ambiente", volumen_ambiente))
+	idioma = str(cfg.get_value("idioma", "actual", idioma))
+	if not idioma in ["es", "en", "fr"]:
+		idioma = "es"
 
 
 func guardar() -> void:
@@ -29,6 +33,7 @@ func guardar() -> void:
 	cfg.set_value("audio", "musica", volumen_musica)
 	cfg.set_value("audio", "sfx", volumen_efectos)
 	cfg.set_value("audio", "ambiente", volumen_ambiente)
+	cfg.set_value("idioma", "actual", idioma)
 	cfg.save(RUTA_CONFIG)
 
 
@@ -60,6 +65,13 @@ func set_volumen_efectos(valor: float) -> void:
 func set_volumen_ambiente(valor: float) -> void:
 	volumen_ambiente = clampf(valor, 0.0, 1.0)
 	_set_bus("Ambiente", volumen_ambiente)
+	guardar()
+
+
+func set_idioma(valor: String) -> void:
+	if not valor in ["es", "en", "fr"]:
+		return
+	idioma = valor
 	guardar()
 
 

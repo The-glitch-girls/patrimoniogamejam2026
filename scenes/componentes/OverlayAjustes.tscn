@@ -1,0 +1,318 @@
+[gd_scene load_steps=17 format=3 uid="uid://qatbsc37daou"]
+
+[ext_resource type="Script" uid="uid://c7t7etg7ncip7" path="res://scripts/componentes/overlay_ajustes.gd" id="1_overlay"]
+[ext_resource type="Texture2D" uid="uid://bq552avp1fw2n" path="res://assets/ui/ajustes/engranaje.png" id="2_engranaje"]
+[ext_resource type="Texture2D" uid="uid://dur61p2toe3f7" path="res://assets/ui/ajustes/bg.png" id="3_fondo"]
+[ext_resource type="Texture2D" uid="uid://kfujc5dh1o6j" path="res://assets/ui/ajustes/chev_abrir.png" id="4_chev_abrir"]
+[ext_resource type="Script" uid="uid://jm6ymp2kiyuc" path="res://scripts/componentes/engranaje.gd" id="5_giro"]
+[ext_resource type="Texture2D" uid="uid://cr3mtagqaqu4d" path="res://assets/ui/ajustes/chev_cerrar.png" id="6_chev_cerrar"]
+[ext_resource type="Texture2D" uid="uid://b5hoibkrtebxd" path="res://assets/ui/ajustes/border.png" id="7_borde"]
+[ext_resource type="Texture2D" uid="uid://c7kbvsgkb8nlg" path="res://assets/ui/ajustes/x_cerrar.png" id="7_r4ghs"]
+[ext_resource type="Texture2D" uid="uid://bhmp283lbn6cj" path="res://assets/ui/ajustes/x_cerrar_pressed.png" id="8_jjljd"]
+[ext_resource type="Texture2D" uid="uid://omol6tt7xq41" path="res://assets/ui/ajustes/panel.png" id="8_panel"]
+[ext_resource type="Texture2D" uid="uid://q435k1thluau" path="res://assets/ui/ajustes/titulo_ES.png" id="9_titulo"]
+[ext_resource type="Texture2D" uid="uid://dwom0f6h761e" path="res://assets/ui/ajustes/grabber.png" id="10_grabber"]
+[ext_resource type="LabelSettings" uid="uid://cnenesgh8eeof" path="res://resources/ajustes_textos.tres" id="11_label_settings"]
+[ext_resource type="Texture2D" uid="uid://bout2y1ujell4" path="res://assets/ui/ajustes/lineaSeparadora.png" id="11_ybsk3"]
+[ext_resource type="Texture2D" uid="uid://bhuqhcmea1e3i" path="res://assets/ui/ajustes/flecha_idioma.svg" id="12_flecha_idioma"]
+[ext_resource type="Texture2D" uid="uid://cqqjg3w8qbi1s" path="res://assets/ui/ajustes/slider.png" id="13_slider"]
+
+[node name="OverlayAjustes" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_overlay")
+
+[node name="FondoAjustes" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.913725)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_fondo")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Engranaje" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = -61.0
+offset_top = -225.0
+offset_right = 1341.0
+offset_bottom = 1187.0
+scale = Vector2(0.65, 0.65)
+pivot_offset = Vector2(701, 771)
+mouse_filter = 2
+texture = ExtResource("2_engranaje")
+script = ExtResource("5_giro")
+
+[node name="BordeAjustes" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("7_borde")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Oscurecer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.286275, 0.215686, 0.513726, 0.168627)
+
+[node name="PanelVisual" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -236.0
+offset_top = -182.0
+offset_right = 480.0
+offset_bottom = 470.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.66, 0.66)
+mouse_filter = 2
+texture = ExtResource("8_panel")
+
+[node name="PanelAjustes" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.666667, 0.666667)
+pivot_offset = Vector2(300, 300)
+mouse_filter = 2
+
+[node name="Cerrar" type="TextureButton" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 546.0
+offset_top = 6.00013
+offset_right = 610.0
+offset_bottom = 70.0001
+focus_mode = 0
+texture_normal = ExtResource("7_r4ghs")
+texture_pressed = ExtResource("8_jjljd")
+texture_hover = ExtResource("8_jjljd")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelAjustes"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_top = -450.0
+offset_bottom = -360.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ChevAbrir" type="TextureRect" parent="PanelAjustes/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("4_chev_abrir")
+stretch_mode = 4
+
+[node name="Titulo" type="TextureRect" parent="PanelAjustes/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("9_titulo")
+stretch_mode = 2
+
+[node name="ChevCerrar" type="TextureRect" parent="PanelAjustes/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("6_chev_cerrar")
+stretch_mode = 4
+
+[node name="MSXLabelContainer" type="VBoxContainer" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 120.0
+offset_right = 390.0
+offset_bottom = 170.0
+alignment = 1
+
+[node name="MSXTopLine" type="TextureRect" parent="PanelAjustes/MSXLabelContainer"]
+layout_mode = 2
+texture = ExtResource("11_ybsk3")
+
+[node name="MusicaLabel" type="Label" parent="PanelAjustes/MSXLabelContainer"]
+layout_mode = 2
+text = "Música"
+label_settings = ExtResource("11_label_settings")
+horizontal_alignment = 1
+
+[node name="MSXTopBottom" type="TextureRect" parent="PanelAjustes/MSXLabelContainer"]
+layout_mode = 2
+texture = ExtResource("11_ybsk3")
+
+[node name="MusicaSliderPista" type="TextureRect" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 208.5
+offset_right = 410.0
+offset_bottom = 224.5
+mouse_filter = 2
+texture = ExtResource("13_slider")
+expand_mode = 1
+
+[node name="MusicaSlider" type="HSlider" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 200.0
+offset_right = 410.0
+offset_bottom = 233.0
+theme_override_icons/grabber = ExtResource("10_grabber")
+theme_override_icons/grabber_highlight = ExtResource("10_grabber")
+theme_override_icons/grabber_disabled = ExtResource("10_grabber")
+theme_override_icons/tick = ExtResource("10_grabber")
+max_value = 1.0
+step = 0.01
+value = 0.8
+
+[node name="MusicaPorcentaje" type="Label" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 198.0
+offset_right = 490.0
+offset_bottom = 235.0
+label_settings = ExtResource("11_label_settings")
+vertical_alignment = 1
+
+[node name="SFXLabelContainer" type="VBoxContainer" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 210.0
+offset_top = 270.0
+offset_right = 390.0
+offset_bottom = 320.0
+alignment = 1
+
+[node name="SFXTopLine" type="TextureRect" parent="PanelAjustes/SFXLabelContainer"]
+layout_mode = 2
+texture = ExtResource("11_ybsk3")
+
+[node name="SFXLabel" type="Label" parent="PanelAjustes/SFXLabelContainer"]
+layout_mode = 2
+text = "SFX"
+label_settings = ExtResource("11_label_settings")
+horizontal_alignment = 1
+
+[node name="SFXTopBottom" type="TextureRect" parent="PanelAjustes/SFXLabelContainer"]
+layout_mode = 2
+texture = ExtResource("11_ybsk3")
+
+[node name="SFXSliderPista" type="TextureRect" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 358.5
+offset_right = 410.0
+offset_bottom = 374.5
+mouse_filter = 2
+texture = ExtResource("13_slider")
+expand_mode = 1
+
+[node name="SFXSlider" type="HSlider" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 350.0
+offset_right = 410.0
+offset_bottom = 383.0
+theme_override_icons/grabber = ExtResource("10_grabber")
+theme_override_icons/grabber_highlight = ExtResource("10_grabber")
+theme_override_icons/grabber_disabled = ExtResource("10_grabber")
+theme_override_icons/tick = ExtResource("10_grabber")
+max_value = 1.0
+step = 0.01
+value = 1.0
+
+[node name="SFXPorcentaje" type="Label" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 420.0
+offset_top = 348.0
+offset_right = 490.0
+offset_bottom = 385.0
+label_settings = ExtResource("11_label_settings")
+vertical_alignment = 1
+
+[node name="IdmaLabelContainer" type="VBoxContainer" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 175.0
+offset_top = 420.0
+offset_right = 425.0
+offset_bottom = 470.0
+alignment = 1
+
+[node name="IdmaTopLine" type="TextureRect" parent="PanelAjustes/IdmaLabelContainer"]
+layout_mode = 2
+texture = ExtResource("11_ybsk3")
+
+[node name="IdiomaRow" type="HBoxContainer" parent="PanelAjustes/IdmaLabelContainer"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="IdiomaLabel" type="Label" parent="PanelAjustes/IdmaLabelContainer/IdiomaRow"]
+layout_mode = 2
+size_flags_horizontal = 0
+horizontal_alignment = 1
+
+[node name="IdiomaBoton" type="TextureButton" parent="PanelAjustes/IdmaLabelContainer/IdiomaRow"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+texture_normal = ExtResource("12_flecha_idioma")
+texture_pressed = ExtResource("12_flecha_idioma")
+texture_hover = ExtResource("12_flecha_idioma")
+ignore_texture_size = true
+stretch_mode = 5
+
+[node name="IdmaTopBottom" type="TextureRect" parent="PanelAjustes/IdmaLabelContainer"]
+layout_mode = 2
+texture = ExtResource("11_ybsk3")
+
+[node name="IdiomaPopup" type="PopupMenu" parent="PanelAjustes"]
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

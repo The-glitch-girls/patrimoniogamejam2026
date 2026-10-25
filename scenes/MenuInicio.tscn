@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cbtq1xaqc2wx6"]
+[gd_scene load_steps=11 format=3 uid="uid://cbtq1xaqc2wx6"]
 
 [ext_resource type="Script" uid="uid://ehqvx8843itb" path="res://scripts/menu_inicio.gd" id="1_menu"]
 [ext_resource type="Texture2D" uid="uid://cpq5wkxq7spr4" path="res://assets/menu_principal.png" id="2_uj8md"]
@@ -8,23 +8,10 @@
 [ext_resource type="PackedScene" uid="uid://xnnaq0yup0e6" path="res://scenes/componentes/MenuBoton.tscn" id="8_cmsus"]
 [ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="8_uj8md"]
 [ext_resource type="Texture2D" uid="uid://d2p1n7liqm74e" path="res://assets/icons/volver.svg" id="8_volver"]
-[ext_resource type="Texture2D" uid="uid://bq552avp1fw2n" path="res://assets/ui/ajustes/engranaje.png" id="9_cmsus"]
-[ext_resource type="Texture2D" uid="uid://dur61p2toe3f7" path="res://assets/ui/ajustes/bg.png" id="9_sq455"]
-[ext_resource type="Texture2D" uid="uid://kfujc5dh1o6j" path="res://assets/ui/ajustes/chev_abrir.png" id="10_7jvuj"]
-[ext_resource type="FontFile" uid="uid://cw0xdhv08d5pt" path="res://assets/fonts/roches/RochesdemoRegular-WpxjV.ttf" id="10_linar"]
-[ext_resource type="Script" uid="uid://jm6ymp2kiyuc" path="res://scripts/componentes/engranaje.gd" id="11_sq455"]
-[ext_resource type="Texture2D" uid="uid://cr3mtagqaqu4d" path="res://assets/ui/ajustes/chev_cerrar.png" id="12_e7hxj"]
-[ext_resource type="Texture2D" uid="uid://b5hoibkrtebxd" path="res://assets/ui/ajustes/border.png" id="12_o7k2b"]
-[ext_resource type="Texture2D" uid="uid://omol6tt7xq41" path="res://assets/ui/ajustes/panel.png" id="13_o7k2b"]
+[ext_resource type="PackedScene" uid="uid://qatbsc37daou" path="res://scenes/componentes/OverlayAjustes.tscn" id="9_ajustes"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_cmsus"]
 font = ExtResource("8_uj8md")
-
-[sub_resource type="LabelSettings" id="LabelSettings_ufbjw"]
-font = ExtResource("10_linar")
-font_size = 78
-font_color = Color(0.823529, 0.376471, 1, 1)
-outline_color = Color(0.823529, 0.376471, 1, 1)
 
 [node name="MenuInicio" type="Control"]
 layout_mode = 3
@@ -166,162 +153,5 @@ grow_vertical = 0
 text = "v 1"
 label_settings = SubResource("LabelSettings_cmsus")
 
-[node name="OverlayAjustes" type="Control" parent="."]
-visible = false
+[node name="OverlayAjustes" parent="." instance=ExtResource("9_ajustes")]
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="FondoAjustes" type="TextureRect" parent="OverlayAjustes"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("9_sq455")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Engranaje" type="TextureRect" parent="OverlayAjustes"]
-layout_mode = 1
-offset_left = -61.0
-offset_top = -225.0
-offset_right = 1341.0
-offset_bottom = 1187.0
-scale = Vector2(0.65, 0.65)
-pivot_offset = Vector2(701, 771)
-texture = ExtResource("9_cmsus")
-script = ExtResource("11_sq455")
-
-[node name="BordeAjustes" type="TextureRect" parent="OverlayAjustes"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 30.0
-offset_top = 30.0
-offset_right = -30.0
-offset_bottom = -30.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("12_o7k2b")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="Oscurecer" type="ColorRect" parent="OverlayAjustes"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.286275, 0.215686, 0.513726, 0.168627)
-
-[node name="PanelVisual" type="TextureRect" parent="OverlayAjustes"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -214.8
-offset_top = -124.6
-offset_right = 501.2
-offset_bottom = 527.4
-grow_horizontal = 2
-grow_vertical = 2
-scale = Vector2(0.6, 0.6)
-texture = ExtResource("13_o7k2b")
-stretch_mode = 5
-
-[node name="PanelAjustes" type="Panel" parent="OverlayAjustes"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -232.0
-offset_top = -230.0
-offset_right = 228.0
-offset_bottom = 250.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="OverlayAjustes/PanelAjustes"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -175.0
-offset_top = 8.0
-offset_right = 177.0
-offset_bottom = 89.0
-grow_horizontal = 2
-
-[node name="ChevAbrir" type="TextureRect" parent="OverlayAjustes/PanelAjustes/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
-texture = ExtResource("10_7jvuj")
-stretch_mode = 4
-
-[node name="Titulo" type="Label" parent="OverlayAjustes/PanelAjustes/HBoxContainer"]
-layout_mode = 2
-text = "AJUSTES"
-label_settings = SubResource("LabelSettings_ufbjw")
-horizontal_alignment = 1
-
-[node name="ChevCerrar" type="TextureRect" parent="OverlayAjustes/PanelAjustes/HBoxContainer"]
-layout_mode = 2
-texture = ExtResource("12_e7hxj")
-
-[node name="MusicaLabel" type="Label" parent="OverlayAjustes/PanelAjustes"]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 178.0
-offset_right = 424.0
-offset_bottom = 202.0
-text = "Musica"
-
-[node name="MusicaSlider" type="HSlider" parent="OverlayAjustes/PanelAjustes"]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 206.0
-offset_right = 424.0
-offset_bottom = 230.0
-max_value = 1.0
-step = 0.01
-value = 0.8
-
-[node name="SFXLabel" type="Label" parent="OverlayAjustes/PanelAjustes"]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 242.0
-offset_right = 424.0
-offset_bottom = 266.0
-text = "Efectos"
-
-[node name="SFXSlider" type="HSlider" parent="OverlayAjustes/PanelAjustes"]
-layout_mode = 0
-offset_left = 36.0
-offset_top = 270.0
-offset_right = 424.0
-offset_bottom = 294.0
-max_value = 1.0
-step = 0.01
-value = 1.0
-
-[node name="Volver" type="Control" parent="OverlayAjustes/PanelAjustes"]
-anchors_preset = 0
-offset_left = 186.0
-offset_top = 348.0
-offset_right = 274.0
-offset_bottom = 436.0
-script = ExtResource("3_circulo")
-color_fondo = Color(0.62, 0.24, 0.36, 1)
-icono = ExtResource("8_volver")

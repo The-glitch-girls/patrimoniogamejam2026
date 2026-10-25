@@ -21,6 +21,7 @@ func _ready() -> void:
 	theme = Theme.new()
 	_tipografia()
 	_conectar()
+	_actualizar_textos("")
 	_set_version()
 	_mostrar_inicio()
 	ResourceLoader.load_threaded_request("res://resources/cavillaca.tres")
@@ -49,10 +50,11 @@ func _tipografia() -> void:
 	$PanelCreditos/Lista.add_theme_font_size_override("font_size", 22)
 	$PanelCreditos/Lista.add_theme_color_override("font_color", CREMA)
 	$PanelCreditos/Lista.text = "\n".join(CREDITS)
+	$PanelCreditos/Titulo.text = Traducciones.obtener("credits")
 	# Panel Ajustes
 	for label in [
-		$OverlayAjustes/PanelAjustes/MusicaLabel,
-		$OverlayAjustes/PanelAjustes/SFXLabel,
+		$OverlayAjustes/PanelAjustes/MSXLabelContainer/MusicaLabel,
+		$OverlayAjustes/PanelAjustes/SFXLabelContainer/SFXLabel,
 	]:
 		label.add_theme_font_override("font", FUENTE)
 		label.add_theme_font_size_override("font_size", 16)
@@ -81,25 +83,32 @@ func _conectar() -> void:
 	$Fila/Ajustes.pressed.connect(_abrir_ajustes)
 	$Fila/Creditos.pressed.connect(_abrir_creditos)
 	$Fila/Salir.pressed.connect(_salir)
-	$OverlayAjustes/PanelAjustes/Volver.pressed.connect(_mostrar_inicio)
+	$OverlayAjustes.connect("cerrar", Callable(self, "_mostrar_inicio"))
 	$PanelCreditos/Volver.pressed.connect(_mostrar_inicio)
-	$OverlayAjustes/PanelAjustes/MusicaSlider.value_changed.connect(Ajustes.set_volumen_musica)
-	$OverlayAjustes/PanelAjustes/SFXSlider.value_changed.connect(Ajustes.set_volumen_efectos)
-	$OverlayAjustes/PanelAjustes/MusicaSlider.value = Ajustes.volumen_musica
-	$OverlayAjustes/PanelAjustes/SFXSlider.value = Ajustes.volumen_efectos
+	Traducciones.idioma_cambiado.connect(_actualizar_textos)
 
 func _mostrar_inicio() -> void:
 	$Fila.visible = true
+	$Titulo.visible = true
+	$Version.visible = true
 	$OverlayAjustes.visible = false
 	$PanelCreditos.visible = false
 
+
+func _actualizar_textos(_idioma: String) -> void:
+	$PanelCreditos/Titulo.text = Traducciones.obtener("credits")
+
 func _abrir_ajustes() -> void:
 	$Fila.visible = false
+	$Titulo.visible = false
+	$Version.visible = false
 	$OverlayAjustes.visible = true
 	$PanelCreditos.visible = false
 
 func _abrir_creditos() -> void:
 	$Fila.visible = false
+	$Titulo.visible = false
+	$Version.visible = false
 	$OverlayAjustes.visible = false
 	$PanelCreditos.visible = true
 	$PanelCreditos/Volver.enfocar()

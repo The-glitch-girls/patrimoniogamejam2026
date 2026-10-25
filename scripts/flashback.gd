@@ -119,7 +119,7 @@ func _estilar() -> void:
 	$Continuar.add_theme_font_size_override("font_size", 18)
 	$Continuar.add_theme_color_override("font_color", CREMA)
 	$Continuar.add_theme_color_override("font_hover_color", CREMA)
-	$Continuar.text = "Continuar"
+	$Continuar.text = Traducciones.obtener("continue")
 	$Continuar.anchor_left = 1.0
 	$Continuar.anchor_right = 1.0
 	$Continuar.anchor_top = 1.0

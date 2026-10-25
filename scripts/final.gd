@@ -10,12 +10,12 @@ const MORADO := Color(0.22, 0.2, 0.42, 1)
 
 const TEXTOS := {
 	"mar": {
-		"titulo": "El mar",
-		"texto": "Cavillaca se sumerge junto al bebé.",
+		"titulo": "final_sea_title",
+		"texto": "final_sea_text",
 	},
 	"cuniraya": {
-		"titulo": "Cuniraya",
-		"texto": "La energía se apagó. Él la alcanzó.",
+		"titulo": "final_cuniraya_title",
+		"texto": "final_cuniraya_text",
 	},
 }
 
@@ -70,7 +70,7 @@ func _armar() -> void:
 	add_child(degradado)
 
 	var titulo := Label.new()
-	titulo.text = dato.titulo
+	titulo.text = Traducciones.obtener(dato.titulo)
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	titulo.set_anchors_preset(Control.PRESET_CENTER)
@@ -86,7 +86,7 @@ func _armar() -> void:
 	add_child(titulo)
 
 	var texto := Label.new()
-	texto.text = dato.texto
+	texto.text = Traducciones.obtener(dato.texto)
 	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	texto.set_anchors_preset(Control.PRESET_CENTER)
 	texto.offset_left = -320
@@ -111,7 +111,7 @@ func _armar() -> void:
 	add_child(boton)
 
 	var leyenda := Label.new()
-	leyenda.text = "Volver a jugar"
+	leyenda.text = Traducciones.obtener("play_again")
 	leyenda.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	leyenda.set_anchors_preset(Control.PRESET_CENTER)
 	leyenda.offset_left = -140

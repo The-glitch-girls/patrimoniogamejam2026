@@ -140,7 +140,7 @@ func _estilar_prompt() -> void:
 	
 	$PromptFondo.add_theme_stylebox_override("panel", _circulo(VERDE, 56))
 	_texto($PromptLabel, 22)
-	$PromptLabel.text = Global.prompt_interaccion
+	$PromptLabel.text = Traducciones.obtener_frase(Global.prompt_interaccion)
 
 
 func _crear_prompt_icono() -> void:
@@ -372,7 +372,7 @@ func _poner_ajustes() -> void:
 	add_child(panel_ajustes)
 
 	var titulo := Label.new()
-	titulo.text = "Sonido"
+	titulo.text = Traducciones.obtener("sound")
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	titulo.position = Vector2(24, 20)
 	titulo.size = Vector2(392, 36)
@@ -380,15 +380,15 @@ func _poner_ajustes() -> void:
 	panel_ajustes.add_child(titulo)
 
 	var filas := [
-		["Master", Ajustes.volumen_master, Ajustes.set_volumen_master],
-		["Musica", Ajustes.volumen_musica, Ajustes.set_volumen_musica],
-		["Efectos", Ajustes.volumen_efectos, Ajustes.set_volumen_efectos],
-		["Ambiente", Ajustes.volumen_ambiente, Ajustes.set_volumen_ambiente],
+		["master", Ajustes.volumen_master, Ajustes.set_volumen_master],
+		["music", Ajustes.volumen_musica, Ajustes.set_volumen_musica],
+		["sfx", Ajustes.volumen_efectos, Ajustes.set_volumen_efectos],
+		["ambience", Ajustes.volumen_ambiente, Ajustes.set_volumen_ambiente],
 	]
 	var y := 72.0
 	for fila in filas:
 		var etiqueta := Label.new()
-		etiqueta.text = fila[0]
+		etiqueta.text = Traducciones.obtener(str(fila[0]))
 		etiqueta.position = Vector2(32, y)
 		etiqueta.size = Vector2(376, 24)
 		_texto(etiqueta, 16)
@@ -475,10 +475,11 @@ func _process(delta):
 		if prompt_texto != Global.prompt_interaccion:
 			var es_ataque := Global.prompt_interaccion.to_lower().contains("atacar")
 			$PromptFondo.add_theme_stylebox_override("panel", _circulo(BORDO if es_ataque else VERDE, 56))
-			$PromptLabel.text = Global.prompt_interaccion
+			$PromptLabel.text = Traducciones.obtener_frase(Global.prompt_interaccion)
 		prompt_texto = Global.prompt_interaccion
 	if prompt_idioma != Global.idioma_actual:
 		prompt_idioma = Global.idioma_actual
+		prompt_texto = ""
 	_actualizar_prompt_visual()
 
 	var destino_alpha := 1.0 if Global.prompt_interaccion != "" else 0.0
@@ -494,7 +495,7 @@ func _process(delta):
 		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""
-	$AvisoLabel.text = Global.aviso_combate
+	$AvisoLabel.text = Traducciones.obtener_frase(Global.aviso_combate)
 	$AvisoFondo.visible = hay_aviso
 	$AvisoLabel.visible = hay_aviso
 	if hay_aviso:
@@ -573,7 +574,7 @@ func _poner_guia_cueva() -> void:
 
 	guia_cueva.configurar(
 		_tarjeta(NARANJA_CUEVA, 22),
-		"Cueva",
+		Traducciones.obtener("cave"),
 		Vector2(150, 44),
 		FUENTE,
 		CREMA
