@@ -8,7 +8,7 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const ESTILO_ETIQUETA_AJUSTES: LabelSettings = preload("res://resources/ajustes_textos.tres")
 const MORADO := Color("#493783")
 const LILA := Color("#C5A3E8")
-const TITULOS_AJUSTES := {
+const TITULOS_CREDITOS := {
 	"es": preload("res://assets/ui/ajustes/titulo_ES.png"),
 	"en": preload("res://assets/ui/ajustes/titulo_EN.png"),
 	"fr": preload("res://assets/ui/ajustes/titulo_FR.png"),
@@ -106,7 +106,7 @@ func _actualizar_textos(_idioma: String) -> void:
 	$PanelAjustes/SFXLabelContainer/SFXLabel.text = Traducciones.obtener("sfx")
 	$PanelAjustes/Cerrar.tooltip_text = Traducciones.obtener("close")
 	$PanelAjustes/ReiniciarLabel.text = Traducciones.obtener("restart")
-	titulo_textura.texture = TITULOS_AJUSTES.get(Global.idioma_actual, TITULOS_AJUSTES["es"])
+	titulo_textura.texture = TITULOS_CREDITOS.get(Global.idioma_actual, TITULOS_CREDITOS["es"])
 	call_deferred("_centrar_titulo")
 
 

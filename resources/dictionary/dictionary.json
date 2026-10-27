@@ -19,6 +19,81 @@
 	"en": "Credits",
 	"fr": "Crédits"
   },
+  "special_thanks": {
+	"es": "Agradecimientos\nespeciales",
+	"en": "Special\nThanks",
+	"fr": "Remerciements\nspéciaux"
+  },
+  "credits_scroll_hint": {
+	"es": "↓ Desliza",
+	"en": "↓ Scroll",
+	"fr": "↓ Défiler"
+  },
+  "credit_ariadna_mestanza_name": {
+	"es": "Ariadna Mestanza",
+	"en": "Ariadna Mestanza",
+	"fr": "Ariadna Mestanza"
+  },
+  "credit_andres_porras_name": {
+	"es": "Andrés Porras",
+	"en": "Andrés Porras",
+	"fr": "Andrés Porras"
+  },
+  "credit_selene_negron_name": {
+	"es": "Selene Negrón",
+	"en": "Selene Negrón",
+	"fr": "Selene Negrón"
+  },
+  "credit_malu_munayco_name": {
+	"es": "Malu Munayco",
+	"en": "Malu Munayco",
+	"fr": "Malu Munayco"
+  },
+  "credit_melissa_huerta_name": {
+	"es": "Melissa Huerta",
+	"en": "Melissa Huerta",
+	"fr": "Melissa Huerta"
+  },
+  "credit_shiara_arauzo_name": {
+	"es": "Shiara Arauzo",
+	"en": "Shiara Arauzo",
+	"fr": "Shiara Arauzo"
+  },
+  "credit_adrian_gutierrez_name": {
+	"es": "Adrián Gutiérrez",
+	"en": "Adrián Gutiérrez",
+	"fr": "Adrián Gutiérrez"
+  },
+  "credit_sumiko_de_los_santos_name": {
+	"es": "Sumiko De Los Santos",
+	"en": "Sumiko De Los Santos",
+	"fr": "Sumiko De Los Santos"
+  },
+  "credit_role_art": {
+	"es": "Arte",
+	"en": "Art",
+	"fr": "Art"
+  },
+  "credit_role_game_developer": {
+	"es": "Desarrollo de videojuegos",
+	"en": "Game Developer",
+	"fr": "Développeur de jeux vidéo"
+	},
+	"credit_role_music_composition": {
+	"es": "Composición musical",
+	"en": "Music Composition",
+	"fr": "Composition musicale"
+	},
+  "credit_role_music": {
+	"es": "Música",
+	"en": "Music",
+	"fr": "Musique"
+  },
+  "credit_role_ui_assets": {
+	"es": "Recursos de interfaz",
+	"en": "UI Assets",
+	"fr": "Ressources d’interface"
+  },
   "back": {
 	"es": "Volver",
 	"en": "Back",

@@ -80,6 +80,15 @@ func _al_enfocar() -> void:
 
 func _al_desenfocar() -> void:
 	_actualizar_textura()
+	_set_color_normal()
+
+
+func restaurar_estado_normal() -> void:
+	_mouse_dentro = false
+	_presionando = false
+	boton.release_focus()
+	_set_color_normal()
+	_actualizar_textura()
 	
 func _actualizar_textura() -> void:
 	if _presionando:

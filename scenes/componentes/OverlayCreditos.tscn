@@ -1,0 +1,267 @@
+[gd_scene load_steps=14 format=3 uid="uid://cf4jtq1hkqvrj"]
+
+[ext_resource type="Script" uid="uid://btjoiqf00524o" path="res://scripts/componentes/overlay_creditos.gd" id="1_int3w"]
+[ext_resource type="Texture2D" uid="uid://dur61p2toe3f7" path="res://assets/ui/ajustes/bg.png" id="2_sq5i8"]
+[ext_resource type="Texture2D" uid="uid://bq552avp1fw2n" path="res://assets/ui/ajustes/engranaje.png" id="3_4qdor"]
+[ext_resource type="Script" uid="uid://jm6ymp2kiyuc" path="res://scripts/componentes/engranaje.gd" id="4_h32bg"]
+[ext_resource type="Texture2D" uid="uid://b5hoibkrtebxd" path="res://assets/ui/ajustes/border.png" id="5_fasjc"]
+[ext_resource type="Texture2D" uid="uid://bb1lq87p50wm6" path="res://assets/ui/creditos/trapecio_creditos.png" id="6_ughaw"]
+[ext_resource type="Texture2D" uid="uid://c7kbvsgkb8nlg" path="res://assets/ui/ajustes/x_cerrar.png" id="7_p8q0b"]
+[ext_resource type="Texture2D" uid="uid://bhmp283lbn6cj" path="res://assets/ui/ajustes/x_cerrar_pressed.png" id="8_b3y4o"]
+[ext_resource type="Texture2D" uid="uid://kfujc5dh1o6j" path="res://assets/ui/ajustes/chev_abrir.png" id="9_r1g35"]
+[ext_resource type="Texture2D" uid="uid://botn6yy0rxwr8" path="res://assets/ui/creditos/titulo_ES.png" id="10_7fu84"]
+[ext_resource type="Texture2D" uid="uid://cr3mtagqaqu4d" path="res://assets/ui/ajustes/chev_cerrar.png" id="11_jcu33"]
+[ext_resource type="LabelSettings" uid="uid://cnenesgh8eeof" path="res://resources/ajustes_textos.tres" id="13_283cm"]
+[ext_resource type="Texture2D" uid="uid://dhexvg303u6fk" path="res://assets/ui/creditos/trapecio_agradecimientos.png" id="13_g1bkq"]
+
+[node name="OverlayCreditos" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+script = ExtResource("1_int3w")
+
+[node name="Fondo" type="TextureRect" parent="."]
+self_modulate = Color(1, 1, 1, 0.705882)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_sq5i8")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Engranaje" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = -61.0
+offset_top = -225.0
+offset_right = 1341.0
+offset_bottom = 1187.0
+scale = Vector2(0.65, 0.65)
+pivot_offset = Vector2(701, 771)
+mouse_filter = 2
+texture = ExtResource("3_4qdor")
+script = ExtResource("4_h32bg")
+
+[node name="Borde" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 30.0
+offset_right = -30.0
+offset_bottom = -30.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("5_fasjc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Oscurecer" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.286275, 0.215686, 0.513726, 0.168627)
+
+[node name="PanelVisual" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = -182.0
+offset_right = 501.0
+offset_bottom = 470.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.6, 0.6)
+mouse_filter = 2
+texture = ExtResource("6_ughaw")
+
+[node name="PanelCreditos" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -300.0
+offset_right = 300.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.666667, 0.666667)
+pivot_offset = Vector2(300, 300)
+mouse_filter = 2
+
+[node name="Cerrar" type="TextureButton" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 576.0
+offset_right = 640.0
+offset_bottom = 64.0
+focus_mode = 0
+texture_normal = ExtResource("7_p8q0b")
+texture_pressed = ExtResource("8_b3y4o")
+texture_hover = ExtResource("8_b3y4o")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelCreditos"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.5
+offset_top = -418.5
+offset_right = 257.5
+offset_bottom = -321.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ChevAbrir" type="TextureRect" parent="PanelCreditos/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("9_r1g35")
+stretch_mode = 4
+
+[node name="Titulo" type="TextureRect" parent="PanelCreditos/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("10_7fu84")
+stretch_mode = 2
+
+[node name="ChevCerrar" type="TextureRect" parent="PanelCreditos/HBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+mouse_filter = 2
+texture = ExtResource("11_jcu33")
+stretch_mode = 4
+
+[node name="Rol1Label" type="Label" parent="PanelCreditos"]
+layout_mode = 2
+offset_left = 110.0
+offset_top = 92.0
+offset_right = 490.0
+offset_bottom = 126.0
+text = "Arte"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rol2Label" type="Label" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 167.0
+offset_right = 490.0
+offset_bottom = 201.0
+text = "Arte"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rol3Label" type="Label" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 242.0
+offset_right = 490.0
+offset_bottom = 276.0
+text = "Arte"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rol4Label" type="Label" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 111.0
+offset_top = 317.0
+offset_right = 491.0
+offset_bottom = 351.0
+text = "Desarrollo de videojuegos"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rol5Label" type="Label" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 110.0
+offset_top = 392.0
+offset_right = 490.0
+offset_bottom = 426.0
+text = "Desarrollo de videojuegos"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rol6Label" type="Label" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 109.5
+offset_top = 467.0
+offset_right = 489.5
+offset_bottom = 501.0
+text = "Desarrollo de videojuegos"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Rol7Label" type="Label" parent="PanelCreditos"]
+layout_mode = 0
+offset_left = 109.5
+offset_top = 542.0
+offset_right = 489.5
+offset_bottom = 576.0
+text = "Composición musical"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PanelVisual2" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = 532.0
+offset_top = 650.0
+offset_right = 859.0
+offset_bottom = 888.0
+scale = Vector2(0.66, 0.66)
+mouse_filter = 2
+texture = ExtResource("13_g1bkq")
+
+[node name="Rol8Label" type="Label" parent="PanelVisual2"]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 145.0
+offset_right = 313.0
+offset_bottom = 179.0
+text = "UI Assets"
+label_settings = ExtResource("13_283cm")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2

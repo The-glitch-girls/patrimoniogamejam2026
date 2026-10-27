@@ -84,7 +84,6 @@ func _estilar_panel():
 		$PanelEstado/PresenciaLabel,
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
-		$PanelEstado/RecuerdosLabel,
 	]:
 		nodo.visible = false
 	if has_node("PresenciaLabel"):

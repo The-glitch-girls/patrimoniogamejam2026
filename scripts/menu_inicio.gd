@@ -1,18 +1,7 @@
 extends Control
 
-const CREDITS := [
-	"Melissa Huerta",
-	"Shiara",
-	"Malu",
-	"Ariadna",
-	"Selene",
-	"Miko",
-]
-
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
-const MORADO := Color(0.22, 0.2, 0.42, 1)
 const CREMA := Color(0.99, 0.96, 0.9, 1)
-const LILA := Color(0.72, 0.68, 0.95, 1)
 @onready var version_label := $Version
 const ESCENA_MAIN := "res://scenes/Main.tscn"
 var iniciando_juego := false
@@ -21,7 +10,6 @@ func _ready() -> void:
 	theme = Theme.new()
 	_tipografia()
 	_conectar()
-	_actualizar_textos("")
 	_set_version()
 	_mostrar_inicio()
 	ResourceLoader.load_threaded_request("res://resources/cavillaca.tres")
@@ -43,14 +31,6 @@ func _capturar() -> void:
 
 
 func _tipografia() -> void:
-	$PanelCreditos/Titulo.add_theme_font_override("font", FUENTE)
-	$PanelCreditos/Titulo.add_theme_font_size_override("font_size", 28)
-	$PanelCreditos/Titulo.add_theme_color_override("font_color", CREMA)
-	$PanelCreditos/Lista.add_theme_font_override("font", FUENTE)
-	$PanelCreditos/Lista.add_theme_font_size_override("font_size", 22)
-	$PanelCreditos/Lista.add_theme_color_override("font_color", CREMA)
-	$PanelCreditos/Lista.text = "\n".join(CREDITS)
-	$PanelCreditos/Titulo.text = Traducciones.obtener("credits")
 	# Panel Ajustes
 	for label in [
 		$OverlayAjustes/PanelAjustes/MSXLabelContainer/MusicaLabel,
@@ -59,24 +39,6 @@ func _tipografia() -> void:
 		label.add_theme_font_override("font", FUENTE)
 		label.add_theme_font_size_override("font_size", 16)
 		label.add_theme_color_override("font_color", CREMA)
-	
-	_tarjeta($PanelCreditos)
-
-
-func _tarjeta(panel: Panel) -> void:
-	var caja := StyleBoxFlat.new()
-	caja.bg_color = MORADO
-	caja.set_corner_radius_all(28)
-	caja.set_border_width_all(6)
-	caja.border_color = Color.WHITE
-	caja.shadow_color = Color(0, 0, 0, 0.28)
-	caja.shadow_size = 12
-	caja.shadow_offset = Vector2(0, 6)
-	caja.content_margin_left = 28
-	caja.content_margin_top = 24
-	caja.content_margin_right = 28
-	caja.content_margin_bottom = 24
-	panel.add_theme_stylebox_override("panel", caja)
 
 func _conectar() -> void:
 	$Fila/Jugar.pressed.connect(_jugar)
@@ -84,34 +46,30 @@ func _conectar() -> void:
 	$Fila/Creditos.pressed.connect(_abrir_creditos)
 	$Fila/Salir.pressed.connect(_salir)
 	$OverlayAjustes.connect("cerrar", Callable(self, "_mostrar_inicio"))
-	$PanelCreditos/Volver.pressed.connect(_mostrar_inicio)
-	Traducciones.idioma_cambiado.connect(_actualizar_textos)
+	$OverlayCreditos.cerrar.connect(_mostrar_inicio)
 
 func _mostrar_inicio() -> void:
+	for nombre_boton in ["Jugar", "Ajustes", "Creditos"]:
+		$Fila.get_node(nombre_boton).restaurar_estado_normal()
 	$Fila.visible = true
 	$Titulo.visible = true
 	$Version.visible = true
 	$OverlayAjustes.visible = false
-	$PanelCreditos.visible = false
-
-
-func _actualizar_textos(_idioma: String) -> void:
-	$PanelCreditos/Titulo.text = Traducciones.obtener("credits")
+	$OverlayCreditos.visible = false
 
 func _abrir_ajustes() -> void:
 	$Fila.visible = false
 	$Titulo.visible = false
 	$Version.visible = false
 	$OverlayAjustes.visible = true
-	$PanelCreditos.visible = false
+	$OverlayCreditos.visible = false
 
 func _abrir_creditos() -> void:
 	$Fila.visible = false
 	$Titulo.visible = false
 	$Version.visible = false
 	$OverlayAjustes.visible = false
-	$PanelCreditos.visible = true
-	$PanelCreditos/Volver.enfocar()
+	$OverlayCreditos.visible = true
 
 func _jugar() -> void:
 	if iniciando_juego:
