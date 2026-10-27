@@ -1,4 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://cqgtkxob80eht"]
+[gd_scene load_steps=3 format=3 uid="uid://cqgtkxob80eht"]
+
+[ext_resource type="SpriteFrames" uid="uid://yu8sdinxc6p2" path="res://resources/cavillaca.tres" id="1_werjt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_th60e"]
 size = Vector2(36, 20)
@@ -12,8 +14,11 @@ position = Vector2(0, 10)
 shape = SubResource("RectangleShape2D_th60e")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
-texture_filter = 1
+texture_filter = 4
 position = Vector2(0, -62)
+sprite_frames = ExtResource("1_werjt")
+animation = &"lado_bebe"
+frame_progress = 0.449417
 
 [node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
 position = Vector2(0, -160)

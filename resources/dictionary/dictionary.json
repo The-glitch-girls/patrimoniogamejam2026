@@ -19,6 +19,81 @@
 	"en": "Credits",
 	"fr": "Crédits"
   },
+  "special_thanks": {
+	"es": "Agradecimientos\nespeciales",
+	"en": "Special\nThanks",
+	"fr": "Remerciements\nspéciaux"
+  },
+  "credits_scroll_hint": {
+	"es": "↓ Desliza",
+	"en": "↓ Scroll",
+	"fr": "↓ Défiler"
+  },
+  "credit_ariadna_mestanza_name": {
+	"es": "Ariadna Mestanza",
+	"en": "Ariadna Mestanza",
+	"fr": "Ariadna Mestanza"
+  },
+  "credit_andres_porras_name": {
+	"es": "Andrés Porras",
+	"en": "Andrés Porras",
+	"fr": "Andrés Porras"
+  },
+  "credit_selene_negron_name": {
+	"es": "Selene Negrón",
+	"en": "Selene Negrón",
+	"fr": "Selene Negrón"
+  },
+  "credit_malu_munayco_name": {
+	"es": "Malu Munayco",
+	"en": "Malu Munayco",
+	"fr": "Malu Munayco"
+  },
+  "credit_melissa_huerta_name": {
+	"es": "Melissa Huerta",
+	"en": "Melissa Huerta",
+	"fr": "Melissa Huerta"
+  },
+  "credit_shiara_arauzo_name": {
+	"es": "Shiara Arauzo",
+	"en": "Shiara Arauzo",
+	"fr": "Shiara Arauzo"
+  },
+  "credit_adrian_gutierrez_name": {
+	"es": "Adrián Gutiérrez",
+	"en": "Adrián Gutiérrez",
+	"fr": "Adrián Gutiérrez"
+  },
+  "credit_sumiko_de_los_santos_name": {
+	"es": "Sumiko De Los Santos",
+	"en": "Sumiko De Los Santos",
+	"fr": "Sumiko De Los Santos"
+  },
+  "credit_role_art": {
+	"es": "Arte",
+	"en": "Art",
+	"fr": "Art"
+  },
+  "credit_role_game_developer": {
+	"es": "Desarrollo de videojuegos",
+	"en": "Game Developer",
+	"fr": "Développeur de jeux vidéo"
+	},
+	"credit_role_music_composition": {
+	"es": "Composición musical",
+	"en": "Music Composition",
+	"fr": "Composition musicale"
+	},
+  "credit_role_music": {
+	"es": "Música",
+	"en": "Music",
+	"fr": "Musique"
+  },
+  "credit_role_ui_assets": {
+	"es": "Recursos de interfaz",
+	"en": "UI Assets",
+	"fr": "Ressources d’interface"
+  },
   "back": {
 	"es": "Volver",
 	"en": "Back",
@@ -98,5 +173,39 @@
 	  "es": "El bebé gateó hacia él.\nCavillaca comprendió quién era su padre.",
 	  "en": "The baby crawled toward him.\nCavillaca understood who his father was.",
 	  "fr": "Le bébé rampa vers lui.\nCavillaca comprit qui était son père."
-	}
+	},
+	"language": {"es": "Idioma", "en": "Language", "fr": "Langue"},
+	"close": {"es": "Cerrar", "en": "Close", "fr": "Fermer"},
+	"continue": {"es": "Continuar", "en": "Continue", "fr": "Continuer"},
+	"sound": {"es": "Sonido", "en": "Sound", "fr": "Son"},
+	"master": {"es": "General", "en": "Master", "fr": "Principal"},
+	"ambience": {"es": "Ambiente", "en": "Ambience", "fr": "Ambiance"},
+	"cave": {"es": "Cueva", "en": "Cave", "fr": "Grotte"},
+	"final_sea_title": {"es": "El mar", "en": "The Sea", "fr": "La mer"},
+	"final_sea_text": {"es": "Cavillaca se sumerge junto al bebé.", "en": "Cavillaca dives into the sea with her baby.", "fr": "Cavillaca plonge dans la mer avec son bébé."},
+	"final_cuniraya_title": {"es": "Cuniraya", "en": "Cuniraya", "fr": "Cuniraya"},
+	"final_cuniraya_text": {"es": "La energía se apagó. Él la alcanzó.", "en": "Her strength faded. He caught up with her.", "fr": "Son énergie s'est épuisée. Il l'a rattrapée."},
+	"play_again": {"es": "Volver a jugar", "en": "Play again", "fr": "Rejouer"},
+	"victory": {"es": "Victoria", "en": "Victory", "fr": "Victoire"},
+	"prompt_talk_rest": {"es": "F Hablar  |  R Descansar", "en": "F Talk  |  R Rest", "fr": "F Parler  |  R Se reposer"},
+	"prompt_talk": {"es": "F Hablar", "en": "F Talk", "fr": "F Parler"},
+	"prompt_rest": {"es": "R  Descansar", "en": "R  Rest", "fr": "R  Se reposer"},
+	"prompt_talk_fox": {"es": "E  Hablar con zorro", "en": "E  Talk to fox", "fr": "E  Parler au renard"},
+	"prompt_leave_with_fox": {"es": "E  Dejar con zorro", "en": "E  Leave with fox", "fr": "E  Laisser avec le renard"},
+	"prompt_pickup_from_fox": {"es": "E  Recoger del zorro", "en": "E  Pick up from fox", "fr": "E  Reprendre au renard"},
+	"prompt_leave": {"es": "E  Dejar", "en": "E  Leave", "fr": "E  Déposer"},
+	"prompt_pickup": {"es": "E  Recoger", "en": "E  Pick up", "fr": "E  Ramasser"},
+	"prompt_attack": {"es": "E  Atacar", "en": "E  Attack", "fr": "E  Attaquer"},
+	"cave_need_memory": {"es": "Con un recuerdo, la cueva recarga tu energía", "en": "With a memory, the cave restores your energy", "fr": "Avec un souvenir, la grotte restaure votre énergie"},
+	"cave_approach": {"es": "Acércate a la entrada para descansar", "en": "Approach the entrance to rest", "fr": "Approchez de l'entrée pour vous reposer"},
+	"fox_no_rest_yet": {"es": "El zorro aún no te ofrece descanso", "en": "The fox cannot offer you rest yet", "fr": "Le renard ne peut pas encore vous offrir de repos"},
+	"fox_approach_rest": {"es": "Acércate al zorro para descansar", "en": "Approach the fox to rest", "fr": "Approchez du renard pour vous reposer"},
+	"energy_full": {"es": "Tu energía ya está completa", "en": "Your energy is already full", "fr": "Votre énergie est déjà au maximum"},
+	"resting_fox": {"es": "Descansando junto al zorro", "en": "Resting beside the fox", "fr": "Repos auprès du renard"},
+	"need_memory_2": {"es": "Necesitas el Recuerdo 2 para esto", "en": "You need Memory 2 for this", "fr": "Vous avez besoin du Souvenir 2 pour cela"},
+	"fox_not_near": {"es": "El zorro no está cerca", "en": "The fox is not nearby", "fr": "Le renard n'est pas à proximité"},
+	"not_carrying_baby": {"es": "No llevas al bebé", "en": "You are not carrying the baby", "fr": "Vous ne portez pas le bébé"},
+	"baby_left_with_fox": {"es": "Bebé dejado con el zorro", "en": "Baby left with the fox", "fr": "Bébé confié au renard"},
+	"baby_picked_up_from_fox": {"es": "Bebé recogido del zorro", "en": "Baby picked up from the fox", "fr": "Bébé repris au renard"},
+	"fox_observes_calmly": {"es": "El zorro te observa con calma", "en": "The fox watches you calmly", "fr": "Le renard vous observe calmement"}
 }

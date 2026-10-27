@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 const LIMITE_ARRIBA_JUGADOR := 180.0
 const LIMITE_ABAJO_JUGADOR := 180.0
-const VELOCIDAD_CAMINAR := 250.0
-const VELOCIDAD_CORRER := 375.0
+const VELOCIDAD_CAMINAR := 200.0
+const VELOCIDAD_CORRER := 300.0
 const VELOCIDAD_CON_BEBE := 170.0
 const VELOCIDAD_SIN_ENERGIA := 100.0
 const DISTANCIA_RECOGER := 56.0
@@ -41,7 +41,7 @@ var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
 
 func _ready():
-	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360 )
+	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360)
 	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
@@ -338,8 +338,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		var es_animacion_lateral := anim_bebe in [&"lado_bebe", &"walk_lado", &"idle_lado"]
 		$Sprite.flip_h = es_animacion_lateral and facing == Vector2.LEFT
 
-		if $Sprite.animation != anim_bebe:
-			$Sprite.play(anim_bebe)
+		_cambiar_animacion(anim_bebe, esta_caminando)
 
 		if esta_caminando:
 			if not $Sprite.is_playing():
@@ -372,8 +371,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		if not $Sprite.sprite_frames.has_animation(anim_vertical):
 			anim_vertical = &"walk_lado" if esta_caminando else &"idle_lado"
 		$Sprite.flip_h = anim_vertical in [&"walk_lado", &"idle_lado"] and facing.x < 0.0
-		if $Sprite.animation != anim_vertical:
-			$Sprite.play(anim_vertical)
+		_cambiar_animacion(anim_vertical, esta_caminando)
 		if esta_caminando:
 			if not $Sprite.is_playing():
 				$Sprite.play()
@@ -386,8 +384,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		var anim_lado := "walk_lado" if esta_caminando else "idle_lado"
 		$Sprite.flip_h = facing == Vector2.LEFT
 		$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
-		if $Sprite.animation != anim_lado:
-			$Sprite.play(anim_lado)
+		_cambiar_animacion(StringName(anim_lado), esta_caminando)
 
 	if esta_caminando:
 		paso_acum += delta
@@ -399,6 +396,30 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 			_sonar_paso()
 	else:
 		paso_acum = 0.0
+
+
+func _cambiar_animacion(nueva: StringName, conservar_fase: bool) -> void:
+	if $Sprite.animation == nueva:
+		return
+
+	var fase: float = 0.0
+	var frames_actuales: int = $Sprite.sprite_frames.get_frame_count($Sprite.animation)
+	if conservar_fase and frames_actuales > 0:
+		fase = (float($Sprite.frame) + $Sprite.frame_progress) / frames_actuales
+
+	$Sprite.play(nueva)
+	if not conservar_fase:
+		return
+
+	var frames_nuevos: int = $Sprite.sprite_frames.get_frame_count(nueva)
+	if frames_nuevos <= 0:
+		return
+	var posicion: float = fase * float(frames_nuevos)
+	var frame_nuevo: int = mini(floori(posicion), frames_nuevos - 1)
+	$Sprite.frame = frame_nuevo
+	$Sprite.frame_progress = posicion - frame_nuevo
+
+
 func _actualizar_camara(_delta: float):
 	cam.offset = Vector2.ZERO
 
@@ -488,10 +509,11 @@ func _crear_frames_sheet(
 	alto_personalizado: float = -1.0
 ) -> Array[Texture2D]:
 	var frames: Array[Texture2D] = []
-	var ancho_frame: float = float(sheet.get_width()) / cantidad
+	var paso_frame := floori(float(sheet.get_width()) / cantidad)
+	var ancho_frame := paso_frame
 
 	if ancho_personalizado > 0:
-		ancho_frame = ancho_personalizado
+		ancho_frame = floori(ancho_personalizado)
 	
 	var alto_frame := sheet.get_height() - y_inicio
 	if alto_personalizado > 0:
@@ -501,7 +523,7 @@ func _crear_frames_sheet(
 		var atlas := AtlasTexture.new()
 		atlas.atlas = sheet
 		atlas.region = Rect2(
-			i * ancho_frame,
+			i * paso_frame,
 			0,
 			ancho_frame,
 			alto_frame

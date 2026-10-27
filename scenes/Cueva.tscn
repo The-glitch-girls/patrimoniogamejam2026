@@ -1,6 +1,7 @@
-[gd_scene load_steps=9 format=3 uid="uid://bu6gamljsyvm5"]
+[gd_scene load_steps=10 format=3 uid="uid://bu6gamljsyvm5"]
 
 [ext_resource type="Script" uid="uid://x8sx1wnmpirj" path="res://scripts/cueva.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cdg60wbjv8wuo" path="res://assets/tiles/arbol.png" id="2_enwi8"]
 [ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="2_tileset"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_entrada"]
@@ -24,6 +25,15 @@ size = Vector2(128, 400)
 [node name="Cueva" type="Area2D"]
 z_index = -1
 script = ExtResource("1_script")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_enwi8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -42)

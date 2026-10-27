@@ -7,6 +7,7 @@
 [ext_resource type="LabelSettings" uid="uid://bm1tqv5ct8jes" path="res://resources/recuerdo_texto.tres" id="3_xqk6w"]
 
 [node name="Control" type="Control"]
+mouse_filter = 2
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,6 +17,7 @@ grow_vertical = 2
 script = ExtResource("1_ubat7")
 
 [node name="AssetRecuerdo" type="TextureRect" parent="."]
+mouse_filter = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -27,6 +29,7 @@ expand_mode = 1
 stretch_mode = 6
 
 [node name="ColorRect" type="ColorRect" parent="."]
+mouse_filter = 2
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -36,6 +39,7 @@ grow_vertical = 2
 color = Color(1, 0.819608, 0.741176, 0.498039)
 
 [node name="Titulo" type="Label" parent="."]
+mouse_filter = 2
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -49,6 +53,7 @@ text = "El que observaba"
 horizontal_alignment = 1
 
 [node name="Texto" type="Label" parent="."]
+mouse_filter = 2
 custom_minimum_size = Vector2(20, 0)
 layout_mode = 1
 anchors_preset = 2

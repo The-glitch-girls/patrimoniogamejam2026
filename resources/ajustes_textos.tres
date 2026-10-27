@@ -1,0 +1,8 @@
+[gd_resource type="LabelSettings" load_steps=2 format=3 uid="uid://cnenesgh8eeof"]
+
+[ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="1_jj75r"]
+
+[resource]
+font = ExtResource("1_jj75r")
+font_size = 26
+font_color = Color(0.286275, 0.215686, 0.513726, 1)

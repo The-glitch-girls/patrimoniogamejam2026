@@ -5,6 +5,7 @@ const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-
 const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
+const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
 const PROMPT_CARGAR := preload("res://assets/ui/botones/cargar_btn.png")
@@ -27,8 +28,8 @@ var icono_presencia: TextureRect
 var marco_presencia: Panel
 var barra_energia: ProgressBar
 var barra_presencia: ProgressBar
-var velo_ajustes: ColorRect
-var panel_ajustes: Panel
+var overlay_ajustes: Control
+var pausa_previa_ajustes := false
 var marcas_recuerdo: Array[Panel] = []
 var guia_bebe: Control
 var guia_fondo: Panel
@@ -83,7 +84,6 @@ func _estilar_panel():
 		$PanelEstado/PresenciaLabel,
 		$PanelEstado/TiempoLabel,
 		$PanelEstado/BebeLabel,
-		$PanelEstado/RecuerdosLabel,
 	]:
 		nodo.visible = false
 	if has_node("PresenciaLabel"):
@@ -140,7 +140,7 @@ func _estilar_prompt() -> void:
 	
 	$PromptFondo.add_theme_stylebox_override("panel", _circulo(VERDE, 56))
 	_texto($PromptLabel, 22)
-	$PromptLabel.text = Global.prompt_interaccion
+	$PromptLabel.text = Traducciones.obtener_frase(Global.prompt_interaccion)
 
 
 func _crear_prompt_icono() -> void:
@@ -343,9 +343,11 @@ func _borde_de(origen: Vector2, destino: Vector2, zona: Rect2) -> Vector2:
 
 func _poner_ajustes() -> void:
 	var boton := BotonCirculo.new()
+	boton.name = "BotonAjustes"
 	boton.color_fondo = DORADO
 	boton.icono = ICONO_AJUSTES
 	boton.tamano = 52.0
+	boton.z_index = 100
 	boton.pressed.connect(_alternar_ajustes)
 	add_child(boton)
 	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
@@ -354,79 +356,38 @@ func _poner_ajustes() -> void:
 	boton.offset_right = -20
 	boton.offset_bottom = 68
 
-	velo_ajustes = ColorRect.new()
-	velo_ajustes.visible = false
-	velo_ajustes.color = Color(0.08, 0.06, 0.16, 0.55)
-	velo_ajustes.set_anchors_preset(Control.PRESET_FULL_RECT)
-	velo_ajustes.mouse_filter = Control.MOUSE_FILTER_STOP
-	add_child(velo_ajustes)
-
-	panel_ajustes = Panel.new()
-	panel_ajustes.visible = false
-	panel_ajustes.set_anchors_preset(Control.PRESET_CENTER)
-	panel_ajustes.offset_left = -220
-	panel_ajustes.offset_top = -210
-	panel_ajustes.offset_right = 220
-	panel_ajustes.offset_bottom = 210
-	panel_ajustes.add_theme_stylebox_override("panel", _tarjeta(MORADO, 28))
-	add_child(panel_ajustes)
-
-	var titulo := Label.new()
-	titulo.text = "Sonido"
-	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	titulo.position = Vector2(24, 20)
-	titulo.size = Vector2(392, 36)
-	_texto(titulo, 28)
-	panel_ajustes.add_child(titulo)
-
-	var filas := [
-		["Master", Ajustes.volumen_master, Ajustes.set_volumen_master],
-		["Musica", Ajustes.volumen_musica, Ajustes.set_volumen_musica],
-		["Efectos", Ajustes.volumen_efectos, Ajustes.set_volumen_efectos],
-		["Ambiente", Ajustes.volumen_ambiente, Ajustes.set_volumen_ambiente],
-	]
-	var y := 72.0
-	for fila in filas:
-		var etiqueta := Label.new()
-		etiqueta.text = fila[0]
-		etiqueta.position = Vector2(32, y)
-		etiqueta.size = Vector2(376, 24)
-		_texto(etiqueta, 16)
-		panel_ajustes.add_child(etiqueta)
-		var slider := HSlider.new()
-		slider.min_value = 0.0
-		slider.max_value = 1.0
-		slider.step = 0.01
-		slider.value = fila[1]
-		slider.position = Vector2(32, y + 28)
-		slider.size = Vector2(376, 24)
-		slider.value_changed.connect(fila[2])
-		panel_ajustes.add_child(slider)
-		y += 72
-	move_child(boton, -1)
+	overlay_ajustes = ESCENA_OVERLAY_AJUSTES.instantiate() as Control
+	overlay_ajustes.visible = false
+	overlay_ajustes.set("desde_juego", true)
+	overlay_ajustes.z_index = 101
+	overlay_ajustes.process_mode = Node.PROCESS_MODE_ALWAYS
+	overlay_ajustes.connect("cerrar", Callable(self, "_cerrar_ajustes"))
+	add_child(overlay_ajustes)
 
 
 func _alternar_ajustes() -> void:
-	if panel_ajustes.visible:
+	if overlay_ajustes.visible:
 		_cerrar_ajustes()
 	else:
 		_abrir_ajustes()
 
 
 func _abrir_ajustes() -> void:
-	velo_ajustes.visible = true
-	panel_ajustes.visible = true
+	pausa_previa_ajustes = get_tree().paused
+	get_node("BotonAjustes").visible = false
+	overlay_ajustes.visible = true
 	get_tree().paused = true
 
 
 func _cerrar_ajustes() -> void:
-	velo_ajustes.visible = false
-	panel_ajustes.visible = false
-	get_tree().paused = false
+	if is_instance_valid(overlay_ajustes):
+		overlay_ajustes.visible = false
+	get_node("BotonAjustes").visible = true
+	get_tree().paused = pausa_previa_ajustes
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_cancel") and panel_ajustes.visible:
+	if event.is_action_pressed("ui_cancel") and is_instance_valid(overlay_ajustes) and overlay_ajustes.visible:
 		_cerrar_ajustes()
 		get_viewport().set_input_as_handled()
 
@@ -475,10 +436,11 @@ func _process(delta):
 		if prompt_texto != Global.prompt_interaccion:
 			var es_ataque := Global.prompt_interaccion.to_lower().contains("atacar")
 			$PromptFondo.add_theme_stylebox_override("panel", _circulo(BORDO if es_ataque else VERDE, 56))
-			$PromptLabel.text = Global.prompt_interaccion
+			$PromptLabel.text = Traducciones.obtener_frase(Global.prompt_interaccion)
 		prompt_texto = Global.prompt_interaccion
 	if prompt_idioma != Global.idioma_actual:
 		prompt_idioma = Global.idioma_actual
+		prompt_texto = ""
 	_actualizar_prompt_visual()
 
 	var destino_alpha := 1.0 if Global.prompt_interaccion != "" else 0.0
@@ -494,7 +456,7 @@ func _process(delta):
 		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""
-	$AvisoLabel.text = Global.aviso_combate
+	$AvisoLabel.text = Traducciones.obtener_frase(Global.aviso_combate)
 	$AvisoFondo.visible = hay_aviso
 	$AvisoLabel.visible = hay_aviso
 	if hay_aviso:
@@ -573,7 +535,7 @@ func _poner_guia_cueva() -> void:
 
 	guia_cueva.configurar(
 		_tarjeta(NARANJA_CUEVA, 22),
-		"Cueva",
+		Traducciones.obtener("cave"),
 		Vector2(150, 44),
 		FUENTE,
 		CREMA
