@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="cavillaca-pov"
-config/version="1.4"
+config/version="1.5.0"
 run/main_scene="res://scenes/MenuInicio.tscn"
 config/features=PackedStringArray("4.4", "GL Compatibility")
 config/icon="res://icon.svg"
