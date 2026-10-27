@@ -251,9 +251,9 @@ texture = ExtResource("17_1nqs0")
 
 [node name="RecuerdosContador" type="Label" parent="HUD/RecuerdosContainer"]
 layout_mode = 0
-offset_left = 312.0
+offset_left = 309.0
 offset_top = -8.0
-offset_right = 370.0
+offset_right = 367.0
 offset_bottom = 115.0
 text = "0"
 label_settings = ExtResource("18_1iba3")

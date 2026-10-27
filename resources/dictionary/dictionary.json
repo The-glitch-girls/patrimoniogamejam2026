@@ -74,6 +74,21 @@
 	"en": "Art",
 	"fr": "Art"
   },
+  "credit_role_ariadna": {
+	"es": "Concept Art, Arte 2D, Animación 2D",
+	"en": "Concept Art, 2D Art, 2D Animation",
+	"fr": "Concept art, art 2D, animation 2D"
+  },
+  "credit_role_selene": {
+	"es": "Concept Art, Arte 2D, Animación 2D",
+	"en": "Concept Art, 2D Art, 2D Animation",
+	"fr": "Concept art, art 2D, animation 2D"
+  },
+  "credit_role_andres": {
+	"es": "Arte 2D, Animación 2D, Arte ambiental/escenarios",
+	"en": "2D Art, 2D Animation, Environment/Levels Art",
+	"fr": "Art 2D, animation 2D, art d’environnement/décors"
+  },
   "credit_role_game_developer": {
 	"es": "Desarrollo de videojuegos",
 	"en": "Game Developer",
