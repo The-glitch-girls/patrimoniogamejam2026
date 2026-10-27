@@ -154,4 +154,5 @@ text = "v 1"
 label_settings = SubResource("LabelSettings_cmsus")
 
 [node name="OverlayAjustes" parent="." instance=ExtResource("9_ajustes")]
+visible = false
 layout_mode = 1

@@ -2,6 +2,8 @@ extends Control
 
 signal cerrar
 
+var desde_juego := false
+
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const ESTILO_ETIQUETA_AJUSTES: LabelSettings = preload("res://resources/ajustes_textos.tres")
 const MORADO := Color("#493783")
@@ -19,6 +21,10 @@ const TITULOS_AJUSTES := {
 
 func _ready() -> void:
 	$PanelAjustes/Cerrar.pressed.connect(_cerrar)
+	$PanelAjustes/ReiniciarBtn.pressed.connect(_reiniciar_partida)
+	$PanelAjustes/ReiniciarBtn.visible = desde_juego
+	$PanelAjustes/ReiniciarLabel.visible = desde_juego
+	$PanelAjustes/ReiniciarLabel.add_theme_font_size_override("font_size", 16)
 	$PanelAjustes/MusicaSlider.value = Ajustes.volumen_musica
 	$PanelAjustes/SFXSlider.value = Ajustes.volumen_efectos
 	$PanelAjustes/MusicaSlider.value_changed.connect(Ajustes.set_volumen_musica)
@@ -51,6 +57,12 @@ func _ready() -> void:
 
 func _cerrar() -> void:
 	cerrar.emit()
+
+
+func _reiniciar_partida() -> void:
+	Global.resetear()
+	get_tree().paused = false
+	get_tree().reload_current_scene()
 
 
 func _poblar_idiomas() -> void:
@@ -93,6 +105,7 @@ func _actualizar_textos(_idioma: String) -> void:
 	$PanelAjustes/MSXLabelContainer/MusicaLabel.text = Traducciones.obtener("music")
 	$PanelAjustes/SFXLabelContainer/SFXLabel.text = Traducciones.obtener("sfx")
 	$PanelAjustes/Cerrar.tooltip_text = Traducciones.obtener("close")
+	$PanelAjustes/ReiniciarLabel.text = Traducciones.obtener("restart")
 	titulo_textura.texture = TITULOS_AJUSTES.get(Global.idioma_actual, TITULOS_AJUSTES["es"])
 	call_deferred("_centrar_titulo")
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://qatbsc37daou"]
+[gd_scene load_steps=20 format=3 uid="uid://qatbsc37daou"]
 
 [ext_resource type="Script" uid="uid://c7t7etg7ncip7" path="res://scripts/componentes/overlay_ajustes.gd" id="1_overlay"]
 [ext_resource type="Texture2D" uid="uid://bq552avp1fw2n" path="res://assets/ui/ajustes/engranaje.png" id="2_engranaje"]
@@ -16,6 +16,9 @@
 [ext_resource type="Texture2D" uid="uid://bout2y1ujell4" path="res://assets/ui/ajustes/lineaSeparadora.png" id="11_ybsk3"]
 [ext_resource type="Texture2D" uid="uid://bhuqhcmea1e3i" path="res://assets/ui/ajustes/flecha_idioma.svg" id="12_flecha_idioma"]
 [ext_resource type="Texture2D" uid="uid://cqqjg3w8qbi1s" path="res://assets/ui/ajustes/slider.png" id="13_slider"]
+[ext_resource type="Texture2D" uid="uid://exd5sas1i8a6" path="res://assets/ui/ajustes/reiniciar_normal.png" id="17_sa2qi"]
+[ext_resource type="Texture2D" uid="uid://b8c1e53khuc31" path="res://assets/ui/ajustes/reiniciar_pressed.png" id="18_qorlm"]
+[ext_resource type="Texture2D" uid="uid://bdunqcl5o5qkc" path="res://assets/ui/ajustes/reiniciar_hover.png" id="19_04die"]
 
 [node name="OverlayAjustes" type="Control"]
 layout_mode = 3
@@ -164,9 +167,9 @@ stretch_mode = 4
 [node name="MSXLabelContainer" type="VBoxContainer" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 210.0
-offset_top = 120.0
+offset_top = 109.5
 offset_right = 390.0
-offset_bottom = 170.0
+offset_bottom = 159.5
 alignment = 1
 
 [node name="MSXTopLine" type="TextureRect" parent="PanelAjustes/MSXLabelContainer"]
@@ -186,9 +189,9 @@ texture = ExtResource("11_ybsk3")
 [node name="MusicaSliderPista" type="TextureRect" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 130.0
-offset_top = 208.5
+offset_top = 198.0
 offset_right = 410.0
-offset_bottom = 224.5
+offset_bottom = 214.0
 mouse_filter = 2
 texture = ExtResource("13_slider")
 expand_mode = 1
@@ -196,9 +199,9 @@ expand_mode = 1
 [node name="MusicaSlider" type="HSlider" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 130.0
-offset_top = 200.0
+offset_top = 189.5
 offset_right = 410.0
-offset_bottom = 233.0
+offset_bottom = 222.5
 theme_override_icons/grabber = ExtResource("10_grabber")
 theme_override_icons/grabber_highlight = ExtResource("10_grabber")
 theme_override_icons/grabber_disabled = ExtResource("10_grabber")
@@ -210,18 +213,18 @@ value = 0.8
 [node name="MusicaPorcentaje" type="Label" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 420.0
-offset_top = 198.0
+offset_top = 187.5
 offset_right = 490.0
-offset_bottom = 235.0
+offset_bottom = 224.5
 label_settings = ExtResource("11_label_settings")
 vertical_alignment = 1
 
 [node name="SFXLabelContainer" type="VBoxContainer" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 210.0
-offset_top = 270.0
+offset_top = 259.5
 offset_right = 390.0
-offset_bottom = 320.0
+offset_bottom = 309.5
 alignment = 1
 
 [node name="SFXTopLine" type="TextureRect" parent="PanelAjustes/SFXLabelContainer"]
@@ -241,9 +244,9 @@ texture = ExtResource("11_ybsk3")
 [node name="SFXSliderPista" type="TextureRect" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 130.0
-offset_top = 358.5
+offset_top = 348.0
 offset_right = 410.0
-offset_bottom = 374.5
+offset_bottom = 364.0
 mouse_filter = 2
 texture = ExtResource("13_slider")
 expand_mode = 1
@@ -251,9 +254,9 @@ expand_mode = 1
 [node name="SFXSlider" type="HSlider" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 130.0
-offset_top = 350.0
+offset_top = 339.5
 offset_right = 410.0
-offset_bottom = 383.0
+offset_bottom = 372.5
 theme_override_icons/grabber = ExtResource("10_grabber")
 theme_override_icons/grabber_highlight = ExtResource("10_grabber")
 theme_override_icons/grabber_disabled = ExtResource("10_grabber")
@@ -265,18 +268,18 @@ value = 1.0
 [node name="SFXPorcentaje" type="Label" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 420.0
-offset_top = 348.0
+offset_top = 337.5
 offset_right = 490.0
-offset_bottom = 385.0
+offset_bottom = 374.5
 label_settings = ExtResource("11_label_settings")
 vertical_alignment = 1
 
 [node name="IdmaLabelContainer" type="VBoxContainer" parent="PanelAjustes"]
 layout_mode = 0
 offset_left = 175.0
-offset_top = 420.0
+offset_top = 409.5
 offset_right = 425.0
-offset_bottom = 470.0
+offset_bottom = 461.5
 alignment = 1
 
 [node name="IdmaTopLine" type="TextureRect" parent="PanelAjustes/IdmaLabelContainer"]
@@ -307,6 +310,28 @@ layout_mode = 2
 texture = ExtResource("11_ybsk3")
 
 [node name="IdiomaPopup" type="PopupMenu" parent="PanelAjustes"]
+
+[node name="ReiniciarBtn" type="TextureButton" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 262.76
+offset_top = 500.0
+offset_right = 395.76
+offset_bottom = 652.0
+scale = Vector2(0.56, 0.56)
+texture_normal = ExtResource("17_sa2qi")
+texture_pressed = ExtResource("18_qorlm")
+texture_hover = ExtResource("19_04die")
+
+[node name="ReiniciarLabel" type="Label" parent="PanelAjustes"]
+layout_mode = 0
+offset_left = 200.0
+offset_top = 594.0
+offset_right = 400.0
+offset_bottom = 628.0
+theme_override_font_sizes/font_size = 16
+text = "Reiniciar"
+label_settings = ExtResource("11_label_settings")
+horizontal_alignment = 1
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1
