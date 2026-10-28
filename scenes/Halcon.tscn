@@ -1,9 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://c7hebov1gpk1s"]
+[gd_scene load_steps=35 format=3 uid="uid://c7hebov1gpk1s"]
 
 [ext_resource type="Script" uid="uid://cndoisgfhf7mv" path="res://scripts/halcon.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://df2a7vs1ox5tp" path="res://assets/enemigos/halconlado_lado.png" id="2_4bbn4"]
 [ext_resource type="Texture2D" uid="uid://d36ymgsgphijy" path="res://assets/enemigos/halcon_espalda.png" id="2_gwswh"]
 [ext_resource type="Texture2D" uid="uid://do5kkrtq0imhv" path="res://assets/enemigos/halcon_frente.png" id="3_fjv6f"]
+[ext_resource type="Texture2D" uid="uid://bbdytq18vlxl0" path="res://assets/enemigos/halcon-pelea-idle.png" id="4_6on7q"]
 [ext_resource type="AudioStream" uid="uid://cp132jf430y36" path="res://sfx/combate/halcon_atacado.ogg" id="5_ee0wm"]
 [ext_resource type="AudioStream" uid="uid://snpxuq0svoxs" path="res://sfx/combate/halcon_muerte.ogg" id="6_6on7q"]
 
@@ -60,6 +61,30 @@ region = Rect2(4096, 140, 1024, 600)
 [sub_resource type="AtlasTexture" id="AtlasTexture_2jtlm"]
 atlas = ExtResource("3_fjv6f")
 region = Rect2(5120, 140, 1024, 600)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fn6ca"]
+atlas = ExtResource("4_6on7q")
+region = Rect2(0, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5jjnf"]
+atlas = ExtResource("4_6on7q")
+region = Rect2(1024, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6wwhh"]
+atlas = ExtResource("4_6on7q")
+region = Rect2(2048, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0l173"]
+atlas = ExtResource("4_6on7q")
+region = Rect2(3072, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jtiar"]
+atlas = ExtResource("4_6on7q")
+region = Rect2(4096, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_acgav"]
+atlas = ExtResource("4_6on7q")
+region = Rect2(5120, 0, 1024, 1024)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_56a7m"]
 atlas = ExtResource("2_4bbn4")
@@ -135,6 +160,29 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_fn6ca")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5jjnf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6wwhh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0l173")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jtiar")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_acgav")
+}],
+"loop": true,
+"name": &"frente_combate",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_56a7m")
 }, {
 "duration": 1.0,
@@ -168,8 +216,6 @@ position = Vector2(-5.5, 14.5)
 shape = SubResource("RectangleShape2D_halcon")
 
 [node name="Detector" type="Area2D" parent="."]
-collision_layer = 1
-collision_mask = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
 position = Vector2(-5.5, 14.5)
@@ -178,8 +224,7 @@ shape = SubResource("RectangleShape2D_detector_halcon")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.24, 0.24)
 sprite_frames = SubResource("SpriteFrames_7c8nx")
-animation = &"lado"
-frame_progress = 0.686428
+animation = &"frente_combate"
 
 [node name="AtaqueSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ee0wm")

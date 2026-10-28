@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://co2r06qo7gdji"]
+
+[ext_resource type="SpriteFrames" uid="uid://ogtt2mcf1qfm" path="res://resources/loro.tres" id="1_5jmam"]
+
+[node name="Loro" type="CharacterBody2D"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = ExtResource("1_5jmam")
+animation = &"idle"
+frame_progress = 0.879892

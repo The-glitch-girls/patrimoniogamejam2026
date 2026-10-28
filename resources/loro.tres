@@ -1,0 +1,47 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://ogtt2mcf1qfm"]
+
+[ext_resource type="Texture2D" uid="uid://u10vtgu5yynt" path="res://assets/amigos/loro.png" id="1_y5ree"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_svkga"]
+atlas = ExtResource("1_y5ree")
+region = Rect2(0, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0wf5c"]
+atlas = ExtResource("1_y5ree")
+region = Rect2(1024, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ic1ou"]
+atlas = ExtResource("1_y5ree")
+region = Rect2(2048, 0, 1024, 1024)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vikge"]
+atlas = ExtResource("1_y5ree")
+region = Rect2(3072, 0, 1024, 1024)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_svkga")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0wf5c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ic1ou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vikge")
+}],
+"loop": true,
+"name": &"hablando",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_svkga")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}]
