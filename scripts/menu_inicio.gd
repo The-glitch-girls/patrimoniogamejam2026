@@ -4,6 +4,7 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 @onready var version_label := $Version
 const ESCENA_MAIN := "res://scenes/Main.tscn"
+const ESCENA_LEYENDA := "res://scenes/Leyenda.tscn"
 var iniciando_juego := false
 
 func _ready() -> void:
@@ -14,6 +15,7 @@ func _ready() -> void:
 	_mostrar_inicio()
 	ResourceLoader.load_threaded_request("res://resources/cavillaca.tres")
 	ResourceLoader.load_threaded_request(ESCENA_MAIN) # Cargar en segundo plano
+	ResourceLoader.load_threaded_request(ESCENA_LEYENDA)
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):
 		_capturar()
@@ -80,29 +82,29 @@ func _jugar() -> void:
 	$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("loading")
 	await get_tree().process_frame
 
-	var estado := ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+	var estado := ResourceLoader.load_threaded_get_status(ESCENA_LEYENDA)
 	if estado == ResourceLoader.THREAD_LOAD_FAILED:
-		var solicitud := ResourceLoader.load_threaded_request(ESCENA_MAIN)
+		var solicitud := ResourceLoader.load_threaded_request(ESCENA_LEYENDA)
 		if solicitud != OK:
-			push_error("No se pudo iniciar la carga de Main.tscn (código %d)" % solicitud)
+			push_error("No se pudo iniciar la carga de Leyenda.tscn (código %d)" % solicitud)
 			$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
 			iniciando_juego = false
 			return
-		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+		estado = ResourceLoader.load_threaded_get_status(ESCENA_LEYENDA)
 	while estado == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await get_tree().process_frame
-		estado = ResourceLoader.load_threaded_get_status(ESCENA_MAIN)
+		estado = ResourceLoader.load_threaded_get_status(ESCENA_LEYENDA)
 
 	var escena: PackedScene
 	if estado == ResourceLoader.THREAD_LOAD_LOADED:
-		escena = ResourceLoader.load_threaded_get(ESCENA_MAIN) as PackedScene
+		escena = ResourceLoader.load_threaded_get(ESCENA_LEYENDA) as PackedScene
 	else:
-		push_error("Falló la carga en segundo plano de Main.tscn (estado %d)" % estado)
+		push_error("Falló la carga en segundo plano de Leyenda.tscn (estado %d)" % estado)
 		$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
 		iniciando_juego = false
 		return
 	if escena == null:
-		push_error("No se pudo cargar Main.tscn")
+		push_error("No se pudo cargar Leyenda.tscn")
 		$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("play")
 		iniciando_juego = false
 		return

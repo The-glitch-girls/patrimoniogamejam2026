@@ -19,6 +19,16 @@
 	"en": "Credits",
 	"fr": "Crédits"
   },
+  "legend_title": {
+	"es": "La leyenda",
+	"en": "The Legend",
+	"fr": "La légende"
+  },
+  "legend_text": {
+	"es": "Cuenta la leyenda que, en tiempos antiguos, vivía Cavillaca, una diosa de extraordinaria belleza, admirada y deseada por todos. Dioses y seres poderosos buscaban conquistarla, pero ella los rechazaba a todos, pues no deseaba casarse.\n\n Entre quienes la admiraban se encontraba Cuniraya Huiracocha, un dios todopoderoso que deseaba acercarse a ella. Sin embargo, consciente de que Cavillaca no aceptaría a ninguno de sus pretendientes, decidió ocultar su verdadera identidad y adoptar la apariencia de un pobre mendigo.",
+	"en": "Legend has it that, in ancient times, there lived Cavillaca, a goddess of extraordinary beauty, admired and desired by all. Gods and powerful beings sought to win her over, but she rejected them all, for she had no wish to marry.\n\n Among those who admired her was Cuniraya Huiracocha, an all-powerful god who longed to approach her. Yet, knowing Cavillaca would accept none of her suitors, he decided to conceal his true identity and take the appearance of a poor beggar.",
+	"fr": "La légende raconte qu'autrefois vivait Cavillaca, une déesse d'une beauté extraordinaire, admirée et désirée de tous. Des dieux et des êtres puissants cherchaient à la conquérir, mais elle les repoussait tous, car elle ne voulait pas se marier.\n\n Parmi ses admirateurs se trouvait Cuniraya Huiracocha, un dieu tout-puissant qui souhaitait l'approcher. Cependant, sachant que Cavillaca n'accepterait aucun de ses prétendants, il décida de cacher sa véritable identité et de prendre l'apparence d'un pauvre mendiant."
+	},
   "special_thanks": {
 	"es": "Agradecimientos\nespeciales",
 	"en": "Special\nThanks",
