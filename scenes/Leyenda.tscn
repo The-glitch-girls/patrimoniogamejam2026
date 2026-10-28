@@ -1,0 +1,108 @@
+[gd_scene load_steps=4 format=3 uid="uid://dj8w17gu6v134"]
+
+[ext_resource type="Script" uid="uid://gi3qso4d4gar" path="res://scripts/leyenda.gd" id="1_leyenda"]
+[ext_resource type="Texture2D" uid="uid://cpq5wkxq7spr4" path="res://assets/menu_principal.png" id="2_fondo"]
+[ext_resource type="AudioStream" uid="uid://qh02o6bb3brm" path="res://sfx/narracion/cavillaca_intro.ogg" id="3_lx0xx"]
+
+[node name="Leyenda" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_leyenda")
+
+[node name="Fondo" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_fondo")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="Sombra" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.0156863, 0.00784314, 0.0392157, 1)
+
+[node name="PanelRelato" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -577.0
+offset_top = -267.0
+offset_right = 578.0
+offset_bottom = 173.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margen" type="MarginContainer" parent="PanelRelato"]
+layout_mode = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 20
+
+[node name="Columna" type="VBoxContainer" parent="PanelRelato/Margen"]
+layout_mode = 2
+theme_override_constants/separation = 18
+
+[node name="Titulo" type="Label" parent="PanelRelato/Margen/Columna"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "La leyenda"
+horizontal_alignment = 1
+
+[node name="Texto" type="Label" parent="PanelRelato/Margen/Columna"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Continuar" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -111.0
+offset_top = -169.0
+offset_right = 109.0
+offset_bottom = -115.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Continuar"
+
+[node name="Narracion" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_lx0xx")
+volume_db = -10.764
+bus = &"SFX"
+
+[node name="Fundido" type="ColorRect" parent="."]
+visible = false
+z_index = 10
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 0)

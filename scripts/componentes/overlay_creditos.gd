@@ -9,15 +9,17 @@ const TITULOS := {
 }
 
 const CLAVES_ROLES := [
-	"credit_role_art",
-	"credit_role_art",
-	"credit_role_art",
+	"credit_role_ariadna",
+	"credit_role_selene",
+	"credit_role_andres",
 	"credit_role_game_developer",
 	"credit_role_game_developer",
 	"credit_role_game_developer",
 	"credit_role_music_composition",
 	"credit_role_ui_assets",
 ]
+
+var contenido_desplazable: Control = null
 
 @onready var etiquetas_roles: Array[Label] = [
 	$PanelCreditos/Rol1Label,
@@ -47,10 +49,22 @@ func _ready() -> void:
 	indicador_desplazamiento.offset_bottom = -16.0
 	indicador_desplazamiento.add_theme_color_override("font_color", Color(0.99, 0.96, 0.9, 1.0))
 	indicador_desplazamiento.add_theme_font_size_override("font_size", 16)
-	for etiqueta in etiquetas_roles:
+	for indice in range(etiquetas_roles.size()):
+		var etiqueta: Label = etiquetas_roles[indice]
 		var estilo: LabelSettings = etiqueta.label_settings.duplicate()
-		estilo.font_size = 18
+		estilo.font_size = 16 if indice < 3 else 18
 		etiqueta.label_settings = estilo
+		if indice < 3:
+			etiqueta.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			etiqueta.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+			etiqueta.size.x = 460.0
+			etiqueta.size.y = 48.0
+			var ancho_visible := etiqueta.size.x * absf(etiqueta.scale.x)
+			etiqueta.position.x = (
+				get_viewport_rect().size.x * 0.5
+				- contenido_desplazable.global_position.x
+				- ancho_visible * 0.5
+			)
 	Traducciones.idioma_cambiado.connect(_actualizar_roles)
 	boton_cerrar.pressed.connect(_al_cerrar)
 	_actualizar_roles(Global.idioma_actual)
@@ -119,6 +133,7 @@ func _configurar_desplazamiento() -> void:
 
 	var contenido := Control.new()
 	contenido.name = "ContenidoDesplazable"
+	contenido_desplazable = contenido
 	var tamano_vista := get_viewport_rect().size
 	var alto_ventana_scroll := tamano_vista.y - scroll.offset_top + scroll.offset_bottom
 	contenido.custom_minimum_size = Vector2(
