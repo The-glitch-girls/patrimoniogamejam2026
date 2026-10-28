@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dju453ghv0krw"
-path="res://.godot/imported/Zorro.png-b6bbc98da1229530f836cd25894d5d7b.ctex"
+path="res://.godot/imported/zorro.png-d73384b91ced8f09ecca3dcc1f5eb9ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/Zorro.png"
-dest_files=["res://.godot/imported/Zorro.png-b6bbc98da1229530f836cd25894d5d7b.ctex"]
+source_file="res://assets/amigos/zorro.png"
+dest_files=["res://.godot/imported/zorro.png-d73384b91ced8f09ecca3dcc1f5eb9ec.ctex"]
 
 [params]
 

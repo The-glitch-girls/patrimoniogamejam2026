@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-const TEXTURA_ZORRO: Texture2D = preload("res://assets/tiles/Zorro.png")
+const TEXTURA_ZORRO: Texture2D = preload("res://assets/amigos/zorro.png")
 const VELOCIDAD_PASEO := 40.0
 const RADIO_PASEO := 8.0
 const PAUSA_MINIMA := 0.3
