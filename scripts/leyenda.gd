@@ -1,7 +1,7 @@
 extends Control
 
 const FUENTE := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
-const TEXTURA_ZORRO: Texture2D = preload("res://assets/tiles/Zorro.png")
+const TEXTURA_ZORRO: Texture2D = preload("res://assets/amigos/zorro.png")
 const COLOR_TEXTO := Color("f4e9ff")
 const COLOR_MARCO := Color("c1a4ea")
 const ESCENA_MAIN := "res://scenes/Main.tscn"
