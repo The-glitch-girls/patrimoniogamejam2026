@@ -9,10 +9,10 @@
 [ext_resource type="AudioStream" uid="uid://snpxuq0svoxs" path="res://sfx/combate/halcon_muerte.ogg" id="6_6on7q"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_halcon"]
-size = Vector2(145, 71)
+size = Vector2(128, 82)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_detector_halcon"]
-size = Vector2(145, 71)
+size = Vector2(128, 82)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7c8nx"]
 atlas = ExtResource("2_gwswh")
@@ -212,19 +212,20 @@ motion_mode = 1
 script = ExtResource("1_script")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(-5.5, 14.5)
+position = Vector2(0, 9)
 shape = SubResource("RectangleShape2D_halcon")
 
 [node name="Detector" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detector"]
-position = Vector2(-5.5, 14.5)
+position = Vector2(0, 9)
 shape = SubResource("RectangleShape2D_detector_halcon")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 scale = Vector2(0.24, 0.24)
 sprite_frames = SubResource("SpriteFrames_7c8nx")
-animation = &"frente_combate"
+animation = &"frente"
+frame_progress = 0.969487
 
 [node name="AtaqueSFX" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("5_ee0wm")

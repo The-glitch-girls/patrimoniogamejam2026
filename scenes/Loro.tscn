@@ -7,4 +7,4 @@
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_5jmam")
 animation = &"idle"
-frame_progress = 0.879892
+frame_progress = 0.716771

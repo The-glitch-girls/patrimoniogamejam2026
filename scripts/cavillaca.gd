@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 const LIMITE_ARRIBA_JUGADOR := 180.0
 const LIMITE_ABAJO_JUGADOR := 180.0
-const VELOCIDAD_CAMINAR := 200.0
+const VELOCIDAD_CAMINAR := 225.0
 const VELOCIDAD_CORRER := 300.0
-const VELOCIDAD_CON_BEBE := 170.0
+const VELOCIDAD_CON_BEBE := 180.0
 const VELOCIDAD_SIN_ENERGIA := 100.0
 const DISTANCIA_RECOGER := 56.0
 const DISTANCIA_DEJAR := 40.0
@@ -27,7 +27,7 @@ var FRAMES_LADO: Array[Texture2D]
 const RUTA_ANIMACIONES := "res://resources/cavillaca.tres"
 var animaciones_cavillaca: SpriteFrames
 var animaciones_cargadas := false
-var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
+var sheet_lado := preload("res://assets/person/cavillaca_lateral2.png")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT
@@ -41,7 +41,7 @@ var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
 
 func _ready():
-	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 5, 2360)
+	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 6, 512)
 	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
@@ -49,17 +49,17 @@ func _ready():
 	_armar_sprite()
 	_solicitar_animaciones()
 
-	$Sprite.scale = Vector2(0.052, 0.052)
-	$Sprite.position.y = -10
-	$CollisionShape2D.position.y = 90
+	$Sprite.scale = Vector2(0.215, 0.215)
+	$Sprite.position.y = 0
+	$CollisionShape2D.position.y = 60
 	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.0, 1.0)
 	# Camara
-	cam.limit_left = 0
-	cam.limit_top = 0
-	cam.limit_right = 4096
-	cam.limit_bottom = 3072
+	cam.limit_left = -400
+	cam.limit_top = -2050
+	cam.limit_right = 5100
+	cam.limit_bottom = 3200
 
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 8.0

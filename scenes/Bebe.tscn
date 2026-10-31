@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://cy6sss6gmw5gh" path="res://assets/person/bebe_normal.png" id="3_inh41"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_inh41"]
-size = Vector2(2420, 340)
+size = Vector2(2400, 1600)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xoaaa"]
 atlas = ExtResource("2_kvb4v")
@@ -103,7 +103,7 @@ mouse_filter = 2
 color = Color(0, 0, 0, 0.3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(50, 470)
+position = Vector2(80.0001, 0)
 scale = Vector2(0.999999, 0.999999)
 shape = SubResource("RectangleShape2D_inh41")
 
@@ -111,4 +111,5 @@ shape = SubResource("RectangleShape2D_inh41")
 position = Vector2(20, -100)
 sprite_frames = SubResource("SpriteFrames_inh41")
 animation = &"llorando"
-frame_progress = 0.752481
+frame = 8
+frame_progress = 0.472185
