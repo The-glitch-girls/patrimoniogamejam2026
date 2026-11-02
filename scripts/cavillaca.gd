@@ -57,7 +57,7 @@ func _ready():
 	cam.zoom = Vector2(1.0, 1.0)
 	# Camara
 	cam.limit_left = -400
-	cam.limit_top = -2050
+	cam.limit_top = -2500
 	cam.limit_right = 5100
 	cam.limit_bottom = 3200
 
