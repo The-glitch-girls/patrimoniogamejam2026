@@ -308,6 +308,7 @@ func entrar_en_combate():
 	Global.prompt_interaccion = "E  Atacar"
 	combate.get_node("VidasHalcon").show()
 	_actualizar_vidas()
+	Musica.iniciar_combate()
 	reparent(combate)
 	position = punto.position
 	$AnimatedSprite2D.scale = escala_original * 2.0
@@ -320,6 +321,7 @@ func entrar_en_combate():
 	
 func salir_de_combate():
 	en_combate = false
+	Musica.terminar_combate()
 	Global.halcon_cerca = false
 	Global.prompt_interaccion = ""
 	$AnimatedSprite2D.scale = escala_original
