@@ -9,6 +9,9 @@ func _ready() -> void:
 	$ImagenFinal.visible = true
 	$ReiniciarBtn.visible = es_final_cuniraya
 	$ReiniciarLbl.visible = es_final_cuniraya
+	if es_final_cuniraya:
+		$ReiniciarBtn.visible = false
+		$ReiniciarLbl.visible = false
 	$AudioFinal.stop()
 	if es_final_cuniraya:
 		$ReiniciarLbl.text = Traducciones.obtener("restart")
@@ -17,6 +20,10 @@ func _ready() -> void:
 		$ReiniciarBtn.pressed.connect(_reintentar_cuniraya)
 		Traducciones.idioma_cambiado.connect(_actualizar_etiqueta_reiniciar)
 		$AudioFinal.play()
+		await get_tree().create_timer(1.0).timeout
+		if is_instance_valid($ReiniciarBtn) and is_instance_valid($ReiniciarLbl):
+			$ReiniciarBtn.visible = true
+			$ReiniciarLbl.visible = true
 	if OS.get_cmdline_user_args().has("--finalshot"):
 		_capturar()
 
