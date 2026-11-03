@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=24 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_fijlm"]
 [ext_resource type="Texture2D" uid="uid://b1qtkbgolc2co" path="res://assets/tiles/jarron1.png" id="2_paa2y"]
@@ -12,7 +12,6 @@
 [ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="10_1s7ia"]
 [ext_resource type="Script" uid="uid://cay8ncyyqmj3t" path="res://scripts/hud.gd" id="11_ew4fm"]
 [ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="12_tthj7"]
-[ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="13_p0i10"]
 [ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="14_5vhjm"]
 [ext_resource type="AudioStream" uid="uid://k0g0tqnkpegb" path="res://sfx/llanto_bebe.mp3" id="15_hjowp"]
 [ext_resource type="Texture2D" uid="uid://dix21bawdw0ft" path="res://assets/ui/recuerdos/recuerdos_x.png" id="16_v0epx"]
@@ -30,7 +29,7 @@ shader_parameter/intensidad = 0.0
 shader_parameter/radio_claro = 0.25
 shader_parameter/radio_sombra = 0.55
 
-[node name="Main" type="Node2D"]
+[node name="Main2" type="Node2D"]
 y_sort_enabled = true
 script = ExtResource("1_fijlm")
 
@@ -197,10 +196,6 @@ vertical_alignment = 1
 visible = false
 offset_right = 40.0
 offset_bottom = 23.0
-
-[node name="SonidoTension" type="AudioStreamPlayer2D" parent="HUD"]
-stream = ExtResource("13_p0i10")
-bus = &"Ambiente"
 
 [node name="PeakTension" type="AudioStreamPlayer2D" parent="HUD"]
 stream = ExtResource("14_5vhjm")

@@ -35,6 +35,7 @@ var material_revelado: ShaderMaterial
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Musica.iniciar_juego_con_tension()
 	titulo.text = Traducciones.obtener("legend_title")
 	texto.text = Traducciones.obtener("legend_text")
 	texto.visible_characters = -1

@@ -78,7 +78,6 @@ func _jugar() -> void:
 		return
 	iniciando_juego = true
 	Global.resetear()
-	Musica.tocar("juego")
 	$Fila/Jugar/Centro/Texto.text = Traducciones.obtener("loading")
 	await get_tree().process_frame
 

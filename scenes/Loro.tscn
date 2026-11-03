@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://co2r06qo7gdji"]
+[gd_scene load_steps=2 format=3 uid="uid://cmopp7feirlo8"]
 
-[ext_resource type="SpriteFrames" uid="uid://ogtt2mcf1qfm" path="res://resources/loro.tres" id="1_5jmam"]
+[ext_resource type="SpriteFrames" uid="uid://ddrg0vafhbmho" path="res://resources/loro.tres" id="1_5jmam"]
 
 [node name="Loro" type="CharacterBody2D"]
 

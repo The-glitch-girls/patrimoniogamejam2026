@@ -275,6 +275,10 @@ func _input(event: InputEvent) -> void:
 		var halcon := get_tree().get_first_node_in_group("halcon")
 		if halcon != null and halcon.has_method("debug_aparecer_al_lado"):
 			halcon.debug_aparecer_al_lado(global_position + Vector2(180.0, 0.0))
+	elif tecla.pressed and not tecla.echo and (tecla.keycode == KEY_F9 or tecla.physical_keycode == KEY_F9):
+		var cuniraya := get_parent().get_node_or_null("Cuniraya")
+		if cuniraya != null and cuniraya.has_method("debug_acercar_a_bebe"):
+			cuniraya.debug_acercar_a_bebe()
 
 
 func _caminar_al_mar(delta: float) -> void:

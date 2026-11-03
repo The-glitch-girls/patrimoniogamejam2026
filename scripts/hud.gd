@@ -51,10 +51,8 @@ var guia_metros_cueva: Label
 var guia_alpha_cueva := 0.0
 var guia_cueva_colocada := false
 
-@onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
 @onready var llanto_bebe: AudioStreamPlayer2D = $LlantoBebe
-var volumen_normal_tension: float = -15.0
 var volumen_normal_peak: float = 0.0
 var volumen_normal_llanto: float = 0.0
 var temporizador_peak: float = 0.0
@@ -72,7 +70,7 @@ func _ready():
 	_poner_guia_cueva()
 	_poner_ajustes()
 	if not Global.partida_terminada:
-		Musica.tocar("juego")
+		Musica.iniciar_juego_con_tension()
 	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--hudshot"):
@@ -505,16 +503,8 @@ func _process(delta):
 		_estilar_pildora($AvisoFondo, color_aviso)
 
 	var nivel_presencia : float = Global.presencia_cuniraya
-	var volumen_tension : float = lerp(-10.0, 0.0, nivel_presencia / 100.0)
+	Musica.actualizar_tension(Global.presencia_activa)
 	material_oscuridad.set_shader_parameter("intensidad", nivel_presencia / 100.0)
-	sonido_tension.volume_db = volumen_tension
-
-	if Global.presencia_activa:
-		if not sonido_tension.playing:
-			sonido_tension.volume_db = volumen_normal_tension
-			sonido_tension.play()
-	else:
-		fade_out_audio(sonido_tension, 2.5)
 
 	if Global.presencia_activa:
 		temporizador_peak -= delta

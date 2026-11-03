@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://mn6rb1w2sort"]
+[gd_scene load_steps=23 format=4 uid="uid://bj3ct4en6xk4d"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_6dwb3"]
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="2_3xrtf"]

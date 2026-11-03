@@ -27,6 +27,15 @@ func _colocar_cuniraya():
 	)
 	# Cuniraya permanece invisible. Su cercanía se lee en el bebé.
 
+func debug_acercar_a_bebe() -> void:
+	if not OS.is_debug_build() or bebe == null:
+		return
+	var sprite_bebe := bebe.get_node_or_null("AnimatedSprite2D") as Node2D
+	if sprite_bebe == null:
+		return
+	global_position = sprite_bebe.global_position + Vector2(120.0, 0.0)
+	print("Depuración: Cuniraya se acercó al bebé")
+
 func _process(delta):
 	# Movimiento autónomo
 	tiempo_cambio -= delta
