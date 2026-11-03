@@ -40,18 +40,18 @@ func descansar() -> void:
 	if Global.recuerdos_obtenidos < 1:
 		Global.mostrar_aviso("El zorro aún no te ofrece descanso")
 		return
-	if not Global.zorro_cerca:
-		Global.mostrar_aviso("Acércate al zorro para descansar")
+	if not _cavillaca_en_entrada():
+		Global.mostrar_aviso("Acércate al tronco para descansar")
 		return
 	if Global.energia >= Global.ENERGIA_MAX:
 		Global.mostrar_aviso("Tu energía ya está completa")
 		return
 	descanso_activo = true
-	Global.mostrar_aviso("Descansando junto al zorro")
+	Global.mostrar_aviso("Descansando junto al tronco")
 
 
 func puede_descansar() -> bool:
-	return Global.zorro_cerca and Global.recuerdos_obtenidos > 0
+	return _cavillaca_en_entrada() and Global.recuerdos_obtenidos > 0
 
 
 func _cavillaca_en_entrada() -> bool:

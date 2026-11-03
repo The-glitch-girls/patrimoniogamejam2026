@@ -31,8 +31,6 @@ var prompt_texto := ""
 var prompt_idioma := ""
 var prompt_icono: TextureRect
 var prompt_titulo: Label
-var prompt_icono_descansar: TextureRect
-var prompt_titulo_descansar: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
@@ -188,43 +186,10 @@ func _crear_prompt_icono() -> void:
 	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(prompt_titulo)
 
-	prompt_icono_descansar = TextureRect.new()
-	prompt_icono_descansar.name = "PromptDescansarIcono"
-	prompt_icono_descansar.z_index = 10
-	prompt_icono_descansar.visible = false
-	prompt_icono_descansar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	prompt_icono_descansar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	prompt_icono_descansar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	prompt_icono_descansar.scale = Vector2(1.5, 1.5)
-	prompt_icono_descansar.pivot_offset = Vector2(42, 42)
-	prompt_icono_descansar.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	prompt_icono_descansar.offset_left = -284
-	prompt_icono_descansar.offset_top = -176
-	prompt_icono_descansar.offset_right = -200
-	prompt_icono_descansar.offset_bottom = -92
-	add_child(prompt_icono_descansar)
-
-	prompt_titulo_descansar = Label.new()
-	prompt_titulo_descansar.name = "PromptDescansarTitulo"
-	prompt_titulo_descansar.z_index = 10
-	prompt_titulo_descansar.visible = false
-	prompt_titulo_descansar.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	prompt_titulo_descansar.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	prompt_titulo_descansar.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	prompt_titulo_descansar.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	prompt_titulo_descansar.offset_left = -321
-	prompt_titulo_descansar.offset_top = -56
-	prompt_titulo_descansar.offset_right = -163
-	prompt_titulo_descansar.offset_bottom = -28
-	_texto(prompt_titulo_descansar, 18)
-	prompt_titulo_descansar.add_theme_font_override("font", FUENTE_PROMPT)
-	add_child(prompt_titulo_descansar)
-
-
 func _tipo_prompt_con_imagen() -> String:
 	var texto := Global.prompt_interaccion.to_lower()
 	if texto.contains("descansar"):
-		return "talk" if texto.begins_with("f ") else "rest"
+		return "rest" if texto.begins_with("r ") else ""
 	if texto.contains("atacar"):
 		return "attack"
 	if texto.contains("recoger"):
@@ -246,13 +211,10 @@ func _actualizar_prompt_visual() -> void:
 
 	var tipo := _tipo_prompt_con_imagen()
 	var usa_imagen := tipo != ""
-	var muestra_descanso_secundario := tipo == "talk" and Global.prompt_interaccion.to_lower().contains("descansar")
 	$PromptFondo.visible = not usa_imagen
 	$PromptLabel.visible = not usa_imagen
 	prompt_icono.visible = usa_imagen
 	prompt_titulo.visible = usa_imagen
-	prompt_icono_descansar.visible = muestra_descanso_secundario
-	prompt_titulo_descansar.visible = muestra_descanso_secundario
 	if not usa_imagen:
 		return
 
@@ -260,10 +222,6 @@ func _actualizar_prompt_visual() -> void:
 	if tipo == "talk" and Global.prompt_interaccion.to_lower().begins_with("f "):
 		accion = "hablar_zorro"
 	var presionado := Input.is_action_pressed(accion)
-	if muestra_descanso_secundario:
-		var descanso_presionado := Input.is_action_pressed("descansar")
-		prompt_icono_descansar.texture = PROMPT_DESCANSAR_PRESIONADO if descanso_presionado else PROMPT_DESCANSAR
-		prompt_titulo_descansar.text = Traducciones.obtener("rest_action")
 	match tipo:
 		"attack":
 			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
@@ -523,14 +481,10 @@ func _process(delta):
 	$PromptFondo.modulate.a = prompt_alpha
 	prompt_icono.modulate.a = prompt_alpha
 	prompt_titulo.modulate.a = prompt_alpha
-	prompt_icono_descansar.modulate.a = prompt_alpha
-	prompt_titulo_descansar.modulate.a = prompt_alpha
 	if destino_alpha == 0.0 and prompt_alpha <= 0.0:
 		$PromptFondo.visible = false
 		$PromptLabel.visible = false
 		prompt_icono.visible = false
-		prompt_icono_descansar.visible = false
-		prompt_titulo_descansar.visible = false
 		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""

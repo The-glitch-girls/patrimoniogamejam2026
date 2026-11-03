@@ -458,7 +458,7 @@ func _actualizar_prompt():
 		puede_descansar = bool(cueva.call("puede_descansar"))
 	
 	if Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
-		Global.prompt_interaccion = "F Hablar  |  R Descansar" if puede_descansar else "F Hablar"
+		Global.prompt_interaccion = "F Hablar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
 		Global.prompt_interaccion = "F  Hablar con zorro"
 	elif puede_descansar:
