@@ -27,8 +27,7 @@ func _ready() -> void:
 			$ReiniciarBtn.visible = true
 			$ReiniciarLbl.visible = true
 	elif es_final_mar:
-		$AudioFinal.stream = AUDIO_FINAL_MAR
-		$AudioFinal.play()
+		Musica.tocar_stream("final_mar", AUDIO_FINAL_MAR)
 		_transicionar_a_creditos_finales()
 
 
@@ -40,7 +39,6 @@ func _reintentar_cuniraya() -> void:
 
 func _actualizar_etiqueta_reiniciar(_idioma: String = "") -> void:
 	$ReiniciarLbl.text = Traducciones.obtener("restart")
-
 
 func _transicionar_a_creditos_finales() -> void:
 	await get_tree().create_timer(5.0).timeout

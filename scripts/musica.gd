@@ -53,3 +53,35 @@ func tocar(nombre: String) -> void:
 		reproductor.volume_db = -40.0
 		reproductor.play()
 	fundido.tween_property(reproductor, "volume_db", VOLUMEN[nombre], 0.7)
+
+
+func tocar_stream(nombre: String, pista: AudioStream, volumen_db: float = -8.0, repetir: bool = true) -> void:
+	if pista == null or nombre == actual:
+		return
+	actual = nombre
+	if pista is AudioStreamOggVorbis:
+		(pista as AudioStreamOggVorbis).loop = repetir
+	if fundido and fundido.is_running():
+		fundido.kill()
+	fundido = create_tween()
+	fundido.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	if reproductor.playing:
+		fundido.tween_property(reproductor, "volume_db", -40.0, 0.45)
+		fundido.tween_callback(func():
+			reproductor.stream = pista
+			reproductor.volume_db = -40.0
+			reproductor.play()
+		)
+	else:
+		reproductor.stream = pista
+		reproductor.volume_db = -40.0
+		reproductor.play()
+	fundido.tween_property(reproductor, "volume_db", volumen_db, 0.7)
+
+
+func detener() -> void:
+	if fundido and fundido.is_running():
+		fundido.kill()
+	actual = ""
+	if is_instance_valid(reproductor):
+		reproductor.stop()

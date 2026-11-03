@@ -1,3 +1,58 @@
-[gd_scene format=3 uid="uid://cxsvd1trhxy5x"]
+[gd_scene load_steps=3 format=3 uid="uid://cxsvd1trhxy5x"]
 
-[node name="CreditosFinales" type="Node2D"]
+[ext_resource type="Texture2D" uid="uid://d24egixkp7wwm" path="res://assets/creditos_finales.png" id="1_i4wtg"]
+[ext_resource type="Script" uid="uid://syqiidp5p4k6" path="res://scripts/creditos_finales.gd" id="2_creditos"]
+
+[node name="CreditosFinales" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_creditos")
+
+[node name="CreditosBackground" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = -12.8
+offset_top = -7.2
+offset_right = 1907.2
+offset_bottom = 1072.8
+scale = Vector2(0.68, 0.68)
+texture = ExtResource("1_i4wtg")
+
+[node name="AreaVisibleCreditos" type="Control" parent="."]
+clip_contents = true
+layout_mode = 1
+anchor_top = 0.34
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 14.2
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="ListaCreditos" type="VBoxContainer" parent="AreaVisibleCreditos"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -320.0
+offset_right = 320.0
+mouse_filter = 2
+theme_override_constants/separation = 12
+
+[node name="MensajeContinuar" type="Label" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -56.0
+offset_right = 320.0
+offset_bottom = -24.0
+horizontal_alignment = 1
