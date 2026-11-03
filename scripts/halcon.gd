@@ -302,9 +302,12 @@ func entrar_en_combate():
 
 	padre_original = get_parent()
 	posicion_original = global_position
+	vida = VIDA_MAX
 	en_combate = true
 	Global.halcon_cerca = false
 	Global.prompt_interaccion = "E  Atacar"
+	combate.get_node("VidasHalcon").show()
+	_actualizar_vidas()
 	reparent(combate)
 	position = punto.position
 	$AnimatedSprite2D.scale = escala_original * 2.0
@@ -382,6 +385,11 @@ func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 	derrotado = true
 	en_muerte = true
+	Global.halcon_cerca = false
+	Global.prompt_interaccion = ""
+	var hud := get_tree().current_scene.get_node_or_null("HUD")
+	if hud != null and hud.has_method("ocultar_prompt_interaccion"):
+		hud.ocultar_prompt_interaccion()
 	
 	$MuerteSFX.play()
 	
@@ -420,19 +428,4 @@ func _victoria():
 	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
 	var flashback := FLASHBACK_ESCENA.instantiate()
 	flashback.configurar(indice)
-	var hud := get_tree().current_scene.get_node("HUD")
 	hud.add_child(flashback)
-	
-# Debug funcionamiento de halcon
-#func _input(event):
-	#if event.is_action_pressed("debug_halcon"):
-		#var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-		#if cavillaca != null:
-			#var objetivo := _obtener_punto_objetivo(cavillaca)
-			#global_position = objetivo + Vector2(100, 0)
-			#show()
-			#derrotado = false
-			#vida = VIDA_MAX
-			#monitoring = true
-			#monitorable = true
-			#$AnimatedSprite2D.play("lado")

@@ -244,6 +244,14 @@ func _actualizar_prompt_visual() -> void:
 			prompt_titulo.text = Traducciones.obtener("rest_action")
 
 
+func ocultar_prompt_interaccion() -> void:
+	Global.prompt_interaccion = ""
+	prompt_alpha = 0.0
+	for nodo in [$PromptFondo, $PromptLabel, prompt_icono, prompt_titulo]:
+		nodo.visible = false
+		nodo.modulate.a = 0.0
+
+
 func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
 	var marco := Panel.new()
 	marco.position = pos

@@ -637,9 +637,10 @@ func _controlar_ataque() -> bool:
 
 		if halcon != null:
 			if halcon.en_combate:
-				ataques_combate += 1
-				print("⚔️ Ataque de combate: ", ataques_combate)
-				_arrojar_en_combate()
+				if not halcon.derrotado and not halcon.en_muerte:
+					ataques_combate += 1
+					print("⚔️ Ataque de combate: ", ataques_combate)
+					_arrojar_en_combate()
 			elif Global.halcon_cerca and not Global.lleva_bebe:
 				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")
 				combate_halcon.show()

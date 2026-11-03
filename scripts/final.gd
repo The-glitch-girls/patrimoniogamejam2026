@@ -11,6 +11,7 @@ func _ready() -> void:
 	$ImagenFinal.visible = true
 	$ReiniciarBtn.visible = es_final_cuniraya
 	$ReiniciarLbl.visible = es_final_cuniraya
+	_centrar_etiqueta_reiniciar()
 	if es_final_cuniraya:
 		$ReiniciarBtn.visible = false
 		$ReiniciarLbl.visible = false
@@ -39,6 +40,14 @@ func _reintentar_cuniraya() -> void:
 
 func _actualizar_etiqueta_reiniciar(_idioma: String = "") -> void:
 	$ReiniciarLbl.text = Traducciones.obtener("restart")
+	_centrar_etiqueta_reiniciar()
+
+
+func _centrar_etiqueta_reiniciar() -> void:
+	$ReiniciarLbl.size.x = 260.0
+	$ReiniciarLbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var centro_boton_x: float = $ReiniciarBtn.position.x + $ReiniciarBtn.size.x * $ReiniciarBtn.scale.x * 0.5
+	$ReiniciarLbl.position.x = centro_boton_x - $ReiniciarLbl.size.x * 0.5
 
 func _transicionar_a_creditos_finales() -> void:
 	await get_tree().create_timer(5.0).timeout
