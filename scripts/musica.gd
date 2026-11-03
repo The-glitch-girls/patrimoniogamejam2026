@@ -129,6 +129,17 @@ func terminar_combate() -> void:
 	fundido_combate.tween_callback(reproductor_combate.stop)
 
 
+func detener_pista_combate() -> void:
+	if fundido_combate and fundido_combate.is_running():
+		fundido_combate.kill()
+	if not is_instance_valid(reproductor_combate) or not reproductor_combate.playing:
+		return
+	fundido_combate = create_tween()
+	fundido_combate.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	fundido_combate.tween_property(reproductor_combate, "volume_db", -40.0, 0.5)
+	fundido_combate.tween_callback(reproductor_combate.stop)
+
+
 func detener() -> void:
 	if fundido and fundido.is_running():
 		fundido.kill()

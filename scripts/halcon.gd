@@ -321,7 +321,7 @@ func entrar_en_combate():
 	
 func salir_de_combate():
 	en_combate = false
-	Musica.terminar_combate()
+	Musica.detener_pista_combate()
 	Global.halcon_cerca = false
 	Global.prompt_interaccion = ""
 	$AnimatedSprite2D.scale = escala_original
@@ -423,6 +423,7 @@ func _victoria():
 	$Detector.set_deferred("monitorable", false)
 
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
+		Musica.terminar_combate()
 		Global.mostrar_aviso("Victoria")
 		respawn_t = TIEMPO_RESPAWN
 		return
@@ -430,4 +431,5 @@ func _victoria():
 	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
 	var flashback := FLASHBACK_ESCENA.instantiate()
 	flashback.configurar(indice)
+	flashback.connect("terminado", Callable(Musica, "terminar_combate"))
 	hud.add_child(flashback)
