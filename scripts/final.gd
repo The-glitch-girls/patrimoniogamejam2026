@@ -1,7 +1,7 @@
 extends Control
 
 const IMAGEN_FINAL_MAR := preload("res://assets/cinematicas/final_mar.png")
-const AUDIO_FINAL_MAR := preload("res://sfx/final/final_mar.ogg")
+const AUDIO_FINAL_MAR := preload("res://sfx/final/aa_final_mar.ogg")
 
 func _ready() -> void:
 	var es_final_cuniraya: bool = Global.resultado_final == "cuniraya"

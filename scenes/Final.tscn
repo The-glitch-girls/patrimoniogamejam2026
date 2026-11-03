@@ -5,7 +5,7 @@
 [ext_resource type="Texture2D" uid="uid://exd5sas1i8a6" path="res://assets/ui/ajustes/reiniciar_normal.png" id="3_dexd0"]
 [ext_resource type="Texture2D" uid="uid://b8c1e53khuc31" path="res://assets/ui/ajustes/reiniciar_pressed.png" id="4_npxuk"]
 [ext_resource type="Texture2D" uid="uid://bdunqcl5o5qkc" path="res://assets/ui/ajustes/reiniciar_hover.png" id="5_48qy7"]
-[ext_resource type="AudioStream" uid="uid://dtx0ih6ohdtr5" path="res://sfx/final/final_cuniraya.ogg" id="6_final_audio"]
+[ext_resource type="AudioStream" uid="uid://dtx0ih6ohdtr5" path="res://sfx/final/aa_final_cuniraya.ogg" id="6_final_audio"]
 
 [node name="Final" type="Control"]
 layout_mode = 3

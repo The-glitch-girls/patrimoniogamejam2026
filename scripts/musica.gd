@@ -1,16 +1,10 @@
 extends Node
 
 const PISTAS := {
-	"menu": "res://sfx/aa_menu_juego.ogg",
+	"menu": "res://sfx/aa_menu.ogg",
 	"juego": "res://sfx/tema_juego.ogg",
 }
 const PISTA_COMBATE := "res://sfx/combate/aa_combate.ogg"
-
-const VOLUMEN := {
-	"menu": -8.0,
-	"juego": -8.0,
-	"recuerdo": -8.0,
-}
 
 var reproductor: AudioStreamPlayer
 var reproductor_combate: AudioStreamPlayer
@@ -57,10 +51,10 @@ func tocar(nombre: String) -> void:
 		reproductor.stream = pista
 		reproductor.volume_db = -40.0
 		reproductor.play()
-	fundido.tween_property(reproductor, "volume_db", VOLUMEN[nombre], 0.7)
+	fundido.tween_property(reproductor, "volume_db", 0.0, 0.7)
 
 
-func tocar_stream(nombre: String, pista: AudioStream, volumen_db: float = -8.0, repetir: bool = true) -> void:
+func tocar_stream(nombre: String, pista: AudioStream, volumen_db: float = 0.0, repetir: bool = true) -> void:
 	if pista == null or nombre == actual:
 		return
 	if combate_activo:
@@ -109,7 +103,7 @@ func iniciar_combate() -> void:
 	reproductor_combate.play()
 	fundido_combate = create_tween()
 	fundido_combate.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	fundido_combate.tween_property(reproductor_combate, "volume_db", -8.0, 0.5)
+	fundido_combate.tween_property(reproductor_combate, "volume_db", 0.0, 0.5)
 
 
 func terminar_combate() -> void:
@@ -120,7 +114,7 @@ func terminar_combate() -> void:
 		fundido.kill()
 	fundido = create_tween()
 	fundido.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	fundido.tween_property(reproductor, "volume_db", VOLUMEN.get(actual, -8.0), 0.7)
+	fundido.tween_property(reproductor, "volume_db", 0.0, 0.7)
 	if fundido_combate and fundido_combate.is_running():
 		fundido_combate.kill()
 	fundido_combate = create_tween()
