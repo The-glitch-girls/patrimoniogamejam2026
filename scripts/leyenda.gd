@@ -16,6 +16,8 @@ const COLOR_LUZ := Color("b9a2ff")
 @onready var fundido: ColorRect = $Fundido
 
 var transicionando := false
+var continuar_mostrado := false
+var pista: Label
 var tiempo_efectos := 0.0
 var progreso_grupo := 0.0
 var salto_rapido := false
@@ -40,16 +42,18 @@ func _ready() -> void:
 	continuar.visible = false
 	continuar.disabled = true
 	continuar.pressed.connect(_continuar)
+	continuar.button_down.connect(_apretar_continuar)
+	continuar.button_up.connect(_soltar_continuar)
 	_estilizar()
+	_crear_pista()
 	_poner_zorro_en_primer_plano()
 	_crear_luces_errantes()
 	_preparar_revelado_por_luz()
 	move_child(zorro, fundido.get_index())
 	await _animar_entrada()
+	_mostrar_pista()
 	await _relatar()
-	continuar.visible = true
-	var tween_boton := create_tween()
-	tween_boton.tween_property(continuar, "modulate:a", 1.0, 0.3)
+	_mostrar_continuar()
 
 
 func _process(delta: float) -> void:
@@ -218,6 +222,7 @@ func _estilizar() -> void:
 	continuar.add_theme_font_size_override("font_size", 18)
 	continuar.add_theme_color_override("font_color", COLOR_TEXTO)
 	continuar.add_theme_color_override("font_hover_color", COLOR_TEXTO)
+	continuar.pivot_offset = Vector2(110, 27)
 	continuar.modulate.a = 0.0
 
 
@@ -234,7 +239,11 @@ func _animar_entrada() -> void:
 
 
 func _relatar() -> void:
+	if continuar_mostrado:
+		return
 	await get_tree().process_frame
+	if continuar_mostrado:
+		return
 	var grupos := _obtener_grupos_de_palabras()
 	if grupos.is_empty():
 		var centro_respaldo := texto.get_global_transform_with_canvas() * (texto.size * 0.5)
@@ -256,6 +265,8 @@ func _relatar() -> void:
 		var estrella: Polygon2D = particula.estrella
 		resplandor.show()
 		estrella.show()
+	if continuar_mostrado:
+		return
 	duracion_relatado = maxf(float(maxi(texto.text.length(), 1)) / 30.0, 1.0)
 	if narracion.stream != null:
 		duracion_relatado = maxf(narracion.stream.get_length(), 0.1)
@@ -264,11 +275,14 @@ func _relatar() -> void:
 	seguir_relatado = true
 	_actualizar_enfoque_luces()
 	if narracion.playing:
-		while narracion.playing:
+		while narracion.playing and not continuar_mostrado:
 			await get_tree().process_frame
 	else:
-		while tiempo_relatado < duracion_relatado:
+		while tiempo_relatado < duracion_relatado and not continuar_mostrado:
 			await get_tree().process_frame
+	if continuar_mostrado:
+		seguir_relatado = false
+		return
 	tiempo_relatado = duracion_relatado
 	_actualizar_enfoque_luces()
 	seguir_relatado = false
@@ -392,11 +406,74 @@ func _peso_palabra(contenido: String, fin_palabra: int) -> float:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if continuar.disabled or transicionando:
+	if transicionando:
 		return
-	if event is InputEventKey and event.pressed and not event.echo:
-		if event.keycode in [KEY_ENTER, KEY_SPACE, KEY_E]:
-			_continuar()
+	if not (event is InputEventKey and event.pressed and not event.echo):
+		return
+	if event.keycode == KEY_SPACE and not continuar_mostrado:
+		_mostrar_continuar()
+		get_viewport().set_input_as_handled()
+		return
+	if continuar.disabled:
+		return
+	if event.keycode in [KEY_ENTER, KEY_SPACE, KEY_E]:
+		_continuar()
+
+
+func _crear_pista() -> void:
+	pista = Label.new()
+	pista.name = "PistaEspacio"
+	pista.text = Traducciones.obtener("press_space")
+	pista.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pista.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	pista.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
+	pista.offset_left = -160.0
+	pista.offset_top = -169.0
+	pista.offset_right = 160.0
+	pista.offset_bottom = -115.0
+	pista.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	pista.add_theme_font_override("font", FUENTE)
+	pista.add_theme_font_size_override("font_size", 18)
+	pista.add_theme_color_override("font_color", COLOR_TEXTO)
+	pista.modulate.a = 0.0
+	add_child(pista)
+	move_child(pista, continuar.get_index())
+
+
+func _mostrar_pista() -> void:
+	if pista == null or continuar_mostrado:
+		return
+	var tween_pista := create_tween()
+	tween_pista.tween_property(pista, "modulate:a", 1.0, 0.3)
+
+
+func _mostrar_continuar() -> void:
+	if continuar_mostrado or transicionando:
+		return
+	continuar_mostrado = true
+	seguir_relatado = false
+	if duracion_relatado > 0.0:
+		tiempo_relatado = duracion_relatado
+		_actualizar_enfoque_luces()
+	if narracion.playing:
+		narracion.stop()
+	if pista != null:
+		pista.visible = false
+	continuar.visible = true
+	continuar.disabled = false
+	continuar.modulate.a = 0.0
+	var tween_boton := create_tween()
+	tween_boton.tween_property(continuar, "modulate:a", 1.0, 0.2)
+
+
+func _apretar_continuar() -> void:
+	var tween := create_tween()
+	tween.tween_property(continuar, "scale", Vector2(0.97, 0.97), 0.08)
+
+
+func _soltar_continuar() -> void:
+	var tween := create_tween()
+	tween.tween_property(continuar, "scale", Vector2.ONE, 0.12)
 
 
 func _continuar() -> void:

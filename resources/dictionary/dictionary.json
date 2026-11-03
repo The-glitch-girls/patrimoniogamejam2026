@@ -202,6 +202,7 @@
 	"language": {"es": "Idioma", "en": "Language", "fr": "Langue"},
 	"close": {"es": "Cerrar", "en": "Close", "fr": "Fermer"},
 	"continue": {"es": "Continuar", "en": "Continue", "fr": "Continuer"},
+	"press_space": {"es": "Pulsa espacio", "en": "Press space", "fr": "Appuyez sur espace"},
 	"sound": {"es": "Sonido", "en": "Sound", "fr": "Son"},
 	"master": {"es": "General", "en": "Master", "fr": "Principal"},
 	"ambience": {"es": "Ambiente", "en": "Ambience", "fr": "Ambiance"},

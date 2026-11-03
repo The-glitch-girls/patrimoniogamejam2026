@@ -200,8 +200,8 @@ func _physics_process(delta):
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
 	move_and_slide()
 	
-	# Utilizado para mostrar delante del bebe
-	z_index = int($CollisionShape2D.global_position.y)
+	# El suelo vive en z negativo. La Y del mapa tambien, asi que no se puede usar como z.
+	z_index = 1
 
 	if cam.global_position.y <= cam.limit_top:
 		global_position.y = min(global_position.y, cam.global_position.y)

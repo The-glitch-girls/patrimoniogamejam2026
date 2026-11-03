@@ -27,8 +27,7 @@ func _process(delta):
 	else:
 		$AnimatedSprite2D.modulate = Color.WHITE
 	
-	# Utilizado para mostrar detras de Cavillaca
-	z_index = int($CollisionShape2D.global_position.y)
+	z_index = 1
 
 func recoger():
 	Global.lleva_bebe = true
