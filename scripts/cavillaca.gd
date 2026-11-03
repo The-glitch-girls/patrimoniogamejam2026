@@ -248,16 +248,6 @@ func _physics_process(delta):
 	_animar_caminata(delta, esta_caminando, esta_corriendo)
 	_actualizar_camara(delta)
 	_actualizar_prompt()
-
-
-func _input(event: InputEvent) -> void:
-	if not OS.is_debug_build() or not (event is InputEventKey):
-		return
-	var tecla := event as InputEventKey
-	if tecla.pressed and not tecla.echo and (tecla.keycode == KEY_F8 or tecla.physical_keycode == KEY_F8):
-		var halcon := get_tree().get_first_node_in_group("halcon")
-		if halcon != null and halcon.has_method("debug_aparecer_al_lado"):
-			halcon.debug_aparecer_al_lado(global_position + Vector2(180.0, 0.0))
 	_actualizar_carga_visual()
 
 	if direccion == Vector2.ZERO:
@@ -274,6 +264,16 @@ func _input(event: InputEvent) -> void:
 		Global.perder_energia(Global.COSTO_CORRER)
 	else:
 		Global.perder_energia(Global.COSTO_CAMINAR)
+
+
+func _input(event: InputEvent) -> void:
+	if not OS.is_debug_build() or not (event is InputEventKey):
+		return
+	var tecla := event as InputEventKey
+	if tecla.pressed and not tecla.echo and (tecla.keycode == KEY_F8 or tecla.physical_keycode == KEY_F8):
+		var halcon := get_tree().get_first_node_in_group("halcon")
+		if halcon != null and halcon.has_method("debug_aparecer_al_lado"):
+			halcon.debug_aparecer_al_lado(global_position + Vector2(180.0, 0.0))
 
 
 func _caminar_al_mar(delta: float) -> void:
