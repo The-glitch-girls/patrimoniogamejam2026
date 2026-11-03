@@ -2,7 +2,7 @@ extends Node
 
 const PISTAS := {
 	"menu": "res://sfx/aa_menu_juego.ogg",
-	"juego": "res://sfx/aa_gameplay_juego.ogg",
+	"juego": "res://sfx/combate/aa_combate.ogg",
 	"ganar": "res://sfx/aa_perder.ogg",
 	"perder": "res://sfx/aa_perder.ogg",
 }
