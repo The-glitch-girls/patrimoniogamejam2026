@@ -132,6 +132,26 @@ func _revivir():
 	$Detector.monitorable = true
 
 
+func debug_aparecer_al_lado(posicion: Vector2) -> void:
+	if not OS.is_debug_build() or en_combate:
+		return
+	global_position = posicion
+	origen = posicion
+	vida = VIDA_MAX
+	derrotado = false
+	en_muerte = false
+	descanso_t = 0.0
+	lock_golpe = 0.0
+	respawn_t = 0.0
+	rondando = false
+	Global.halcon_cerca = true
+	$AnimatedSprite2D.scale = escala_original
+	$AnimatedSprite2D.play("lado")
+	$Detector.set_deferred("monitoring", true)
+	$Detector.set_deferred("monitorable", true)
+	show()
+
+
 func _armar_puntos() -> void:
 	puntos_abiertos.clear()
 	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer

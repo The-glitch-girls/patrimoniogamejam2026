@@ -1,10 +1,12 @@
 extends Control
 
 const IMAGEN_FINAL_MAR := preload("res://assets/cinematicas/final_mar.png")
+const AUDIO_FINAL_MAR := preload("res://sfx/final/final_mar.ogg")
 
 func _ready() -> void:
 	var es_final_cuniraya: bool = Global.resultado_final == "cuniraya"
-	if not es_final_cuniraya:
+	var es_final_mar: bool = Global.resultado_final == "mar"
+	if es_final_mar:
 		$ImagenFinal.texture = IMAGEN_FINAL_MAR
 	$ImagenFinal.visible = true
 	$ReiniciarBtn.visible = es_final_cuniraya
@@ -24,19 +26,10 @@ func _ready() -> void:
 		if is_instance_valid($ReiniciarBtn) and is_instance_valid($ReiniciarLbl):
 			$ReiniciarBtn.visible = true
 			$ReiniciarLbl.visible = true
-	if OS.get_cmdline_user_args().has("--finalshot"):
-		_capturar()
-
-
-func _capturar() -> void:
-	var arbol := get_tree()
-	if arbol == null:
-		return
-	await arbol.process_frame
-	await arbol.create_timer(0.45).timeout
-	var imagen := arbol.root.get_viewport().get_texture().get_image()
-	imagen.save_png("screenshot_final.png")
-	arbol.quit()
+	elif es_final_mar:
+		$AudioFinal.stream = AUDIO_FINAL_MAR
+		$AudioFinal.play()
+		_transicionar_a_creditos_finales()
 
 
 func _reintentar_cuniraya() -> void:
@@ -47,3 +40,9 @@ func _reintentar_cuniraya() -> void:
 
 func _actualizar_etiqueta_reiniciar(_idioma: String = "") -> void:
 	$ReiniciarLbl.text = Traducciones.obtener("restart")
+
+
+func _transicionar_a_creditos_finales() -> void:
+	await get_tree().create_timer(5.0).timeout
+	if is_inside_tree():
+		get_tree().change_scene_to_file("res://scenes/CreditosFinales.tscn")
