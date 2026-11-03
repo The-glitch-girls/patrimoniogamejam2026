@@ -10,7 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="8_03owp"]
 [ext_resource type="Script" uid="uid://cay8ncyyqmj3t" path="res://scripts/hud.gd" id="9_8qdhh"]
 [ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="10_ngf25"]
-[ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="11_utor8"]
+[ext_resource type="AudioStream" uid="uid://cd44yu5r7yp52" path="res://sfx/aa_tension_gameplay.ogg" id="11_6dwb3"]
 [ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="12_sub5l"]
 [ext_resource type="AudioStream" uid="uid://k0g0tqnkpegb" path="res://sfx/llanto_bebe.mp3" id="13_l65pt"]
 [ext_resource type="Texture2D" uid="uid://dix21bawdw0ft" path="res://assets/ui/recuerdos/recuerdos_x.png" id="14_ggmb3"]
@@ -198,7 +198,7 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="SonidoTension" type="AudioStreamPlayer2D" parent="HUD"]
-stream = ExtResource("11_utor8")
+stream = ExtResource("11_6dwb3")
 bus = &"Ambiente"
 
 [node name="PeakTension" type="AudioStreamPlayer2D" parent="HUD"]

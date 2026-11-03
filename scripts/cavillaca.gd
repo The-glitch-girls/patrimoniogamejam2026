@@ -144,9 +144,12 @@ func _copiar_animacion(destino: SpriteFrames, nombre: StringName) -> void:
 	destino.set_animation_speed(nombre, animaciones_cavillaca.get_animation_speed(nombre))
 	destino.set_animation_loop(nombre, animaciones_cavillaca.get_animation_loop(nombre))
 	for indice in range(animaciones_cavillaca.get_frame_count(nombre)):
+		var textura := animaciones_cavillaca.get_frame_texture(nombre, indice)
+		var textura_copia := textura.duplicate() as Texture2D
+		textura_copia.resource_path = ""
 		destino.add_frame(
 			nombre,
-			animaciones_cavillaca.get_frame_texture(nombre, indice),
+			textura_copia,
 			animaciones_cavillaca.get_frame_duration(nombre, indice)
 		)
 
