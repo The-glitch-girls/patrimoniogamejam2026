@@ -57,7 +57,6 @@ func _ready():
 	$Detector.body_entered.connect(_on_body_entered)
 
 	$AnimatedSprite2D.play("lado")
-	
 
 func _ignorar_colision_con_cavillaca() -> void:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as CharacterBody2D

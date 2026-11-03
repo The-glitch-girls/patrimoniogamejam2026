@@ -7,7 +7,7 @@ const FRASES := {
 	"F Hablar  |  R Descansar": "prompt_talk_rest",
 	"F Hablar": "prompt_talk",
 	"R  Descansar": "prompt_rest",
-	"E  Hablar con zorro": "prompt_talk_fox",
+	"F  Hablar con zorro": "prompt_talk_fox",
 	"E  Dejar con zorro": "prompt_leave_with_fox",
 	"E  Recoger del zorro": "prompt_pickup_from_fox",
 	"E  Dejar": "prompt_leave",
@@ -25,7 +25,8 @@ const FRASES := {
 	"No llevas al bebé": "not_carrying_baby",
 	"Bebé dejado con el zorro": "baby_left_with_fox",
 	"Bebé recogido del zorro": "baby_picked_up_from_fox",
-	"El zorro te observa con calma": "fox_observes_calmly",
+	"El zorro parece reconocer el recuerdo que encontraste": "fox_recognizes_memory",
+	"El zorro confía en ti y está dispuesto a cuidar al bebé": "fox_trusts_with_baby",
 }
 
 var idioma_actual := Global.idioma_actual

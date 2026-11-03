@@ -108,7 +108,12 @@ func _elegir_destino() -> void:
 
 
 func hablar() -> void:
-	Global.mostrar_aviso("El zorro te observa con calma")
+	if Global.recuerdos_obtenidos == 0:
+		Global.mostrar_aviso("Con un recuerdo, la cueva recarga tu energía")
+	elif Global.recuerdos_obtenidos == 1:
+		Global.mostrar_aviso("El zorro parece reconocer el recuerdo que encontraste")
+	else:
+		Global.mostrar_aviso("El zorro confía en ti y está dispuesto a cuidar al bebé")
 
 func _poner_animacion(caminando: bool) -> void:
 	var animacion := "caminar" if caminando else "quieto"

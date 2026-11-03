@@ -10,6 +10,14 @@ const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
 const PROMPT_CARGAR := preload("res://assets/ui/botones/cargar_btn.png")
 const PROMPT_CARGAR_PRESIONADO := preload("res://assets/ui/botones/cargar_btn_pressed.png")
+const PROMPT_CONVERSAR := preload("res://assets/ui/botones/conversar_btn.png")
+const PROMPT_CONVERSAR_PRESIONADO := preload("res://assets/ui/botones/conversar_btn_pressed.png")
+const PROMPT_DEJAR := preload("res://assets/ui/botones/dejar_btn.png")
+const PROMPT_DEJAR_PRESIONADO := preload("res://assets/ui/botones/dejar_btn_pressed.png")
+const PROMPT_HABLAR := preload("res://assets/ui/botones/hablar_btn.png")
+const PROMPT_HABLAR_PRESIONADO := preload("res://assets/ui/botones/hablar_btn_pressed.png")
+const PROMPT_DESCANSAR := preload("res://assets/ui/botones/descansar_btn.png")
+const PROMPT_DESCANSAR_PRESIONADO := preload("res://assets/ui/botones/descansar_btn_pressed.png")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
@@ -23,6 +31,8 @@ var prompt_texto := ""
 var prompt_idioma := ""
 var prompt_icono: TextureRect
 var prompt_titulo: Label
+var prompt_icono_descansar: TextureRect
+var prompt_titulo_descansar: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
@@ -178,13 +188,53 @@ func _crear_prompt_icono() -> void:
 	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(prompt_titulo)
 
+	prompt_icono_descansar = TextureRect.new()
+	prompt_icono_descansar.name = "PromptDescansarIcono"
+	prompt_icono_descansar.z_index = 10
+	prompt_icono_descansar.visible = false
+	prompt_icono_descansar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	prompt_icono_descansar.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	prompt_icono_descansar.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	prompt_icono_descansar.scale = Vector2(1.5, 1.5)
+	prompt_icono_descansar.pivot_offset = Vector2(42, 42)
+	prompt_icono_descansar.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	prompt_icono_descansar.offset_left = -284
+	prompt_icono_descansar.offset_top = -176
+	prompt_icono_descansar.offset_right = -200
+	prompt_icono_descansar.offset_bottom = -92
+	add_child(prompt_icono_descansar)
+
+	prompt_titulo_descansar = Label.new()
+	prompt_titulo_descansar.name = "PromptDescansarTitulo"
+	prompt_titulo_descansar.z_index = 10
+	prompt_titulo_descansar.visible = false
+	prompt_titulo_descansar.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	prompt_titulo_descansar.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt_titulo_descansar.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	prompt_titulo_descansar.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
+	prompt_titulo_descansar.offset_left = -321
+	prompt_titulo_descansar.offset_top = -56
+	prompt_titulo_descansar.offset_right = -163
+	prompt_titulo_descansar.offset_bottom = -28
+	_texto(prompt_titulo_descansar, 18)
+	prompt_titulo_descansar.add_theme_font_override("font", FUENTE_PROMPT)
+	add_child(prompt_titulo_descansar)
+
 
 func _tipo_prompt_con_imagen() -> String:
 	var texto := Global.prompt_interaccion.to_lower()
+	if texto.contains("descansar"):
+		return "talk" if texto.begins_with("f ") else "rest"
 	if texto.contains("atacar"):
 		return "attack"
 	if texto.contains("recoger"):
 		return "pickup"
+	if texto.contains("dejar"):
+		return "leave"
+	if texto.contains("conversar"):
+		return "converse"
+	if texto.contains("hablar"):
+		return "talk"
 	return ""
 
 
@@ -196,20 +246,44 @@ func _actualizar_prompt_visual() -> void:
 
 	var tipo := _tipo_prompt_con_imagen()
 	var usa_imagen := tipo != ""
+	var muestra_descanso_secundario := tipo == "talk" and Global.prompt_interaccion.to_lower().contains("descansar")
 	$PromptFondo.visible = not usa_imagen
 	$PromptLabel.visible = not usa_imagen
 	prompt_icono.visible = usa_imagen
 	prompt_titulo.visible = usa_imagen
+	prompt_icono_descansar.visible = muestra_descanso_secundario
+	prompt_titulo_descansar.visible = muestra_descanso_secundario
 	if not usa_imagen:
 		return
 
-	var presionado := Input.is_action_pressed("atacar") if tipo == "attack" else Input.is_action_pressed("interactuar")
-	if tipo == "attack":
-		prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
-		prompt_titulo.text = Traducciones.obtener("attack")
-	else:
-		prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
-		prompt_titulo.text = Traducciones.obtener("pickup")
+	var accion := "atacar" if tipo == "attack" else "descansar" if tipo == "rest" else "interactuar"
+	if tipo == "talk" and Global.prompt_interaccion.to_lower().begins_with("f "):
+		accion = "hablar_zorro"
+	var presionado := Input.is_action_pressed(accion)
+	if muestra_descanso_secundario:
+		var descanso_presionado := Input.is_action_pressed("descansar")
+		prompt_icono_descansar.texture = PROMPT_DESCANSAR_PRESIONADO if descanso_presionado else PROMPT_DESCANSAR
+		prompt_titulo_descansar.text = Traducciones.obtener("rest_action")
+	match tipo:
+		"attack":
+			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
+			prompt_titulo.text = Traducciones.obtener("attack")
+		"pickup":
+			prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
+			prompt_titulo.text = Traducciones.obtener("pickup")
+		"converse":
+			prompt_icono.texture = PROMPT_CONVERSAR_PRESIONADO if presionado else PROMPT_CONVERSAR
+			prompt_titulo.text = Traducciones.obtener("converse_action")
+		"leave":
+			prompt_icono.texture = PROMPT_DEJAR_PRESIONADO if presionado else PROMPT_DEJAR
+			var clave_titulo := "leave_with_fox_action" if Global.prompt_interaccion.to_lower().contains("con zorro") else "leave_action"
+			prompt_titulo.text = Traducciones.obtener(clave_titulo)
+		"talk":
+			prompt_icono.texture = PROMPT_HABLAR_PRESIONADO if presionado else PROMPT_HABLAR
+			prompt_titulo.text = Traducciones.obtener("talk_action")
+		"rest":
+			prompt_icono.texture = PROMPT_DESCANSAR_PRESIONADO if presionado else PROMPT_DESCANSAR
+			prompt_titulo.text = Traducciones.obtener("rest_action")
 
 
 func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
@@ -449,10 +523,14 @@ func _process(delta):
 	$PromptFondo.modulate.a = prompt_alpha
 	prompt_icono.modulate.a = prompt_alpha
 	prompt_titulo.modulate.a = prompt_alpha
+	prompt_icono_descansar.modulate.a = prompt_alpha
+	prompt_titulo_descansar.modulate.a = prompt_alpha
 	if destino_alpha == 0.0 and prompt_alpha <= 0.0:
 		$PromptFondo.visible = false
 		$PromptLabel.visible = false
 		prompt_icono.visible = false
+		prompt_icono_descansar.visible = false
+		prompt_titulo_descansar.visible = false
 		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""
