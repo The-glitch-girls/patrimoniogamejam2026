@@ -1,6 +1,11 @@
-[gd_scene load_steps=2 format=3 uid="uid://hal2ns27l1ej"]
+[gd_scene load_steps=7 format=3 uid="uid://hal2ns27l1ej"]
 
 [ext_resource type="Script" uid="uid://cc74jj4g4tf2n" path="res://scripts/final.gd" id="1_final"]
+[ext_resource type="Texture2D" uid="uid://dgf8f0jx6ashw" path="res://assets/cinematicas/final_cuniraya.png" id="2_xiy6r"]
+[ext_resource type="Texture2D" uid="uid://exd5sas1i8a6" path="res://assets/ui/ajustes/reiniciar_normal.png" id="3_dexd0"]
+[ext_resource type="Texture2D" uid="uid://b8c1e53khuc31" path="res://assets/ui/ajustes/reiniciar_pressed.png" id="4_npxuk"]
+[ext_resource type="Texture2D" uid="uid://bdunqcl5o5qkc" path="res://assets/ui/ajustes/reiniciar_hover.png" id="5_48qy7"]
+[ext_resource type="AudioStream" uid="uid://dtx0ih6ohdtr5" path="res://sfx/final/final_cuniraya.ogg" id="6_final_audio"]
 
 [node name="Final" type="Control"]
 layout_mode = 3
@@ -10,3 +15,35 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_final")
+
+[node name="ImagenFinal" type="TextureRect" parent="."]
+layout_mode = 1
+offset_left = -12.8
+offset_top = -7.2
+offset_right = 1907.2
+offset_bottom = 1072.8
+scale = Vector2(0.68, 0.68)
+texture = ExtResource("2_xiy6r")
+
+[node name="ReiniciarBtn" type="TextureButton" parent="."]
+layout_mode = 0
+offset_left = 1166.0
+offset_top = 569.0
+offset_right = 1299.0
+offset_bottom = 721.0
+scale = Vector2(0.6, 0.6)
+texture_normal = ExtResource("3_dexd0")
+texture_pressed = ExtResource("4_npxuk")
+texture_hover = ExtResource("5_48qy7")
+
+[node name="ReiniciarLbl" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1170.0
+offset_top = 671.0
+offset_right = 1243.0
+offset_bottom = 703.0
+text = "Reiniciar"
+
+[node name="AudioFinal" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_final_audio")
+parameters/looping = true
