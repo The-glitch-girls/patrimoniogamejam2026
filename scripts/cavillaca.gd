@@ -41,6 +41,7 @@ var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
 
 func _ready():
+	_asegurar_tecla_dialogo_zorro()
 	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 6, 512)
 	
 	add_to_group("cavillaca")
@@ -65,6 +66,31 @@ func _ready():
 	cam.position_smoothing_speed = 8.0
 	add_child(cam)
 	cam.make_current()
+
+
+func _asegurar_tecla_dialogo_zorro() -> void:
+	# En algunos proyectos F quedó agregada también a "atacar".
+	# Se reserva F para hablar y se evita que abra el combate por accidente.
+	if not InputMap.has_action("hablar_zorro"):
+		InputMap.add_action("hablar_zorro")
+
+	var tecla_f := InputEventKey.new()
+	tecla_f.physical_keycode = KEY_F
+	var f_asignada_a_hablar := false
+	for evento in InputMap.action_get_events("hablar_zorro"):
+		if evento is InputEventKey:
+			var tecla := evento as InputEventKey
+			if tecla.physical_keycode == KEY_F or tecla.keycode == KEY_F:
+				f_asignada_a_hablar = true
+				break
+	if not f_asignada_a_hablar:
+		InputMap.action_add_event("hablar_zorro", tecla_f)
+
+	for evento in InputMap.action_get_events("atacar"):
+		if evento is InputEventKey:
+			var tecla := evento as InputEventKey
+			if tecla.physical_keycode == KEY_F or tecla.keycode == KEY_F:
+				InputMap.action_erase_event("atacar", evento)
 
 
 func _solicitar_animaciones() -> void:
@@ -160,7 +186,7 @@ func _physics_process(delta):
 		elif Global.lleva_bebe:
 			_dejar_bebe()
 		elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-			_hablar_con_zorro()
+			pass # Hablar con el zorro se activa únicamente con F.
 		else:
 			_recoger_bebe()
 
@@ -427,16 +453,16 @@ func _actualizar_camara(_delta: float):
 func _actualizar_prompt():
 	var cueva := get_tree().get_first_node_in_group("zona_segura")
 	var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+	var puede_descansar: bool = false
+	if cueva != null:
+		puede_descansar = bool(cueva.call("puede_descansar"))
 	
 	if Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
-		if cueva != null and cueva.puede_descansar():
-			Global.prompt_interaccion = "F Hablar  |  R Descansar"
-		else:
-			Global.prompt_interaccion = "F Hablar"
-	elif cueva != null and cueva.puede_descansar():
-		Global.prompt_interaccion = "R  Descansar"
+		Global.prompt_interaccion = "F Hablar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-		Global.prompt_interaccion = "E  Hablar con zorro"
+		Global.prompt_interaccion = "F  Hablar con zorro"
+	elif puede_descansar:
+		Global.prompt_interaccion = "R  Descansar"
 	elif en_cueva and Global.cuidado_bebe_desbloqueado:
 		if Global.lleva_bebe:
 			Global.prompt_interaccion = "E  Dejar con zorro"
@@ -450,7 +476,6 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "E  Atacar"
 	else:
 		Global.prompt_interaccion = ""
-	
 	#print("HALCON CERCA: ", Global.halcon_cerca)
 
 
@@ -460,11 +485,6 @@ func _actualizar_carga_visual():
 	else:
 		$Sprite.modulate = Color.WHITE
 
-
-func _hablar_con_zorro():
-	var zorro := get_tree().get_first_node_in_group("zorro")
-	if zorro != null:
-		zorro.hablar()
 
 
 func _obtener_bebe() -> Node2D:
@@ -601,7 +621,7 @@ func _controlar_ataque() -> bool:
 	
 	# Ataque: funciona tanto para entrar al combate
 	# como para golpear al halcón dentro del combate.
-	if Input.is_action_just_pressed("atacar"):
+	if Input.is_action_just_pressed("atacar") and not Input.is_physical_key_pressed(KEY_F):
 		var halcon := get_tree().get_first_node_in_group("halcon")
 
 		if halcon != null:

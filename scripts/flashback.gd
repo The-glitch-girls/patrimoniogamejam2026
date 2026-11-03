@@ -5,6 +5,16 @@ signal terminado
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
+const TEXTURAS_CONTINUAR := {
+	"es": preload("res://assets/ui/recuerdos/continuar_es.png"),
+	"en": preload("res://assets/ui/recuerdos/continuar_en.png"),
+	"fr": preload("res://assets/ui/recuerdos/continuar_fr.png"),
+}
+const TEXTURAS_CONTINUAR_PRESIONADO := {
+	"es": preload("res://assets/ui/recuerdos/continuar_es_pressed.png"),
+	"en": preload("res://assets/ui/recuerdos/continuar_en_pressed.png"),
+	"fr": preload("res://assets/ui/recuerdos/continuar_fr_pressed.png"),
+}
 
 var indice := 1
 var cerrando := false
@@ -24,6 +34,8 @@ func _ready():
 	_aplicar_texto()
 	_aplicar_asset()
 	_estilar()
+	_actualizar_texturas_continuar(Global.idioma_actual)
+	Traducciones.idioma_cambiado.connect(_actualizar_texturas_continuar)
 
 	$Continuar.visible = false
 	$Continuar.pressed.connect(_continuar)
@@ -31,8 +43,14 @@ func _ready():
 
 func _aplicar_texto() -> void:
 	var dato: Dictionary = Global.RECUERDOS[indice]
-	$Titulo.text = Traducciones.obtener(dato.titulo)
-	$Texto.text = Traducciones.obtener(dato.texto)
+	$CajaRecuerdo/Titulo.text = Traducciones.obtener(dato.titulo)
+	$CajaRecuerdo/Texto.text = Traducciones.obtener(dato.texto)
+
+
+func _actualizar_texturas_continuar(idioma: String) -> void:
+	var codigo := idioma if TEXTURAS_CONTINUAR.has(idioma) else "es"
+	$Continuar.texture_normal = TEXTURAS_CONTINUAR[codigo]
+	$Continuar.texture_pressed = TEXTURAS_CONTINUAR_PRESIONADO[codigo]
 
 func _aplicar_asset() -> void:
 	var dato: Dictionary = Global.RECUERDOS[indice]
@@ -47,9 +65,10 @@ func _aplicar_asset() -> void:
 		
 
 func _animar_apertura() -> void:
-	$Titulo.modulate.a = 0.0
-	$Texto.modulate.a = 0.0
-	$Texto.visible_ratio = 0.0
+	$CajaRecuerdo.modulate.a = 0.0
+	$CajaRecuerdo/Titulo.modulate.a = 0.0
+	$CajaRecuerdo/Texto.modulate.a = 0.0
+	$CajaRecuerdo/Texto.visible_ratio = 0.0
 	$Continuar.modulate.a = 0.0
 
 	var tween := create_tween()
@@ -64,15 +83,17 @@ func _animar_apertura() -> void:
 	else:
 		tween.tween_interval(0.2)
 
-	$Titulo.offset_top += 14.0
-	$Titulo.offset_bottom += 14.0
+	tween.tween_interval(0.12)
+	tween.tween_property($CajaRecuerdo, "modulate:a", 1.0, 0.35)
+	$CajaRecuerdo/Titulo.offset_top += 14.0
+	$CajaRecuerdo/Titulo.offset_bottom += 14.0
 	tween.tween_interval(0.1)
-	tween.tween_property($Titulo, "modulate:a", 1.0, 0.35)
-	tween.parallel().tween_property($Titulo, "offset_top", 0.0, 0.35)
-	tween.parallel().tween_property($Titulo, "offset_bottom", 0.0, 0.35)
+	tween.tween_property($CajaRecuerdo/Titulo, "modulate:a", 1.0, 0.35)
+	tween.parallel().tween_property($CajaRecuerdo/Titulo, "offset_top", 0.0, 0.35)
+	tween.parallel().tween_property($CajaRecuerdo/Titulo, "offset_bottom", 0.0, 0.35)
 	tween.tween_interval(0.1)
-	tween.tween_property($Texto, "modulate:a", 1.0, 0.25)
-	tween.parallel().tween_property($Texto, "visible_ratio", 1.0, 1.6)
+	tween.tween_property($CajaRecuerdo/Texto, "modulate:a", 1.0, 0.25)
+	tween.parallel().tween_property($CajaRecuerdo/Texto, "visible_ratio", 1.0, 1.6)
 	await tween.finished
 
 	if $AssetRecuerdo.visible:
@@ -85,49 +106,37 @@ func _animar_apertura() -> void:
 
 func _estilar() -> void:
 	$ColorRect.color = Color(0.12, 0.1, 0.28, 0.72)
-	for label in [$Titulo, $Texto]:
+	for label in [$CajaRecuerdo/Titulo, $CajaRecuerdo/Texto]:
 		label.add_theme_font_override("font", FUENTE)
 		label.add_theme_color_override("font_color", CREMA)
-	$Titulo.add_theme_font_size_override("font_size", 22)
-	$Titulo.anchor_left = 0.05
-	$Titulo.anchor_right = 0.53
-	$Titulo.anchor_top = 0.74
-	$Titulo.anchor_bottom = 0.82
-	$Titulo.offset_left = 0
-	$Titulo.offset_right = 0
-	$Titulo.offset_top = 0
-	$Titulo.offset_bottom = 0
-	$Titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	$Texto.anchor_left = 0.05
-	$Texto.anchor_right = 0.335
-	$Texto.anchor_top = 0.82
-	$Texto.anchor_bottom = 0.99
-	$Texto.offset_left = 0
-	$Texto.offset_right = 0
-	$Texto.offset_top = 0
-	$Texto.offset_bottom = 0
-	$Texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	$CajaRecuerdo/Titulo.add_theme_font_size_override("font_size", 36)
+	var ajustes_texto: LabelSettings = $CajaRecuerdo/Texto.label_settings.duplicate()
+	ajustes_texto.font_size = 25
+	$CajaRecuerdo/Texto.label_settings = ajustes_texto
+	$CajaRecuerdo/Titulo.anchor_left = 0.06
+	$CajaRecuerdo/Titulo.anchor_right = 0.94
+	$CajaRecuerdo/Titulo.anchor_top = 0.17
+	$CajaRecuerdo/Titulo.anchor_bottom = 0.36
+	$CajaRecuerdo/Titulo.offset_left = 0
+	$CajaRecuerdo/Titulo.offset_right = 0
+	$CajaRecuerdo/Titulo.offset_top = 0
+	$CajaRecuerdo/Titulo.offset_bottom = 0
+	$CajaRecuerdo/Titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	$CajaRecuerdo/Texto.anchor_left = 0.06
+	$CajaRecuerdo/Texto.anchor_right = 0.94
+	$CajaRecuerdo/Texto.anchor_top = 0.40
+	$CajaRecuerdo/Texto.anchor_bottom = 0.91
+	$CajaRecuerdo/Texto.offset_left = 0
+	$CajaRecuerdo/Texto.offset_right = 0
+	$CajaRecuerdo/Texto.offset_top = 0
+	$CajaRecuerdo/Texto.offset_bottom = 0
+	$CajaRecuerdo/Texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	$CajaRecuerdo/Texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var boton := StyleBoxFlat.new()
 	boton.bg_color = VERDE
 	boton.set_corner_radius_all(22)
 	boton.set_border_width_all(5)
 	boton.border_color = Color.WHITE
-	$Continuar.add_theme_stylebox_override("normal", boton)
-	$Continuar.add_theme_stylebox_override("hover", boton)
-	$Continuar.add_theme_stylebox_override("pressed", boton)
-	$Continuar.add_theme_font_override("font", FUENTE)
-	$Continuar.add_theme_font_size_override("font_size", 18)
-	$Continuar.add_theme_color_override("font_color", CREMA)
-	$Continuar.add_theme_color_override("font_hover_color", CREMA)
-	$Continuar.text = Traducciones.obtener("continue")
-	$Continuar.anchor_left = 1.0
-	$Continuar.anchor_right = 1.0
-	$Continuar.anchor_top = 1.0
-	$Continuar.anchor_bottom = 1.0
-	$Continuar.offset_left = -215
-	$Continuar.offset_right = -40
-	$Continuar.offset_top = -98
-	$Continuar.offset_bottom = -40
 
 
 func _continuar() -> void:
@@ -142,8 +151,9 @@ func _continuar() -> void:
 	tween_cierre.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tween_cierre.set_parallel(true)
 	tween_cierre.tween_property($ColorRect, "color:a", 1.0, 0.65)
-	tween_cierre.tween_property($Titulo, "modulate:a", 0.0, 0.4)
-	tween_cierre.tween_property($Texto, "modulate:a", 0.0, 0.4)
+	tween_cierre.tween_property($CajaRecuerdo, "modulate:a", 0.0, 0.4)
+	tween_cierre.tween_property($CajaRecuerdo/Titulo, "modulate:a", 0.0, 0.4)
+	tween_cierre.tween_property($CajaRecuerdo/Texto, "modulate:a", 0.0, 0.4)
 	tween_cierre.tween_property($Continuar, "modulate:a", 0.0, 0.3)
 	tween_cierre.tween_property($RecuerdoMusica, "volume_db", -50.0, 0.65)
 	if $AssetRecuerdo.visible:

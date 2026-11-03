@@ -74,7 +74,3 @@ func obtener_punto_cuniraya() -> Vector2:
 	
 func mostrar_combate_halcon() -> void:
 	combate_halcon.show()
-	
-func _input(event):
-	if event is InputEventKey and event.pressed and event.keycode == KEY_F:
-		combate_halcon.show()

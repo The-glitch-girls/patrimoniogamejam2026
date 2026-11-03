@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctipp4cjs4yuu"]
+[gd_scene load_steps=3 format=3 uid="uid://ctipp4cjs4yuu"]
 
 [ext_resource type="Texture2D" uid="uid://b7ayeghs46tju" path="res://assets/enemigos/fondo_combate.png" id="1_5y5ie"]
+[ext_resource type="Texture2D" uid="uid://cjwdkaijwxt6q" path="res://assets/ui/heart.png" id="2_ngwey"]
 
 [node name="CombateHalcon" type="CanvasLayer"]
 layer = 5
@@ -31,23 +32,26 @@ position = Vector2(641, 730)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
+offset_left = -62.3
 offset_top = 42.0
-offset_bottom = 42.0
+offset_right = 115.7
+offset_bottom = 86.0
 grow_horizontal = 2
+scale = Vector2(0.7, 0.7)
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Vida1" type="Label" parent="VidasHalcon"]
+[node name="Vida1" type="TextureRect" parent="VidasHalcon"]
+custom_minimum_size = Vector2(54, 44)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "♥"
+texture = ExtResource("2_ngwey")
 
-[node name="Vida2" type="Label" parent="VidasHalcon"]
+[node name="Vida2" type="TextureRect" parent="VidasHalcon"]
+custom_minimum_size = Vector2(54, 44)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "♥"
+texture = ExtResource("2_ngwey")
 
-[node name="Vida3" type="Label" parent="VidasHalcon"]
+[node name="Vida3" type="TextureRect" parent="VidasHalcon"]
+custom_minimum_size = Vector2(54, 44)
 layout_mode = 2
-theme_override_font_sizes/font_size = 28
-text = "♥"
+texture = ExtResource("2_ngwey")

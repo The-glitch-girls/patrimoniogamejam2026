@@ -2,13 +2,12 @@ extends Area2D
 
 const RECUPERACION_ENERGIA_POR_SEGUNDO := 8.0
 const RANGO_INTERACCION := 40.0
-const RANGO_ZORRO_DESCANSO := 150.0
 const RANGO_ENTRADA := 150.0
 
 var bebe_con_zorro := false
 var jugador_en_entrada := false
 var puerta_abierta := true
-var aviso_energia_mostrado := false
+var descanso_activo := false
 
 @onready var arbol: TileMapLayer = $Arbol
 @onready var puerta: TileMapLayer = $Puerta
@@ -23,36 +22,36 @@ func _ready():
 
 func _process(delta: float) -> void:
 	jugador_en_entrada = _cavillaca_en_entrada()
-	if jugador_en_entrada and not aviso_energia_mostrado:
-		Global.mostrar_aviso("Con un recuerdo, la cueva recarga tu energía")
-	aviso_energia_mostrado = jugador_en_entrada
-
 	var puerta_abierta_ahora := jugador_en_entrada and Global.recuerdos_obtenidos > 0
 	_cambiar_puerta(puerta_abierta_ahora)
 
-	if puerta_abierta_ahora:
+	# El descanso solo recupera energía después de iniciar con R y mientras
+	# Cavillaca siga dentro del rango permitido.
+	if descanso_activo and not puede_descansar():
+		descanso_activo = false
+	if descanso_activo:
 		Global.recuperar_energia(RECUPERACION_ENERGIA_POR_SEGUNDO * delta)
-	Global.descanso_con_zorro = puerta_abierta_ahora
+		if Global.energia >= Global.ENERGIA_MAX:
+			descanso_activo = false
+	Global.descanso_con_zorro = descanso_activo
 
 
 func descansar() -> void:
-	if not _cavillaca_en_entrada():
-		Global.mostrar_aviso("Acércate a la entrada para descansar")
-		return
 	if Global.recuerdos_obtenidos < 1:
 		Global.mostrar_aviso("El zorro aún no te ofrece descanso")
 		return
-	if not _zorro_en_rango_de_descanso():
-		Global.mostrar_aviso("Acércate al zorro para descansar")
+	if not _cavillaca_en_entrada():
+		Global.mostrar_aviso("Acércate al tronco para descansar")
 		return
 	if Global.energia >= Global.ENERGIA_MAX:
 		Global.mostrar_aviso("Tu energía ya está completa")
 		return
-	Global.mostrar_aviso("Descansando junto al zorro")
+	descanso_activo = true
+	Global.mostrar_aviso("Descansando junto al tronco")
 
 
 func puede_descansar() -> bool:
-	return _cavillaca_en_entrada() and _zorro_en_rango_de_descanso() and Global.recuerdos_obtenidos > 0
+	return _cavillaca_en_entrada() and Global.recuerdos_obtenidos > 0
 
 
 func _cavillaca_en_entrada() -> bool:
@@ -61,11 +60,6 @@ func _cavillaca_en_entrada() -> bool:
 		cavillaca != null
 		and cavillaca.global_position.distance_to(colision_puerta.global_position) <= RANGO_ENTRADA
 	)
-
-
-func _zorro_en_rango_de_descanso() -> bool:
-	var zorro := get_tree().get_first_node_in_group("zorro") as Node2D
-	return zorro != null and colision_puerta.global_position.distance_to(zorro.global_position) < RANGO_ZORRO_DESCANSO
 
 
 func _crear_arbol_y_puerta() -> void:
