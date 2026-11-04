@@ -4,7 +4,6 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
-const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
@@ -59,10 +58,9 @@ var dialogo_zorro_fondo: TextureRect
 var dialogo_zorro_texto: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
-var marco_presencia: Panel
 var barra_energia: TextureRect
 var material_relleno_energia: ShaderMaterial
-var barra_presencia: ProgressBar
+var barra_presencia_texture: TextureProgressBar
 var overlay_ajustes: Control
 var pausa_previa_ajustes := false
 var marcas_recuerdo: Array[Panel] = []
@@ -138,10 +136,9 @@ func _estilar_panel():
 		$PresenciaLabel.visible = false
 	$PanelEstado/EnergiaBar.hide()
 	_configurar_barra_energia()
-	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 76), LILA)
-	barra_presencia = $PanelEstado/PresenciaBar
-	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 80), LILA)
-	_mostrar_presencia(false)
+	icono_presencia = $PanelEstado/PresenciaIcono
+	barra_presencia_texture = $PanelEstado/PresenciaBarTexture
+	_mostrar_presencia(true)
 	_poner_recuerdos()
 	add_child(preload("res://scripts/componentes/etiquetas_barras.gd").new())
 
@@ -185,27 +182,6 @@ func _configurar_barra_energia() -> void:
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	contenedor.add_child(marco)
-
-func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
-	var circulo := Panel.new()
-	circulo.position = pos
-	circulo.size = Vector2(36, 36)
-	circulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	circulo.add_theme_stylebox_override("panel", _circulo(color))
-	$PanelEstado.add_child(circulo)
-	var icono := TextureRect.new()
-	icono.texture = textura
-	icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	icono.set_anchors_preset(Control.PRESET_CENTER)
-	icono.offset_left = -11
-	icono.offset_top = -11
-	icono.offset_right = 11
-	icono.offset_bottom = 11
-	circulo.add_child(icono)
-	return icono
-
 
 func _circulo(color: Color, radio: int = 36) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -382,32 +358,9 @@ func ocultar_prompt_interaccion() -> void:
 		nodo.modulate.a = 0.0
 
 
-func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
-	var marco := Panel.new()
-	marco.position = pos
-	marco.size = Vector2(196, 28)
-	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	marco.add_theme_stylebox_override("panel", _tarjeta(MORADO, 14))
-	$PanelEstado.add_child(marco)
-	barra.reparent(marco)
-	barra.set_anchors_preset(Control.PRESET_FULL_RECT)
-	barra.offset_left = 6
-	barra.offset_top = 6
-	barra.offset_right = -6
-	barra.offset_bottom = -6
-	var fill := StyleBoxFlat.new()
-	fill.bg_color = color
-	fill.set_corner_radius_all(8)
-	barra.add_theme_stylebox_override("fill", fill)
-	barra.add_theme_stylebox_override("background", StyleBoxEmpty.new())
-	barra.show_percentage = false
-	return marco
-
-
 func _mostrar_presencia(es_visible: bool) -> void:
-	icono_presencia.get_parent().visible = es_visible
-	marco_presencia.visible = es_visible
-	barra_presencia.visible = es_visible
+	icono_presencia.visible = es_visible
+	barra_presencia_texture.visible = es_visible
 
 
 func _poner_recuerdos() -> void:
@@ -694,8 +647,7 @@ func _capturar_flashback() -> void:
 func _process(delta):
 	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
 	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
-	barra_presencia.value = Global.presencia_cuniraya
-	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
+	barra_presencia_texture.value = Global.presencia_cuniraya
 	_actualizar_recuerdos()
 	_actualizar_guia_bebe(delta)
 	_actualizar_guia_cueva(delta)
