@@ -3,6 +3,7 @@ extends CanvasLayer
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
+const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
@@ -129,7 +130,7 @@ func _configurar_barra_energia() -> void:
 	barra_energia = TextureRect.new()
 	contenedor.add_child(barra_energia)
 	barra_energia.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	barra_energia.texture = _crear_textura_relleno_energia()
+	barra_energia.texture = REFERENCIA_ENERGIA
 	barra_energia.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	barra_energia.stretch_mode = TextureRect.STRETCH_SCALE
 	barra_energia.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -139,6 +140,8 @@ func _configurar_barra_energia() -> void:
 	uniform float porcentaje = 1.0;
 	void fragment() {
 		vec4 color = texture(TEXTURE, UV);
+		float diferencia_morada = min(color.r - color.g, color.b - color.g);
+		color.a *= smoothstep(0.06, 0.2, diferencia_morada);
 		if (UV.x > porcentaje) {
 			color.a = 0.0;
 		}
@@ -156,23 +159,6 @@ func _configurar_barra_energia() -> void:
 	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
-
-func _crear_textura_relleno_energia() -> ImageTexture:
-	var imagen := Image.create(500, 125, false, Image.FORMAT_RGBA8)
-	var color_relleno := Color(0.78, 0.29, 0.95, 1.0)
-	for y in range(125):
-		for x in range(500):
-			var distancia_y := float(y) - 57.0
-			var dentro_cuerpo := absf(distancia_y) <= 29.0
-			if x < 99:
-				dentro_cuerpo = dentro_cuerpo and Vector2(x - 99.0, distancia_y).length_squared() <= 29.0 * 29.0
-			elif x > 392:
-				dentro_cuerpo = dentro_cuerpo and Vector2(x - 392.0, distancia_y).length_squared() <= 29.0 * 29.0
-			var dentro_espiral := Vector2(x - 96.0, y - 79.0).length_squared() <= 39.0 * 39.0
-			if dentro_cuerpo or dentro_espiral:
-				imagen.set_pixel(x, y, color_relleno)
-		return ImageTexture.create_from_image(imagen)
-
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
