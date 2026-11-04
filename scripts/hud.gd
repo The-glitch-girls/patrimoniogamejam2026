@@ -18,6 +18,18 @@ const PROMPT_HABLAR := preload("res://assets/ui/botones/hablar_btn.png")
 const PROMPT_HABLAR_PRESIONADO := preload("res://assets/ui/botones/hablar_btn_pressed.png")
 const PROMPT_DESCANSAR := preload("res://assets/ui/botones/descansar_btn.png")
 const PROMPT_DESCANSAR_PRESIONADO := preload("res://assets/ui/botones/descansar_btn_pressed.png")
+const TEXTURA_CAJA_DIALOGO := preload("res://assets/ui/dialogo/dialogo_caja.png")
+const MENSAJES_DIALOGO_ZORRO: Array[String] = [
+	"Con un recuerdo, la cueva recarga tu energía",
+	"El zorro parece reconocer el recuerdo que encontraste",
+	"El zorro confía en ti y está dispuesto a cuidar al bebé",
+	"El zorro aún no te ofrece descanso",
+	"Necesitas el Recuerdo 2 para esto",
+	"El zorro no está cerca",
+	"No llevas al bebé",
+	"Bebé dejado con el zorro",
+	"Bebé recogido del zorro",
+]
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
@@ -31,6 +43,8 @@ var prompt_texto := ""
 var prompt_idioma := ""
 var prompt_icono: TextureRect
 var prompt_titulo: Label
+var dialogo_zorro_fondo: TextureRect
+var dialogo_zorro_texto: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
@@ -51,12 +65,10 @@ var guia_metros_cueva: Label
 var guia_alpha_cueva := 0.0
 var guia_cueva_colocada := false
 
-@onready var sonido_tension: AudioStreamPlayer2D = $SonidoTension
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
-@onready var llanto_bebe: AudioStreamPlayer2D = $LlantoBebe
-var volumen_normal_tension: float = -15.0
+@onready var llanto_bebe: AudioStreamPlayer = $LlantoBebe
 var volumen_normal_peak: float = 0.0
-var volumen_normal_llanto: float = 0.0
+var volumen_normal_llanto: float = 3.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
 
@@ -66,13 +78,14 @@ func _ready():
 	_estilar_panel()
 	_estilar_textos()
 	_crear_prompt_icono()
+	_crear_dialogo_zorro()
 	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
 	_poner_guia_bebe()
 	_poner_guia_cueva()
 	_poner_ajustes()
 	if not Global.partida_terminada:
-		Musica.tocar("juego")
+		Musica.iniciar_juego_con_tension()
 	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--hudshot"):
@@ -161,10 +174,13 @@ func _crear_prompt_icono() -> void:
 	prompt_icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	prompt_icono.scale = Vector2(1.5, 1.5)
 	prompt_icono.pivot_offset = Vector2(42, 42)
-	prompt_icono.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	prompt_icono.offset_left = -134
+	prompt_icono.anchor_left = 0.5
+	prompt_icono.anchor_right = 0.5
+	prompt_icono.anchor_top = 1.0
+	prompt_icono.anchor_bottom = 1.0
+	prompt_icono.offset_left = -42
 	prompt_icono.offset_top = -176
-	prompt_icono.offset_right = -50
+	prompt_icono.offset_right = 42
 	prompt_icono.offset_bottom = -92
 	add_child(prompt_icono)
 
@@ -175,16 +191,56 @@ func _crear_prompt_icono() -> void:
 	prompt_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	prompt_titulo.set_anchors_preset(Control.PRESET_BOTTOM_RIGHT)
-	prompt_titulo.offset_left = -171
+	prompt_titulo.anchor_left = 0.5
+	prompt_titulo.anchor_right = 0.5
+	prompt_titulo.anchor_top = 1.0
+	prompt_titulo.anchor_bottom = 1.0
+	prompt_titulo.offset_left = -79
 	prompt_titulo.offset_top = -56
-	prompt_titulo.offset_right = -13
+	prompt_titulo.offset_right = 79
 	prompt_titulo.offset_bottom = -28
 	_texto(prompt_titulo, 18)
 	prompt_titulo.add_theme_font_override("font", FUENTE_PROMPT)
 	prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(prompt_titulo)
+
+
+func _crear_dialogo_zorro() -> void:
+	dialogo_zorro_fondo = TextureRect.new()
+	dialogo_zorro_fondo.name = "DialogoZorroFondo"
+	dialogo_zorro_fondo.texture = TEXTURA_CAJA_DIALOGO
+	dialogo_zorro_fondo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	dialogo_zorro_fondo.stretch_mode = TextureRect.STRETCH_SCALE
+	dialogo_zorro_fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dialogo_zorro_fondo.visible = false
+	dialogo_zorro_fondo.z_index = 20
+	dialogo_zorro_fondo.anchor_left = 0.5
+	dialogo_zorro_fondo.anchor_right = 0.5
+	dialogo_zorro_fondo.offset_left = -463.0
+	dialogo_zorro_fondo.offset_top = 164.0
+	dialogo_zorro_fondo.offset_right = 463.0
+	dialogo_zorro_fondo.offset_bottom = 298.0
+	add_child(dialogo_zorro_fondo)
+
+	dialogo_zorro_texto = Label.new()
+	dialogo_zorro_texto.name = "DialogoZorroTexto"
+	dialogo_zorro_texto.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	dialogo_zorro_texto.visible = false
+	dialogo_zorro_texto.z_index = 21
+	dialogo_zorro_texto.anchor_left = 0.5
+	dialogo_zorro_texto.anchor_right = 0.5
+	dialogo_zorro_texto.offset_left = -405.0
+	dialogo_zorro_texto.offset_top = 188.0
+	dialogo_zorro_texto.offset_right = 405.0
+	dialogo_zorro_texto.offset_bottom = 274.0
+	dialogo_zorro_texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	dialogo_zorro_texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	dialogo_zorro_texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	dialogo_zorro_texto.add_theme_font_override("font", FUENTE)
+	dialogo_zorro_texto.add_theme_font_size_override("font_size", 23)
+	dialogo_zorro_texto.add_theme_color_override("font_color", CREMA)
+	add_child(dialogo_zorro_texto)
 
 func _tipo_prompt_con_imagen() -> String:
 	var texto := Global.prompt_interaccion.to_lower()
@@ -222,6 +278,8 @@ func _actualizar_prompt_visual() -> void:
 	if tipo == "talk" and Global.prompt_interaccion.to_lower().begins_with("f "):
 		accion = "hablar_zorro"
 	var presionado := Input.is_action_pressed(accion)
+	if tipo == "rest" and Global.descanso_con_zorro:
+		presionado = true
 	match tipo:
 		"attack":
 			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
@@ -242,6 +300,14 @@ func _actualizar_prompt_visual() -> void:
 		"rest":
 			prompt_icono.texture = PROMPT_DESCANSAR_PRESIONADO if presionado else PROMPT_DESCANSAR
 			prompt_titulo.text = Traducciones.obtener("rest_action")
+
+
+func ocultar_prompt_interaccion() -> void:
+	Global.prompt_interaccion = ""
+	prompt_alpha = 0.0
+	for nodo in [$PromptFondo, $PromptLabel, prompt_icono, prompt_titulo]:
+		nodo.visible = false
+		nodo.modulate.a = 0.0
 
 
 func _envolver_barra(barra: ProgressBar, pos: Vector2, color: Color) -> Panel:
@@ -329,6 +395,18 @@ func _ajustar_banner_aviso() -> void:
 	label.offset_right = ancho_texto * 0.5
 	label.offset_top = fondo.offset_top + 10.0
 	label.offset_bottom = label.offset_top + alto_texto
+
+
+func _posicionar_aviso_descanso(es_descanso: bool) -> void:
+	var fondo := $AvisoFondo as Panel
+	var label := $AvisoLabel as Label
+	var ancla_vertical := 1.0 if es_descanso else 0.0
+	fondo.anchor_top = ancla_vertical
+	fondo.anchor_bottom = ancla_vertical
+	label.anchor_top = ancla_vertical
+	label.anchor_bottom = ancla_vertical
+	# El estado de descanso aparece sobre el botón R, sin tapar la escena.
+	fondo.offset_top = -246.0 if es_descanso else 28.0
 
 
 func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
@@ -488,25 +566,25 @@ func _process(delta):
 		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""
+	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
+	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
+	var mostrar_aviso_normal := hay_aviso and not es_dialogo_zorro
 	$AvisoLabel.text = Traducciones.obtener_frase(Global.aviso_combate)
-	$AvisoFondo.visible = hay_aviso
-	$AvisoLabel.visible = hay_aviso
-	if hay_aviso:
+	$AvisoFondo.visible = mostrar_aviso_normal
+	$AvisoLabel.visible = mostrar_aviso_normal
+	dialogo_zorro_fondo.visible = hay_aviso and es_dialogo_zorro
+	dialogo_zorro_texto.visible = hay_aviso and es_dialogo_zorro
+	if es_dialogo_zorro:
+		dialogo_zorro_texto.text = Traducciones.obtener_frase(Global.aviso_combate)
+	if mostrar_aviso_normal:
+		_posicionar_aviso_descanso(es_aviso_descanso)
 		_ajustar_banner_aviso()
-		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else BORDO
+		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
 		_estilar_pildora($AvisoFondo, color_aviso)
 
 	var nivel_presencia : float = Global.presencia_cuniraya
-	var volumen_tension : float = lerp(-10.0, 0.0, nivel_presencia / 100.0)
+	Musica.actualizar_tension(Global.presencia_activa)
 	material_oscuridad.set_shader_parameter("intensidad", nivel_presencia / 100.0)
-	sonido_tension.volume_db = volumen_tension
-
-	if Global.presencia_activa:
-		if not sonido_tension.playing:
-			sonido_tension.volume_db = volumen_normal_tension
-			sonido_tension.play()
-	else:
-		fade_out_audio(sonido_tension, 2.5)
 
 	if Global.presencia_activa:
 		temporizador_peak -= delta
@@ -536,14 +614,12 @@ func _process(delta):
 	else:
 		$Guias.visible = true
 
-func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
-	if not audio.playing:
+func fade_out_audio(audio: Node, duracion: float) -> void:
+	if not audio.get("playing"):
 		return
 	var tween := create_tween()
 	tween.tween_property(audio, "volume_db", -40.0, duracion)
-	tween.tween_callback(func():
-		audio.stop()
-	)
+	tween.tween_callback(Callable(audio, "stop"))
 
 # Guias de bebe y cueva utilizando la clase GuiaNavegacion
 func _poner_guia_bebe() -> void:

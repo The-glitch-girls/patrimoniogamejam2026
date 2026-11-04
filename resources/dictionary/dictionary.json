@@ -39,6 +39,11 @@
 	"en": "v Scroll",
 	"fr": "v Défiler"
   },
+  "credits_continue": {
+	"es": "Presione cualquier tecla para continuar",
+	"en": "Press any key to continue",
+	"fr": "Appuyez sur une touche pour continuer"
+  },
   "credit_ariadna_mestanza_name": {
 	"es": "Ariadna Mestanza",
 	"en": "Ariadna Mestanza",

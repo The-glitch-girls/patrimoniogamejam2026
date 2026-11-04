@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bu6gamljsyvm5"]
+
+[ext_resource type="Script" uid="uid://x8sx1wnmpirj" path="res://scripts/refugio.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://cdg60wbjv8wuo" path="res://assets/tiles/arbol.png" id="2_enwi8"]
+[ext_resource type="Texture2D" uid="uid://cfhky3uhoek2" path="res://assets/tiles/tileset_2.png" id="3_gate"]
+[ext_resource type="AudioStream" uid="uid://d28dq8dl5ri5j" path="res://sfx/zorro/opening-door.ogg" id="4_5eja5"]
+
+[node name="Refugio" type="Node2D"]
+z_index = -1
+script = ExtResource("1_script")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -192.0
+offset_top = -192.0
+offset_right = 192.0
+offset_bottom = 192.0
+texture = ExtResource("2_enwi8")
+
+[node name="Puerta" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(-2, 59)
+texture = ExtResource("3_gate")
+region_enabled = true
+region_rect = Rect2(2432, 128, 128, 256)
+
+[node name="PuntoDescanso" type="Marker2D" parent="."]
+position = Vector2(0, 70)
+
+[node name="SonidoPuerta" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_5eja5")
+bus = &"SFX"

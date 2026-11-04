@@ -92,7 +92,6 @@ text = "Continuar"
 
 [node name="Narracion" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("3_lx0xx")
-volume_db = -10.764
 bus = &"SFX"
 
 [node name="Fundido" type="ColorRect" parent="."]

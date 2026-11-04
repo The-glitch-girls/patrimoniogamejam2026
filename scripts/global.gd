@@ -173,10 +173,7 @@ func abrir_final(tipo: String) -> void:
 		return
 	resultado_final = tipo
 	partida_terminada = true
-	if tipo == "mar":
-		Musica.tocar("ganar")
-	else:
-		Musica.tocar("perder")
+	Musica.detener()
 	get_tree().change_scene_to_file(ESCENA_FINAL)
 
 

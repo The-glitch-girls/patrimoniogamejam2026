@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://mn6rb1w2sort"]
+[gd_scene load_steps=23 format=4 uid="uid://bj3ct4en6xk4d"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_6dwb3"]
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="2_3xrtf"]
@@ -6,11 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://cfa3mx2kxpkdp" path="res://scenes/Bebe.tscn" id="4_y3ogh"]
 [ext_resource type="PackedScene" uid="uid://c7hebov1gpk1s" path="res://scenes/Halcon.tscn" id="5_xfg8y"]
 [ext_resource type="PackedScene" uid="uid://b8x3k2nan5p7q" path="res://scenes/Zorro.tscn" id="6_ecoj1"]
-[ext_resource type="PackedScene" uid="uid://bu6gamljsyvm5" path="res://scenes/Cueva.tscn" id="7_4baep"]
+[ext_resource type="PackedScene" uid="uid://bu6gamljsyvm5" path="res://scenes/Refugio.tscn" id="7_4baep"]
 [ext_resource type="PackedScene" uid="uid://h3t7r1b7lw70" path="res://scenes/Cuniraya.tscn" id="8_03owp"]
 [ext_resource type="Script" uid="uid://cay8ncyyqmj3t" path="res://scripts/hud.gd" id="9_8qdhh"]
 [ext_resource type="Shader" uid="uid://b43httfmujypj" path="res://shaders/presencia_cuniraya.gdshader" id="10_ngf25"]
-[ext_resource type="AudioStream" uid="uid://db2pv402tpyb7" path="res://sfx/tension_ambiente.ogg" id="11_utor8"]
+[ext_resource type="AudioStream" uid="uid://cd44yu5r7yp52" path="res://sfx/aa_tension_gameplay.ogg" id="11_6dwb3"]
 [ext_resource type="AudioStream" uid="uid://cwot1y16ppvvf" path="res://sfx/tension_peak.ogg" id="12_sub5l"]
 [ext_resource type="AudioStream" uid="uid://k0g0tqnkpegb" path="res://sfx/llanto_bebe.mp3" id="13_l65pt"]
 [ext_resource type="Texture2D" uid="uid://dix21bawdw0ft" path="res://assets/ui/recuerdos/recuerdos_x.png" id="14_ggmb3"]
@@ -198,14 +198,14 @@ offset_right = 40.0
 offset_bottom = 23.0
 
 [node name="SonidoTension" type="AudioStreamPlayer2D" parent="HUD"]
-stream = ExtResource("11_utor8")
+stream = ExtResource("11_6dwb3")
 bus = &"Ambiente"
 
 [node name="PeakTension" type="AudioStreamPlayer2D" parent="HUD"]
 stream = ExtResource("12_sub5l")
 bus = &"Ambiente"
 
-[node name="LlantoBebe" type="AudioStreamPlayer2D" parent="HUD"]
+[node name="LlantoBebe" type="AudioStreamPlayer" parent="HUD"]
 stream = ExtResource("13_l65pt")
 bus = &"SFX"
 

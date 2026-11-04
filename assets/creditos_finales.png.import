@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://o7yisw4epgqq"
-path="res://.godot/imported/final_suicidio.png-f0895b26f75b36cfc2d3914f7c2bf90d.ctex"
+uid="uid://d24egixkp7wwm"
+path="res://.godot/imported/creditos_finales.png-eea08f3a4c16fbcad6effdd603f3c225.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/cinematicas/final_suicidio.png"
-dest_files=["res://.godot/imported/final_suicidio.png-f0895b26f75b36cfc2d3914f7c2bf90d.ctex"]
+source_file="res://assets/creditos_finales.png"
+dest_files=["res://.godot/imported/creditos_finales.png-eea08f3a4c16fbcad6effdd603f3c225.ctex"]
 
 [params]
 

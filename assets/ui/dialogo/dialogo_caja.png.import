@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://sihfn1ykvdit"
-path="res://.godot/imported/screenshot_final.png-c9130b17b062a662b1e93e45be0179c5.ctex"
+uid="uid://o6op336vugma"
+path="res://.godot/imported/dialogo_caja.png-5f8025bac7dbc1863f842395ee76a320.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://screenshot_final.png"
-dest_files=["res://.godot/imported/screenshot_final.png-c9130b17b062a662b1e93e45be0179c5.ctex"]
+source_file="res://assets/ui/dialogo/dialogo_caja.png"
+dest_files=["res://.godot/imported/dialogo_caja.png-5f8025bac7dbc1863f842395ee76a320.ctex"]
 
 [params]
 

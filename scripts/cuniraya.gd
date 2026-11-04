@@ -14,6 +14,7 @@ const RANGO_PRESENCIA := 240.0
 const TIEMPO_CAMBIO := 2.5
 const CUEVA := Rect2(-80, 160, 160, 280)
 const MAR := Rect2(160, 740, 520, 180)
+var debug_seguir_bebe := false
 
 func _ready():
 	bebe = get_tree().get_first_node_in_group("bebe") as StaticBody2D
@@ -27,13 +28,31 @@ func _colocar_cuniraya():
 	)
 	# Cuniraya permanece invisible. Su cercanía se lee en el bebé.
 
+func debug_acercar_a_bebe() -> void:
+	if not OS.is_debug_build() or bebe == null:
+		return
+	var sprite_bebe := bebe.get_node_or_null("AnimatedSprite2D") as Node2D
+	if sprite_bebe == null:
+		return
+	debug_seguir_bebe = true
+	global_position = sprite_bebe.global_position + Vector2(120.0, 0.0)
+	direccion = Vector2.ZERO
+	print("Depuración: Cuniraya apareció junto al bebé")
+
 func _process(delta):
-	# Movimiento autónomo
-	tiempo_cambio -= delta
-	
-	if tiempo_cambio <= 0.0:
-		direccion = direcciones.pick_random()
-		tiempo_cambio = TIEMPO_CAMBIO
+	if debug_seguir_bebe:
+		if bebe == null:
+			return
+		var sprite_bebe := bebe.get_node_or_null("AnimatedSprite2D") as Node2D
+		if sprite_bebe == null:
+			return
+		global_position = sprite_bebe.global_position + Vector2(120.0, 0.0)
+	else:
+		# Movimiento autónomo
+		tiempo_cambio -= delta
+		if tiempo_cambio <= 0.0:
+			direccion = direcciones.pick_random()
+			tiempo_cambio = TIEMPO_CAMBIO
 	
 	# Presencia y acercamiento al bebé
 	if bebe != null and not Global.lleva_bebe:
