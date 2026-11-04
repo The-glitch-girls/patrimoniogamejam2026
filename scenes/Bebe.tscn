@@ -9,27 +9,27 @@ size = Vector2(2420, 340)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xoaaa"]
 atlas = ExtResource("2_kvb4v")
-region = Rect2(0, 0, 2518, 1675)
+region = Rect2(0, 0, 629.5, 418.75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5s7p5"]
 atlas = ExtResource("2_kvb4v")
-region = Rect2(2518, 0, 2518, 1675)
+region = Rect2(629.5, 0, 629.5, 418.75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_vnuqn"]
 atlas = ExtResource("2_kvb4v")
-region = Rect2(5036, 0, 2518, 1675)
+region = Rect2(1259, 0, 629.5, 418.75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_w61h7"]
 atlas = ExtResource("3_inh41")
-region = Rect2(5082, 0, 2541, 1803)
+region = Rect2(1270.5, 0, 635.25, 450.75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rkrwv"]
 atlas = ExtResource("3_inh41")
-region = Rect2(2541, 0, 2541, 1803)
+region = Rect2(635.25, 0, 635.25, 450.75)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qqahu"]
 atlas = ExtResource("3_inh41")
-region = Rect2(0, 0, 2541, 1803)
+region = Rect2(0, 0, 635.25, 450.75)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_inh41"]
 animations = [{
@@ -109,6 +109,7 @@ shape = SubResource("RectangleShape2D_inh41")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(20, -100)
+scale = Vector2(4, 4)
 sprite_frames = SubResource("SpriteFrames_inh41")
 animation = &"llorando"
 frame_progress = 0.752481
