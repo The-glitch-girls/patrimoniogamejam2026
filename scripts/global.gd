@@ -72,6 +72,8 @@ var cuidado_bebe_desbloqueado: bool = false
 var hacia_el_mar: bool = false
 var flashback_abierto: bool = false
 var resultado_final: String = ""
+# Se muestra una sola vez por sesión (no se reinicia en resetear()).
+var controles_mostrados: bool = false
 
 # Sistema de Recuerdos
 var recuerdos_obtenidos: int = 0
@@ -111,6 +113,8 @@ const ENERGIA_MAX: float = 100.0
 # PRESENCIA CUNIRAYA
 const PRESENCIA_MAX := 100.0
 const VELOCIDAD_PRESENCIA := 5.0
+# Cargar al bebé calma a Cuniraya
+const ALIVIO_PRESENCIA := 3.0
 # COSTOS Y DAÑOS
 const COSTO_CAMINAR: float = 0.5
 const COSTO_CORRER: float = 2.0
@@ -122,6 +126,8 @@ const PRESENCIA_CRITICA: float = 75.0
 const DRENAJE_CRITICO: float = 4.0
 # RECOMPENSA
 const RECOMPENSA_VICTORIA: float = 12.0
+# AVISOS: tiempo mínimo para poder leerlos
+const DURACION_AVISO: float = 4.0
 
 # =========================
 # PROCESO
@@ -137,7 +143,9 @@ func _process(delta):
 
 	if hacia_el_mar or flashback_abierto or partida_terminada:
 		return
-	if presencia_cuniraya >= PRESENCIA_CRITICA and not lleva_bebe:
+	if lleva_bebe:
+		reducir_presencia(ALIVIO_PRESENCIA * delta)
+	elif presencia_cuniraya >= PRESENCIA_CRITICA:
 		perder_energia(DRENAJE_CRITICO * delta)
 
 # =========================
@@ -162,8 +170,8 @@ func aumentar_presencia(cantidad: float = 1.0):
 	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
 
 
-func reducir_presencia():
-	presencia_cuniraya = max(presencia_cuniraya - 1, 0)
+func reducir_presencia(cantidad: float = 1.0):
+	presencia_cuniraya = max(presencia_cuniraya - cantidad, 0.0)
 
 
 func aumentar_presencia_por_tiempo(delta: float):
@@ -189,7 +197,7 @@ func obtener_recuerdo() -> int:
 # =========================
 func mostrar_aviso(texto: String):
 	aviso_combate = texto
-	aviso_temporizador = 2.0
+	aviso_temporizador = DURACION_AVISO
 
 
 func terminar(resultado: String) -> void:

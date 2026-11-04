@@ -84,6 +84,8 @@ var volumen_normal_peak: float = 0.0
 var volumen_normal_llanto: float = 3.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
+# Mientras la presencia está activa, el bebé llora cada ~10 s como pista sonora.
+const INTERVALO_LLANTO := 10.0
 var aviso_visible_actual := ""
 var ornamentos_aviso: Array[Line2D] = []
 
@@ -102,6 +104,7 @@ func _ready():
 	_poner_ajustes()
 	if not Global.partida_terminada:
 		Musica.iniciar_juego_con_tension()
+		_mostrar_controles_una_vez()
 	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--hudshot"):
@@ -110,6 +113,14 @@ func _ready():
 		_capturar_flashback()
 	elif OS.get_cmdline_user_args().has("--guiashot"):
 		_capturar_guia()
+
+
+func _mostrar_controles_una_vez() -> void:
+	if Global.controles_mostrados:
+		return
+	Global.controles_mostrados = true
+	Global.mostrar_aviso(Traducciones.obtener("controls_hint"))
+	Global.aviso_temporizador = 8.0
 
 
 func _estilar_panel():
@@ -298,6 +309,10 @@ func _crear_dialogo_zorro() -> void:
 	dialogo_zorro_texto.add_theme_color_override("font_color", CREMA)
 	add_child(dialogo_zorro_texto)
 
+func _es_prompt_luchar() -> bool:
+	return Global.prompt_interaccion == "E  Deja al bebé para luchar"
+
+
 func _tipo_prompt_con_imagen() -> String:
 	var texto := Global.prompt_interaccion.to_lower()
 	if texto.contains("descansar"):
@@ -306,7 +321,7 @@ func _tipo_prompt_con_imagen() -> String:
 		return "attack"
 	if texto.contains("recoger"):
 		return "pickup"
-	if texto.contains("dejar"):
+	if texto.contains("dejar") or texto.contains("deja al bebé"):
 		return "leave"
 	if texto.contains("conversar"):
 		return "converse"
@@ -348,7 +363,7 @@ func _actualizar_prompt_visual() -> void:
 			prompt_titulo.text = Traducciones.obtener("converse_action")
 		"leave":
 			prompt_icono.texture = PROMPT_DEJAR_PRESIONADO if presionado else PROMPT_DEJAR
-			var clave_titulo := "leave_with_fox_action" if Global.prompt_interaccion.to_lower().contains("con zorro") else "leave_action"
+			var clave_titulo := "drop_baby_to_fight_action" if _es_prompt_luchar() else "leave_with_fox_action" if Global.prompt_interaccion.to_lower().contains("con zorro") else "leave_action"
 			prompt_titulo.text = Traducciones.obtener(clave_titulo)
 		"talk":
 			prompt_icono.texture = PROMPT_HABLAR_PRESIONADO if presionado else PROMPT_HABLAR
@@ -759,7 +774,7 @@ func _process(delta):
 		if temporizador_llanto <= 0.0 and not llanto_bebe.playing:
 			llanto_bebe.volume_db = volumen_normal_llanto
 			llanto_bebe.play()
-			temporizador_llanto = 45.0
+			temporizador_llanto = INTERVALO_LLANTO
 	else:
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
