@@ -5,7 +5,7 @@ const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
-const ICONO_AJUSTES := preload("res://assets/ui/ajustes/engranaje.png")
+const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
@@ -602,9 +602,9 @@ func _poner_ajustes() -> void:
 	add_child(boton)
 	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	boton.offset_left = -72
-	boton.offset_top = 28
+	boton.offset_top = 20
 	boton.offset_right = -20
-	boton.offset_bottom = 80
+	boton.offset_bottom = 72
 
 	overlay_ajustes = ESCENA_OVERLAY_AJUSTES.instantiate() as Control
 	overlay_ajustes.visible = false
