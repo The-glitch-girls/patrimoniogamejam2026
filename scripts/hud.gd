@@ -84,6 +84,8 @@ var volumen_normal_peak: float = 0.0
 var volumen_normal_llanto: float = 3.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
+# Mientras la presencia está activa, el bebé llora cada ~10 s como pista sonora.
+const INTERVALO_LLANTO := 10.0
 var aviso_visible_actual := ""
 var ornamentos_aviso: Array[Line2D] = []
 
@@ -759,7 +761,7 @@ func _process(delta):
 		if temporizador_llanto <= 0.0 and not llanto_bebe.playing:
 			llanto_bebe.volume_db = volumen_normal_llanto
 			llanto_bebe.play()
-			temporizador_llanto = 45.0
+			temporizador_llanto = INTERVALO_LLANTO
 	else:
 		fade_out_audio(llanto_bebe, 2.5)
 		temporizador_llanto = 0.0
