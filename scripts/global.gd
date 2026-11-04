@@ -100,6 +100,8 @@ const PRESENCIA_CRITICA: float = 75.0
 const DRENAJE_CRITICO: float = 4.0
 # RECOMPENSA
 const RECOMPENSA_VICTORIA: float = 12.0
+# AVISOS: tiempo mínimo para poder leerlos
+const DURACION_AVISO: float = 4.0
 
 # =========================
 # PROCESO
@@ -167,7 +169,7 @@ func obtener_recuerdo() -> int:
 # =========================
 func mostrar_aviso(texto: String):
 	aviso_combate = texto
-	aviso_temporizador = 2.0
+	aviso_temporizador = DURACION_AVISO
 
 
 func terminar(resultado: String) -> void:

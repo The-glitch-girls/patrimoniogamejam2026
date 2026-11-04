@@ -13,6 +13,7 @@ const AUDIOS_MENSAJE: Array[AudioStream] = [
 @onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
 var tiempo_hablando := 0.0
+var ya_hablo := false
 
 
 func _ready() -> void:
@@ -36,6 +37,7 @@ func _process(delta: float) -> void:
 func hablar() -> void:
 	if tiempo_hablando > 0.0:
 		return
+	ya_hablo = true
 	tiempo_hablando = DURACION_HABLA
 	sprite.play("hablando")
 	var frase := "parrot_baby_warning"
@@ -54,6 +56,9 @@ func reproducir_sonido_mensaje() -> void:
 func _al_entrar_en_rango(cuerpo: Node2D) -> void:
 	if cuerpo.is_in_group("cavillaca"):
 		Global.loro_cerca = true
+		# La primera vez que Cavillaca se acerca, el loro da su consejo sin pulsar F.
+		if not ya_hablo:
+			hablar()
 
 
 func _al_salir_del_rango(cuerpo: Node2D) -> void:
