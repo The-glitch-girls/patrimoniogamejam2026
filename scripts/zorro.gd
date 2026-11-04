@@ -12,6 +12,7 @@ var pausa := 0.0
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var deteccion: Area2D = $Deteccion
+@onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
 func _ready() -> void:
 	add_to_group("zorro")
@@ -114,6 +115,12 @@ func hablar() -> void:
 		Global.mostrar_aviso("El zorro parece reconocer el recuerdo que encontraste")
 	else:
 		Global.mostrar_aviso("El zorro confía en ti y está dispuesto a cuidar al bebé")
+	reproducir_sonido_mensaje()
+
+
+func reproducir_sonido_mensaje() -> void:
+	if sonido_mensaje.stream != null:
+		sonido_mensaje.play()
 
 func _poner_animacion(caminando: bool) -> void:
 	var animacion := "caminar" if caminando else "quieto"

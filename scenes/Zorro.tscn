@@ -26,3 +26,6 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Deteccion"]
 shape = SubResource("CircleShape2D_deteccion")
+
+[node name="SonidoMensaje" type="AudioStreamPlayer2D" parent="."]
+bus = &"SFX"

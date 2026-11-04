@@ -3,14 +3,19 @@ extends Node2D
 const RECUPERACION_ENERGIA_POR_SEGUNDO := 8.0
 const RANGO_INTERACCION := 40.0
 const RANGO_ENTRADA := 150.0
+const DURACION_ANIMACION_PUERTA := 0.32
+const ANCHO_PUERTA_ABIERTA := 0.06
 
 var bebe_con_zorro := false
 var jugador_en_entrada := false
-var puerta_abierta := true
+var puerta_abierta := false
 var descanso_activo := false
+var escala_puerta := Vector2.ONE
+var animacion_puerta: Tween
 
 @onready var puerta: Sprite2D = $Puerta
 @onready var punto_descanso: Marker2D = $PuntoDescanso
+@onready var sonido_puerta: AudioStreamPlayer2D = $SonidoPuerta
 
 func _ready():
 	add_to_group("zona_segura")
@@ -35,7 +40,7 @@ func _process(delta: float) -> void:
 
 func descansar() -> void:
 	if Global.recuerdos_obtenidos < 1:
-		Global.mostrar_aviso("El zorro aún no te ofrece descanso")
+		_mostrar_aviso_zorro("El zorro aún no te ofrece descanso")
 		return
 	if not _cavillaca_en_entrada():
 		Global.mostrar_aviso("Acércate al tronco para descansar")
@@ -60,19 +65,43 @@ func _cavillaca_en_entrada() -> bool:
 
 
 func _crear_puerta() -> void:
+	escala_puerta = puerta.scale
 	puerta.visible = true
-	_cambiar_puerta(false)
 
 
 func _cambiar_puerta(abierta: bool) -> void:
 	if puerta_abierta == abierta:
 		return
 	puerta_abierta = abierta
-	puerta.visible = not abierta
+	if sonido_puerta.stream != null:
+		sonido_puerta.play()
+	if animacion_puerta != null and animacion_puerta.is_running():
+		animacion_puerta.kill()
+
+	animacion_puerta = create_tween()
+	animacion_puerta.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	if abierta:
+		animacion_puerta.tween_property(
+			puerta,
+			"scale",
+			Vector2(escala_puerta.x * ANCHO_PUERTA_ABIERTA, escala_puerta.y),
+			DURACION_ANIMACION_PUERTA
+		)
+		animacion_puerta.tween_callback(_ocultar_puerta)
+	else:
+		if not puerta.visible:
+			puerta.scale = Vector2(escala_puerta.x * ANCHO_PUERTA_ABIERTA, escala_puerta.y)
+		puerta.visible = true
+		animacion_puerta.tween_property(puerta, "scale", escala_puerta, DURACION_ANIMACION_PUERTA)
+
+
+func _ocultar_puerta() -> void:
+	puerta.visible = false
+	puerta.scale = escala_puerta
 			
 func dejar_bebe_con_zorro():
 	if not Global.cuidado_bebe_desbloqueado:
-		Global.mostrar_aviso("Necesitas el Recuerdo 2 para esto")
+		_mostrar_aviso_zorro("Necesitas el Recuerdo 2 para esto")
 		return
 	
 	var zorro := get_tree().get_first_node_in_group("zorro") as Node2D
@@ -82,16 +111,16 @@ func dejar_bebe_con_zorro():
 		or cavillaca == null
 		or cavillaca.global_position.distance_to(zorro.global_position) >= RANGO_INTERACCION
 	):
-		Global.mostrar_aviso("El zorro no está cerca")
+		_mostrar_aviso_zorro("El zorro no está cerca")
 		return
 	
 	if not Global.lleva_bebe:
-		Global.mostrar_aviso("No llevas al bebé")
+		_mostrar_aviso_zorro("No llevas al bebé")
 		return
 	
 	bebe_con_zorro = true
 	Global.lleva_bebe = false
-	Global.mostrar_aviso("Bebé dejado con el zorro")
+	_mostrar_aviso_zorro("Bebé dejado con el zorro")
 	
 	var bebe := get_tree().get_first_node_in_group("bebe")
 	if bebe != null:
@@ -104,8 +133,15 @@ func recoger_bebe_del_zorro():
 	
 	bebe_con_zorro = false
 	Global.lleva_bebe = true
-	Global.mostrar_aviso("Bebé recogido del zorro")
+	_mostrar_aviso_zorro("Bebé recogido del zorro")
 	
 	var bebe := get_tree().get_first_node_in_group("bebe")
 	if bebe != null:
 		bebe.recoger()
+
+
+func _mostrar_aviso_zorro(texto: String) -> void:
+	Global.mostrar_aviso(texto)
+	var zorro := get_tree().get_first_node_in_group("zorro")
+	if zorro != null:
+		zorro.call("reproducir_sonido_mensaje")
