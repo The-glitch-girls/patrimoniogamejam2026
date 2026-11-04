@@ -88,9 +88,9 @@ func _armar_animaciones() -> void:
 	frames.set_animation_speed("caminar", 5.0)
 
 	var regiones := [
-		Rect2(256, 1450, 2200, 2200),
-		Rect2(2600, 1450, 2400, 2200),
-		Rect2(5000, 1450, 2800, 2200),
+		Rect2(64, 362.5, 550, 550),
+		Rect2(650, 362.5, 600, 550),
+		Rect2(1250, 362.5, 700, 550),
 	]
 	# El PNG incluye mucho margen vacío arriba y abajo; limitar el atlas a la
 	# franja de cada pose evita incluir partes de la pose vecina.

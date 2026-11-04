@@ -102,14 +102,14 @@ func _poner_zorro_en_primer_plano() -> void:
 	frames.set_animation_speed("quieto", 1.0)
 	var marco := AtlasTexture.new()
 	marco.atlas = TEXTURA_ZORRO
-	marco.region = Rect2(256, 1450, 2200, 2200)
+	marco.region = Rect2(64, 362.5, 550, 550)
 	marco.filter_clip = true
 	frames.add_frame("quieto", marco)
 	zorro = AnimatedSprite2D.new()
 	zorro.name = "ZorroEnLaSombra"
 	zorro.sprite_frames = frames
 	zorro.position = Vector2(1150.0, 570.0)
-	zorro.scale = Vector2(0.06, 0.06)
+	zorro.scale = Vector2(0.24, 0.24)
 	zorro.flip_h = true
 	zorro.modulate = Color(0.68, 0.48, 0.82, 0.9)
 	add_child(zorro)
