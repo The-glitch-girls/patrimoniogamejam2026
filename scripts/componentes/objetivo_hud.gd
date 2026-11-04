@@ -16,6 +16,9 @@ var texto: Label
 var cierre: Label
 var pista: Label
 var tiempo_tarjeta := 0.0
+# Avisos que llegan mientras la tarjeta está abierta: se muestran después, de a uno.
+var avisos_en_espera: Array = []
+var espera_siguiente := 0.0
 
 
 func _ready() -> void:
@@ -46,20 +49,21 @@ func _crear_tarjeta() -> void:
 	var caja := StyleBoxFlat.new()
 	caja.bg_color = Color(0.035, 0.03, 0.085, 0.82)
 	caja.set_corner_radius_all(28)
-	caja.content_margin_left = 36
-	caja.content_margin_right = 36
+	caja.content_margin_left = 28
+	caja.content_margin_right = 28
 	caja.content_margin_top = 22
 	caja.content_margin_bottom = 20
 	caja.shadow_color = Color(0, 0, 0, 0.28)
 	caja.shadow_size = 10
 	tarjeta.add_theme_stylebox_override("panel", caja)
-	tarjeta.anchor_left = 0.5
-	tarjeta.anchor_right = 0.5
-	tarjeta.anchor_top = 0.68
-	tarjeta.anchor_bottom = 0.68
-	tarjeta.offset_left = -300
-	tarjeta.offset_right = 300
-	tarjeta.grow_vertical = Control.GROW_DIRECTION_BOTH
+	# Arriba a la derecha, bajo el contador de recuerdos: no tapa a Cavillaca,
+	# al bebé ni el prompt de interacción, y queda junto al 0/3 que explica.
+	tarjeta.anchor_left = 1.0
+	tarjeta.anchor_right = 1.0
+	tarjeta.offset_left = -452
+	tarjeta.offset_right = -32
+	tarjeta.offset_top = 104
+	tarjeta.grow_vertical = Control.GROW_DIRECTION_END
 	add_child(tarjeta)
 
 	var columna := VBoxContainer.new()
@@ -99,17 +103,43 @@ func _process(delta: float) -> void:
 	pista.visible = Global.recuerdos_obtenidos < Global.RECUERDOS_TOTALES \
 		and not Global.partida_terminada and not (combate and combate.visible)
 	if not is_instance_valid(tarjeta):
+		_mostrar_avisos_en_espera(delta)
 		return
+	_retener_aviso()
 	tiempo_tarjeta += delta
 	if tiempo_tarjeta >= DURACION_TARJETA:
 		_cerrar_tarjeta()
 
 
+func _retener_aviso() -> void:
+	# Un mensaje a la vez: los avisos (controles, loro…) esperan a que se cierre la tarjeta.
+	if Global.aviso_combate == "":
+		return
+	var texto := Global.aviso_combate
+	if not avisos_en_espera.any(func(a): return a[0] == texto):
+		avisos_en_espera.append([texto, maxf(Global.aviso_temporizador, Global.DURACION_AVISO)])
+	Global.aviso_combate = ""
+	Global.aviso_temporizador = 0.0
+
+
+func _mostrar_avisos_en_espera(delta: float) -> void:
+	if avisos_en_espera.is_empty():
+		return
+	espera_siguiente -= delta
+	if espera_siguiente > 0.0:
+		return
+	var aviso: Array = avisos_en_espera.pop_front()
+	Global.mostrar_aviso(aviso[0])
+	Global.aviso_temporizador = aviso[1]
+	espera_siguiente = aviso[1]
+
+
 func _input(event: InputEvent) -> void:
-	# Cualquier tecla o clic cierra la tarjeta sin consumir la entrada.
+	# Solo Espacio/Enter o clic la cierran: moverse no la descarta sin leerla.
 	if not is_instance_valid(tarjeta) or tiempo_tarjeta < 0.4:
 		return
-	if (event is InputEventKey or event is InputEventMouseButton) and event.is_pressed():
+	if event.is_action_pressed("ui_accept") \
+			or (event is InputEventMouseButton and event.is_pressed()):
 		_cerrar_tarjeta()
 
 
