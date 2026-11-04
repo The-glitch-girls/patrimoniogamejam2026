@@ -48,7 +48,8 @@ var dialogo_zorro_texto: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
-var barra_energia: ProgressBar
+var barra_energia: TextureRect
+var material_relleno_energia: ShaderMaterial
 var barra_presencia: ProgressBar
 var overlay_ajustes: Control
 var pausa_previa_ajustes := false
@@ -120,25 +121,33 @@ func _estilar_panel():
 
 func _configurar_barra_energia() -> void:
 	var contenedor := Control.new()
-	contenedor.position = Vector2(0, 0)
-	contenedor.size = Vector2(250, 62)
+	contenedor.position = Vector2(20, 8)
+	contenedor.size = Vector2(246, 60)
 	contenedor.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	$PanelEstado.add_child(contenedor)
 
-	barra_energia = ProgressBar.new()
-	barra_energia.min_value = 0.0
-	barra_energia.max_value = Global.ENERGIA_MAX
-	barra_energia.value = Global.energia
-	barra_energia.show_percentage = false
-	barra_energia.position = Vector2(36, 14)
-	barra_energia.size = Vector2(183, 31)
-	barra_energia.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	var relleno := StyleBoxFlat.new()
-	relleno.bg_color = Color(0.76, 0.22, 0.93, 1.0)
-	relleno.set_corner_radius_all(16)
-	barra_energia.add_theme_stylebox_override("fill", relleno)
-	barra_energia.add_theme_stylebox_override("background", StyleBoxEmpty.new())
+	barra_energia = TextureRect.new()
 	contenedor.add_child(barra_energia)
+	barra_energia.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	barra_energia.texture = _crear_textura_relleno_energia()
+	barra_energia.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	barra_energia.stretch_mode = TextureRect.STRETCH_SCALE
+	barra_energia.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var shader_relleno := Shader.new()
+	shader_relleno.code = """
+	shader_type canvas_item;
+	uniform float porcentaje = 1.0;
+	void fragment() {
+		vec4 color = texture(TEXTURE, UV);
+		if (UV.x > porcentaje) {
+			color.a = 0.0;
+		}
+		COLOR = color;
+	}
+	"""
+	material_relleno_energia = ShaderMaterial.new()
+	material_relleno_energia.shader = shader_relleno
+	barra_energia.material = material_relleno_energia
 
 	var marco := TextureRect.new()
 	contenedor.add_child(marco)
@@ -147,6 +156,23 @@ func _configurar_barra_energia() -> void:
 	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+func _crear_textura_relleno_energia() -> ImageTexture:
+	var imagen := Image.create(500, 125, false, Image.FORMAT_RGBA8)
+	var color_relleno := Color(0.78, 0.29, 0.95, 1.0)
+	for y in range(125):
+		for x in range(500):
+			var distancia_y := float(y) - 57.0
+			var dentro_cuerpo := absf(distancia_y) <= 29.0
+			if x < 99:
+				dentro_cuerpo = dentro_cuerpo and Vector2(x - 99.0, distancia_y).length_squared() <= 29.0 * 29.0
+			elif x > 392:
+				dentro_cuerpo = dentro_cuerpo and Vector2(x - 392.0, distancia_y).length_squared() <= 29.0 * 29.0
+			var dentro_espiral := Vector2(x - 96.0, y - 79.0).length_squared() <= 39.0 * 39.0
+			if dentro_cuerpo or dentro_espiral:
+				imagen.set_pixel(x, y, color_relleno)
+		return ImageTexture.create_from_image(imagen)
+
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
@@ -566,7 +592,8 @@ func _capturar_flashback() -> void:
 
 
 func _process(delta):
-	barra_energia.value = Global.energia
+	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
+	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
 	barra_presencia.value = Global.presencia_cuniraya
 	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
 	_actualizar_recuerdos()
