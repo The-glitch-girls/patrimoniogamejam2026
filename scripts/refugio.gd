@@ -124,6 +124,7 @@ func dejar_bebe_con_zorro():
 	
 	var bebe := get_tree().get_first_node_in_group("bebe")
 	if bebe != null:
+		bebe.call("reproducir_sonido_dejar")
 		bebe.global_position = zorro.global_position
 
 

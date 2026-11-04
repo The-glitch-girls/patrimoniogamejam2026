@@ -112,3 +112,7 @@ position = Vector2(20, -100)
 sprite_frames = SubResource("SpriteFrames_inh41")
 animation = &"llorando"
 frame_progress = 0.752481
+
+[node name="SonidoAccion" type="AudioStreamPlayer" parent="."]
+process_mode = 3
+bus = &"SFX"
