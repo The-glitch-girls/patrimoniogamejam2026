@@ -143,6 +143,7 @@ func _estilar_panel():
 	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 80), LILA)
 	_mostrar_presencia(false)
 	_poner_recuerdos()
+	add_child(preload("res://scripts/componentes/etiquetas_barras.gd").new())
 
 
 func _configurar_barra_energia() -> void:
