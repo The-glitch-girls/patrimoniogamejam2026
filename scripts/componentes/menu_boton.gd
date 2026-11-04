@@ -72,6 +72,7 @@ func _al_soltar() -> void:
 	_actualizar_textura()
 
 func _al_presionar() -> void:
+	Global.reproducir_clic()
 	pressed.emit()
 
 func _al_enfocar() -> void:

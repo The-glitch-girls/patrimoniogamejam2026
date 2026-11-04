@@ -56,10 +56,12 @@ func _ready() -> void:
 
 
 func _cerrar() -> void:
+	Global.reproducir_clic()
 	cerrar.emit()
 
 
 func _reiniciar_partida() -> void:
+	Global.reproducir_clic()
 	Global.resetear()
 	get_tree().paused = false
 	get_tree().reload_current_scene()
@@ -74,6 +76,7 @@ func _poblar_idiomas() -> void:
 
 
 func _abrir_popup_idioma() -> void:
+	Global.reproducir_clic()
 	# Ancla el menú al bloque subrayado completo, no al botón de la flecha.
 	var rect_idioma: Rect2 = $PanelAjustes/IdmaLabelContainer.get_global_rect()
 	var posicion := Vector2i(roundi(rect_idioma.position.x), roundi(rect_idioma.end.y))
@@ -86,6 +89,7 @@ func _seleccionar_idioma(indice: int) -> void:
 	var codigos := ["es", "en", "fr"]
 	if indice < 0 or indice >= codigos.size():
 		return
+	Global.reproducir_clic()
 	Traducciones.cambiar_idioma(codigos[indice])
 	idioma_label.text = _nombre_idioma(codigos[indice])
 

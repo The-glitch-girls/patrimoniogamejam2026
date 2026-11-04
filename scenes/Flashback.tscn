@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://wfsrnjb0u26y" path="res://assets/cinematicas/recuerdo_1.png" id="2_ib4ad"]
 [ext_resource type="AudioStream" uid="uid://b3tw08j2ap4ya" path="res://sfx/revelar.ogg" id="2_vr83p"]
 [ext_resource type="Texture2D" uid="uid://bhqfwhjhyifnf" path="res://assets/ui/recuerdos/recuerdo_caja.png" id="3_38lae"]
-[ext_resource type="AudioStream" uid="uid://drhe82oc6lf12" path="res://sfx/aa_recuerdo.ogg" id="3_mk5yg"]
+[ext_resource type="AudioStream" uid="uid://drhe82oc6lf12" path="res://sfx/msx/aa_recuerdo.ogg" id="3_mk5yg"]
 [ext_resource type="LabelSettings" uid="uid://bm1tqv5ct8jes" path="res://resources/recuerdo_texto.tres" id="3_xqk6w"]
 [ext_resource type="Texture2D" uid="uid://085jvc6g6gi8" path="res://assets/ui/recuerdos/continuar_es.png" id="5_8sftm"]
 [ext_resource type="Texture2D" uid="uid://i0ue7vjeqq04" path="res://assets/ui/recuerdos/continuar_es_pressed.png" id="6_be6h3"]

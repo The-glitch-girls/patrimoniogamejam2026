@@ -1,9 +1,9 @@
 extends Node
 
 const PISTAS := {
-	"menu": "res://sfx/aa_menu.ogg",
-	"juego": "res://sfx/aa_tema_gameplay.ogg",
-	"tension": "res://sfx/aa_tension_gameplay.ogg",
+	"menu": "res://sfx/msx/aa_menu.ogg",
+	"juego": "res://sfx/msx/aa_gameplay_tema.ogg",
+	"tension": "res://sfx/msx/aa_gameplay_tension.ogg",
 }
 const PISTA_COMBATE := "res://sfx/combate/aa_combate.ogg"
 const DURACION_FUNDIDO_TENSION := 5.0

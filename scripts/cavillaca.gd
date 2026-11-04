@@ -140,6 +140,7 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
+	_reproducir_clic_accion_teclado()
 	if _controlar_ataque():
 		return
 		
@@ -635,3 +636,19 @@ func _controlar_ataque() -> bool:
 		return true
 	
 	return false
+
+
+func _reproducir_clic_accion_teclado() -> void:
+	var prompt := Global.prompt_interaccion
+	if Input.is_action_just_pressed("hablar_zorro") and Global.zorro_cerca and prompt.begins_with("F "):
+		Global.reproducir_clic()
+	elif Input.is_action_just_pressed("descansar") and prompt.begins_with("R "):
+		Global.reproducir_clic()
+	elif (
+		Input.is_action_just_pressed("interactuar")
+		and prompt.begins_with("E ")
+	) or (
+		Input.is_action_just_pressed("atacar")
+		and prompt.to_lower().contains("atacar")
+	):
+		Global.reproducir_clic()

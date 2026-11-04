@@ -2,9 +2,9 @@ extends CharacterBody2D
 
 const TEXTURA_ZORRO: Texture2D = preload("res://assets/amigos/zorro.png")
 const AUDIOS_MENSAJE: Array[AudioStream] = [
-	preload("res://sfx/zorro/aa_zorro1.ogg"),
-	preload("res://sfx/zorro/aa_zorro2.ogg"),
-	preload("res://sfx/zorro/aa_zorro3.ogg"),
+	preload("res://sfx/animales/zorro/aa_zorro1.ogg"),
+	preload("res://sfx/animales/zorro/aa_zorro2.ogg"),
+	preload("res://sfx/animales/zorro/aa_zorro3.ogg"),
 ]
 const VELOCIDAD_PASEO := 40.0
 const RADIO_PASEO := 8.0
