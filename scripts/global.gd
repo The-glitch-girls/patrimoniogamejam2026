@@ -9,6 +9,7 @@ func _ready() -> void:
 	reproductor_clic.name = "ClicSFX"
 	reproductor_clic.stream = SFX_CLIC
 	reproductor_clic.bus = "SFX"
+	reproductor_clic.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(reproductor_clic)
 
 

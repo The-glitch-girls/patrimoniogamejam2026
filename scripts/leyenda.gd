@@ -419,6 +419,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if continuar.disabled:
 		return
 	if event.keycode in [KEY_ENTER, KEY_SPACE, KEY_E]:
+		Global.reproducir_clic()
 		_continuar()
 
 
