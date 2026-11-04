@@ -3,6 +3,7 @@ extends CanvasLayer
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
+const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
@@ -109,14 +110,44 @@ func _estilar_panel():
 		nodo.visible = false
 	if has_node("PresenciaLabel"):
 		$PresenciaLabel.visible = false
-	_poner_icono(ICONO_ENERGIA, Vector2(16, 16), VERDE)
-	barra_energia = $PanelEstado/EnergiaBar
-	_envolver_barra(barra_energia, Vector2(60, 20), VERDE)
-	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 60), LILA)
+	$PanelEstado/EnergiaBar.hide()
+	_configurar_barra_energia()
+	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 76), LILA)
 	barra_presencia = $PanelEstado/PresenciaBar
-	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 64), LILA)
+	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 80), LILA)
 	_mostrar_presencia(false)
 	_poner_recuerdos()
+
+
+func _configurar_barra_energia() -> void:
+	var contenedor := Control.new()
+	contenedor.position = Vector2(0, 0)
+	contenedor.size = Vector2(250, 62)
+	contenedor.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$PanelEstado.add_child(contenedor)
+
+	barra_energia = ProgressBar.new()
+	barra_energia.min_value = 0.0
+	barra_energia.max_value = Global.ENERGIA_MAX
+	barra_energia.value = Global.energia
+	barra_energia.show_percentage = false
+	barra_energia.position = Vector2(36, 14)
+	barra_energia.size = Vector2(183, 31)
+	barra_energia.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var relleno := StyleBoxFlat.new()
+	relleno.bg_color = Color(0.76, 0.22, 0.93, 1.0)
+	relleno.set_corner_radius_all(16)
+	barra_energia.add_theme_stylebox_override("fill", relleno)
+	barra_energia.add_theme_stylebox_override("background", StyleBoxEmpty.new())
+	contenedor.add_child(barra_energia)
+
+	var marco := TextureRect.new()
+	marco.texture = MARCO_ENERGIA
+	marco.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	marco.stretch_mode = TextureRect.STRETCH_SCALE
+	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	contenedor.add_child(marco)
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
