@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=28 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_fijlm"]
 [ext_resource type="Texture2D" uid="uid://b1qtkbgolc2co" path="res://assets/tiles/jarron1.png" id="2_paa2y"]
@@ -23,6 +23,9 @@
 [ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="22_o8kxg"]
 [ext_resource type="PackedScene" uid="uid://ctipp4cjs4yuu" path="res://scenes/CombateHalcon.tscn" id="23_hgl71"]
 [ext_resource type="PackedScene" uid="uid://cmopp7feirlo8" path="res://scenes/Loro.tscn" id="24_loro"]
+[ext_resource type="Texture2D" uid="uid://clpieon8ugbc2" path="res://assets/ui/barras/presencia_borde.png" id="25_presence_border"]
+[ext_resource type="Texture2D" uid="uid://cp7kdeeerwtje" path="res://assets/ui/barras/presencia_fill.png" id="26_presence_fill"]
+[ext_resource type="Texture2D" uid="uid://g1f71dpakuca" path="res://assets/ui/barras/presencia_icono.png" id="27_presence_icon"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
 shader = ExtResource("12_tthj7")
@@ -121,12 +124,26 @@ offset_right = 160.0
 offset_bottom = 129.0
 text = "PRESENCIA"
 
-[node name="PresenciaBar" type="ProgressBar" parent="HUD/PanelEstado"]
+[node name="PresenciaBarTexture" type="TextureProgressBar" parent="HUD/PanelEstado"]
 layout_mode = 0
-offset_left = 20.0
-offset_top = 130.0
-offset_right = 200.0
-offset_bottom = 153.0
+offset_left = 118.0
+offset_top = 58.0
+offset_right = 378.0
+offset_bottom = 83.0
+scale = Vector2(0.46, 0.6)
+texture_over = ExtResource("25_presence_border")
+texture_progress = ExtResource("26_presence_fill")
+
+[node name="PresenciaIcono" type="TextureRect" parent="HUD/PanelEstado"]
+layout_mode = 0
+offset_left = 76.0
+offset_top = 58.0
+offset_right = 112.0
+offset_bottom = 72.0
+mouse_filter = 2
+texture = ExtResource("27_presence_icon")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TiempoLabel" type="Label" parent="HUD/PanelEstado"]
 layout_mode = 0
