@@ -101,6 +101,7 @@ func _ready():
 	_estilar_pildora($AvisoFondo, VERDE)
 	_poner_guia_bebe()
 	_poner_guia_cueva()
+	add_child(preload("res://scripts/componentes/presencia_critica.gd").new())
 	_poner_ajustes()
 	if not Global.partida_terminada:
 		Musica.iniciar_juego_con_tension()
