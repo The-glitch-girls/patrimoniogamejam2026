@@ -14,6 +14,7 @@ const FRASES := {
 	"E  Dejar": "prompt_leave",
 	"E  Recoger": "prompt_pickup",
 	"E  Atacar": "prompt_attack",
+	"E  Deja al bebé para luchar": "prompt_drop_baby_to_fight",
 	"Victoria": "victory",
 	"Con un recuerdo, la cueva recarga tu energía": "cave_need_memory",
 	"Acércate al tronco para descansar": "cave_approach",
