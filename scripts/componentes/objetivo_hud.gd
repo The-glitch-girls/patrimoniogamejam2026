@@ -30,13 +30,13 @@ func _ready() -> void:
 
 
 func _crear_pista() -> void:
-	pista = _label(15, LILA_SUAVE)
+	pista = _label(17, LILA_SUAVE)
 	pista.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	pista.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	pista.offset_left = -360
+	pista.offset_left = -420
 	pista.offset_right = -96
 	pista.offset_top = 70
-	pista.offset_bottom = 92
+	pista.offset_bottom = 94
 	add_child(pista)
 
 
