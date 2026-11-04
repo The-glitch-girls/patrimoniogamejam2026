@@ -13,7 +13,6 @@ func _ready() -> void:
 	_conectar()
 	_set_version()
 	_mostrar_inicio()
-	ResourceLoader.load_threaded_request("res://resources/cavillaca.tres")
 	ResourceLoader.load_threaded_request(ESCENA_MAIN) # Cargar en segundo plano
 	ResourceLoader.load_threaded_request(ESCENA_LEYENDA)
 	Musica.tocar("menu")

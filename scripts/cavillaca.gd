@@ -24,9 +24,7 @@ const ATAQUE := preload("res://sfx/combate/piedra_lanzada.ogg")
 
 var FRAMES_LADO: Array[Texture2D]
 
-const RUTA_ANIMACIONES := "res://resources/cavillaca.tres"
 var animaciones_cavillaca: SpriteFrames
-var animaciones_cargadas := false
 var sheet_lado := preload("res://assets/person/cavillaca_lateral2.png")
 
 var energia_temporizador := 0.0
@@ -43,12 +41,13 @@ var ataques_combate := 0
 func _ready():
 	_asegurar_tecla_dialogo_zorro()
 	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 6, 512)
+	animaciones_cavillaca = $Sprite.sprite_frames
 	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
 	_armar_sfx()
 	_armar_sprite()
-	_solicitar_animaciones()
+	_aplicar_animaciones_cargadas()
 
 	$Sprite.scale = Vector2(0.215, 0.215)
 	$Sprite.position.y = 0
@@ -93,31 +92,11 @@ func _asegurar_tecla_dialogo_zorro() -> void:
 				InputMap.action_erase_event("atacar", evento)
 
 
-func _solicitar_animaciones() -> void:
-	var estado := ResourceLoader.load_threaded_get_status(RUTA_ANIMACIONES)
-	if estado == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE or estado == ResourceLoader.THREAD_LOAD_FAILED:
-		var resultado := ResourceLoader.load_threaded_request(RUTA_ANIMACIONES)
-		if resultado != OK:
-			push_error("No se pudo iniciar la carga de las animaciones de Cavillaca")
-		return
-	if estado == ResourceLoader.THREAD_LOAD_LOADED:
-		_aplicar_animaciones_cargadas()
-
-
-func _procesar_carga_animaciones() -> void:
-	if animaciones_cargadas:
-		return
-	if ResourceLoader.load_threaded_get_status(RUTA_ANIMACIONES) == ResourceLoader.THREAD_LOAD_LOADED:
-		_aplicar_animaciones_cargadas()
-
-
 func _aplicar_animaciones_cargadas() -> void:
-	animaciones_cavillaca = ResourceLoader.load_threaded_get(RUTA_ANIMACIONES) as SpriteFrames
 	if animaciones_cavillaca == null:
 		return
 	for nombre in [&"espalda", &"frente", &"espalda_bebe", &"frente_bebe", &"lado_bebe"]:
 		_copiar_animacion($Sprite.sprite_frames, nombre)
-	animaciones_cargadas = true
 
 func _armar_sfx() -> void:
 	sfx_paso = AudioStreamPlayer.new()
@@ -145,11 +124,9 @@ func _copiar_animacion(destino: SpriteFrames, nombre: StringName) -> void:
 	destino.set_animation_loop(nombre, animaciones_cavillaca.get_animation_loop(nombre))
 	for indice in range(animaciones_cavillaca.get_frame_count(nombre)):
 		var textura := animaciones_cavillaca.get_frame_texture(nombre, indice)
-		var textura_copia := textura.duplicate() as Texture2D
-		textura_copia.resource_path = ""
 		destino.add_frame(
 			nombre,
-			textura_copia,
+			textura,
 			animaciones_cavillaca.get_frame_duration(nombre, indice)
 		)
 
@@ -163,7 +140,6 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
-	_procesar_carga_animaciones()
 	if _controlar_ataque():
 		return
 		
