@@ -24,9 +24,7 @@ const ATAQUE := preload("res://sfx/combate/piedra_lanzada.ogg")
 
 var FRAMES_LADO: Array[Texture2D]
 
-const RUTA_ANIMACIONES := "res://resources/cavillaca.tres"
 var animaciones_cavillaca: SpriteFrames
-var animaciones_cargadas := false
 var sheet_lado := preload("res://assets/person/cavillaca_lateral2.png")
 
 var energia_temporizador := 0.0
@@ -43,12 +41,13 @@ var ataques_combate := 0
 func _ready():
 	_asegurar_tecla_dialogo_zorro()
 	FRAMES_LADO = _crear_frames_sheet(sheet_lado, 6, 512)
+	animaciones_cavillaca = $Sprite.sprite_frames
 	
 	add_to_group("cavillaca")
 	motion_mode = MOTION_MODE_FLOATING
 	_armar_sfx()
 	_armar_sprite()
-	_solicitar_animaciones()
+	_aplicar_animaciones_cargadas()
 
 	$Sprite.scale = Vector2(0.215, 0.215)
 	$Sprite.position.y = 0
@@ -93,31 +92,11 @@ func _asegurar_tecla_dialogo_zorro() -> void:
 				InputMap.action_erase_event("atacar", evento)
 
 
-func _solicitar_animaciones() -> void:
-	var estado := ResourceLoader.load_threaded_get_status(RUTA_ANIMACIONES)
-	if estado == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE or estado == ResourceLoader.THREAD_LOAD_FAILED:
-		var resultado := ResourceLoader.load_threaded_request(RUTA_ANIMACIONES)
-		if resultado != OK:
-			push_error("No se pudo iniciar la carga de las animaciones de Cavillaca")
-		return
-	if estado == ResourceLoader.THREAD_LOAD_LOADED:
-		_aplicar_animaciones_cargadas()
-
-
-func _procesar_carga_animaciones() -> void:
-	if animaciones_cargadas:
-		return
-	if ResourceLoader.load_threaded_get_status(RUTA_ANIMACIONES) == ResourceLoader.THREAD_LOAD_LOADED:
-		_aplicar_animaciones_cargadas()
-
-
 func _aplicar_animaciones_cargadas() -> void:
-	animaciones_cavillaca = ResourceLoader.load_threaded_get(RUTA_ANIMACIONES) as SpriteFrames
 	if animaciones_cavillaca == null:
 		return
 	for nombre in [&"espalda", &"frente", &"espalda_bebe", &"frente_bebe", &"lado_bebe"]:
 		_copiar_animacion($Sprite.sprite_frames, nombre)
-	animaciones_cargadas = true
 
 func _armar_sfx() -> void:
 	sfx_paso = AudioStreamPlayer.new()
@@ -144,9 +123,10 @@ func _copiar_animacion(destino: SpriteFrames, nombre: StringName) -> void:
 	destino.set_animation_speed(nombre, animaciones_cavillaca.get_animation_speed(nombre))
 	destino.set_animation_loop(nombre, animaciones_cavillaca.get_animation_loop(nombre))
 	for indice in range(animaciones_cavillaca.get_frame_count(nombre)):
+		var textura := animaciones_cavillaca.get_frame_texture(nombre, indice)
 		destino.add_frame(
 			nombre,
-			animaciones_cavillaca.get_frame_texture(nombre, indice),
+			textura,
 			animaciones_cavillaca.get_frame_duration(nombre, indice)
 		)
 
@@ -160,7 +140,7 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
-	_procesar_carga_animaciones()
+	_reproducir_clic_accion_teclado()
 	if _controlar_ataque():
 		return
 		
@@ -176,12 +156,12 @@ func _physics_process(delta):
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
 		var cueva := get_tree().get_first_node_in_group("zona_segura")
-		var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
-		
-		if en_cueva and Global.cuidado_bebe_desbloqueado:
+		var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
+
+		if Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and cueva != null:
 			if Global.lleva_bebe:
 				cueva.dejar_bebe_con_zorro()
-			else:
+			elif bebe_con_zorro:
 				cueva.recoger_bebe_del_zorro()
 		elif Global.lleva_bebe:
 			_dejar_bebe()
@@ -268,6 +248,21 @@ func _physics_process(delta):
 		Global.perder_energia(Global.COSTO_CORRER)
 	else:
 		Global.perder_energia(Global.COSTO_CAMINAR)
+
+
+func _input(event: InputEvent) -> void:
+	if not OS.is_debug_build() or not (event is InputEventKey):
+		return
+	var tecla := event as InputEventKey
+	# Probar halcon
+	if tecla.pressed and not tecla.echo and (tecla.keycode == KEY_F8 or tecla.physical_keycode == KEY_F8):
+		var halcon := get_tree().get_first_node_in_group("halcon")
+		if halcon != null and halcon.has_method("debug_aparecer_al_lado"):
+			halcon.debug_aparecer_al_lado(global_position + Vector2(180.0, 0.0))
+	elif tecla.pressed and not tecla.echo and (tecla.keycode == KEY_F9 or tecla.physical_keycode == KEY_F9):
+		var cuniraya := get_parent().get_node_or_null("Cuniraya")
+		if cuniraya != null and cuniraya.has_method("debug_acercar_a_bebe"):
+			cuniraya.debug_acercar_a_bebe()
 
 
 func _caminar_al_mar(delta: float) -> void:
@@ -456,22 +451,21 @@ func _actualizar_camara(_delta: float):
 
 func _actualizar_prompt():
 	var cueva := get_tree().get_first_node_in_group("zona_segura")
-	var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+	var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
 	var puede_descansar: bool = false
 	if cueva != null:
 		puede_descansar = bool(cueva.call("puede_descansar"))
 	
-	if Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
+	if puede_descansar:
+		Global.prompt_interaccion = "R  Descansar"
+	elif Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and Global.lleva_bebe:
+		Global.prompt_interaccion = "E  Dejar con zorro"
+	elif Global.zorro_cerca and bebe_con_zorro:
+		Global.prompt_interaccion = "E  Recoger del zorro"
+	elif Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
 		Global.prompt_interaccion = "F Hablar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
 		Global.prompt_interaccion = "F  Hablar con zorro"
-	elif puede_descansar:
-		Global.prompt_interaccion = "R  Descansar"
-	elif en_cueva and Global.cuidado_bebe_desbloqueado:
-		if Global.lleva_bebe:
-			Global.prompt_interaccion = "E  Dejar con zorro"
-		else:
-			Global.prompt_interaccion = "E  Recoger del zorro"
 	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
@@ -632,9 +626,10 @@ func _controlar_ataque() -> bool:
 
 		if halcon != null:
 			if halcon.en_combate:
-				ataques_combate += 1
-				print("⚔️ Ataque de combate: ", ataques_combate)
-				_arrojar_en_combate()
+				if not halcon.derrotado and not halcon.en_muerte:
+					ataques_combate += 1
+					print("⚔️ Ataque de combate: ", ataques_combate)
+					_arrojar_en_combate()
 			elif Global.halcon_cerca and not Global.lleva_bebe:
 				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")
 				combate_halcon.show()
@@ -647,3 +642,19 @@ func _controlar_ataque() -> bool:
 		return true
 	
 	return false
+
+
+func _reproducir_clic_accion_teclado() -> void:
+	var prompt := Global.prompt_interaccion
+	if Input.is_action_just_pressed("hablar_zorro") and Global.zorro_cerca and prompt.begins_with("F "):
+		Global.reproducir_clic()
+	elif Input.is_action_just_pressed("descansar") and prompt.begins_with("R "):
+		Global.reproducir_clic()
+	elif (
+		Input.is_action_just_pressed("interactuar")
+		and prompt.begins_with("E ")
+	) or (
+		Input.is_action_just_pressed("atacar")
+		and prompt.to_lower().contains("atacar")
+	):
+		Global.reproducir_clic()

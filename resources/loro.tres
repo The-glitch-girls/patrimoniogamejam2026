@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://ogtt2mcf1qfm"]
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://ddrg0vafhbmho"]
 
 [ext_resource type="Texture2D" uid="uid://u10vtgu5yynt" path="res://assets/amigos/loro.png" id="1_y5ree"]
 
@@ -14,6 +14,10 @@ region = Rect2(1024, 0, 1024, 1024)
 atlas = ExtResource("1_y5ree")
 region = Rect2(2048, 0, 1024, 1024)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_vikge"]
+atlas = ExtResource("1_y5ree")
+region = Rect2(3072, 0, 1024, 1024)
+
 [resource]
 animations = [{
 "frames": [{
@@ -25,6 +29,9 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ic1ou")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vikge")
 }],
 "loop": true,
 "name": &"hablando",

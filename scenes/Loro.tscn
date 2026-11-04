@@ -1,6 +1,6 @@
-[gd_scene load_steps=5 format=3 uid="uid://co2r06qo7gdji"]
+[gd_scene load_steps=5 format=3 uid="uid://cmopp7feirlo8"]
 
-[ext_resource type="SpriteFrames" uid="uid://ogtt2mcf1qfm" path="res://resources/loro.tres" id="1_5jmam"]
+[ext_resource type="SpriteFrames" uid="uid://ddrg0vafhbmho" path="res://resources/loro.tres" id="1_5jmam"]
 [ext_resource type="Script" path="res://scripts/loro.gd" id="2_loro"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_loro"]
@@ -21,6 +21,7 @@ shape = SubResource("CircleShape2D_loro")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = ExtResource("1_5jmam")
 animation = &"idle"
+frame_progress = 0.879892
 
 [node name="Deteccion" type="Area2D" parent="."]
 collision_layer = 0

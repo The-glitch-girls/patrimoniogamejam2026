@@ -1,5 +1,22 @@
 extends Node
 
+const SFX_CLIC := preload("res://sfx/interaccion/clic.ogg")
+var reproductor_clic: AudioStreamPlayer
+
+
+func _ready() -> void:
+	reproductor_clic = AudioStreamPlayer.new()
+	reproductor_clic.name = "ClicSFX"
+	reproductor_clic.stream = SFX_CLIC
+	reproductor_clic.bus = "SFX"
+	reproductor_clic.process_mode = Node.PROCESS_MODE_ALWAYS
+	add_child(reproductor_clic)
+
+
+func reproducir_clic() -> void:
+	if is_instance_valid(reproductor_clic):
+		reproductor_clic.play()
+
 # =========================
 # INPUT MAP
 # =========================
@@ -174,10 +191,7 @@ func abrir_final(tipo: String) -> void:
 		return
 	resultado_final = tipo
 	partida_terminada = true
-	if tipo == "mar":
-		Musica.tocar("ganar")
-	else:
-		Musica.tocar("perder")
+	Musica.detener()
 	get_tree().change_scene_to_file(ESCENA_FINAL)
 
 

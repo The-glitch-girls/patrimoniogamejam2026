@@ -1,6 +1,11 @@
 extends CharacterBody2D
 
 const TEXTURA_ZORRO: Texture2D = preload("res://assets/amigos/zorro.png")
+const AUDIOS_MENSAJE: Array[AudioStream] = [
+	preload("res://sfx/animales/zorro/aa_zorro1.ogg"),
+	preload("res://sfx/animales/zorro/aa_zorro2.ogg"),
+	preload("res://sfx/animales/zorro/aa_zorro3.ogg"),
+]
 const VELOCIDAD_PASEO := 40.0
 const RADIO_PASEO := 8.0
 const PAUSA_MINIMA := 0.3
@@ -9,9 +14,11 @@ const PAUSA_MAXIMA := 0.6
 var posicion_cueva := Vector2.ZERO
 var destino := Vector2.ZERO
 var pausa := 0.0
+var indice_audio_mensaje := 0
 
 @onready var sprite: AnimatedSprite2D = $Sprite
 @onready var deteccion: Area2D = $Deteccion
+@onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
 func _ready() -> void:
 	add_to_group("zorro")
@@ -114,6 +121,14 @@ func hablar() -> void:
 		Global.mostrar_aviso("El zorro parece reconocer el recuerdo que encontraste")
 	else:
 		Global.mostrar_aviso("El zorro confía en ti y está dispuesto a cuidar al bebé")
+	reproducir_sonido_mensaje()
+
+
+func reproducir_sonido_mensaje() -> void:
+	sonido_mensaje.stop()
+	sonido_mensaje.stream = AUDIOS_MENSAJE[indice_audio_mensaje]
+	sonido_mensaje.play()
+	indice_audio_mensaje = (indice_audio_mensaje + 1) % AUDIOS_MENSAJE.size()
 
 func _poner_animacion(caminando: bool) -> void:
 	var animacion := "caminar" if caminando else "quieto"

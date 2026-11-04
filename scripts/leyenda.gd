@@ -35,6 +35,7 @@ var material_revelado: ShaderMaterial
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	Musica.iniciar_juego_con_tension()
 	titulo.text = Traducciones.obtener("legend_title")
 	texto.text = Traducciones.obtener("legend_text")
 	texto.visible_characters = -1
@@ -42,6 +43,7 @@ func _ready() -> void:
 	continuar.visible = false
 	continuar.disabled = true
 	continuar.pressed.connect(_continuar)
+	continuar.pressed.connect(Global.reproducir_clic)
 	continuar.button_down.connect(_apretar_continuar)
 	continuar.button_up.connect(_soltar_continuar)
 	_estilizar()
@@ -417,6 +419,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if continuar.disabled:
 		return
 	if event.keycode in [KEY_ENTER, KEY_SPACE, KEY_E]:
+		Global.reproducir_clic()
 		_continuar()
 
 

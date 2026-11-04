@@ -132,6 +132,26 @@ func _revivir():
 	$Detector.monitorable = true
 
 
+func debug_aparecer_al_lado(posicion: Vector2) -> void:
+	if not OS.is_debug_build() or en_combate:
+		return
+	global_position = posicion
+	origen = posicion
+	vida = VIDA_MAX
+	derrotado = false
+	en_muerte = false
+	descanso_t = 0.0
+	lock_golpe = 0.0
+	respawn_t = 0.0
+	rondando = false
+	Global.halcon_cerca = true
+	$AnimatedSprite2D.scale = escala_original
+	$AnimatedSprite2D.play("lado")
+	$Detector.set_deferred("monitoring", true)
+	$Detector.set_deferred("monitorable", true)
+	show()
+
+
 func _armar_puntos() -> void:
 	puntos_abiertos.clear()
 	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
@@ -282,9 +302,13 @@ func entrar_en_combate():
 
 	padre_original = get_parent()
 	posicion_original = global_position
+	vida = VIDA_MAX
 	en_combate = true
 	Global.halcon_cerca = false
 	Global.prompt_interaccion = "E  Atacar"
+	combate.get_node("VidasHalcon").show()
+	_actualizar_vidas()
+	Musica.iniciar_combate()
 	reparent(combate)
 	position = punto.position
 	$AnimatedSprite2D.scale = escala_original * 2.0
@@ -297,6 +321,7 @@ func entrar_en_combate():
 	
 func salir_de_combate():
 	en_combate = false
+	Musica.detener_pista_combate()
 	Global.halcon_cerca = false
 	Global.prompt_interaccion = ""
 	$AnimatedSprite2D.scale = escala_original
@@ -362,6 +387,11 @@ func _victoria():
 	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 	derrotado = true
 	en_muerte = true
+	Global.halcon_cerca = false
+	Global.prompt_interaccion = ""
+	var hud := get_tree().current_scene.get_node_or_null("HUD")
+	if hud != null and hud.has_method("ocultar_prompt_interaccion"):
+		hud.ocultar_prompt_interaccion()
 	
 	$MuerteSFX.play()
 	
@@ -393,6 +423,7 @@ func _victoria():
 	$Detector.set_deferred("monitorable", false)
 
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
+		Musica.terminar_combate()
 		Global.mostrar_aviso("Victoria")
 		respawn_t = TIEMPO_RESPAWN
 		return
@@ -400,19 +431,5 @@ func _victoria():
 	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
 	var flashback := FLASHBACK_ESCENA.instantiate()
 	flashback.configurar(indice)
-	var hud := get_tree().current_scene.get_node("HUD")
+	flashback.connect("terminado", Callable(Musica, "terminar_combate"))
 	hud.add_child(flashback)
-	
-# Debug funcionamiento de halcon
-#func _input(event):
-	#if event.is_action_pressed("debug_halcon"):
-		#var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-		#if cavillaca != null:
-			#var objetivo := _obtener_punto_objetivo(cavillaca)
-			#global_position = objetivo + Vector2(100, 0)
-			#show()
-			#derrotado = false
-			#vida = VIDA_MAX
-			#monitoring = true
-			#monitorable = true
-			#$AnimatedSprite2D.play("lado")

@@ -1,132 +1,59 @@
 extends Control
 
-const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
-const ICONO_JUGAR := preload("res://assets/icons/play.svg")
-const FONDO := preload("res://assets/menu_principal.png")
-const CREMA := Color(0.99, 0.96, 0.9, 1)
-const LILA := Color(0.72, 0.68, 0.95, 1)
-const VERDE := Color(0.49, 0.76, 0.29, 1)
-const MORADO := Color(0.22, 0.2, 0.42, 1)
-
-const TEXTOS := {
-	"mar": {
-		"titulo": "final_sea_title",
-		"texto": "final_sea_text",
-	},
-	"cuniraya": {
-		"titulo": "final_cuniraya_title",
-		"texto": "final_cuniraya_text",
-	},
-}
-
+const IMAGEN_FINAL_MAR := preload("res://assets/cinematicas/final_mar.png")
+const AUDIO_FINAL_MAR := preload("res://sfx/final/aa_final_mar.ogg")
 
 func _ready() -> void:
-	_armar()
-	if OS.get_cmdline_user_args().has("--finalshot"):
-		_capturar()
+	var es_final_cuniraya: bool = Global.resultado_final == "cuniraya"
+	var es_final_mar: bool = Global.resultado_final == "mar"
+	if es_final_mar:
+		$ImagenFinal.texture = IMAGEN_FINAL_MAR
+	$ImagenFinal.visible = true
+	$ReiniciarBtn.visible = es_final_cuniraya
+	$ReiniciarLbl.visible = es_final_cuniraya
+	_centrar_etiqueta_reiniciar()
+	if es_final_cuniraya:
+		$ReiniciarBtn.visible = false
+		$ReiniciarLbl.visible = false
+	$AudioFinal.stop()
+	if es_final_cuniraya:
+		$ReiniciarLbl.text = Traducciones.obtener("restart")
+		$ReiniciarLbl.add_theme_color_override("font_color", Color.WHITE)
+		$ReiniciarLbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		$ReiniciarBtn.pressed.connect(_reintentar_cuniraya)
+		Traducciones.idioma_cambiado.connect(_actualizar_etiqueta_reiniciar)
+		Musica.detener()
+		$AudioFinal.bus = "Musica"
+		$AudioFinal.volume_db = -5.0
+		$AudioFinal.play()
+		await get_tree().create_timer(1.0).timeout
+		if is_instance_valid($ReiniciarBtn) and is_instance_valid($ReiniciarLbl):
+			$ReiniciarBtn.visible = true
+			$ReiniciarLbl.visible = true
+	elif es_final_mar:
+		Musica.tocar_stream("final_mar", AUDIO_FINAL_MAR)
+		_transicionar_a_creditos_finales()
 
 
-func _capturar() -> void:
-	var arbol := get_tree()
-	if arbol == null:
-		return
-	await arbol.process_frame
-	await arbol.create_timer(0.45).timeout
-	var imagen := arbol.root.get_viewport().get_texture().get_image()
-	imagen.save_png("screenshot_final.png")
-	arbol.quit()
-
-
-func _armar() -> void:
-	var tipo := Global.resultado_final
-	if tipo == "":
-		tipo = "mar"
-	var dato: Dictionary = TEXTOS[tipo]
-
-	var fondo := TextureRect.new()
-	fondo.texture = FONDO
-	fondo.set_anchors_preset(Control.PRESET_FULL_RECT)
-	fondo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	fondo.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(fondo)
-
-	var degradado := TextureRect.new()
-	degradado.set_anchors_preset(Control.PRESET_FULL_RECT)
-	degradado.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	degradado.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	var gradiente := Gradient.new()
-	gradiente.colors = PackedColorArray([
-		Color(0.18, 0.12, 0.36, 0.55),
-		Color(0.12, 0.1, 0.28, 0.78),
-	])
-	var textura := GradientTexture2D.new()
-	textura.gradient = gradiente
-	textura.fill_from = Vector2(0.5, 0.0)
-	textura.fill_to = Vector2(0.5, 1.0)
-	textura.width = 8
-	textura.height = 256
-	degradado.texture = textura
-	add_child(degradado)
-
-	var titulo := Label.new()
-	titulo.text = Traducciones.obtener(dato.titulo)
-	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	titulo.set_anchors_preset(Control.PRESET_CENTER)
-	titulo.offset_left = -280
-	titulo.offset_top = -160
-	titulo.offset_right = 280
-	titulo.offset_bottom = -70
-	titulo.add_theme_font_override("font", FUENTE)
-	titulo.add_theme_font_size_override("font_size", 64)
-	titulo.add_theme_color_override("font_color", CREMA)
-	titulo.add_theme_color_override("font_outline_color", Color(0.12, 0.1, 0.18, 1))
-	titulo.add_theme_constant_override("outline_size", 10)
-	add_child(titulo)
-
-	var texto := Label.new()
-	texto.text = Traducciones.obtener(dato.texto)
-	texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	texto.set_anchors_preset(Control.PRESET_CENTER)
-	texto.offset_left = -320
-	texto.offset_top = -62
-	texto.offset_right = 320
-	texto.offset_bottom = -20
-	texto.add_theme_font_override("font", FUENTE)
-	texto.add_theme_font_size_override("font_size", 22)
-	texto.add_theme_color_override("font_color", LILA)
-	add_child(texto)
-
-	var boton := BotonCirculo.new()
-	boton.color_fondo = VERDE
-	boton.icono = ICONO_JUGAR
-	boton.tamano = 88.0
-	boton.set_anchors_preset(Control.PRESET_CENTER)
-	boton.offset_left = -44
-	boton.offset_top = 24
-	boton.offset_right = 44
-	boton.offset_bottom = 112
-	boton.pressed.connect(_volver)
-	add_child(boton)
-
-	var leyenda := Label.new()
-	leyenda.text = Traducciones.obtener("play_again")
-	leyenda.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	leyenda.set_anchors_preset(Control.PRESET_CENTER)
-	leyenda.offset_left = -140
-	leyenda.offset_top = 122
-	leyenda.offset_right = 140
-	leyenda.offset_bottom = 150
-	leyenda.add_theme_font_override("font", FUENTE)
-	leyenda.add_theme_font_size_override("font_size", 18)
-	leyenda.add_theme_color_override("font_color", CREMA)
-	add_child(leyenda)
-
-	boton.enfocar()
-
-
-func _volver() -> void:
+func _reintentar_cuniraya() -> void:
+	Global.reproducir_clic()
 	Global.resetear()
-	Musica.tocar("menu")
-	get_tree().change_scene_to_file("res://scenes/MenuInicio.tscn")
+	Musica.iniciar_juego_con_tension()
+	get_tree().change_scene_to_file("res://scenes/Main.tscn")
+
+
+func _actualizar_etiqueta_reiniciar(_idioma: String = "") -> void:
+	$ReiniciarLbl.text = Traducciones.obtener("restart")
+	_centrar_etiqueta_reiniciar()
+
+
+func _centrar_etiqueta_reiniciar() -> void:
+	$ReiniciarLbl.size.x = 260.0
+	$ReiniciarLbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	var centro_boton_x: float = $ReiniciarBtn.position.x + $ReiniciarBtn.size.x * $ReiniciarBtn.scale.x * 0.5
+	$ReiniciarLbl.position.x = centro_boton_x - $ReiniciarLbl.size.x * 0.5
+
+func _transicionar_a_creditos_finales() -> void:
+	await get_tree().create_timer(5.0).timeout
+	if is_inside_tree():
+		get_tree().change_scene_to_file("res://scenes/CreditosFinales.tscn")
