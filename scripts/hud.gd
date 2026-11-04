@@ -397,6 +397,18 @@ func _ajustar_banner_aviso() -> void:
 	label.offset_bottom = label.offset_top + alto_texto
 
 
+func _posicionar_aviso_descanso(es_descanso: bool) -> void:
+	var fondo := $AvisoFondo as Panel
+	var label := $AvisoLabel as Label
+	var ancla_vertical := 1.0 if es_descanso else 0.0
+	fondo.anchor_top = ancla_vertical
+	fondo.anchor_bottom = ancla_vertical
+	label.anchor_top = ancla_vertical
+	label.anchor_bottom = ancla_vertical
+	# El estado de descanso aparece sobre el botón R, sin tapar la escena.
+	fondo.offset_top = -246.0 if es_descanso else 28.0
+
+
 func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
 	caja.bg_color = color
@@ -555,6 +567,7 @@ func _process(delta):
 
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
+	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
 	var mostrar_aviso_normal := hay_aviso and not es_dialogo_zorro
 	$AvisoLabel.text = Traducciones.obtener_frase(Global.aviso_combate)
 	$AvisoFondo.visible = mostrar_aviso_normal
@@ -564,8 +577,9 @@ func _process(delta):
 	if es_dialogo_zorro:
 		dialogo_zorro_texto.text = Traducciones.obtener_frase(Global.aviso_combate)
 	if mostrar_aviso_normal:
+		_posicionar_aviso_descanso(es_aviso_descanso)
 		_ajustar_banner_aviso()
-		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else BORDO
+		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
 		_estilar_pildora($AvisoFondo, color_aviso)
 
 	var nivel_presencia : float = Global.presencia_cuniraya
