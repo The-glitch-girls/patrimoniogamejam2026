@@ -6,6 +6,11 @@ const VELOCIDAD_CAMINAR := 225.0
 const VELOCIDAD_CORRER := 300.0
 const VELOCIDAD_CON_BEBE := 180.0
 const VELOCIDAD_SIN_ENERGIA := 100.0
+# Velocidad de la animación de caminata sin bebé
+const ESCALA_ANIM_CAMINAR := 1.7
+# Al correr, la animación acelera en la misma proporción que la velocidad
+# (300/225 ≈ 1.33) para que los pies no patinen. Falta arte propio de correr (#11).
+const ESCALA_ANIM_CORRER := ESCALA_ANIM_CAMINAR * VELOCIDAD_CORRER / VELOCIDAD_CAMINAR
 const DISTANCIA_RECOGER := 56.0
 const DISTANCIA_DEJAR := 40.0
 const ACELERACION := 900.0
@@ -477,7 +482,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		if esta_caminando:
 			if not $Sprite.is_playing():
 				$Sprite.play()
-			$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
+			$Sprite.speed_scale = ESCALA_ANIM_CORRER if esta_corriendo else ESCALA_ANIM_CAMINAR
 		else:
 			$Sprite.stop()
 			$Sprite.frame = 0
@@ -485,7 +490,7 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 	else:
 		var anim_lado := "walk_lado" if esta_caminando else "idle_lado"
 		$Sprite.flip_h = facing == Vector2.LEFT
-		$Sprite.speed_scale = 2.0 if esta_corriendo else 1.7
+		$Sprite.speed_scale = ESCALA_ANIM_CORRER if esta_corriendo else ESCALA_ANIM_CAMINAR
 		_cambiar_animacion(StringName(anim_lado), esta_caminando)
 
 	if esta_caminando:
