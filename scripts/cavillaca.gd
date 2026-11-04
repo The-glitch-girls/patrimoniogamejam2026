@@ -584,6 +584,8 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "F Hablar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
 		Global.prompt_interaccion = "F  Hablar con zorro"
+	elif Global.halcon_cerca and Global.lleva_bebe:
+		Global.prompt_interaccion = "E  Deja al bebé para luchar"
 	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():
