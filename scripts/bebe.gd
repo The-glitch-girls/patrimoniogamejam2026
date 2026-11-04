@@ -1,10 +1,13 @@
 extends StaticBody2D
 
+const SFX_RECOGER := preload("res://sfx/interaccion/bebe_recoger.ogg")
+const SFX_DEJAR := preload("res://sfx/interaccion/bebe_dejar.ogg")
 const OFFSET_CARGADO := Vector2(22, -52)
 const SEGUIMIENTO := 14.0
 
 var bob_t := 0.0
 var llorando := false
+@onready var sonido_accion: AudioStreamPlayer = $SonidoAccion
 
 func _ready():
 	add_to_group("bebe")
@@ -30,6 +33,7 @@ func _process(delta):
 	z_index = 1
 
 func recoger():
+	_sonar_accion(SFX_RECOGER)
 	Global.lleva_bebe = true
 	llorando = false
 	$AnimatedSprite2D.play("normal")
@@ -41,6 +45,7 @@ func dejar(_posicion: Vector2):
 	if cavillaca == null:
 		return
 
+	_sonar_accion(SFX_DEJAR)
 	var pies := cavillaca.get_node("CollisionShape2D") as CollisionShape2D
 	global_position = pies.global_position
 
@@ -48,6 +53,16 @@ func dejar(_posicion: Vector2):
 	$AnimatedSprite2D.position = Vector2(0, -14)
 	$AnimatedSprite2D.modulate = Color.WHITE
 	$CollisionShape2D.set_deferred("disabled", false)
+
+
+func reproducir_sonido_dejar() -> void:
+	_sonar_accion(SFX_DEJAR)
+
+
+func _sonar_accion(audio: AudioStream) -> void:
+	sonido_accion.stop()
+	sonido_accion.stream = audio
+	sonido_accion.play()
 
 func _seguir_carga(cavillaca: Node2D, delta: float):
 	if cavillaca == null:

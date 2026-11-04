@@ -213,9 +213,17 @@
 	"ambience": {"es": "Ambiente", "en": "Ambience", "fr": "Ambiance"},
 	"cave": {"es": "Cueva", "en": "Cave", "fr": "Grotte"},
 	"final_sea_title": {"es": "El mar", "en": "The Sea", "fr": "La mer"},
-	"final_sea_text": {"es": "Cavillaca se sumerge junto al bebé.", "en": "Cavillaca dives into the sea with her baby.", "fr": "Cavillaca plonge dans la mer avec son bébé."},
+	"final_sea_text": {
+	  "es": "Con cada recuerdo recuperado, la historia comenzó a revelarse ante ti. Ya no quedaban dudas sobre lo ocurrido ni sobre el destino que te esperaba.\n\nEsta vez, elegiste tu propio camino. Te adentraste en el mar, dejando atrás un mundo al que ya no querías pertenecer.",
+	  "en": "With each memory recovered, the story began to reveal itself to you. There was no longer any doubt about what had happened or about the fate that awaited you.\n\nThis time, you chose your own path. You ventured into the sea, leaving behind a world you no longer wished to belong to.",
+	  "fr": "À mesure que tu retrouvais les souvenirs, l’histoire commença à se révéler à toi. Il ne restait plus aucun doute sur ce qui s’était passé ni sur le destin qui t’attendait.\n\nCette fois, tu as choisi ton propre chemin. Tu t’es avancée dans la mer, laissant derrière toi un monde auquel tu ne voulais plus appartenir."
+	},
 	"final_cuniraya_title": {"es": "Cuniraya", "en": "Cuniraya", "fr": "Cuniraya"},
-	"final_cuniraya_text": {"es": "La energía se apagó. Él la alcanzó.", "en": "Her strength faded. He caught up with her.", "fr": "Son énergie s'est épuisée. Il l'a rattrapée."},
+	"final_cuniraya_text": {
+	  "es": "Después de todo lo que habías atravesado, ya no te quedaban fuerzas para continuar.\n\nCuniraya, que te había perseguido durante todo el camino, finalmente te alcanzó.\n\nEsta vez, no hubo forma de escapar de él.",
+	  "en": "After everything you had been through, you no longer had the strength to go on.\n\nCuniraya, who had pursued you all along the way, finally caught up with you.\n\nThis time, there was no way to escape him.",
+	  "fr": "Après tout ce que tu avais traversé, tu n’avais plus la force de continuer.\n\nCuniraya, qui t’avait poursuivie tout au long du chemin, a fini par te rattraper.\n\nCette fois, tu n’as pas pu lui échapper."
+	},
 	"play_again": {"es": "Volver a jugar", "en": "Play again", "fr": "Rejouer"},
 	"victory": {"es": "Victoria", "en": "Victory", "fr": "Victoire"},
 	"prompt_talk_rest": {"es": "F Hablar  |  R Descansar", "en": "F Talk  |  R Rest", "fr": "F Parler  |  R Se reposer"},

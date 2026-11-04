@@ -1,11 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://hal2ns27l1ej"]
+[gd_scene load_steps=13 format=3 uid="uid://hal2ns27l1ej"]
 
 [ext_resource type="Script" uid="uid://cc74jj4g4tf2n" path="res://scripts/final.gd" id="1_final"]
 [ext_resource type="Texture2D" uid="uid://dgf8f0jx6ashw" path="res://assets/cinematicas/final_cuniraya.png" id="2_xiy6r"]
 [ext_resource type="Texture2D" uid="uid://exd5sas1i8a6" path="res://assets/ui/ajustes/reiniciar_normal.png" id="3_dexd0"]
+[ext_resource type="Texture2D" uid="uid://bhqfwhjhyifnf" path="res://assets/ui/recuerdos/recuerdo_caja.png" id="3_f3pyh"]
+[ext_resource type="LabelSettings" uid="uid://bm1tqv5ct8jes" path="res://resources/recuerdo_texto.tres" id="4_nlwcw"]
 [ext_resource type="Texture2D" uid="uid://b8c1e53khuc31" path="res://assets/ui/ajustes/reiniciar_pressed.png" id="4_npxuk"]
+[ext_resource type="Texture2D" uid="uid://085jvc6g6gi8" path="res://assets/ui/recuerdos/continuar_es.png" id="5_8hrha"]
 [ext_resource type="Texture2D" uid="uid://bdunqcl5o5qkc" path="res://assets/ui/ajustes/reiniciar_hover.png" id="5_48qy7"]
 [ext_resource type="AudioStream" uid="uid://dtx0ih6ohdtr5" path="res://sfx/final/aa_final_cuniraya.ogg" id="6_final_audio"]
+[ext_resource type="Texture2D" uid="uid://i0ue7vjeqq04" path="res://assets/ui/recuerdos/continuar_es_pressed.png" id="6_kpunv"]
+[ext_resource type="Texture2D" uid="uid://xm7ak8vdpjj" path="res://assets/ui/botones/btn_pasar.png" id="8_g7nb7"]
+[ext_resource type="Texture2D" uid="uid://jjn8br7lne0t" path="res://assets/ui/botones/btn_pasar_pressed.png" id="9_08c7k"]
 
 [node name="Final" type="Control"]
 layout_mode = 3
@@ -25,12 +31,34 @@ offset_bottom = 1072.8
 scale = Vector2(0.68, 0.68)
 texture = ExtResource("2_xiy6r")
 
+[node name="CajaTexto" type="TextureRect" parent="."]
+offset_left = 143.0
+offset_top = 530.0
+offset_right = 1673.0
+offset_bottom = 813.0
+scale = Vector2(0.65, 0.65)
+texture = ExtResource("3_f3pyh")
+
+[node name="Texto" type="Label" parent="CajaTexto"]
+custom_minimum_size = Vector2(20, 0)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.06
+anchor_top = 0.32
+anchor_right = 0.94
+anchor_bottom = 0.88
+offset_left = 0.200005
+offset_top = 7.44
+offset_right = -0.199951
+offset_bottom = -12.04
+label_settings = ExtResource("4_nlwcw")
+
 [node name="ReiniciarBtn" type="TextureButton" parent="."]
 layout_mode = 0
-offset_left = 1166.0
-offset_top = 569.0
-offset_right = 1299.0
-offset_bottom = 721.0
+offset_left = 643.0
+offset_top = 551.0
+offset_right = 776.0
+offset_bottom = 703.0
 scale = Vector2(0.6, 0.6)
 texture_normal = ExtResource("3_dexd0")
 texture_pressed = ExtResource("4_npxuk")
@@ -38,11 +66,32 @@ texture_hover = ExtResource("5_48qy7")
 
 [node name="ReiniciarLbl" type="Label" parent="."]
 layout_mode = 0
-offset_left = 1170.0
-offset_top = 671.0
-offset_right = 1243.0
-offset_bottom = 703.0
+offset_left = 647.0
+offset_top = 653.0
+offset_right = 720.0
+offset_bottom = 685.0
 text = "Reiniciar"
+
+[node name="SgteTexto" type="TextureButton" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 1064.0
+offset_top = 653.0
+offset_right = 1093.0
+offset_bottom = 685.0
+scale = Vector2(0.6, 0.6)
+texture_normal = ExtResource("8_g7nb7")
+texture_pressed = ExtResource("9_08c7k")
+
+[node name="Continuar" type="TextureButton" parent="."]
+visible = false
+offset_left = 937.0
+offset_top = 637.0
+offset_right = 1191.0
+offset_bottom = 698.0
+scale = Vector2(0.6, 0.6)
+texture_normal = ExtResource("5_8hrha")
+texture_pressed = ExtResource("6_kpunv")
 
 [node name="AudioFinal" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_final_audio")

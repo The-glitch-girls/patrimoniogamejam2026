@@ -13,6 +13,7 @@ const FRENADO := 1200.0
 const ACELERACION_CON_BEBE := 420.0
 const LOCK_TRAS_DEJAR := 0.35
 const COOLDOWN_ARROJAR := 0.35
+const ORIGEN_CAVILLACA := Vector2(13, 11)
 
 const PIEDRA_ESCENA := preload("res://scenes/Piedra.tscn")
 const PASOS := [
@@ -37,6 +38,8 @@ var cam: Camera2D
 var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
+var preparando_caminata_mar := false
+var caminata_mar_preparada := false
 
 func _ready():
 	_asegurar_tecla_dialogo_zorro()
@@ -145,6 +148,10 @@ func _physics_process(delta):
 		return
 		
 	if Global.hacia_el_mar:
+		if not caminata_mar_preparada:
+			if not preparando_caminata_mar:
+				_transicionar_al_origen_mar()
+			return
 		_caminar_al_mar(delta)
 		return
 
@@ -261,10 +268,63 @@ func _input(event: InputEvent) -> void:
 			cuniraya.debug_acercar_a_bebe()
 
 
+func _transicionar_al_origen_mar() -> void:
+	preparando_caminata_mar = true
+	velocity = Vector2.ZERO
+	var capa_transicion := CanvasLayer.new()
+	capa_transicion.layer = 20
+	var fundido := ColorRect.new()
+	fundido.color = Color("51438f")
+	fundido.color.a = 0.0
+	fundido.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	fundido.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	capa_transicion.add_child(fundido)
+	get_tree().current_scene.add_child(capa_transicion)
+	var fundir_a_violeta := create_tween()
+	fundir_a_violeta.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	fundir_a_violeta.tween_property(fundido, "color:a", 1.0, 1.25)
+	await fundir_a_violeta.finished
+	if not is_inside_tree():
+		return
+	Global.lleva_bebe = true
+	_ocultar_sprite_bebe()
+	if cam != null:
+		cam.position_smoothing_enabled = false
+	global_position = _posicion_celda_mapa(ORIGEN_CAVILLACA)
+	velocity = Vector2.ZERO
+	mar_t = 0.0
+	facing = _cardinal(_posicion_celda_mapa(Global.DESTINO_MAR) - global_position)
+	_animar_caminata(0.0, false, false)
+	_actualizar_carga_visual()
+	if cam != null:
+		cam.reset_smoothing()
+	await get_tree().create_timer(0.2).timeout
+	if not is_inside_tree():
+		return
+	await get_tree().process_frame
+	if not is_inside_tree():
+		return
+	if cam != null:
+		cam.position_smoothing_enabled = true
+	var revelar_mapa := create_tween()
+	revelar_mapa.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	revelar_mapa.tween_property(fundido, "color:a", 0.0, 1.25)
+	await revelar_mapa.finished
+	if not is_inside_tree():
+		return
+	capa_transicion.queue_free()
+	preparando_caminata_mar = false
+	caminata_mar_preparada = true
+
+
+func _posicion_celda_mapa(coordenadas: Vector2) -> Vector2:
+	var suelo := get_tree().current_scene.get_node("SueloTiles") as TileMapLayer
+	return suelo.to_global(suelo.map_to_local(Vector2i(coordenadas)))
+
+
 func _caminar_al_mar(delta: float) -> void:
-	_cargar_bebe_forzado()
 	mar_t += delta
-	var destino := Global.DESTINO_MAR
+	var destino := _posicion_celda_mapa(Global.DESTINO_MAR)
 	var hacia := destino - global_position
 	if hacia.length() < 70.0 or mar_t > 8.0:
 		Global.abrir_final("mar")
@@ -295,16 +355,13 @@ func _cardinal(hacia: Vector2) -> Vector2:
 	return Vector2(0, sign(hacia.y))
 
 
-func _cargar_bebe_forzado() -> void:
-	if Global.lleva_bebe:
-		return
-	var cueva := get_tree().get_first_node_in_group("zona_segura")
-	if cueva != null and cueva.get("bebe_con_zorro"):
-		cueva.recoger_bebe_del_zorro()
-		return
+func _ocultar_sprite_bebe() -> void:
 	var bebe := _obtener_bebe()
-	if bebe != null:
-		bebe.recoger()
+	if bebe == null:
+		return
+	var sprite_bebe := bebe.get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+	if sprite_bebe != null:
+		sprite_bebe.hide()
 
 
 func esta_cerca_del_bebe() -> bool:

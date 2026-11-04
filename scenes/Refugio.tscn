@@ -1,9 +1,11 @@
-[gd_scene load_steps=5 format=3 uid="uid://bu6gamljsyvm5"]
+[gd_scene load_steps=7 format=3 uid="uid://bu6gamljsyvm5"]
 
 [ext_resource type="Script" uid="uid://x8sx1wnmpirj" path="res://scripts/refugio.gd" id="1_script"]
 [ext_resource type="Texture2D" uid="uid://cdg60wbjv8wuo" path="res://assets/tiles/arbol.png" id="2_enwi8"]
 [ext_resource type="Texture2D" uid="uid://cfhky3uhoek2" path="res://assets/tiles/tileset_2.png" id="3_gate"]
 [ext_resource type="AudioStream" uid="uid://dkewprtaxjka0" path="res://sfx/interaccion/swoosh.ogg" id="4_5eja5"]
+[ext_resource type="AudioStream" uid="uid://dv7mko7jlr4k6" path="res://sfx/interaccion/energia_cargando.ogg" id="5_energia"]
+[ext_resource type="AudioStream" uid="uid://ij23tsrkannr" path="res://sfx/interaccion/energia_full.ogg" id="6_energia_full"]
 
 [node name="Refugio" type="Node2D"]
 z_index = -1
@@ -28,4 +30,12 @@ position = Vector2(0, 70)
 
 [node name="SonidoPuerta" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("4_5eja5")
+bus = &"SFX"
+
+[node name="SonidoEnergiaCargando" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_energia")
+bus = &"SFX"
+
+[node name="SonidoEnergiaFull" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_energia_full")
 bus = &"SFX"

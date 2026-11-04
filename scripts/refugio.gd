@@ -1,5 +1,6 @@
 extends Node2D
 
+const STREAM_ENERGIA_CARGANDO: AudioStreamOggVorbis = preload("res://sfx/interaccion/energia_cargando.ogg")
 const RECUPERACION_ENERGIA_POR_SEGUNDO := 8.0
 const RANGO_INTERACCION := 40.0
 const RANGO_ENTRADA := 150.0
@@ -16,9 +17,14 @@ var animacion_puerta: Tween
 @onready var puerta: Sprite2D = $Puerta
 @onready var punto_descanso: Marker2D = $PuntoDescanso
 @onready var sonido_puerta: AudioStreamPlayer2D = $SonidoPuerta
+@onready var sonido_energia_cargando: AudioStreamPlayer = $SonidoEnergiaCargando
+@onready var sonido_energia_full: AudioStreamPlayer = $SonidoEnergiaFull
 
 func _ready():
 	add_to_group("zona_segura")
+	var stream_carga := STREAM_ENERGIA_CARGANDO.duplicate() as AudioStreamOggVorbis
+	stream_carga.loop = true
+	sonido_energia_cargando.stream = stream_carga
 	_crear_puerta()
 
 
@@ -32,9 +38,15 @@ func _process(delta: float) -> void:
 	if descanso_activo and not puede_descansar():
 		descanso_activo = false
 	if descanso_activo:
+		if not sonido_energia_cargando.playing:
+			sonido_energia_cargando.play()
 		Global.recuperar_energia(RECUPERACION_ENERGIA_POR_SEGUNDO * delta)
 		if Global.energia >= Global.ENERGIA_MAX:
 			descanso_activo = false
+			sonido_energia_cargando.stop()
+			sonido_energia_full.play()
+	else:
+		sonido_energia_cargando.stop()
 	Global.descanso_con_zorro = descanso_activo
 
 
@@ -124,6 +136,7 @@ func dejar_bebe_con_zorro():
 	
 	var bebe := get_tree().get_first_node_in_group("bebe")
 	if bebe != null:
+		bebe.call("reproducir_sonido_dejar")
 		bebe.global_position = zorro.global_position
 
 
