@@ -554,9 +554,9 @@ func _hay_suelo_bajo_pies(posicion: Vector2) -> bool:
 		return true
 
 	var ancho_pies := 16.0
-	var centro_pies := posicion + $CollisionShape2D.position
+	var centro_pies: Vector2 = posicion + $CollisionShape2D.position
 	for desplazamiento_x in [-ancho_pies, 0.0, ancho_pies]:
-		var punto_global := centro_pies + Vector2(desplazamiento_x, 0.0)
+		var punto_global: Vector2 = centro_pies + Vector2(desplazamiento_x, 0.0)
 		var celda := suelo_tiles.local_to_map(suelo_tiles.to_local(punto_global))
 		if suelo_tiles.get_cell_source_id(celda) == -1:
 			return false
