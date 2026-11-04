@@ -138,8 +138,8 @@ func aumentar_presencia(cantidad: float = 1.0):
 	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
 
 
-func reducir_presencia():
-	presencia_cuniraya = max(presencia_cuniraya - 1, 0)
+func reducir_presencia(cantidad: float = 1.0):
+	presencia_cuniraya = max(presencia_cuniraya - cantidad, 0.0)
 
 
 func aumentar_presencia_por_tiempo(delta: float):
