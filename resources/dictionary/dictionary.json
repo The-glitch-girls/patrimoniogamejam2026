@@ -246,6 +246,7 @@
 	"fox_no_rest_yet": {"es": "El zorro aún no te ofrece descanso", "en": "The fox cannot offer you rest yet", "fr": "Le renard ne peut pas encore vous offrir de repos"},
 	"fox_approach_rest": {"es": "Acércate al zorro para descansar", "en": "Approach the fox to rest", "fr": "Approchez du renard pour vous reposer"},
 	"energy_full": {"es": "Tu energía ya está completa", "en": "Your energy is already full", "fr": "Votre énergie est déjà au maximum"},
+	"presence_critical_warning": {"es": "¡Cuniraya está muy cerca! Sin el bebé en brazos pierdes energía", "en": "Cuniraya is very close! Without the baby in your arms you lose energy", "fr": "Cuniraya est tout près ! Sans le bébé dans les bras, tu perds de l’énergie"},
 	"resting_fox": {"es": "Descansando junto al zorro", "en": "Resting beside the fox", "fr": "Repos auprès du renard"},
 	"resting_trunk": {"es": "Descansando junto al tronco", "en": "Resting by the tree trunk", "fr": "Repos près du tronc"},
 	"need_memory_2": {"es": "Necesitas el Recuerdo 2 para esto", "en": "You need Memory 2 for this", "fr": "Vous avez besoin du Souvenir 2 pour cela"},
