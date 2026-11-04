@@ -36,6 +36,7 @@ func _ready() -> void:
 
 
 func _reintentar_cuniraya() -> void:
+	Global.reproducir_clic()
 	Global.resetear()
 	Musica.iniciar_juego_con_tension()
 	get_tree().change_scene_to_file("res://scenes/Main.tscn")

@@ -71,6 +71,7 @@ func _ready() -> void:
 
 
 func _al_cerrar() -> void:
+	Global.reproducir_clic()
 	cerrar.emit()
 
 

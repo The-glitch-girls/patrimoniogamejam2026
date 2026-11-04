@@ -51,7 +51,7 @@ func _armar() -> void:
 	var vacio := StyleBoxEmpty.new()
 	for nombre in ["normal", "hover", "pressed", "focus", "disabled"]:
 		_boton.add_theme_stylebox_override(nombre, vacio)
-	_boton.pressed.connect(func(): pressed.emit())
+	_boton.pressed.connect(_al_presionar)
 	_boton.mouse_entered.connect(_al_entrar)
 	_boton.mouse_exited.connect(_al_salir)
 	_boton.button_down.connect(_al_apretar)
@@ -91,6 +91,11 @@ func _al_salir() -> void:
 
 func _al_apretar() -> void:
 	_tween_escala(0.92)
+
+
+func _al_presionar() -> void:
+	Global.reproducir_clic()
+	pressed.emit()
 
 
 func _al_soltar() -> void:

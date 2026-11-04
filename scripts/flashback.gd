@@ -140,6 +140,7 @@ func _estilar() -> void:
 
 
 func _continuar() -> void:
+	Global.reproducir_clic()
 	if cerrando:
 		return
 	cerrando = true

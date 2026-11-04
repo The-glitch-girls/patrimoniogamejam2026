@@ -43,6 +43,7 @@ func _ready() -> void:
 	continuar.visible = false
 	continuar.disabled = true
 	continuar.pressed.connect(_continuar)
+	continuar.pressed.connect(Global.reproducir_clic)
 	continuar.button_down.connect(_apretar_continuar)
 	continuar.button_up.connect(_soltar_continuar)
 	_estilizar()
