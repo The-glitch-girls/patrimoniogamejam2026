@@ -112,7 +112,6 @@ const DESTINO_MAR := Vector2(13, 16)
 const ESCENA_FINAL := "res://scenes/Final.tscn"
 
 # Temporizadores
-# Temporizadores # EDITAR
 var aviso_temporizador: float = 0.0
 
 # =========================
