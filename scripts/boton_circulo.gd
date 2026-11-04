@@ -7,6 +7,7 @@ signal pressed
 @export var icono: Texture2D
 @export var tamano := 88.0
 @export var ancho_borde := 6
+@export var color_borde := Color.WHITE
 
 var _boton: Button
 var _panel: Panel
@@ -73,7 +74,7 @@ func _circulo(color: Color) -> StyleBoxFlat:
 	caja.bg_color = color
 	caja.set_corner_radius_all(int(tamano))
 	caja.set_border_width_all(ancho_borde)
-	caja.border_color = Color.WHITE
+	caja.border_color = color_borde
 	caja.shadow_color = Color(0, 0, 0, 0.22)
 	caja.shadow_size = 8
 	caja.shadow_offset = Vector2(0, 4)

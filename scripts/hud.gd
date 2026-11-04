@@ -47,6 +47,8 @@ const DORADO := Color(0.86, 0.7, 0.2, 1)
 const BORDO := Color(0.62, 0.24, 0.36, 1)
 const AZUL_GUIA := Color(0.31, 0.53, 0.82, 1)
 const MORADO_GUIA := Color(0.48, 0.36, 0.72, 1)
+const VERDE_ARBOL := Color(0.16, 0.49, 0.49, 1)
+const BORDE_ENERGIA := Color(0.9, 0.84, 1.0, 1)
 
 var prompt_alpha := 0.0
 var prompt_texto := ""
@@ -590,10 +592,11 @@ func _borde_de(origen: Vector2, destino: Vector2, zona: Rect2) -> Vector2:
 func _poner_ajustes() -> void:
 	var boton := BotonCirculo.new()
 	boton.name = "BotonAjustes"
-	boton.color_fondo = VERDE
+	boton.color_fondo = VERDE_ARBOL
 	boton.icono = ICONO_AJUSTES
 	boton.tamano = 52.0
-	boton.ancho_borde = 6
+	boton.ancho_borde = 3
+	boton.color_borde = BORDE_ENERGIA
 	boton.z_index = 100
 	boton.pressed.connect(_alternar_ajustes)
 	add_child(boton)
