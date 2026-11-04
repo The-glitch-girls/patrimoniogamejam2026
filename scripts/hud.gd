@@ -298,6 +298,10 @@ func _crear_dialogo_zorro() -> void:
 	dialogo_zorro_texto.add_theme_color_override("font_color", CREMA)
 	add_child(dialogo_zorro_texto)
 
+func _es_prompt_luchar() -> bool:
+	return Global.prompt_interaccion == "E  Deja al bebé para luchar"
+
+
 func _tipo_prompt_con_imagen() -> String:
 	var texto := Global.prompt_interaccion.to_lower()
 	if texto.contains("descansar"):
@@ -306,7 +310,7 @@ func _tipo_prompt_con_imagen() -> String:
 		return "attack"
 	if texto.contains("recoger"):
 		return "pickup"
-	if texto.contains("dejar"):
+	if texto.contains("dejar") or texto.contains("deja al bebé"):
 		return "leave"
 	if texto.contains("conversar"):
 		return "converse"
@@ -348,7 +352,7 @@ func _actualizar_prompt_visual() -> void:
 			prompt_titulo.text = Traducciones.obtener("converse_action")
 		"leave":
 			prompt_icono.texture = PROMPT_DEJAR_PRESIONADO if presionado else PROMPT_DEJAR
-			var clave_titulo := "leave_with_fox_action" if Global.prompt_interaccion.to_lower().contains("con zorro") else "leave_action"
+			var clave_titulo := "drop_baby_to_fight_action" if _es_prompt_luchar() else "leave_with_fox_action" if Global.prompt_interaccion.to_lower().contains("con zorro") else "leave_action"
 			prompt_titulo.text = Traducciones.obtener(clave_titulo)
 		"talk":
 			prompt_icono.texture = PROMPT_HABLAR_PRESIONADO if presionado else PROMPT_HABLAR

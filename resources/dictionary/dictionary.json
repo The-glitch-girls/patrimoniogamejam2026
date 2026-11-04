@@ -257,6 +257,7 @@
 	"fox_trusts_with_baby": {"es": "El zorro confía en ti y está dispuesto a cuidar al bebé", "en": "The fox trusts you and is willing to look after the baby", "fr": "Le renard vous fait confiance et est prêt à veiller sur le bébé"},
 	"parrot_baby_warning": {"es": "¡Escucha al bebé si sientes que Cuniraya se acerca!", "en": "Listen to the baby when you feel Cuniraya drawing near!", "fr": "Écoute le bébé si tu sens Cuniraya s'approcher !"},
 	"parrot_cuniraya_near": {"es": "¡Cuniraya está cerca! Protege al bebé.", "en": "Cuniraya is near! Protect the baby.", "fr": "Cuniraya est proche ! Protège le bébé."},
+	"drop_baby_to_fight_action": {"es": "Deja al bebé para luchar", "en": "Put the baby down to fight", "fr": "Pose le bébé pour combattre"},
 	"prompt_drop_baby_to_fight": {"es": "E  Deja al bebé para luchar", "en": "E  Put the baby down to fight", "fr": "E  Pose le bébé pour combattre"},
-	"controls_hint": {"es": "Moverte: WASD o flechas · Correr: Shift · Recoger, dejar o atacar: E · Hablar: F · Descansar: R", "en": "Move: WASD or arrows · Run: Shift · Pick up, put down or attack: E · Talk: F · Rest: R", "fr": "Se déplacer : ZQSD/WASD ou flèches · Courir : Maj · Prendre, poser ou attaquer : E · Parler : F · Se reposer : R"}
+	"controls_hint": {"es": "Mover WASD · Correr Shift · Acción E · Hablar F · Descansar R", "en": "Move WASD · Run Shift · Action E · Talk F · Rest R", "fr": "Bouger ZQSD · Courir Maj · Action E · Parler F · Repos R"}
 }
