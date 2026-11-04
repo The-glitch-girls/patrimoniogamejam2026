@@ -129,6 +129,11 @@
 	"en": "Back",
 	"fr": "Retour"
   },
+	"energy_label": {"es": "Energía", "en": "Energy", "fr": "Énergie"},
+	"energy_baby_label": {"es": "Cargar al bebé gasta %d× más energía", "en": "Carrying the baby drains %d× more energy", "fr": "Porter le bébé use %d× plus d’énergie"},
+	"presence_label": {"es": "Presencia de Cuniraya", "en": "Cuniraya’s presence", "fr": "Présence de Cuniraya"},
+	"energy_tooltip": {"es": "Energía: caminar y correr la gastan. Cargar al bebé la gasta %d× más rápido. Si llega a 0, Cuniraya te alcanza.", "en": "Energy: walking and running use it. Carrying the baby drains it %d× faster. At 0, Cuniraya catches you.", "fr": "Énergie : marcher et courir la consomment. Porter le bébé l’use %d× plus vite. À 0, Cuniraya te rattrape."},
+	"presence_tooltip": {"es": "Presencia de Cuniraya: crece con el tiempo y baja mientras cargas al bebé. Desde %d, sin el bebé en brazos, pierdes energía.", "en": "Cuniraya’s presence: grows over time and drops while you carry the baby. From %d on, without the baby in your arms, you lose energy.", "fr": "Présence de Cuniraya : elle grandit avec le temps et baisse quand tu portes le bébé. À partir de %d, sans le bébé dans les bras, tu perds de l’énergie."},
   "restart": {
 	"es": "Reiniciar",
 	"en": "Restart",
