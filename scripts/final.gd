@@ -2,13 +2,19 @@ extends Control
 
 const IMAGEN_FINAL_MAR := preload("res://assets/cinematicas/final_mar.png")
 const AUDIO_FINAL_MAR := preload("res://sfx/final/aa_final_mar.ogg")
+var clave_texto_final := ""
 
 func _ready() -> void:
 	var es_final_cuniraya: bool = Global.resultado_final == "cuniraya"
 	var es_final_mar: bool = Global.resultado_final == "mar"
+	clave_texto_final = "final_cuniraya_text" if es_final_cuniraya else "final_sea_text"
 	if es_final_mar:
 		$ImagenFinal.texture = IMAGEN_FINAL_MAR
 	$ImagenFinal.visible = true
+	$CajaTexto.visible = es_final_cuniraya or es_final_mar
+	$CajaTexto/Texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_actualizar_texto_final()
+	Traducciones.idioma_cambiado.connect(_actualizar_texto_final)
 	$ReiniciarBtn.visible = es_final_cuniraya
 	$ReiniciarLbl.visible = es_final_cuniraya
 	_centrar_etiqueta_reiniciar()
@@ -45,6 +51,11 @@ func _reintentar_cuniraya() -> void:
 func _actualizar_etiqueta_reiniciar(_idioma: String = "") -> void:
 	$ReiniciarLbl.text = Traducciones.obtener("restart")
 	_centrar_etiqueta_reiniciar()
+
+
+func _actualizar_texto_final(_idioma: String = "") -> void:
+	if not clave_texto_final.is_empty():
+		$CajaTexto/Texto.text = Traducciones.obtener(clave_texto_final)
 
 
 func _centrar_etiqueta_reiniciar() -> void:
