@@ -16,6 +16,21 @@ const TIEMPO_EN_ZONA := 10.0
 const PASO_MIN := 600.0
 const PASO_MAX := 1400.0
 const SEPARACION := 480.0
+const EXCLUSION_TRONCO_OFFSET := Vector2(-760.0, -100.0)
+const EXCLUSION_TRONCO_TAMANO := Vector2(900.0, 520.0)
+var zona_aparicion_celdas := PackedVector2Array([
+	Vector2(2.0, -15.0), Vector2(7.0, -15.0), Vector2(13.0, -14.5),
+	Vector2(14.0, -13.5), Vector2(14.0, -7.0), Vector2(15.0, -6.0),
+	Vector2(16.0, -5.5), Vector2(19.0, -8.0), Vector2(23.0, -11.0),
+	Vector2(24.0, -12.0), Vector2(30.0, -12.0), Vector2(33.0, -11.0),
+	Vector2(35.0, -9.0), Vector2(36.0, -6.0), Vector2(35.0, -1.0),
+	Vector2(36.0, 1.0), Vector2(39.0, 4.0), Vector2(39.0, 8.0),
+	Vector2(38.0, 10.0), Vector2(36.0, 10.5), Vector2(32.0, 11.0),
+	Vector2(28.0, 12.0), Vector2(24.0, 13.0), Vector2(20.0, 13.0),
+	Vector2(16.0, 13.0), Vector2(12.0, 13.0), Vector2(10.0, 13.0),
+	Vector2(6.0, 13.0), Vector2(3.0, 13.0), Vector2(2.0, 13.0),
+	Vector2(2.0, 7.0), Vector2(2.0, 0.0), Vector2(2.0, -8.0),
+])
 
 var vida := VIDA_MAX
 var origen := Vector2.ZERO
@@ -135,8 +150,18 @@ func _revivir():
 func debug_aparecer_al_lado(posicion: Vector2) -> void:
 	if not OS.is_debug_build() or en_combate:
 		return
-	global_position = posicion
-	origen = posicion
+	if puntos_abiertos.is_empty():
+		_armar_puntos()
+	var posicion_segura := posicion
+	if not _posicion_es_spawn_valido(posicion_segura):
+		if puntos_abiertos.is_empty():
+			return
+		posicion_segura = puntos_abiertos[0]
+		for punto in puntos_abiertos:
+			if punto.distance_squared_to(posicion) < posicion_segura.distance_squared_to(posicion):
+				posicion_segura = punto
+	global_position = posicion_segura
+	origen = posicion_segura
 	vida = VIDA_MAX
 	derrotado = false
 	en_muerte = false
@@ -160,12 +185,40 @@ func _armar_puntos() -> void:
 	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
 	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
 	for celda in suelo.get_used_cells():
+		if not Geometry2D.is_point_in_polygon(Vector2(celda), zona_aparicion_celdas):
+			continue
 		if bordes != null and bordes.get_cell_source_id(celda) != -1:
 			continue
 		var punto := suelo.to_global(suelo.map_to_local(celda))
-		if cueva != null and punto.distance_to(cueva.global_position) < 180.0:
+		if _esta_en_exclusion_tronco(punto, cueva):
 			continue
 		puntos_abiertos.append(punto)
+
+
+func _esta_en_exclusion_tronco(punto: Vector2, refugio: Node2D) -> bool:
+	if refugio == null:
+		return false
+	var exclusion := Rect2(
+		refugio.global_position + EXCLUSION_TRONCO_OFFSET,
+		EXCLUSION_TRONCO_TAMANO
+	)
+	return exclusion.has_point(punto)
+
+
+func _posicion_es_spawn_valido(punto: Vector2) -> bool:
+	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	if suelo == null:
+		return false
+	var celda := suelo.local_to_map(suelo.to_local(punto))
+	if suelo.get_cell_source_id(celda) == -1:
+		return false
+	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
+	if bordes != null and bordes.get_cell_source_id(celda) != -1:
+		return false
+	if not Geometry2D.is_point_in_polygon(Vector2(celda), zona_aparicion_celdas):
+		return false
+	var refugio := get_tree().get_first_node_in_group("zona_segura") as Node2D
+	return not _esta_en_exclusion_tronco(punto, refugio)
 
 
 func _aparecer_en_otro_lado() -> void:

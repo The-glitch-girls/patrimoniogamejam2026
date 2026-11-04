@@ -3,14 +3,14 @@
 [ext_resource type="SpriteFrames" uid="uid://yu8sdinxc6p2" path="res://resources/cavillaca.tres" id="1_werjt"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_th60e"]
-size = Vector2(36, 20)
+size = Vector2(36, 391)
 
 [node name="Cavillaca" type="CharacterBody2D"]
 collision_mask = 5
 motion_mode = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 10)
+position = Vector2(0, 195.5)
 shape = SubResource("RectangleShape2D_th60e")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
@@ -21,4 +21,4 @@ animation = &"lado_bebe"
 frame_progress = 0.449417
 
 [node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
-position = Vector2(0, -160)
+position = Vector2(0, -265)
