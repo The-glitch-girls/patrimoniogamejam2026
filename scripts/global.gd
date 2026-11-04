@@ -1,5 +1,9 @@
 extends Node
 
+signal pausa_cambiada(pausado: bool)
+
+var pausado: bool = false
+
 const SFX_CLIC := preload("res://sfx/interaccion/clic.ogg")
 var reproductor_clic: AudioStreamPlayer
 
@@ -11,6 +15,26 @@ func _ready() -> void:
 	reproductor_clic.bus = "SFX"
 	reproductor_clic.process_mode = Node.PROCESS_MODE_ALWAYS
 	add_child(reproductor_clic)
+	var escucha_pausa := Node.new()
+	escucha_pausa.name = "EscuchaPausa"
+	escucha_pausa.process_mode = Node.PROCESS_MODE_ALWAYS
+	escucha_pausa.set_script(_ESCUCHA_PAUSA)
+	add_child(escucha_pausa)
+
+
+const _ESCUCHA_PAUSA := preload("res://scripts/componentes/escucha_pausa.gd")
+
+
+func puede_pausar() -> bool:
+	return not (flashback_abierto or partida_terminada or hacia_el_mar)
+
+
+func alternar_pausa() -> void:
+	if not pausado and not puede_pausar():
+		return
+	pausado = not pausado
+	get_tree().paused = pausado
+	pausa_cambiada.emit(pausado)
 
 
 func reproducir_clic() -> void:
