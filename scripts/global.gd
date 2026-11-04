@@ -89,6 +89,8 @@ const ENERGIA_MAX: float = 100.0
 # PRESENCIA CUNIRAYA
 const PRESENCIA_MAX := 100.0
 const VELOCIDAD_PRESENCIA := 5.0
+# Cargar al bebé calma a Cuniraya
+const ALIVIO_PRESENCIA := 3.0
 # COSTOS Y DAÑOS
 const COSTO_CAMINAR: float = 0.5
 const COSTO_CORRER: float = 2.0
@@ -117,7 +119,9 @@ func _process(delta):
 
 	if hacia_el_mar or flashback_abierto or partida_terminada:
 		return
-	if presencia_cuniraya >= PRESENCIA_CRITICA and not lleva_bebe:
+	if lleva_bebe:
+		reducir_presencia(ALIVIO_PRESENCIA * delta)
+	elif presencia_cuniraya >= PRESENCIA_CRITICA:
 		perder_energia(DRENAJE_CRITICO * delta)
 
 # =========================
@@ -142,8 +146,8 @@ func aumentar_presencia(cantidad: float = 1.0):
 	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
 
 
-func reducir_presencia():
-	presencia_cuniraya = max(presencia_cuniraya - 1, 0)
+func reducir_presencia(cantidad: float = 1.0):
+	presencia_cuniraya = max(presencia_cuniraya - cantidad, 0.0)
 
 
 func aumentar_presencia_por_tiempo(delta: float):
