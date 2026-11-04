@@ -71,7 +71,7 @@ const RECUERDOS := {
 		"asset": "res://assets/cinematicas/recuerdo_3.png"
 	},
 }
-const DESTINO_MAR := Vector2(620, 880)
+const DESTINO_MAR := Vector2(13, 16)
 const ESCENA_FINAL := "res://scenes/Final.tscn"
 
 # Temporizadores
