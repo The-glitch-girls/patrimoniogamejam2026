@@ -238,6 +238,7 @@ func abrir_final(tipo: String) -> void:
 
 
 func resetear():
+	pausado = false
 	energia = ENERGIA_MAX
 	lleva_bebe = false
 	tiempo_juego = 0.0
