@@ -35,6 +35,7 @@ var lock_arrojar := 0.0
 var paso_acum := 0.0
 var mar_t := 0.0
 var cam: Camera2D
+var suelo_tiles: TileMapLayer
 var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
@@ -55,19 +56,37 @@ func _ready():
 	$Sprite.scale = Vector2(0.215, 0.215)
 	$Sprite.position.y = 0
 	$CollisionShape2D.position.y = 60
+	suelo_tiles = get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
 	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.0, 1.0)
-	# Camara
-	cam.limit_left = -800
-	cam.limit_top = -2900
-	cam.limit_right = 5800
-	cam.limit_bottom = 3800
-
 	cam.position_smoothing_enabled = true
 	cam.position_smoothing_speed = 8.0
 	add_child(cam)
+	_configurar_limites_camara()
 	cam.make_current()
+
+
+func _configurar_limites_camara() -> void:
+	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	if suelo == null or suelo.tile_set == null:
+		return
+
+	var celdas := suelo.get_used_rect()
+	if celdas.size == Vector2i.ZERO:
+		return
+
+	var tamano_celda := Vector2(suelo.tile_set.tile_size)
+	var esquina_superior_izquierda := suelo.to_global(
+		suelo.map_to_local(celdas.position) - tamano_celda * 0.5
+	)
+	var esquina_inferior_derecha := suelo.to_global(
+		suelo.map_to_local(celdas.end - Vector2i.ONE) + tamano_celda * 0.5
+	)
+	cam.limit_left = floori(esquina_superior_izquierda.x)
+	cam.limit_top = floori(esquina_superior_izquierda.y)
+	cam.limit_right = ceili(esquina_inferior_derecha.x)
+	cam.limit_bottom = ceili(esquina_inferior_derecha.y)
 
 
 func _asegurar_tecla_dialogo_zorro() -> void:
@@ -211,6 +230,7 @@ func _physics_process(delta):
 		aceleracion = ACELERACION_CON_BEBE
 
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
+	_limitar_movimiento_al_suelo(delta)
 	move_and_slide()
 	
 	# El suelo vive en z negativo. La Y del mapa tambien, asi que no se puede usar como z.
@@ -500,6 +520,47 @@ func _cambiar_animacion(nueva: StringName, conservar_fase: bool) -> void:
 
 func _actualizar_camara(_delta: float):
 	cam.offset = Vector2.ZERO
+
+
+func _limitar_movimiento_al_suelo(delta: float) -> void:
+	if suelo_tiles == null or velocity == Vector2.ZERO:
+		return
+
+	var desplazamiento := velocity * delta
+	if _hay_suelo_bajo_pies(global_position + desplazamiento):
+		return
+
+	var puede_mover_x := absf(desplazamiento.x) > 0.0 and _hay_suelo_bajo_pies(
+		global_position + Vector2(desplazamiento.x, 0.0)
+	)
+	var puede_mover_y := absf(desplazamiento.y) > 0.0 and _hay_suelo_bajo_pies(
+		global_position + Vector2(0.0, desplazamiento.y)
+	)
+	if puede_mover_x and puede_mover_y:
+		if absf(desplazamiento.x) > absf(desplazamiento.y):
+			velocity.y = 0.0
+		else:
+			velocity.x = 0.0
+	elif puede_mover_x:
+		velocity.y = 0.0
+	elif puede_mover_y:
+		velocity.x = 0.0
+	else:
+		velocity = Vector2.ZERO
+
+
+func _hay_suelo_bajo_pies(posicion: Vector2) -> bool:
+	if suelo_tiles == null:
+		return true
+
+	var ancho_pies := 16.0
+	var centro_pies := posicion + $CollisionShape2D.position
+	for desplazamiento_x in [-ancho_pies, 0.0, ancho_pies]:
+		var punto_global := centro_pies + Vector2(desplazamiento_x, 0.0)
+		var celda := suelo_tiles.local_to_map(suelo_tiles.to_local(punto_global))
+		if suelo_tiles.get_cell_source_id(celda) == -1:
+			return false
+	return true
 
 
 func _actualizar_prompt():
