@@ -64,6 +64,13 @@ func _ready() -> void:
 	_mostrar_parte_texto()
 
 
+func _mostrar_resumen_derrota() -> void:
+	var resumen: Control = preload("res://scripts/componentes/resumen_derrota.gd").new()
+	resumen.modulate.a = 0.0
+	add_child(resumen)
+	create_tween().tween_property(resumen, "modulate:a", 1.0, 0.3)
+
+
 func _reintentar_cuniraya() -> void:
 	Global.reproducir_clic()
 	Global.resetear()
@@ -198,6 +205,8 @@ func _continuar() -> void:
 	_centrar_etiqueta_reiniciar()
 	$ReiniciarBtn.visible = true
 	$ReiniciarLbl.visible = true
+	if es_final_cuniraya:
+		_mostrar_resumen_derrota()
 
 
 func _centrar_etiqueta_reiniciar() -> void:
