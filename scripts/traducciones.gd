@@ -8,6 +8,7 @@ const FRASES := {
 	"F Hablar": "prompt_talk",
 	"R  Descansar": "prompt_rest",
 	"F  Hablar con zorro": "prompt_talk_fox",
+	"F  Hablar con loro": "prompt_talk_parrot",
 	"E  Dejar con zorro": "prompt_leave_with_fox",
 	"E  Recoger del zorro": "prompt_pickup_from_fox",
 	"E  Dejar": "prompt_leave",

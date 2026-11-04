@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=26 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_fijlm"]
 [ext_resource type="Texture2D" uid="uid://b1qtkbgolc2co" path="res://assets/tiles/jarron1.png" id="2_paa2y"]
@@ -23,6 +23,7 @@
 [ext_resource type="LabelSettings" uid="uid://cp8vd81qh71o8" path="res://resources/recuerdo_tot.tres" id="21_sgqbo"]
 [ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="22_o8kxg"]
 [ext_resource type="PackedScene" uid="uid://ctipp4cjs4yuu" path="res://scenes/CombateHalcon.tscn" id="23_hgl71"]
+[ext_resource type="PackedScene" uid="uid://co2r06qo7gdji" path="res://scenes/Loro.tscn" id="24_loro"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
 shader = ExtResource("12_tthj7")
@@ -44,6 +45,9 @@ position = Vector2(1088, -1000)
 [node name="Halcon" parent="." instance=ExtResource("7_v2keh")]
 position = Vector2(1088, -1920)
 scale = Vector2(1.5, 1.5)
+
+[node name="Loro" parent="." instance=ExtResource("24_loro")]
+position = Vector2(930, -300)
 
 [node name="Zorro" parent="." instance=ExtResource("8_krm86")]
 position = Vector2(2624, 960)

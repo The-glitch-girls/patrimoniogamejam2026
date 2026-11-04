@@ -2,7 +2,8 @@ extends CanvasLayer
 
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
-const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
+const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
+const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
@@ -34,7 +35,8 @@ var prompt_titulo: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
-var barra_energia: ProgressBar
+var barra_energia: TextureRect
+var material_relleno_energia: ShaderMaterial
 var barra_presencia: ProgressBar
 var overlay_ajustes: Control
 var pausa_previa_ajustes := false
@@ -59,6 +61,8 @@ var volumen_normal_peak: float = 0.0
 var volumen_normal_llanto: float = 0.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
+var aviso_visible_actual := ""
+var ornamentos_aviso: Array[Line2D] = []
 
 
 func _ready():
@@ -67,7 +71,7 @@ func _ready():
 	_estilar_textos()
 	_crear_prompt_icono()
 	_estilar_prompt()
-	_estilar_pildora($AvisoFondo, VERDE)
+	_crear_ornamentos_aviso()
 	_poner_guia_bebe()
 	_poner_guia_cueva()
 	_poner_ajustes()
@@ -96,14 +100,53 @@ func _estilar_panel():
 		nodo.visible = false
 	if has_node("PresenciaLabel"):
 		$PresenciaLabel.visible = false
-	_poner_icono(ICONO_ENERGIA, Vector2(16, 16), VERDE)
-	barra_energia = $PanelEstado/EnergiaBar
-	_envolver_barra(barra_energia, Vector2(60, 20), VERDE)
+	_configurar_barra_energia()
 	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 60), LILA)
 	barra_presencia = $PanelEstado/PresenciaBar
 	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 64), LILA)
 	_mostrar_presencia(false)
 	_poner_recuerdos()
+
+
+func _configurar_barra_energia() -> void:
+	var barra_original := $PanelEstado/EnergiaBar
+	barra_original.hide()
+	var medidor := Control.new()
+	medidor.position = Vector2(20, 8)
+	medidor.size = Vector2(246, 60)
+	medidor.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$PanelEstado.add_child(medidor)
+	barra_energia = TextureRect.new()
+	barra_energia.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	barra_energia.texture = REFERENCIA_ENERGIA
+	barra_energia.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	barra_energia.stretch_mode = TextureRect.STRETCH_SCALE
+	barra_energia.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var shader_relleno := Shader.new()
+	shader_relleno.code = """
+	shader_type canvas_item;
+	uniform float porcentaje = 1.0;
+	void fragment() {
+		vec4 color = texture(TEXTURE, UV);
+		float diferencia_morada = min(color.r - color.g, color.b - color.g);
+		color.a *= smoothstep(0.06, 0.2, diferencia_morada);
+		if (UV.x > porcentaje) {
+			color.a = 0.0;
+		}
+		COLOR = color;
+	}
+	"""
+	material_relleno_energia = ShaderMaterial.new()
+	material_relleno_energia.shader = shader_relleno
+	barra_energia.material = material_relleno_energia
+	medidor.add_child(barra_energia)
+	var marco := TextureRect.new()
+	marco.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	marco.texture = MARCO_ENERGIA
+	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	marco.stretch_mode = TextureRect.STRETCH_SCALE
+	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	medidor.add_child(marco)
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
@@ -303,7 +346,7 @@ func _actualizar_recuerdos() -> void:
 
 func _estilar_textos():
 	_texto($PromptLabel, 16)
-	_texto($AvisoLabel, 18)
+	_texto($AvisoLabel, 22)
 
 
 func _texto(label: Label, tamano: int) -> void:
@@ -318,17 +361,79 @@ func _ajustar_banner_aviso() -> void:
 	var tamano_fuente := label.get_theme_font_size("font_size")
 	var fuente := label.get_theme_font("font")
 	var ancho_texto := fuente.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano_fuente).x
-	var alto_texto := fuente.get_height(tamano_fuente)
-	var ancho_banner := ancho_texto + 40.0
-	var alto_banner := alto_texto + 20.0
+	var tamano_vista := get_viewport().get_visible_rect().size
+	var ancho_maximo := maxf(280.0, tamano_vista.x - 120.0)
+	var ancho_banner := minf(maxf(ancho_texto + 320.0, 560.0), ancho_maximo)
+	var ancho_label := ancho_banner - 112.0
+	var alto_texto := fuente.get_multiline_string_size(
+		label.text, HORIZONTAL_ALIGNMENT_CENTER, ancho_label, tamano_fuente
+	).y
+	var alto_banner := maxf(alto_texto + 48.0, 96.0)
 
+	fondo.anchor_left = 0.5
+	fondo.anchor_right = 0.5
+	fondo.anchor_top = 0.32
+	fondo.anchor_bottom = 0.32
 	fondo.offset_left = -ancho_banner * 0.5
 	fondo.offset_right = ancho_banner * 0.5
-	fondo.offset_bottom = fondo.offset_top + alto_banner
-	label.offset_left = -ancho_texto * 0.5
-	label.offset_right = ancho_texto * 0.5
-	label.offset_top = fondo.offset_top + 10.0
-	label.offset_bottom = label.offset_top + alto_texto
+	fondo.offset_top = -alto_banner * 0.5
+	fondo.offset_bottom = alto_banner * 0.5
+	label.anchor_left = 0.5
+	label.anchor_right = 0.5
+	label.anchor_top = 0.32
+	label.anchor_bottom = 0.32
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	label.offset_left = -ancho_label * 0.5
+	label.offset_right = ancho_label * 0.5
+	label.offset_top = -alto_banner * 0.5 + 16.0
+	label.offset_bottom = alto_banner * 0.5 - 16.0
+	_actualizar_ornamentos_aviso(ancho_banner, alto_banner)
+
+
+func _crear_ornamentos_aviso() -> void:
+	for _indice in range(4):
+		var linea := Line2D.new()
+		linea.width = 2.5
+		linea.default_color = Color(0.9, 0.89, 1.0, 0.92)
+		linea.antialiased = true
+		linea.begin_cap_mode = Line2D.LINE_CAP_ROUND
+		linea.end_cap_mode = Line2D.LINE_CAP_ROUND
+		linea.joint_mode = Line2D.LINE_JOINT_ROUND
+		$AvisoFondo.add_child(linea)
+		ornamentos_aviso.append(linea)
+
+
+func _actualizar_ornamentos_aviso(ancho: float, alto: float) -> void:
+	ornamentos_aviso[0].points = PackedVector2Array([
+		Vector2(4.0, alto - 10.0), Vector2(-14.0, alto - 18.0),
+		Vector2(-23.0, alto - 31.0), Vector2(-20.0, alto - 41.0),
+		Vector2(-8.0, alto - 43.0), Vector2(-2.0, alto - 34.0),
+	])
+	ornamentos_aviso[1].points = PackedVector2Array([
+		Vector2(0.0, alto - 2.0), Vector2(-20.0, alto - 14.0),
+		Vector2(-28.0, alto - 26.0), Vector2(-26.0, alto - 35.0),
+	])
+	ornamentos_aviso[2].points = PackedVector2Array([
+		Vector2(ancho - 4.0, 10.0), Vector2(ancho + 14.0, 18.0),
+		Vector2(ancho + 23.0, 30.0), Vector2(ancho + 20.0, 40.0),
+		Vector2(ancho + 9.0, 43.0), Vector2(ancho + 2.0, 35.0),
+	])
+	ornamentos_aviso[3].points = PackedVector2Array([
+		Vector2(ancho, 2.0), Vector2(ancho + 20.0, 13.0),
+		Vector2(ancho + 28.0, 25.0), Vector2(ancho + 26.0, 34.0),
+	])
+
+
+func _estilar_banner_consejo() -> void:
+	var caja := StyleBoxFlat.new()
+	caja.bg_color = Color(0.035, 0.03, 0.085, 0.78)
+	caja.set_corner_radius_all(48)
+	caja.shadow_color = Color(0.0, 0.0, 0.0, 0.28)
+	caja.shadow_size = 10
+	caja.shadow_offset = Vector2(0, 4)
+	$AvisoFondo.add_theme_stylebox_override("panel", caja)
 
 
 func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
@@ -457,7 +562,8 @@ func _capturar_flashback() -> void:
 
 
 func _process(delta):
-	barra_energia.value = Global.energia
+	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
+	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
 	barra_presencia.value = Global.presencia_cuniraya
 	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
 	_actualizar_recuerdos()
@@ -488,13 +594,19 @@ func _process(delta):
 		prompt_titulo.visible = false
 
 	var hay_aviso := Global.aviso_combate != ""
-	$AvisoLabel.text = Traducciones.obtener_frase(Global.aviso_combate)
-	$AvisoFondo.visible = hay_aviso
-	$AvisoLabel.visible = hay_aviso
 	if hay_aviso:
-		_ajustar_banner_aviso()
-		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else BORDO
-		_estilar_pildora($AvisoFondo, color_aviso)
+		var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
+		if texto_aviso != aviso_visible_actual:
+			aviso_visible_actual = texto_aviso
+			$AvisoLabel.text = texto_aviso
+			_ajustar_banner_aviso()
+			_estilar_banner_consejo()
+		$AvisoFondo.visible = true
+		$AvisoLabel.visible = true
+	else:
+		aviso_visible_actual = ""
+		$AvisoFondo.visible = false
+		$AvisoLabel.visible = false
 
 	var nivel_presencia : float = Global.presencia_cuniraya
 	var volumen_tension : float = lerp(-10.0, 0.0, nivel_presencia / 100.0)
