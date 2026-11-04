@@ -2,7 +2,6 @@ extends CanvasLayer
 
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
-const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
@@ -142,12 +141,12 @@ func _configurar_barra_energia() -> void:
 	contenedor.add_child(barra_energia)
 
 	var marco := TextureRect.new()
+	contenedor.add_child(marco)
 	marco.texture = MARCO_ENERGIA
 	marco.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	contenedor.add_child(marco)
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
