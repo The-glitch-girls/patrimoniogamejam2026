@@ -30,11 +30,21 @@ func puede_pausar() -> bool:
 
 
 func alternar_pausa() -> void:
+	# Otro sistema (ajustes, flashback) quitó la pausa: sincronizar.
+	if pausado and not get_tree().paused:
+		_fijar_pausa(false)
+	# El árbol está pausado por otro sistema: no tocarlo.
+	if not pausado and get_tree().paused:
+		return
 	if not pausado and not puede_pausar():
 		return
-	pausado = not pausado
-	get_tree().paused = pausado
-	pausa_cambiada.emit(pausado)
+	_fijar_pausa(not pausado)
+
+
+func _fijar_pausa(valor: bool) -> void:
+	pausado = valor
+	get_tree().paused = valor
+	pausa_cambiada.emit(valor)
 
 
 func reproducir_clic() -> void:
