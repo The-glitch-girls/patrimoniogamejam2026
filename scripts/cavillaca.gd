@@ -179,12 +179,12 @@ func _physics_process(delta):
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
 		var cueva := get_tree().get_first_node_in_group("zona_segura")
-		var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
-		
-		if en_cueva and Global.cuidado_bebe_desbloqueado:
+		var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
+
+		if Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and cueva != null:
 			if Global.lleva_bebe:
 				cueva.dejar_bebe_con_zorro()
-			else:
+			elif bebe_con_zorro:
 				cueva.recoger_bebe_del_zorro()
 		elif Global.lleva_bebe:
 			_dejar_bebe()
@@ -470,22 +470,21 @@ func _actualizar_camara(_delta: float):
 
 func _actualizar_prompt():
 	var cueva := get_tree().get_first_node_in_group("zona_segura")
-	var en_cueva := cueva != null and global_position.distance_to(cueva.global_position) < 50.0
+	var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
 	var puede_descansar: bool = false
 	if cueva != null:
 		puede_descansar = bool(cueva.call("puede_descansar"))
 	
-	if Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
+	if puede_descansar:
+		Global.prompt_interaccion = "R  Descansar"
+	elif Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and Global.lleva_bebe:
+		Global.prompt_interaccion = "E  Dejar con zorro"
+	elif Global.zorro_cerca and bebe_con_zorro:
+		Global.prompt_interaccion = "E  Recoger del zorro"
+	elif Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
 		Global.prompt_interaccion = "F Hablar"
 	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
 		Global.prompt_interaccion = "F  Hablar con zorro"
-	elif puede_descansar:
-		Global.prompt_interaccion = "R  Descansar"
-	elif en_cueva and Global.cuidado_bebe_desbloqueado:
-		if Global.lleva_bebe:
-			Global.prompt_interaccion = "E  Dejar con zorro"
-		else:
-			Global.prompt_interaccion = "E  Recoger del zorro"
 	elif Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Dejar"
 	elif esta_cerca_del_bebe():

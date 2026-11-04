@@ -1,4 +1,4 @@
-extends Area2D
+extends Node2D
 
 const RECUPERACION_ENERGIA_POR_SEGUNDO := 8.0
 const RANGO_INTERACCION := 40.0
@@ -9,15 +9,12 @@ var jugador_en_entrada := false
 var puerta_abierta := true
 var descanso_activo := false
 
-@onready var arbol: TileMapLayer = $Arbol
-@onready var puerta: TileMapLayer = $Puerta
-@onready var colision_puerta: CollisionShape2D = $ColisionPuerta/CollisionShape2D
+@onready var puerta: Sprite2D = $Puerta
+@onready var punto_descanso: Marker2D = $PuntoDescanso
 
 func _ready():
 	add_to_group("zona_segura")
-	_crear_arbol_y_puerta()
-	body_entered.connect(_on_body_entered)
-	body_exited.connect(_on_body_exited)
+	_crear_puerta()
 
 
 func _process(delta: float) -> void:
@@ -58,14 +55,12 @@ func _cavillaca_en_entrada() -> bool:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	return (
 		cavillaca != null
-		and cavillaca.global_position.distance_to(colision_puerta.global_position) <= RANGO_ENTRADA
+		and cavillaca.global_position.distance_to(punto_descanso.global_position) <= RANGO_ENTRADA
 	)
 
 
-func _crear_arbol_y_puerta() -> void:
-	for fila in range(3):
-		for columna in range(3):
-			arbol.set_cell(Vector2i(columna, fila), 0, Vector2i(9 + columna, fila))
+func _crear_puerta() -> void:
+	puerta.visible = true
 	_cambiar_puerta(false)
 
 
@@ -73,25 +68,20 @@ func _cambiar_puerta(abierta: bool) -> void:
 	if puerta_abierta == abierta:
 		return
 	puerta_abierta = abierta
-	for fila in range(1, 3):
-		# La puerta del atlas va sobre el hueco oscuro del árbol.
-		var celda := Vector2i(1, fila)
-		if abierta:
-			puerta.erase_cell(celda)
-		else:
-			puerta.set_cell(celda, 0, Vector2i(12, fila))
-	# La puerta se oculta al desbloquearse, pero la colisión conserva el límite
-	# físico para que Cavillaca no atraviese el tronco.
-	colision_puerta.set_deferred("disabled", false)
-
-
+	puerta.visible = not abierta
+			
 func dejar_bebe_con_zorro():
 	if not Global.cuidado_bebe_desbloqueado:
 		Global.mostrar_aviso("Necesitas el Recuerdo 2 para esto")
 		return
 	
-	var zorro := get_tree().get_first_node_in_group("zorro")
-	if zorro == null or global_position.distance_to(zorro.global_position) >= RANGO_INTERACCION:
+	var zorro := get_tree().get_first_node_in_group("zorro") as Node2D
+	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+	if (
+		zorro == null
+		or cavillaca == null
+		or cavillaca.global_position.distance_to(zorro.global_position) >= RANGO_INTERACCION
+	):
 		Global.mostrar_aviso("El zorro no está cerca")
 		return
 	
@@ -105,7 +95,7 @@ func dejar_bebe_con_zorro():
 	
 	var bebe := get_tree().get_first_node_in_group("bebe")
 	if bebe != null:
-		bebe.global_position = global_position
+		bebe.global_position = zorro.global_position
 
 
 func recoger_bebe_del_zorro():
@@ -119,22 +109,3 @@ func recoger_bebe_del_zorro():
 	var bebe := get_tree().get_first_node_in_group("bebe")
 	if bebe != null:
 		bebe.recoger()
-
-
-func _on_body_entered(body: Node):
-	if body.is_in_group("cavillaca"):
-		var zorro := get_tree().get_first_node_in_group("zorro")
-		var zorro_cerca := zorro != null and global_position.distance_to(zorro.global_position) < RANGO_INTERACCION
-		
-		if zorro_cerca and Global.recuerdos_obtenidos > 0:
-			Global.zona_actual = "Cueva del Zorro"
-		elif zorro_cerca and Global.recuerdos_obtenidos == 0:
-			Global.zona_actual = "Cueva del Zorro (?)"
-		else:
-			Global.zona_actual = "Cueva del Zorro"
-
-
-func _on_body_exited(body: Node):
-	if body.is_in_group("cavillaca"):
-		Global.zona_actual = "Plaza"
-		Global.descanso_con_zorro = false
