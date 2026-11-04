@@ -2,9 +2,15 @@ extends CharacterBody2D
 
 const DURACION_HABLA := 2.2
 const ESCALA_SPRITE := Vector2(0.12, 0.12)
+const AUDIOS_MENSAJE: Array[AudioStream] = [
+	preload("res://sfx/animales/loro/aa_loro1.ogg"),
+	preload("res://sfx/animales/loro/aa_loro2.ogg"),
+	preload("res://sfx/animales/loro/aa_loro3.ogg"),
+]
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var deteccion: Area2D = $Deteccion
+@onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
 var tiempo_hablando := 0.0
 
@@ -36,6 +42,13 @@ func hablar() -> void:
 	if Global.presencia_cuniraya >= Global.PRESENCIA_CRITICA:
 		frase = "parrot_cuniraya_near"
 	Global.mostrar_aviso(Traducciones.obtener(frase))
+	reproducir_sonido_mensaje()
+
+
+func reproducir_sonido_mensaje() -> void:
+	sonido_mensaje.stop()
+	sonido_mensaje.stream = AUDIOS_MENSAJE.pick_random()
+	sonido_mensaje.play()
 
 
 func _al_entrar_en_rango(cuerpo: Node2D) -> void:

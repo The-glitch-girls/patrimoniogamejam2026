@@ -705,15 +705,16 @@ func _process(delta):
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
 	var es_consejo_loro := CONSEJOS_LORO.has(Global.aviso_combate)
+	var usar_caja_dialogo := es_dialogo_zorro or es_consejo_loro
 	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
-	var mostrar_aviso_normal := hay_aviso and not es_dialogo_zorro
+	var mostrar_aviso_normal := hay_aviso and not usar_caja_dialogo
 	var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
 	$AvisoLabel.text = texto_aviso
 	$AvisoFondo.visible = mostrar_aviso_normal
 	$AvisoLabel.visible = mostrar_aviso_normal
-	dialogo_zorro_fondo.visible = hay_aviso and es_dialogo_zorro
-	dialogo_zorro_texto.visible = hay_aviso and es_dialogo_zorro
-	if es_dialogo_zorro:
+	dialogo_zorro_fondo.visible = hay_aviso and usar_caja_dialogo
+	dialogo_zorro_texto.visible = hay_aviso and usar_caja_dialogo
+	if usar_caja_dialogo:
 		dialogo_zorro_texto.text = texto_aviso
 		aviso_visible_actual = ""
 	if mostrar_aviso_normal:

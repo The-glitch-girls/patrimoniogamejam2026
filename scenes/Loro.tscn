@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cmopp7feirlo8"]
+[gd_scene load_steps=6 format=3 uid="uid://cmopp7feirlo8"]
 
 [ext_resource type="SpriteFrames" uid="uid://ddrg0vafhbmho" path="res://resources/loro.tres" id="1_5jmam"]
-[ext_resource type="Script" path="res://scripts/loro.gd" id="2_loro"]
+[ext_resource type="Script" uid="uid://dqjxcbpl7apdj" path="res://scripts/loro.gd" id="2_loro"]
+[ext_resource type="AudioStream" uid="uid://yjwv7vn5gi6k" path="res://sfx/animales/loro/aa_loro1.ogg" id="3_mv6f4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_loro"]
 radius = 14.0
@@ -28,3 +29,7 @@ collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Deteccion"]
 shape = SubResource("CircleShape2D_deteccion_loro")
+
+[node name="SonidoMensaje" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_mv6f4")
+bus = &"SFX"
