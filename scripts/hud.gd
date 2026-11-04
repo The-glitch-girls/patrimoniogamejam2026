@@ -594,17 +594,17 @@ func _poner_ajustes() -> void:
 	boton.name = "BotonAjustes"
 	boton.color_fondo = VERDE_ARBOL
 	boton.icono = ICONO_AJUSTES
-	boton.tamano = 52.0
+	boton.tamano = 48.0
 	boton.ancho_borde = 3
 	boton.color_borde = BORDE_ENERGIA
 	boton.z_index = 100
 	boton.pressed.connect(_alternar_ajustes)
 	add_child(boton)
 	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	boton.offset_left = -72
-	boton.offset_top = 20
-	boton.offset_right = -20
-	boton.offset_bottom = 72
+	boton.offset_left = -84
+	boton.offset_top = 26
+	boton.offset_right = -32
+	boton.offset_bottom = 68
 
 	overlay_ajustes = ESCENA_OVERLAY_AJUSTES.instantiate() as Control
 	overlay_ajustes.visible = false
