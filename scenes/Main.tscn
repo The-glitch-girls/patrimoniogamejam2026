@@ -201,7 +201,7 @@ offset_bottom = 23.0
 stream = ExtResource("14_5vhjm")
 bus = &"Ambiente"
 
-[node name="LlantoBebe" type="AudioStreamPlayer2D" parent="HUD"]
+[node name="LlantoBebe" type="AudioStreamPlayer" parent="HUD"]
 stream = ExtResource("15_hjowp")
 bus = &"SFX"
 

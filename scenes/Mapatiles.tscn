@@ -205,7 +205,7 @@ bus = &"Ambiente"
 stream = ExtResource("12_sub5l")
 bus = &"Ambiente"
 
-[node name="LlantoBebe" type="AudioStreamPlayer2D" parent="HUD"]
+[node name="LlantoBebe" type="AudioStreamPlayer" parent="HUD"]
 stream = ExtResource("13_l65pt")
 bus = &"SFX"
 

@@ -22,6 +22,9 @@ func _ready() -> void:
 		$ReiniciarLbl.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		$ReiniciarBtn.pressed.connect(_reintentar_cuniraya)
 		Traducciones.idioma_cambiado.connect(_actualizar_etiqueta_reiniciar)
+		Musica.detener()
+		$AudioFinal.bus = "Musica"
+		$AudioFinal.volume_db = -5.0
 		$AudioFinal.play()
 		await get_tree().create_timer(1.0).timeout
 		if is_instance_valid($ReiniciarBtn) and is_instance_valid($ReiniciarLbl):

@@ -52,9 +52,9 @@ var guia_alpha_cueva := 0.0
 var guia_cueva_colocada := false
 
 @onready var peak_tension: AudioStreamPlayer2D = $PeakTension
-@onready var llanto_bebe: AudioStreamPlayer2D = $LlantoBebe
+@onready var llanto_bebe: AudioStreamPlayer = $LlantoBebe
 var volumen_normal_peak: float = 0.0
-var volumen_normal_llanto: float = 0.0
+var volumen_normal_llanto: float = 3.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
 
@@ -534,14 +534,12 @@ func _process(delta):
 	else:
 		$Guias.visible = true
 
-func fade_out_audio(audio: AudioStreamPlayer2D, duracion: float) -> void:
-	if not audio.playing:
+func fade_out_audio(audio: Node, duracion: float) -> void:
+	if not audio.get("playing"):
 		return
 	var tween := create_tween()
 	tween.tween_property(audio, "volume_db", -40.0, duracion)
-	tween.tween_callback(func():
-		audio.stop()
-	)
+	tween.tween_callback(Callable(audio, "stop"))
 
 # Guias de bebe y cueva utilizando la clase GuiaNavegacion
 func _poner_guia_bebe() -> void:

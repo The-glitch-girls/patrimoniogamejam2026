@@ -7,6 +7,8 @@ const PISTAS := {
 }
 const PISTA_COMBATE := "res://sfx/combate/aa_combate.ogg"
 const DURACION_FUNDIDO_TENSION := 5.0
+const VOLUMEN_JUEGO_DB := -5.0
+const VOLUMEN_TENSION_DB := -6.0
 
 var reproductor: AudioStreamPlayer
 var reproductor_tension: AudioStreamPlayer
@@ -63,7 +65,8 @@ func tocar(nombre: String) -> void:
 		reproductor.stream = pista
 		reproductor.volume_db = -40.0
 		reproductor.play()
-	fundido.tween_property(reproductor, "volume_db", 0.0, 0.7)
+	var volumen_objetivo := VOLUMEN_JUEGO_DB if nombre == "juego" else 0.0
+	fundido.tween_property(reproductor, "volume_db", volumen_objetivo, 0.7)
 
 
 func tocar_stream(nombre: String, pista: AudioStream, volumen_db: float = 0.0, repetir: bool = true) -> void:
@@ -131,7 +134,7 @@ func _reproducir_juego_y_tension() -> void:
 	reproductor_tension.play()
 	fundido = create_tween()
 	fundido.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	fundido.tween_property(reproductor, "volume_db", 0.0, 0.7)
+	fundido.tween_property(reproductor, "volume_db", VOLUMEN_JUEGO_DB, 0.7)
 
 
 func actualizar_tension(activa: bool) -> void:
@@ -144,7 +147,7 @@ func actualizar_tension(activa: bool) -> void:
 		fundido_tension.kill()
 	fundido_tension = create_tween()
 	fundido_tension.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	var volumen_objetivo := 0.0 if activa else -80.0
+	var volumen_objetivo := VOLUMEN_TENSION_DB if activa else -80.0
 	fundido_tension.tween_property(
 		reproductor_tension,
 		"volume_db",
@@ -197,13 +200,13 @@ func terminar_combate() -> void:
 		fundido.kill()
 	fundido = create_tween()
 	fundido.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	fundido.tween_property(reproductor, "volume_db", 0.0, 0.7)
+	fundido.tween_property(reproductor, "volume_db", VOLUMEN_JUEGO_DB, 0.7)
 	if reproductor_tension.playing:
 		if fundido_tension and fundido_tension.is_running():
 			fundido_tension.kill()
 		fundido_tension = create_tween()
 		fundido_tension.set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-		var volumen_tension := 0.0 if tension_activa else -80.0
+		var volumen_tension := VOLUMEN_TENSION_DB if tension_activa else -80.0
 		fundido_tension.tween_property(reproductor_tension, "volume_db", volumen_tension, DURACION_FUNDIDO_TENSION)
 	if fundido_combate and fundido_combate.is_running():
 		fundido_combate.kill()
