@@ -46,7 +46,7 @@ position = Vector2(1088, -1920)
 scale = Vector2(1.5, 1.5)
 
 [node name="Loro" parent="." instance=ExtResource("24_loro")]
-position = Vector2(930, -300)
+position = Vector2(1280, -856)
 
 [node name="Zorro" parent="." instance=ExtResource("8_krm86")]
 position = Vector2(2469, 773)
