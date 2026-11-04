@@ -31,6 +31,14 @@ const MENSAJES_DIALOGO_ZORRO: Array[String] = [
 	"Bebé dejado con el zorro",
 	"Bebé recogido del zorro",
 ]
+const CONSEJOS_LORO: Array[String] = [
+	"¡Escucha al bebé si sientes que Cuniraya se acerca!",
+	"Listen to the baby when you feel Cuniraya drawing near!",
+	"Écoute le bébé si tu sens Cuniraya s'approcher !",
+	"¡Cuniraya está cerca! Protege al bebé.",
+	"Cuniraya is near! Protect the baby.",
+	"Cuniraya est proche ! Protège le bébé.",
+]
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
 const VERDE := Color(0.49, 0.76, 0.29, 1)
@@ -73,6 +81,8 @@ var volumen_normal_peak: float = 0.0
 var volumen_normal_llanto: float = 3.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
+var aviso_visible_actual := ""
+var ornamentos_aviso: Array[Line2D] = []
 
 
 func _ready():
@@ -81,6 +91,7 @@ func _ready():
 	_estilar_textos()
 	_crear_prompt_icono()
 	_crear_dialogo_zorro()
+	_crear_ornamentos_aviso()
 	_estilar_prompt()
 	_estilar_pildora($AvisoFondo, VERDE)
 	_poner_guia_bebe()
@@ -439,6 +450,88 @@ func _ajustar_banner_aviso() -> void:
 	label.offset_bottom = label.offset_top + alto_texto
 
 
+func _ajustar_banner_consejo() -> void:
+	var label := $AvisoLabel as Label
+	var fondo := $AvisoFondo as Panel
+	label.add_theme_font_size_override("font_size", 22)
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	var tamano_fuente := label.get_theme_font_size("font_size")
+	var fuente := label.get_theme_font("font")
+	var ancho_texto := fuente.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano_fuente).x
+	var ancho_vista := get_viewport().get_visible_rect().size.x
+	var ancho_maximo := maxf(280.0, ancho_vista - 120.0)
+	var ancho_banner := minf(maxf(ancho_texto + 320.0, 560.0), ancho_maximo)
+	var ancho_label := ancho_banner - 112.0
+	var alto_texto := fuente.get_multiline_string_size(label.text, HORIZONTAL_ALIGNMENT_CENTER, ancho_label, tamano_fuente).y
+	var alto_banner := maxf(alto_texto + 48.0, 96.0)
+
+	fondo.anchor_left = 0.5
+	fondo.anchor_right = 0.5
+	fondo.anchor_top = 0.32
+	fondo.anchor_bottom = 0.32
+	fondo.offset_left = -ancho_banner * 0.5
+	fondo.offset_right = ancho_banner * 0.5
+	fondo.offset_top = -alto_banner * 0.5
+	fondo.offset_bottom = alto_banner * 0.5
+	label.anchor_left = 0.5
+	label.anchor_right = 0.5
+	label.anchor_top = 0.32
+	label.anchor_bottom = 0.32
+	label.offset_left = -ancho_label * 0.5
+	label.offset_right = ancho_label * 0.5
+	label.offset_top = -alto_banner * 0.5 + 16.0
+	label.offset_bottom = alto_banner * 0.5 - 16.0
+	_actualizar_ornamentos_aviso(ancho_banner, alto_banner)
+	for linea in ornamentos_aviso:
+		linea.visible = true
+
+
+func _crear_ornamentos_aviso() -> void:
+	for _indice in range(4):
+		var linea := Line2D.new()
+		linea.width = 2.5
+		linea.default_color = Color(0.9, 0.89, 1.0, 0.92)
+		linea.antialiased = true
+		linea.begin_cap_mode = Line2D.LINE_CAP_ROUND
+		linea.end_cap_mode = Line2D.LINE_CAP_ROUND
+		linea.joint_mode = Line2D.LINE_JOINT_ROUND
+		$AvisoFondo.add_child(linea)
+		ornamentos_aviso.append(linea)
+
+
+func _actualizar_ornamentos_aviso(ancho: float, alto: float) -> void:
+	ornamentos_aviso[0].points = PackedVector2Array([
+		Vector2(4.0, alto - 10.0), Vector2(-14.0, alto - 18.0),
+		Vector2(-23.0, alto - 31.0), Vector2(-20.0, alto - 41.0),
+		Vector2(-8.0, alto - 43.0), Vector2(-2.0, alto - 34.0),
+	])
+	ornamentos_aviso[1].points = PackedVector2Array([
+		Vector2(0.0, alto - 2.0), Vector2(-20.0, alto - 14.0),
+		Vector2(-28.0, alto - 26.0), Vector2(-26.0, alto - 35.0),
+	])
+	ornamentos_aviso[2].points = PackedVector2Array([
+		Vector2(ancho - 4.0, 10.0), Vector2(ancho + 14.0, 18.0),
+		Vector2(ancho + 23.0, 30.0), Vector2(ancho + 20.0, 40.0),
+		Vector2(ancho + 9.0, 43.0), Vector2(ancho + 2.0, 35.0),
+	])
+	ornamentos_aviso[3].points = PackedVector2Array([
+		Vector2(ancho, 2.0), Vector2(ancho + 20.0, 13.0),
+		Vector2(ancho + 28.0, 25.0), Vector2(ancho + 26.0, 34.0),
+	])
+
+
+func _estilar_banner_consejo() -> void:
+	var caja := StyleBoxFlat.new()
+	caja.bg_color = Color(0.035, 0.03, 0.085, 0.78)
+	caja.set_corner_radius_all(48)
+	caja.shadow_color = Color(0.0, 0.0, 0.0, 0.28)
+	caja.shadow_size = 10
+	caja.shadow_offset = Vector2(0, 4)
+	$AvisoFondo.add_theme_stylebox_override("panel", caja)
+
+
 func _posicionar_aviso_descanso(es_descanso: bool) -> void:
 	var fondo := $AvisoFondo as Panel
 	var label := $AvisoLabel as Label
@@ -611,20 +704,35 @@ func _process(delta):
 
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
+	var es_consejo_loro := CONSEJOS_LORO.has(Global.aviso_combate)
 	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
 	var mostrar_aviso_normal := hay_aviso and not es_dialogo_zorro
-	$AvisoLabel.text = Traducciones.obtener_frase(Global.aviso_combate)
+	var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
+	$AvisoLabel.text = texto_aviso
 	$AvisoFondo.visible = mostrar_aviso_normal
 	$AvisoLabel.visible = mostrar_aviso_normal
 	dialogo_zorro_fondo.visible = hay_aviso and es_dialogo_zorro
 	dialogo_zorro_texto.visible = hay_aviso and es_dialogo_zorro
 	if es_dialogo_zorro:
-		dialogo_zorro_texto.text = Traducciones.obtener_frase(Global.aviso_combate)
+		dialogo_zorro_texto.text = texto_aviso
+		aviso_visible_actual = ""
 	if mostrar_aviso_normal:
-		_posicionar_aviso_descanso(es_aviso_descanso)
-		_ajustar_banner_aviso()
-		var color_aviso := VERDE if Global.aviso_combate == "Victoria" else Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
-		_estilar_pildora($AvisoFondo, color_aviso)
+		if es_consejo_loro:
+			if texto_aviso != aviso_visible_actual:
+				aviso_visible_actual = texto_aviso
+				_ajustar_banner_consejo()
+				_estilar_banner_consejo()
+		else:
+			aviso_visible_actual = texto_aviso
+			$AvisoLabel.add_theme_font_size_override("font_size", 18)
+			for linea in ornamentos_aviso:
+				linea.visible = false
+			_posicionar_aviso_descanso(es_aviso_descanso)
+			_ajustar_banner_aviso()
+			var color_aviso := VERDE if Global.aviso_combate == "Victoria" else Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
+			_estilar_pildora($AvisoFondo, color_aviso)
+	else:
+		aviso_visible_actual = ""
 
 	var nivel_presencia : float = Global.presencia_cuniraya
 	Musica.actualizar_tension(Global.presencia_activa)
