@@ -181,6 +181,10 @@ func _physics_process(delta):
 		var zorro := get_tree().get_first_node_in_group("zorro")
 		if zorro != null:
 			zorro.hablar()
+	elif Input.is_action_just_pressed("hablar_zorro") and Global.loro_cerca:
+		var loro := get_tree().get_first_node_in_group("loro")
+		if loro != null:
+			loro.hablar()
 
 	if Input.is_action_just_pressed("descansar"):
 		var cueva_descanso := get_tree().get_first_node_in_group("zona_segura")
@@ -525,6 +529,8 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
 	elif Global.halcon_cerca and not Global.lleva_bebe:
 		Global.prompt_interaccion = "E  Atacar"
+	elif Global.loro_cerca:
+		Global.prompt_interaccion = "F  Hablar con loro"
 	else:
 		Global.prompt_interaccion = ""
 	#print("HALCON CERCA: ", Global.halcon_cerca)

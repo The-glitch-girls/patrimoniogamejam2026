@@ -230,6 +230,7 @@
 	"prompt_talk": {"es": "F Hablar", "en": "F Talk", "fr": "F Parler"},
 	"prompt_rest": {"es": "R  Descansar", "en": "R  Rest", "fr": "R  Se reposer"},
 	"prompt_talk_fox": {"es": "F  Hablar con el zorro", "en": "F  Talk to the fox", "fr": "F  Parler au renard"},
+	"prompt_talk_parrot": {"es": "F  Hablar con el loro", "en": "F  Talk to the parrot", "fr": "F  Parler au perroquet"},
 	"prompt_leave_with_fox": {"es": "E  Dejar al bebé con el zorro", "en": "E  Leave the baby with the fox", "fr": "E  Confier le bébé au renard"},
 	"prompt_pickup_from_fox": {"es": "E  Recoger del zorro", "en": "E  Pick up from fox", "fr": "E  Reprendre au renard"},
 	"prompt_leave": {"es": "E  Dejar", "en": "E  Put down", "fr": "E  Déposer"},
@@ -253,5 +254,7 @@
 	"baby_left_with_fox": {"es": "Bebé dejado con el zorro", "en": "Baby left with the fox", "fr": "Bébé confié au renard"},
 	"baby_picked_up_from_fox": {"es": "Bebé recogido del zorro", "en": "Baby picked up from the fox", "fr": "Bébé repris au renard"},
 	"fox_recognizes_memory": {"es": "El zorro parece reconocer el recuerdo que encontraste", "en": "The fox seems to recognize the memory you found", "fr": "Le renard semble reconnaître le souvenir que vous avez trouvé"},
-	"fox_trusts_with_baby": {"es": "El zorro confía en ti y está dispuesto a cuidar al bebé", "en": "The fox trusts you and is willing to look after the baby", "fr": "Le renard vous fait confiance et est prêt à veiller sur le bébé"}
+	"fox_trusts_with_baby": {"es": "El zorro confía en ti y está dispuesto a cuidar al bebé", "en": "The fox trusts you and is willing to look after the baby", "fr": "Le renard vous fait confiance et est prêt à veiller sur le bébé"},
+	"parrot_baby_warning": {"es": "¡Escucha al bebé si sientes que Cuniraya se acerca!", "en": "Listen to the baby when you feel Cuniraya drawing near!", "fr": "Écoute le bébé si tu sens Cuniraya s'approcher !"},
+	"parrot_cuniraya_near": {"es": "¡Cuniraya está cerca! Protege al bebé.", "en": "Cuniraya is near! Protect the baby.", "fr": "Cuniraya est proche ! Protège le bébé."}
 }

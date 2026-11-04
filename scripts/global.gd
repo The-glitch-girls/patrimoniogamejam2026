@@ -40,6 +40,7 @@ var prompt_interaccion: String = ""
 var zona_actual: String = "Plaza"
 var halcon_cerca: bool = false
 var zorro_cerca: bool = false
+var loro_cerca: bool = false
 var aviso_combate: String = ""
 var partida_terminada: bool = false
 var descanso_con_zorro: bool = false
@@ -205,6 +206,7 @@ func resetear():
 	zona_actual = "Plaza"
 	halcon_cerca = false
 	zorro_cerca = false
+	loro_cerca = false
 	aviso_combate = ""
 	descanso_con_zorro = false
 	cuidado_bebe_desbloqueado = false

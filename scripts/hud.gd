@@ -2,7 +2,8 @@ extends CanvasLayer
 
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
-const ICONO_ENERGIA := preload("res://assets/icons/energia.svg")
+const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
+const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
@@ -48,7 +49,8 @@ var dialogo_zorro_texto: Label
 var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var marco_presencia: Panel
-var barra_energia: ProgressBar
+var barra_energia: TextureRect
+var material_relleno_energia: ShaderMaterial
 var barra_presencia: ProgressBar
 var overlay_ajustes: Control
 var pausa_previa_ajustes := false
@@ -109,14 +111,54 @@ func _estilar_panel():
 		nodo.visible = false
 	if has_node("PresenciaLabel"):
 		$PresenciaLabel.visible = false
-	_poner_icono(ICONO_ENERGIA, Vector2(16, 16), VERDE)
-	barra_energia = $PanelEstado/EnergiaBar
-	_envolver_barra(barra_energia, Vector2(60, 20), VERDE)
-	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 60), LILA)
+	$PanelEstado/EnergiaBar.hide()
+	_configurar_barra_energia()
+	icono_presencia = _poner_icono(ICONO_PRESENCIA, Vector2(16, 76), LILA)
 	barra_presencia = $PanelEstado/PresenciaBar
-	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 64), LILA)
+	marco_presencia = _envolver_barra(barra_presencia, Vector2(60, 80), LILA)
 	_mostrar_presencia(false)
 	_poner_recuerdos()
+
+
+func _configurar_barra_energia() -> void:
+	var contenedor := Control.new()
+	contenedor.position = Vector2(20, 8)
+	contenedor.size = Vector2(246, 60)
+	contenedor.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	$PanelEstado.add_child(contenedor)
+
+	barra_energia = TextureRect.new()
+	barra_energia.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	barra_energia.texture = REFERENCIA_ENERGIA
+	barra_energia.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	barra_energia.stretch_mode = TextureRect.STRETCH_SCALE
+	barra_energia.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	var shader_relleno := Shader.new()
+	shader_relleno.code = """
+	shader_type canvas_item;
+	uniform float porcentaje = 1.0;
+	void fragment() {
+		vec4 color = texture(TEXTURE, UV);
+		float diferencia_morada = min(color.r - color.g, color.b - color.g);
+		color.a *= smoothstep(0.06, 0.2, diferencia_morada);
+		if (UV.x > porcentaje) {
+			color.a = 0.0;
+		}
+		COLOR = color;
+	}
+	"""
+	material_relleno_energia = ShaderMaterial.new()
+	material_relleno_energia.shader = shader_relleno
+	barra_energia.material = material_relleno_energia
+	contenedor.add_child(barra_energia)
+
+	var marco := TextureRect.new()
+	marco.texture = MARCO_ENERGIA
+	marco.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	marco.stretch_mode = TextureRect.STRETCH_SCALE
+	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	contenedor.add_child(marco)
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
@@ -536,7 +578,8 @@ func _capturar_flashback() -> void:
 
 
 func _process(delta):
-	barra_energia.value = Global.energia
+	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
+	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
 	barra_presencia.value = Global.presencia_cuniraya
 	_mostrar_presencia(Global.presencia_cuniraya > 0.5)
 	_actualizar_recuerdos()
