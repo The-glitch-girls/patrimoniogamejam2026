@@ -102,6 +102,7 @@ func _ready():
 	_poner_ajustes()
 	if not Global.partida_terminada:
 		Musica.iniciar_juego_con_tension()
+		_mostrar_controles_una_vez()
 	$Oscuridad.set_anchors_preset(Control.PRESET_FULL_RECT)
 	material_oscuridad = $Oscuridad.material as ShaderMaterial
 	if OS.get_cmdline_user_args().has("--hudshot"):
@@ -110,6 +111,14 @@ func _ready():
 		_capturar_flashback()
 	elif OS.get_cmdline_user_args().has("--guiashot"):
 		_capturar_guia()
+
+
+func _mostrar_controles_una_vez() -> void:
+	if Global.controles_mostrados:
+		return
+	Global.controles_mostrados = true
+	Global.mostrar_aviso(Traducciones.obtener("controls_hint"))
+	Global.aviso_temporizador = 8.0
 
 
 func _estilar_panel():

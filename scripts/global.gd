@@ -48,6 +48,8 @@ var cuidado_bebe_desbloqueado: bool = false
 var hacia_el_mar: bool = false
 var flashback_abierto: bool = false
 var resultado_final: String = ""
+# Se muestra una sola vez por sesión (no se reinicia en resetear()).
+var controles_mostrados: bool = false
 
 # Sistema de Recuerdos
 var recuerdos_obtenidos: int = 0
