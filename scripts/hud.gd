@@ -128,7 +128,6 @@ func _configurar_barra_energia() -> void:
 	$PanelEstado.add_child(contenedor)
 
 	barra_energia = TextureRect.new()
-	contenedor.add_child(barra_energia)
 	barra_energia.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	barra_energia.texture = REFERENCIA_ENERGIA
 	barra_energia.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -151,14 +150,15 @@ func _configurar_barra_energia() -> void:
 	material_relleno_energia = ShaderMaterial.new()
 	material_relleno_energia.shader = shader_relleno
 	barra_energia.material = material_relleno_energia
+	contenedor.add_child(barra_energia)
 
 	var marco := TextureRect.new()
-	contenedor.add_child(marco)
 	marco.texture = MARCO_ENERGIA
 	marco.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	marco.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	contenedor.add_child(marco)
 
 func _poner_icono(textura: Texture2D, pos: Vector2, color: Color) -> TextureRect:
 	var circulo := Panel.new()
