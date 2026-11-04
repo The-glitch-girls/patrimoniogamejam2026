@@ -5,7 +5,7 @@ const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
 const ICONO_PRESENCIA := preload("res://assets/icons/presencia.svg")
-const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
+const ICONO_AJUSTES := preload("res://assets/ui/ajustes/engranaje.png")
 const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
@@ -45,7 +45,8 @@ const VERDE := Color(0.49, 0.76, 0.29, 1)
 const LILA := Color(0.67, 0.62, 0.93, 1)
 const DORADO := Color(0.86, 0.7, 0.2, 1)
 const BORDO := Color(0.62, 0.24, 0.36, 1)
-const NARANJA_CUEVA := Color(1.0, 0.58, 0.24, 1)
+const AZUL_GUIA := Color(0.31, 0.53, 0.82, 1)
+const MORADO_GUIA := Color(0.48, 0.36, 0.72, 1)
 
 var prompt_alpha := 0.0
 var prompt_texto := ""
@@ -589,17 +590,18 @@ func _borde_de(origen: Vector2, destino: Vector2, zona: Rect2) -> Vector2:
 func _poner_ajustes() -> void:
 	var boton := BotonCirculo.new()
 	boton.name = "BotonAjustes"
-	boton.color_fondo = DORADO
+	boton.color_fondo = VERDE
 	boton.icono = ICONO_AJUSTES
 	boton.tamano = 52.0
+	boton.ancho_borde = 6
 	boton.z_index = 100
 	boton.pressed.connect(_alternar_ajustes)
 	add_child(boton)
 	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
 	boton.offset_left = -72
-	boton.offset_top = 16
+	boton.offset_top = 28
 	boton.offset_right = -20
-	boton.offset_bottom = 68
+	boton.offset_bottom = 80
 
 	overlay_ajustes = ESCENA_OVERLAY_AJUSTES.instantiate() as Control
 	overlay_ajustes.visible = false
@@ -779,7 +781,7 @@ func _poner_guia_bebe() -> void:
 	guia_bebe = GuiaNavegacion.new()
 
 	guia_bebe.configurar(
-		_tarjeta(VERDE, 22),
+		_tarjeta(AZUL_GUIA, 22),
 		"300 m",
 		Vector2(132, 44),
 		FUENTE,
@@ -795,7 +797,7 @@ func _poner_guia_cueva() -> void:
 	guia_cueva = GuiaNavegacion.new()
 
 	guia_cueva.configurar(
-		_tarjeta(NARANJA_CUEVA, 22),
+		_tarjeta(MORADO_GUIA, 22),
 		Traducciones.obtener("cave"),
 		Vector2(150, 44),
 		FUENTE,
