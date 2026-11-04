@@ -32,6 +32,7 @@ scale = Vector2(0.68, 0.68)
 texture = ExtResource("2_xiy6r")
 
 [node name="CajaTexto" type="TextureRect" parent="."]
+layout_mode = 0
 offset_left = 143.0
 offset_top = 530.0
 offset_right = 1673.0
@@ -85,6 +86,7 @@ texture_pressed = ExtResource("9_08c7k")
 
 [node name="Continuar" type="TextureButton" parent="."]
 visible = false
+layout_mode = 0
 offset_left = 937.0
 offset_top = 637.0
 offset_right = 1191.0
