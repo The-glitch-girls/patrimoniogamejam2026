@@ -21,11 +21,14 @@ var tiempos := {}
 func _ready() -> void:
 	hud = get_parent()
 	var panel: Control = hud.get_node("PanelEstado")
-	etiqueta_energia = _etiqueta(panel, Vector2(272, 22))
-	etiqueta_presencia = _etiqueta(panel, Vector2(266, 80))
-	etiqueta_bebe = _etiqueta(panel, Vector2(8, 112))
+	var presencia: Control = hud.barra_presencia_texture
+	etiqueta_energia = _etiqueta(panel, Vector2(268, 20))
+	etiqueta_presencia = _etiqueta(panel, Vector2(
+		presencia.position.x + presencia.size.x * presencia.scale.x + 10,
+		presencia.position.y + presencia.size.y * presencia.scale.y * 0.5 - 15))
+	etiqueta_bebe = _etiqueta(panel, Vector2(4, 86))
 	zona_energia = _zona(hud.barra_energia.get_parent())
-	zona_presencia = _zona(hud.marco_presencia)
+	zona_presencia = _zona(presencia)
 	_traducir()
 	Traducciones.idioma_cambiado.connect(_traducir)
 	if not Global.partida_terminada:
@@ -44,8 +47,15 @@ func _etiqueta(panel: Control, pos: Vector2) -> Label:
 	label.add_theme_font_override("font", FUENTE)
 	label.add_theme_font_size_override("font_size", 18)
 	label.add_theme_color_override("font_color", CREMA)
-	label.add_theme_color_override("font_outline_color", Color(0.1, 0.07, 0.2, 0.9))
-	label.add_theme_constant_override("outline_size", 6)
+	# Fondo oscuro para que se lea sobre zonas claras del mapa.
+	var fondo := StyleBoxFlat.new()
+	fondo.bg_color = Color(0.035, 0.03, 0.085, 0.72)
+	fondo.set_corner_radius_all(12)
+	fondo.content_margin_left = 10
+	fondo.content_margin_right = 10
+	fondo.content_margin_top = 2
+	fondo.content_margin_bottom = 3
+	label.add_theme_stylebox_override("normal", fondo)
 	panel.add_child(label)
 	return label
 
@@ -95,7 +105,7 @@ func _mostrar(clave: String) -> void:
 
 
 func _process(delta: float) -> void:
-	if hud.marco_presencia.visible:
+	if hud.barra_presencia_texture.visible:
 		_mostrar("presencia")
 	if Global.lleva_bebe:
 		_mostrar("bebe")
@@ -105,7 +115,7 @@ func _process(delta: float) -> void:
 			tiempos.erase(clave)
 	_fundir(etiqueta_energia, tiempos.has("energia"), delta)
 	_fundir(etiqueta_bebe, tiempos.has("bebe"), delta)
-	_fundir(etiqueta_presencia, tiempos.has("presencia") and hud.marco_presencia.visible, delta)
+	_fundir(etiqueta_presencia, tiempos.has("presencia") and hud.barra_presencia_texture.visible, delta)
 
 
 func _fundir(label: Label, activa: bool, delta: float) -> void:
