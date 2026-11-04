@@ -596,7 +596,6 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "F  Hablar con loro"
 	else:
 		Global.prompt_interaccion = ""
-	#print("HALCON CERCA: ", Global.halcon_cerca)
 
 
 func _actualizar_carga_visual():
@@ -730,7 +729,6 @@ func _arrojar_en_combate():
 			Global.perder_energia(2.0)
 		else:
 			Global.perder_energia(5.0)
-			print("🪨 ¡El halcón esquivó!")
 
 	if is_instance_valid(piedra):
 		piedra.queue_free()
@@ -748,7 +746,6 @@ func _controlar_ataque() -> bool:
 			if halcon.en_combate:
 				if not halcon.derrotado and not halcon.en_muerte:
 					ataques_combate += 1
-					print("⚔️ Ataque de combate: ", ataques_combate)
 					_arrojar_en_combate()
 			elif Global.halcon_cerca and not Global.lleva_bebe:
 				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")

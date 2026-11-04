@@ -119,7 +119,6 @@ func _process(delta):
 	if cavillaca != null:
 		var objetivo := _obtener_punto_objetivo(cavillaca)
 		var distancia := global_position.distance_to(objetivo)
-		#print("🦅 distancia Cavillaca-halcon: ", distancia)
 		
 		if rondando and distancia > RANGO_CORTE:
 			rondando = false
@@ -232,7 +231,6 @@ func _aparecer_en_otro_lado() -> void:
 	zona_t = 0.0
 	rondando = false
 	$AnimatedSprite2D.play("lado")
-	print("🦅 SPAWN HALCÓN EN: ", punto)
 
 
 func _elegir_mas_adelante() -> Vector2:
@@ -404,12 +402,10 @@ func recibir_golpe(direccion: Vector2):
 	_actualizar_vidas()
 	flash_t = 0.12
 	
-	print("🦅 HALCÓN RECIBIÓ GOLPE | vida = ", vida, " | posición = ", global_position)
 
 	global_position += direccion.normalized() * 5.0
 
 	if vida <= 0:
-		print("🦅 HALCÓN VA A MORIR")
 		_victoria()
 	else:
 		$AtaqueSFX.play()
@@ -437,7 +433,6 @@ func esquivar_hacia(punto: Node2D):
 	)
 
 func _victoria():
-	print("🦅🦅🦅 VICTORIA HALCÓN | recuerdos = ", Global.recuerdos_obtenidos)
 	derrotado = true
 	en_muerte = true
 	Global.halcon_cerca = false
