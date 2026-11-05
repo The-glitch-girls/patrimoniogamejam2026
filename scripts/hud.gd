@@ -581,6 +581,7 @@ func _poner_ajustes() -> void:
 	overlay_ajustes.process_mode = Node.PROCESS_MODE_ALWAYS
 	overlay_ajustes.connect("cerrar", Callable(self, "_cerrar_ajustes"))
 	add_child(overlay_ajustes)
+	add_child(preload("res://scripts/componentes/menu_pausa.gd").new())
 
 
 func _alternar_ajustes() -> void:
