@@ -77,8 +77,8 @@ func _configurar_limites_camara() -> void:
 	if suelo == null or suelo.tile_set == null:
 		return
 
-	var celdas := suelo.get_used_rect()
-	if celdas.size == Vector2i.ZERO:
+	var celdas := _rect_pintado(suelo)
+	if celdas.size.x <= 0 or celdas.size.y <= 0:
 		return
 
 	var tamano_celda := Vector2(suelo.tile_set.tile_size)
@@ -92,6 +92,30 @@ func _configurar_limites_camara() -> void:
 	cam.limit_top = floori(esquina_superior_izquierda.y)
 	cam.limit_right = ceili(esquina_inferior_derecha.x)
 	cam.limit_bottom = ceili(esquina_inferior_derecha.y)
+
+
+# Recorta el rectángulo usado hasta que sus cuatro bordes estén pintados,
+# para que la cámara nunca muestre huecos sin tiles.
+func _rect_pintado(suelo: TileMapLayer) -> Rect2i:
+	var r := suelo.get_used_rect()
+	while r.size.x > 0 and r.size.y > 0:
+		var vacios := [0, 0, 0, 0] # arriba, abajo, izquierda, derecha
+		for x in range(r.position.x, r.end.x):
+			if suelo.get_cell_source_id(Vector2i(x, r.position.y)) == -1: vacios[0] += 1
+			if suelo.get_cell_source_id(Vector2i(x, r.end.y - 1)) == -1: vacios[1] += 1
+		for y in range(r.position.y, r.end.y):
+			if suelo.get_cell_source_id(Vector2i(r.position.x, y)) == -1: vacios[2] += 1
+			if suelo.get_cell_source_id(Vector2i(r.end.x - 1, y)) == -1: vacios[3] += 1
+		var fr := [float(vacios[0]) / r.size.x, float(vacios[1]) / r.size.x, float(vacios[2]) / r.size.y, float(vacios[3]) / r.size.y]
+		var peor: int = fr.find(fr.max())
+		if fr[peor] == 0.0:
+			break
+		match peor:
+			0: r.position.y += 1; r.size.y -= 1
+			1: r.size.y -= 1
+			2: r.position.x += 1; r.size.x -= 1
+			3: r.size.x -= 1
+	return r
 
 
 func _asegurar_tecla_dialogo_zorro() -> void:
