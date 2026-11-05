@@ -20,26 +20,39 @@ var brillo: CPUParticles2D
 func _crear_brillo():
 	brillo = CPUParticles2D.new()
 	brillo.scale = Vector2.ONE / scale
-	brillo.position = Vector2(0, -14) / scale
-	brillo.amount = 10
-	brillo.lifetime = 1.2
-	brillo.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
-	brillo.emission_sphere_radius = 18.0
+	brillo.amount = 8
+	brillo.lifetime = 1.4
+	brillo.texture = _textura_destello()
+	# Nacen en un anillo alrededor del bebé, nunca sobre su cara.
+	brillo.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE_SURFACE
+	brillo.emission_sphere_radius = 62.0
 	brillo.direction = Vector2.UP
-	brillo.spread = 30.0
+	brillo.spread = 20.0
 	brillo.gravity = Vector2.ZERO
-	brillo.initial_velocity_min = 4.0
-	brillo.initial_velocity_max = 10.0
-	brillo.scale_amount_min = 10.0
-	brillo.scale_amount_max = 16.0
+	brillo.initial_velocity_min = 3.0
+	brillo.initial_velocity_max = 8.0
+	brillo.scale_amount_min = 0.6
+	brillo.scale_amount_max = 1.0
 	var curva := Curve.new()
 	curva.add_point(Vector2(0, 0))
 	curva.add_point(Vector2(0.4, 1))
 	curva.add_point(Vector2(1, 0))
 	brillo.scale_amount_curve = curva
-	brillo.color = Color(1.0, 0.95, 0.7, 0.9)
-	brillo.z_index = 1
+	brillo.color = Color(1.0, 0.95, 0.7, 0.85)
 	add_child(brillo)
+
+func _textura_destello() -> Texture2D:
+	var grad := Gradient.new()
+	grad.set_color(0, Color(1, 1, 1, 1))
+	grad.set_color(1, Color(1, 1, 1, 0))
+	var tex := GradientTexture2D.new()
+	tex.gradient = grad
+	tex.fill = GradientTexture2D.FILL_RADIAL
+	tex.fill_from = Vector2(0.5, 0.5)
+	tex.fill_to = Vector2(1.0, 0.5)
+	tex.width = 14
+	tex.height = 14
+	return tex
 
 func _process(delta):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
