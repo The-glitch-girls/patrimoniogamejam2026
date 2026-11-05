@@ -112,8 +112,10 @@ func _process(delta: float) -> void:
 
 
 func _retener_aviso() -> void:
-	# Un mensaje a la vez: los avisos (controles, loro…) esperan a que se cierre la tarjeta.
-	if Global.aviso_combate == "":
+	# Solo la ayuda de controles espera a que se cierre la tarjeta. Lo urgente
+	# (presencia crítica, consejo del loro) y la respuesta a lo que hace la
+	# jugadora salen al momento: la tarjeta está arriba a la derecha y no los tapa.
+	if Global.aviso_combate == "" or not _es_diferible(Global.aviso_combate):
 		return
 	var texto := Global.aviso_combate
 	if not avisos_en_espera.any(func(a): return a[0] == texto):
@@ -121,18 +123,20 @@ func _retener_aviso() -> void:
 	Global.aviso_combate = ""
 	Global.aviso_temporizador = 0.0
 
+func _es_diferible(texto: String) -> bool:
+	return texto == Traducciones.obtener("controls_hint")
 
 func _mostrar_avisos_en_espera(delta: float) -> void:
 	if avisos_en_espera.is_empty():
 		return
 	espera_siguiente -= delta
-	if espera_siguiente > 0.0:
+	# No pisar un aviso que está en pantalla (p. ej. el loro o la presencia crítica).
+	if espera_siguiente > 0.0 or Global.aviso_combate != "":
 		return
 	var aviso: Array = avisos_en_espera.pop_front()
 	Global.mostrar_aviso(aviso[0])
 	Global.aviso_temporizador = aviso[1]
 	espera_siguiente = aviso[1]
-
 
 func _input(event: InputEvent) -> void:
 	# Solo Espacio/Enter o clic la cierran: moverse no la descarta sin leerla.
