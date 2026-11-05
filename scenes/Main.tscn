@@ -462,7 +462,7 @@ position = Vector2(2432.0, 3712.0)
 shape = SubResource("RectangleShape2D_lim1")
 
 [node name="Derecha" type="CollisionShape2D" parent="LimitesMapa"]
-position = Vector2(5632.0, 448.0)
+position = Vector2(5440.0, 448.0)
 shape = SubResource("RectangleShape2D_lim2")
 
 [node name="Arriba" type="CollisionShape2D" parent="LimitesMapa"]
@@ -490,13 +490,13 @@ position = Vector2(4736.0, -1920.0)
 shape = SubResource("RectangleShape2D_lim8")
 
 [node name="Escalon6" type="CollisionShape2D" parent="LimitesMapa"]
-position = Vector2(5056.0, -1536.0)
+position = Vector2(4960.0, -1536.0)
 shape = SubResource("RectangleShape2D_lim9")
 
 [node name="Escalon7" type="CollisionShape2D" parent="LimitesMapa"]
-position = Vector2(5248.0, -576.0)
+position = Vector2(5184.0, -576.0)
 shape = SubResource("RectangleShape2D_lim10")
 
 [node name="Escalon8" type="CollisionShape2D" parent="LimitesMapa"]
-position = Vector2(5312.0, 256.0)
+position = Vector2(5248.0, 256.0)
 shape = SubResource("RectangleShape2D_lim11")
