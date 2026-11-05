@@ -12,9 +12,38 @@ var llorando := false
 func _ready():
 	add_to_group("bebe")
 	$AnimatedSprite2D.play("normal")
+	_crear_brillo()
+
+# Destellos suaves alrededor del bebé mientras está en el suelo, para que se note que se puede recoger.
+var brillo: CPUParticles2D
+
+func _crear_brillo():
+	brillo = CPUParticles2D.new()
+	brillo.scale = Vector2.ONE / scale
+	brillo.position = Vector2(0, -14) / scale
+	brillo.amount = 10
+	brillo.lifetime = 1.2
+	brillo.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+	brillo.emission_sphere_radius = 18.0
+	brillo.direction = Vector2.UP
+	brillo.spread = 30.0
+	brillo.gravity = Vector2.ZERO
+	brillo.initial_velocity_min = 4.0
+	brillo.initial_velocity_max = 10.0
+	brillo.scale_amount_min = 10.0
+	brillo.scale_amount_max = 16.0
+	var curva := Curve.new()
+	curva.add_point(Vector2(0, 0))
+	curva.add_point(Vector2(0.4, 1))
+	curva.add_point(Vector2(1, 0))
+	brillo.scale_amount_curve = curva
+	brillo.color = Color(1.0, 0.95, 0.7, 0.9)
+	brillo.z_index = 1
+	add_child(brillo)
 
 func _process(delta):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
+	brillo.emitting = not Global.lleva_bebe
 	if Global.lleva_bebe:
 		_seguir_carga(cavillaca, delta)
 		return
