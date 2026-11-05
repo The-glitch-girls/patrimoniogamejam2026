@@ -140,6 +140,7 @@ func _estilar_panel():
 	barra_presencia_texture = $PanelEstado/PresenciaBarTexture
 	_mostrar_presencia(true)
 	_poner_recuerdos()
+	add_child(preload("res://scripts/componentes/etiquetas_barras.gd").new())
 
 
 func _configurar_barra_energia() -> void:
