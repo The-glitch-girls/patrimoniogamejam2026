@@ -24,7 +24,8 @@ func _ready() -> void:
 	var presencia: Control = hud.barra_presencia_texture
 	etiqueta_energia = _etiqueta(panel, Vector2(268, 20))
 	etiqueta_presencia = _etiqueta(panel, Vector2(
-		presencia.position.x + presencia.size.x * presencia.scale.x + 10,
+		# +36: deja sitio a la flecha ▼ de presencia crítica (#64).
+		presencia.position.x + presencia.size.x * presencia.scale.x + 36,
 		presencia.position.y + presencia.size.y * presencia.scale.y * 0.5 - 15))
 	etiqueta_bebe = _etiqueta(panel, Vector2(4, 86))
 	zona_energia = _zona(hud.barra_energia.get_parent())
