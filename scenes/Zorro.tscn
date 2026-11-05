@@ -19,7 +19,7 @@ shape = SubResource("CircleShape2D_zorro")
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 position = Vector2(0, -42)
-scale = Vector2(0.04, 0.04)
+scale = Vector2(0.16, 0.16)
 
 [node name="Deteccion" type="Area2D" parent="."]
 collision_layer = 0
