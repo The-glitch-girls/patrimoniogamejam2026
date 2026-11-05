@@ -50,11 +50,11 @@ func _poner_flecha() -> void:
 	relleno.color = CREMA
 	flecha.add_child(contorno)
 	flecha.add_child(relleno)
-	# A la izquierda del ícono de presencia: a la derecha de la barra va la
-	# etiqueta "Presencia de Cuniraya" (#63) y se superponían.
+	# Pegada a la derecha de la barra; la etiqueta "Presencia de Cuniraya" (#63)
+	# deja ESPACIO_FLECHA libre para que no se superpongan.
+	var ancho_visible := barra.size.x * barra.scale.x
 	var alto_visible := barra.size.y * barra.scale.y
-	var icono: Control = hud.icono_presencia
-	flecha.position = Vector2(icono.position.x - 26, barra.position.y + alto_visible * 0.5 - 7)
+	flecha.position = barra.position + Vector2(ancho_visible + 6, alto_visible * 0.5 - 7)
 	flecha.visible = false
 	barra.get_parent().add_child(flecha)
 
