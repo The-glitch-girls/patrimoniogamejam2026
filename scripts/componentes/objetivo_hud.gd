@@ -106,6 +106,12 @@ func _process(delta: float) -> void:
 		_mostrar_avisos_en_espera(delta)
 		return
 	_retener_aviso()
+	# La caja de diálogo (loro, zorro) ocupa el centro y llega hasta la tarjeta:
+	# la ocultamos mientras dure y su tiempo no corre.
+	var dialogo := _hay_dialogo()
+	tarjeta.modulate.a = move_toward(tarjeta.modulate.a, 0.0 if dialogo else 1.0, delta * 5.0)
+	if dialogo:
+		return
 	tiempo_tarjeta += delta
 	if tiempo_tarjeta >= DURACION_TARJETA:
 		_cerrar_tarjeta()
@@ -122,6 +128,11 @@ func _retener_aviso() -> void:
 		avisos_en_espera.append([texto, maxf(Global.aviso_temporizador, Global.DURACION_AVISO)])
 	Global.aviso_combate = ""
 	Global.aviso_temporizador = 0.0
+
+func _hay_dialogo() -> bool:
+	var hud := get_parent()
+	return Global.aviso_combate != "" and (hud.MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate) \
+		or hud.CONSEJOS_LORO.has(Global.aviso_combate))
 
 func _es_diferible(texto: String) -> bool:
 	return texto == Traducciones.obtener("controls_hint")
