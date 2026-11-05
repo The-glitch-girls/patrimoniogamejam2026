@@ -77,9 +77,10 @@ func _configurar_limites_camara() -> void:
 	if suelo == null or suelo.tile_set == null:
 		return
 
-	var celdas := _rect_pintado(suelo)
-	if celdas.size.x <= 0 or celdas.size.y <= 0:
+	var celdas := suelo.get_used_rect()
+	if celdas.size == Vector2i.ZERO:
 		return
+	_rellenar_huecos.call_deferred(suelo, celdas)
 
 	var tamano_celda := Vector2(suelo.tile_set.tile_size)
 	var esquina_superior_izquierda := suelo.to_global(
@@ -94,28 +95,33 @@ func _configurar_limites_camara() -> void:
 	cam.limit_bottom = ceili(esquina_inferior_derecha.y)
 
 
-# Recorta el rectángulo usado hasta que sus cuatro bordes estén pintados,
-# para que la cámara nunca muestre huecos sin tiles.
-func _rect_pintado(suelo: TileMapLayer) -> Rect2i:
-	var r := suelo.get_used_rect()
-	while r.size.x > 0 and r.size.y > 0:
-		var vacios := [0, 0, 0, 0] # arriba, abajo, izquierda, derecha
+
+# Pinta los huecos del rectángulo con suelo y árboles en capas decorativas,
+# para que la cámara no muestre vacío. No toca SueloTiles: no se pueden pisar.
+func _rellenar_huecos(suelo: TileMapLayer, r: Rect2i) -> void:
+	var escena := get_tree().current_scene
+	var copa := escena.get_node_or_null("DecoracionTop") as TileMapLayer
+	if copa == null:
+		return
+	var fondo := TileMapLayer.new()
+	fondo.name = "RellenoSuelo"
+	fondo.tile_set = suelo.tile_set
+	fondo.transform = suelo.transform
+	var arboles := TileMapLayer.new()
+	arboles.name = "RellenoArboles"
+	arboles.tile_set = copa.tile_set
+	arboles.transform = copa.transform
+	arboles.z_index = copa.z_index
+	escena.add_child(fondo)
+	escena.move_child(fondo, suelo.get_index())
+	escena.add_child(arboles)
+	for y in range(r.position.y, r.end.y):
 		for x in range(r.position.x, r.end.x):
-			if suelo.get_cell_source_id(Vector2i(x, r.position.y)) == -1: vacios[0] += 1
-			if suelo.get_cell_source_id(Vector2i(x, r.end.y - 1)) == -1: vacios[1] += 1
-		for y in range(r.position.y, r.end.y):
-			if suelo.get_cell_source_id(Vector2i(r.position.x, y)) == -1: vacios[2] += 1
-			if suelo.get_cell_source_id(Vector2i(r.end.x - 1, y)) == -1: vacios[3] += 1
-		var fr := [float(vacios[0]) / r.size.x, float(vacios[1]) / r.size.x, float(vacios[2]) / r.size.y, float(vacios[3]) / r.size.y]
-		var peor: int = fr.find(fr.max())
-		if fr[peor] == 0.0:
-			break
-		match peor:
-			0: r.position.y += 1; r.size.y -= 1
-			1: r.size.y -= 1
-			2: r.position.x += 1; r.size.x -= 1
-			3: r.size.x -= 1
-	return r
+			var c := Vector2i(x, y)
+			if suelo.get_cell_source_id(c) != -1:
+				continue
+			fondo.set_cell(c, 2, Vector2i(0, 0))
+			arboles.set_cell(c, 2, Vector2i(posmod(x, 3), 14 + posmod(y, 2)))
 
 
 func _asegurar_tecla_dialogo_zorro() -> void:
