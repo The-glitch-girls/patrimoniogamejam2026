@@ -207,6 +207,10 @@
 	  "en": "The baby crawled toward him.\nCavillaca understood who his father was.",
 	  "fr": "Le bébé rampa vers lui.\nCavillaca comprit qui était son père."
 	},
+	"objective_title": {"es": "Tu objetivo", "en": "Your goal", "fr": "Ton objectif"},
+	"objective_text": {"es": "Lleva al bebé hasta el mar. En el camino, vence al halcón para recuperar 3 recuerdos.", "en": "Carry the baby to the sea. On the way, defeat the hawk to recover 3 memories.", "fr": "Porte le bébé jusqu’à la mer. En chemin, bats le faucon pour retrouver 3 souvenirs."},
+	"objective_dismiss": {"es": "Espacio, Enter o clic para cerrar", "en": "Space, Enter or click to close", "fr": "Espace, Entrée ou clic pour fermer"},
+	"memories_hint": {"es": "Los recuerdos los guarda el halcón", "en": "The hawk holds the memories", "fr": "Le faucon garde les souvenirs"},
 	"language": {"es": "Idioma", "en": "Language", "fr": "Langue"},
 	"close": {"es": "Cerrar", "en": "Close", "fr": "Fermer"},
 	"continue": {"es": "Continuar", "en": "Continue", "fr": "Continuer"},

@@ -371,6 +371,7 @@ func _poner_recuerdos() -> void:
 		viewport_size.x - 320,
 		20
 	)
+	add_child(preload("res://scripts/componentes/objetivo_hud.gd").new())
 
 func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
