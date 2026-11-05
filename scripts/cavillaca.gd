@@ -111,17 +111,31 @@ func _rellenar_huecos(suelo: TileMapLayer, r: Rect2i) -> void:
 	arboles.name = "RellenoArboles"
 	arboles.tile_set = copa.tile_set
 	arboles.transform = copa.transform
-	arboles.z_index = copa.z_index
+	arboles.z_index = suelo.z_index
 	escena.add_child(fondo)
 	escena.move_child(fondo, suelo.get_index())
 	escena.add_child(arboles)
+	escena.move_child(arboles, suelo.get_index() + 1)
 	for y in range(r.position.y, r.end.y):
 		for x in range(r.position.x, r.end.x):
-			var c := Vector2i(x, y)
-			if suelo.get_cell_source_id(c) != -1:
-				continue
-			fondo.set_cell(c, 2, Vector2i(0, 0))
-			arboles.set_cell(c, 2, Vector2i(posmod(x, 3), 14 + posmod(y, 2)))
+			if suelo.get_cell_source_id(Vector2i(x, y)) == -1:
+				fondo.set_cell(Vector2i(x, y), 2, Vector2i(0, 0))
+	# Solo árboles 3x2 enteros, con un tile libre respecto del piso jugable.
+	for y in range(r.position.y, r.end.y - 1, 2):
+		for x in range(r.position.x, r.end.x - 2, 3):
+			if _bloque_libre(suelo, Vector2i(x, y)):
+				for dy in 2:
+					for dx in 3:
+						arboles.set_cell(Vector2i(x + dx, y + dy), 2, Vector2i(dx, 14 + dy))
+
+
+func _bloque_libre(suelo: TileMapLayer, origen: Vector2i) -> bool:
+	for dy in range(-1, 3):
+		for dx in range(-1, 4):
+			var c := origen + Vector2i(dx, dy)
+			if suelo.get_used_rect().has_point(c) and suelo.get_cell_source_id(c) != -1:
+				return false
+	return true
 
 
 func _asegurar_tecla_dialogo_zorro() -> void:
