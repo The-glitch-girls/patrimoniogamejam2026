@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=40 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_fijlm"]
 [ext_resource type="Texture2D" uid="uid://b1qtkbgolc2co" path="res://assets/tiles/jarron1.png" id="2_paa2y"]
@@ -32,6 +32,42 @@ shader = ExtResource("12_tthj7")
 shader_parameter/intensidad = 0.0
 shader_parameter/radio_claro = 0.25
 shader_parameter/radio_sombra = 0.55
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim0"]
+size = Vector2(256, 6784)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim1"]
+size = Vector2(6656, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim2"]
+size = Vector2(256, 6784)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim3"]
+size = Vector2(6656, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim4"]
+size = Vector2(3584, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim5"]
+size = Vector2(2304, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim6"]
+size = Vector2(1792, 128)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim7"]
+size = Vector2(1664, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim8"]
+size = Vector2(1536, 256)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim9"]
+size = Vector2(896, 512)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim10"]
+size = Vector2(512, 1408)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lim11"]
+size = Vector2(384, 256)
 
 [node name="Main2" type="Node2D"]
 y_sort_enabled = true
@@ -412,3 +448,55 @@ texture = ExtResource("2_paa2y")
 position = Vector2(64, 144)
 scale = Vector2(0.11, 0.11)
 texture = ExtResource("3_xjkgv")
+
+[node name="LimitesMapa" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Izquierda" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(-768.0, 448.0)
+shape = SubResource("RectangleShape2D_lim0")
+
+[node name="Abajo" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(2432.0, 3712.0)
+shape = SubResource("RectangleShape2D_lim1")
+
+[node name="Derecha" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(5632.0, 448.0)
+shape = SubResource("RectangleShape2D_lim2")
+
+[node name="Arriba" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(2432.0, -2688.0)
+shape = SubResource("RectangleShape2D_lim3")
+
+[node name="Escalon1" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(3712.0, -2496.0)
+shape = SubResource("RectangleShape2D_lim4")
+
+[node name="Escalon2" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(4352.0, -2368.0)
+shape = SubResource("RectangleShape2D_lim5")
+
+[node name="Escalon3" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(4608.0, -2240.0)
+shape = SubResource("RectangleShape2D_lim6")
+
+[node name="Escalon4" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(4672.0, -2048.0)
+shape = SubResource("RectangleShape2D_lim7")
+
+[node name="Escalon5" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(4736.0, -1920.0)
+shape = SubResource("RectangleShape2D_lim8")
+
+[node name="Escalon6" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(5056.0, -1536.0)
+shape = SubResource("RectangleShape2D_lim9")
+
+[node name="Escalon7" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(5248.0, -576.0)
+shape = SubResource("RectangleShape2D_lim10")
+
+[node name="Escalon8" type="CollisionShape2D" parent="LimitesMapa"]
+position = Vector2(5312.0, 256.0)
+shape = SubResource("RectangleShape2D_lim11")
