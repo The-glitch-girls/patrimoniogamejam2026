@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dhexvg303u6fk"
-path="res://.godot/imported/trapecio_agradecimientos.png-16e04096fdb1c67d1db46c72c256833d.ctex"
+path.s3tc="res://.godot/imported/trapecio_agradecimientos.png-16e04096fdb1c67d1db46c72c256833d.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/ui/creditos/trapecio_agradecimientos.png"
-dest_files=["res://.godot/imported/trapecio_agradecimientos.png-16e04096fdb1c67d1db46c72c256833d.ctex"]
+dest_files=["res://.godot/imported/trapecio_agradecimientos.png-16e04096fdb1c67d1db46c72c256833d.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

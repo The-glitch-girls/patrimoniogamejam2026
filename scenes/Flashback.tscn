@@ -1,7 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://viy73o76wr6w"]
+[gd_scene load_steps=8 format=3 uid="uid://viy73o76wr6w"]
 
 [ext_resource type="Script" uid="uid://bm7bd60tyv004" path="res://scripts/flashback.gd" id="1_ubat7"]
-[ext_resource type="Texture2D" uid="uid://wfsrnjb0u26y" path="res://assets/cinematicas/recuerdo_1.png" id="2_ib4ad"]
 [ext_resource type="AudioStream" uid="uid://b3tw08j2ap4ya" path="res://sfx/revelar.ogg" id="2_vr83p"]
 [ext_resource type="Texture2D" uid="uid://bhqfwhjhyifnf" path="res://assets/ui/recuerdos/recuerdo_caja.png" id="3_38lae"]
 [ext_resource type="AudioStream" uid="uid://drhe82oc6lf12" path="res://sfx/msx/aa_recuerdo.ogg" id="3_mk5yg"]
@@ -27,7 +26,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-texture = ExtResource("2_ib4ad")
 expand_mode = 1
 stretch_mode = 6
 

@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cn34f1stl4wxg"
-path="res://.godot/imported/jarron2.png-2a47c467a530b5e1ec00694354d44616.ctex"
+path.s3tc="res://.godot/imported/jarron2.png-2a47c467a530b5e1ec00694354d44616.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/tiles/jarron2.png"
-dest_files=["res://.godot/imported/jarron2.png-2a47c467a530b5e1ec00694354d44616.ctex"]
+dest_files=["res://.godot/imported/jarron2.png-2a47c467a530b5e1ec00694354d44616.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

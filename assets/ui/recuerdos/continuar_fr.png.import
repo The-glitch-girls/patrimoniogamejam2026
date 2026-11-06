@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://d2lcipsis53vo"
-path="res://.godot/imported/continuar_fr.png-ef028af4c86aa6e147ed0978be65d792.ctex"
+path.s3tc="res://.godot/imported/continuar_fr.png-ef028af4c86aa6e147ed0978be65d792.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/ui/recuerdos/continuar_fr.png"
-dest_files=["res://.godot/imported/continuar_fr.png-ef028af4c86aa6e147ed0978be65d792.ctex"]
+dest_files=["res://.godot/imported/continuar_fr.png-ef028af4c86aa6e147ed0978be65d792.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

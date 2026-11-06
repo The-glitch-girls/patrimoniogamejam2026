@@ -214,6 +214,8 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 
 
 func _physics_process(delta):
+	if lock_arrojar > 0.0:
+		lock_arrojar = max(lock_arrojar - delta, 0.0)
 	_reproducir_clic_accion_teclado()
 	if _controlar_ataque():
 		return
@@ -228,9 +230,6 @@ func _physics_process(delta):
 
 	if lock_interaccion > 0.0:
 		lock_interaccion = max(lock_interaccion - delta, 0.0)
-
-	if lock_arrojar > 0.0:
-		lock_arrojar = max(lock_arrojar - delta, 0.0)
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
 		var cueva := get_tree().get_first_node_in_group("zona_segura")
@@ -796,13 +795,19 @@ func _controlar_ataque() -> bool:
 
 		if halcon != null:
 			if halcon.en_combate:
-				if not halcon.derrotado and not halcon.en_muerte:
+				if not halcon.derrotado and not halcon.en_muerte and lock_arrojar <= 0.0:
+					lock_arrojar = COOLDOWN_ARROJAR
 					ataques_combate += 1
 					_arrojar_en_combate()
 			elif Global.halcon_cerca and not Global.lleva_bebe:
-				var combate_halcon := get_tree().current_scene.get_node("CombateHalcon")
+				var escena_actual := get_tree().current_scene
+				var combate_halcon := escena_actual.call("obtener_combate_halcon") as CanvasLayer
+				if combate_halcon == null:
+					return false
 				combate_halcon.show()
+				combate = combate_halcon
 				ataques_combate = 0
+				lock_arrojar = 0.0
 				halcon.entrar_en_combate()
 				
 	# Mientras hay combate, Cavillaca no puede moverse.

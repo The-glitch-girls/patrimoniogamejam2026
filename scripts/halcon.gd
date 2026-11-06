@@ -59,9 +59,14 @@ var en_muerte := false
 var padre_original: Node
 var posicion_original := Vector2.ZERO
 	
-const FLASHBACK_ESCENA := preload("res://scenes/Flashback.tscn")
+const RUTA_FLASHBACK_ESCENA := "res://scenes/Flashback.tscn"
+const RUTA_TEXTURA_COMBATE := "res://assets/enemigos/halcon-pelea-idle.png"
+
+var frames_vuelo: SpriteFrames
+var frames_combate: SpriteFrames
 
 func _ready():
+	frames_vuelo = $AnimatedSprite2D.sprite_frames
 	add_to_group("halcon")
 	origen = global_position
 	inicio = global_position
@@ -344,8 +349,33 @@ func _obtener_punto_objetivo(cavillaca: Node2D) -> Vector2:
 	
 	return cavillaca.global_position
 	
+# La hoja grande exclusiva del combate se carga solo al primer encuentro.
+func _obtener_frames_combate() -> SpriteFrames:
+	if frames_combate != null:
+		return frames_combate
+
+	var textura := load(RUTA_TEXTURA_COMBATE) as Texture2D
+	if textura == null:
+		push_error("No se pudo cargar la textura de combate del halcón")
+		return null
+
+	frames_combate = SpriteFrames.new()
+	frames_combate.add_animation("frente_combate")
+	frames_combate.set_animation_loop("frente_combate", true)
+	frames_combate.set_animation_speed("frente_combate", 5.0)
+	for indice in range(6):
+		var atlas := AtlasTexture.new()
+		atlas.atlas = textura
+		atlas.region = Rect2(indice * 1024, 0, 1024, 1024)
+		frames_combate.add_frame("frente_combate", atlas)
+	return frames_combate
+
+
 # Funciones utilizadas en combate
 func entrar_en_combate():
+	var animaciones_combate := _obtener_frames_combate()
+	if animaciones_combate == null:
+		return
 	var combate := get_tree().current_scene.get_node("CombateHalcon")
 	var punto := combate.get_node("PuntoHalcon") as Node2D
 	#var punto_izquierda := combate.get_node("PuntoHalconIzquierda") as Node2D
@@ -368,7 +398,8 @@ func entrar_en_combate():
 	$Detector.monitorable = true # permite que piedra detecte al halcón.
 	
 	$AnimatedSprite2D.flip_h = false
-	$AnimatedSprite2D.play("frente")
+	$AnimatedSprite2D.sprite_frames = animaciones_combate
+	$AnimatedSprite2D.play("frente_combate")
 	
 func salir_de_combate():
 	en_combate = false
@@ -376,11 +407,14 @@ func salir_de_combate():
 	Global.halcon_cerca = false
 	Global.prompt_interaccion = ""
 	$AnimatedSprite2D.scale = escala_original
+	if frames_vuelo != null:
+		$AnimatedSprite2D.sprite_frames = frames_vuelo
 	collision_mask = 5
 	
 	if padre_original != null:
 		reparent(padre_original)
 		global_position = posicion_original
+	frames_combate = null
 	
 	$AnimatedSprite2D.play("lado")
 
@@ -465,6 +499,10 @@ func _victoria():
 		combate.hide()
 	
 	salir_de_combate()
+	if is_instance_valid(padre_original) and padre_original.has_method("liberar_combate_halcon"):
+		padre_original.call("liberar_combate_halcon", combate)
+	elif is_instance_valid(combate):
+		combate.queue_free()
 	
 	hide()
 	$Detector.set_deferred("monitoring", false)
@@ -477,7 +515,11 @@ func _victoria():
 		return
 	var indice := Global.obtener_recuerdo()
 	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
-	var flashback := FLASHBACK_ESCENA.instantiate()
+	var escena_flashback := load(RUTA_FLASHBACK_ESCENA) as PackedScene
+	if escena_flashback == null:
+		push_error("No se pudo cargar Flashback.tscn")
+		return
+	var flashback := escena_flashback.instantiate()
 	flashback.configurar(indice)
 	flashback.connect("terminado", Callable(Musica, "terminar_combate"))
 	hud.add_child(flashback)

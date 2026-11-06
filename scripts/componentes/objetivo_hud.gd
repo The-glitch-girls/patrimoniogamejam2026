@@ -123,9 +123,9 @@ func _retener_aviso() -> void:
 	# jugadora salen al momento: la tarjeta está arriba a la derecha y no los tapa.
 	if Global.aviso_combate == "" or not _es_diferible(Global.aviso_combate):
 		return
-	var texto := Global.aviso_combate
-	if not avisos_en_espera.any(func(a): return a[0] == texto):
-		avisos_en_espera.append([texto, maxf(Global.aviso_temporizador, Global.DURACION_AVISO)])
+	var aviso_pendiente := Global.aviso_combate
+	if not avisos_en_espera.any(func(a): return a[0] == aviso_pendiente):
+		avisos_en_espera.append([aviso_pendiente, maxf(Global.aviso_temporizador, Global.DURACION_AVISO)])
 	Global.aviso_combate = ""
 	Global.aviso_temporizador = 0.0
 
@@ -134,8 +134,8 @@ func _hay_dialogo() -> bool:
 	return Global.aviso_combate != "" and (hud.MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate) \
 		or hud.CONSEJOS_LORO.has(Global.aviso_combate))
 
-func _es_diferible(texto: String) -> bool:
-	return texto == Traducciones.obtener("controls_hint")
+func _es_diferible(mensaje: String) -> bool:
+	return mensaje == Traducciones.obtener("controls_hint")
 
 func _mostrar_avisos_en_espera(delta: float) -> void:
 	if avisos_en_espera.is_empty():

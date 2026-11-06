@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://bbsn6um4cd8n8"
-path="res://.godot/imported/bg.png-8bee68abf56a53806eb6351830941136.ctex"
+path.s3tc="res://.godot/imported/bg.png-8bee68abf56a53806eb6351830941136.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/tiles/bg.png"
-dest_files=["res://.godot/imported/bg.png-8bee68abf56a53806eb6351830941136.ctex"]
+dest_files=["res://.godot/imported/bg.png-8bee68abf56a53806eb6351830941136.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

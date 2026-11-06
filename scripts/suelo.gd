@@ -1,14 +1,13 @@
 extends Node2D
 
-@onready var combate_halcon = $CombateHalcon
-
+const RUTA_COMBATE_HALCON := "res://scenes/CombateHalcon.tscn"
 const MURO := Color(0.08, 0.06, 0.05, 1)
 const GROSOR_MURO := 18.0
 
 var zonas: Array[Dictionary] = []
+var combate_halcon: CanvasLayer
 
 func _ready():
-	combate_halcon.hide()
 	zonas.append({ "nombre": "Mar", "rect": Rect2(500, 820, 400, 220) })
 
 func _process(_delta):
@@ -72,5 +71,38 @@ func obtener_punto_cuniraya() -> Vector2:
 
 	return to_global(punto_local)
 	
+func obtener_combate_halcon() -> CanvasLayer:
+	if is_instance_valid(combate_halcon):
+		return combate_halcon
+
+	var escena := load(RUTA_COMBATE_HALCON) as PackedScene
+	if escena == null:
+		push_error("No se pudo cargar CombateHalcon.tscn")
+		return null
+
+	combate_halcon = escena.instantiate() as CanvasLayer
+	if combate_halcon == null:
+		push_error("CombateHalcon.tscn no contiene un CanvasLayer")
+		return null
+
+	combate_halcon.name = "CombateHalcon"
+	add_child(combate_halcon)
+	combate_halcon.hide()
+	return combate_halcon
+
+
 func mostrar_combate_halcon() -> void:
-	combate_halcon.show()
+	var combate := obtener_combate_halcon()
+	if combate != null:
+		combate.show()
+
+
+func liberar_combate_halcon(combate: CanvasLayer) -> void:
+	if not is_instance_valid(combate):
+		combate_halcon = null
+		return
+	if combate != combate_halcon:
+		push_warning("Se intentó liberar una instancia de combate que no pertenece a este suelo")
+		return
+	combate_halcon = null
+	combate.queue_free()

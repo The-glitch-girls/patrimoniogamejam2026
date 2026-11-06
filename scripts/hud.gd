@@ -5,7 +5,7 @@ const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
 const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
-const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
+const RUTA_OVERLAY_AJUSTES := "res://scenes/componentes/OverlayAjustes.tscn"
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
 const PROMPT_CARGAR := preload("res://assets/ui/botones/cargar_btn.png")
@@ -577,24 +577,28 @@ func _poner_ajustes() -> void:
 	boton.offset_right = -32
 	boton.offset_bottom = 68
 
-	overlay_ajustes = ESCENA_OVERLAY_AJUSTES.instantiate() as Control
-	overlay_ajustes.visible = false
-	overlay_ajustes.set("desde_juego", true)
-	overlay_ajustes.z_index = 101
-	overlay_ajustes.process_mode = Node.PROCESS_MODE_ALWAYS
-	overlay_ajustes.connect("cerrar", Callable(self, "_cerrar_ajustes"))
-	add_child(overlay_ajustes)
 	add_child(preload("res://scripts/componentes/menu_pausa.gd").new())
 
 
 func _alternar_ajustes() -> void:
-	if overlay_ajustes.visible:
+	if is_instance_valid(overlay_ajustes) and overlay_ajustes.visible:
 		_cerrar_ajustes()
 	else:
 		_abrir_ajustes()
 
 
 func _abrir_ajustes() -> void:
+	if not is_instance_valid(overlay_ajustes):
+		var escena := load(RUTA_OVERLAY_AJUSTES) as PackedScene
+		if escena == null:
+			push_error("No se pudo cargar OverlayAjustes.tscn")
+			return
+		overlay_ajustes = escena.instantiate() as Control
+		overlay_ajustes.set("desde_juego", true)
+		overlay_ajustes.z_index = 101
+		overlay_ajustes.process_mode = Node.PROCESS_MODE_ALWAYS
+		overlay_ajustes.connect("cerrar", Callable(self, "_cerrar_ajustes"))
+		add_child(overlay_ajustes)
 	pausa_previa_ajustes = get_tree().paused
 	get_node("BotonAjustes").visible = false
 	overlay_ajustes.visible = true
@@ -603,7 +607,8 @@ func _abrir_ajustes() -> void:
 
 func _cerrar_ajustes() -> void:
 	if is_instance_valid(overlay_ajustes):
-		overlay_ajustes.visible = false
+		overlay_ajustes.queue_free()
+		overlay_ajustes = null
 	get_node("BotonAjustes").visible = true
 	get_tree().paused = pausa_previa_ajustes
 
@@ -638,7 +643,11 @@ func _capturar_guia() -> void:
 
 
 func _capturar_flashback() -> void:
-	var flashback := preload("res://scenes/Flashback.tscn").instantiate()
+	var escena_flashback := load("res://scenes/Flashback.tscn") as PackedScene
+	if escena_flashback == null:
+		push_error("No se pudo cargar Flashback.tscn")
+		return
+	var flashback := escena_flashback.instantiate()
 	flashback.configurar(1)
 	add_child(flashback)
 	await get_tree().create_timer(0.5).timeout

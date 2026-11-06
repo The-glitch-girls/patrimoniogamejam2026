@@ -2,17 +2,20 @@ extends Control
 
 const FUENTE_TEXTO := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const COLOR_TEXTO := Color("f4e9ff")
-const IMAGEN_FINAL_MAR := preload("res://assets/cinematicas/final_mar.png")
-const AUDIO_FINAL_MAR := preload("res://sfx/final/aa_final_mar.ogg")
-const TEXTURAS_CONTINUAR := {
-	"es": preload("res://assets/ui/recuerdos/continuar_es.png"),
-	"en": preload("res://assets/ui/recuerdos/continuar_en.png"),
-	"fr": preload("res://assets/ui/recuerdos/continuar_fr.png"),
+const RUTA_IMAGEN_FINAL := {
+	"cuniraya": "res://assets/cinematicas/final_cuniraya.png",
+	"mar": "res://assets/cinematicas/final_mar.png"
 }
-const TEXTURAS_CONTINUAR_PRESIONADO := {
-	"es": preload("res://assets/ui/recuerdos/continuar_es_pressed.png"),
-	"en": preload("res://assets/ui/recuerdos/continuar_en_pressed.png"),
-	"fr": preload("res://assets/ui/recuerdos/continuar_fr_pressed.png"),
+const AUDIO_FINAL_MAR := preload("res://sfx/final/aa_final_mar.ogg")
+const RUTAS_CONTINUAR := {
+	"es": "res://assets/ui/recuerdos/continuar_es.png",
+	"en": "res://assets/ui/recuerdos/continuar_en.png",
+	"fr": "res://assets/ui/recuerdos/continuar_fr.png",
+}
+const RUTAS_CONTINUAR_PRESIONADO := {
+	"es": "res://assets/ui/recuerdos/continuar_es_pressed.png",
+	"en": "res://assets/ui/recuerdos/continuar_en_pressed.png",
+	"fr": "res://assets/ui/recuerdos/continuar_fr_pressed.png",
 }
 
 var clave_texto_final := ""
@@ -27,8 +30,8 @@ func _ready() -> void:
 	es_final_cuniraya = Global.resultado_final == "cuniraya"
 	es_final_mar = Global.resultado_final == "mar"
 	clave_texto_final = "final_cuniraya_text" if es_final_cuniraya else "final_sea_text"
-	if es_final_mar:
-		$ImagenFinal.texture = IMAGEN_FINAL_MAR
+	var clave_final := "mar" if es_final_mar else "cuniraya"
+	$ImagenFinal.texture = load(RUTA_IMAGEN_FINAL[clave_final])
 	$ImagenFinal.visible = true
 	$CajaTexto.visible = es_final_cuniraya or es_final_mar
 	_estilizar_texto_final()
@@ -89,9 +92,9 @@ func _actualizar_texto_final(_idioma: String = "") -> void:
 
 
 func _actualizar_textura_continuar(idioma: String) -> void:
-	var codigo := idioma if TEXTURAS_CONTINUAR.has(idioma) else "es"
-	$Continuar.texture_normal = TEXTURAS_CONTINUAR[codigo]
-	$Continuar.texture_pressed = TEXTURAS_CONTINUAR_PRESIONADO[codigo]
+	var codigo := idioma if RUTAS_CONTINUAR.has(idioma) else "es"
+	$Continuar.texture_normal = load(RUTAS_CONTINUAR[codigo])
+	$Continuar.texture_pressed = load(RUTAS_CONTINUAR_PRESIONADO[codigo])
 
 
 func _estilizar_texto_final() -> void:
