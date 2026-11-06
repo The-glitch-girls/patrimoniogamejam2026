@@ -31,7 +31,7 @@ const ATAQUE := preload("res://sfx/combate/piedra_lanzada.ogg")
 var FRAMES_LADO: Array[Texture2D]
 
 var animaciones_cavillaca: SpriteFrames
-var sheet_lado := preload("res://assets/person/cavillaca_lateral2.png")
+var sheet_lado := preload("res://assets/person/cavillaca_lateral.png")
 
 var energia_temporizador := 0.0
 var facing := Vector2.RIGHT

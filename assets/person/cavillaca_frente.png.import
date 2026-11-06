@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://byjw4jwu510gf"
-path="res://.godot/imported/cavillaca_frente2.png-b509837475849802f80e785e202aebfb.ctex"
+path="res://.godot/imported/cavillaca_frente.png-42b562ca0427ab2f0a602b850a33a523.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/person/cavillaca_frente2.png"
-dest_files=["res://.godot/imported/cavillaca_frente2.png-b509837475849802f80e785e202aebfb.ctex"]
+source_file="res://assets/person/cavillaca_frente.png"
+dest_files=["res://.godot/imported/cavillaca_frente.png-42b562ca0427ab2f0a602b850a33a523.ctex"]
 
 [params]
 
