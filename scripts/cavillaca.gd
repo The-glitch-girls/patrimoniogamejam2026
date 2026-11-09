@@ -38,6 +38,7 @@ var facing := Vector2.RIGHT
 var lock_interaccion := 0.0
 var lock_arrojar := 0.0
 var paso_acum := 0.0
+var jarrones_en_contacto: Array[Node2D] = []
 var mar_t := 0.0
 var cam: Camera2D
 var suelo_tiles: TileMapLayer
@@ -232,20 +233,25 @@ func _physics_process(delta):
 		lock_interaccion = max(lock_interaccion - delta, 0.0)
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
-		var cueva := get_tree().get_first_node_in_group("zona_segura")
-		var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
-
-		if Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and cueva != null:
-			if Global.lleva_bebe:
-				cueva.dejar_bebe_con_zorro()
-			elif bebe_con_zorro:
-				cueva.recoger_bebe_del_zorro()
-		elif Global.lleva_bebe:
-			_dejar_bebe()
-		elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-			pass # Hablar con el zorro se activa únicamente con F.
+		var jarron := _jarron_mas_cercano()
+		if jarron != null and not Global.lleva_bebe and Global.prompt_interaccion == "E  Recolectar":
+			if jarron.call("recolectar_piedra"):
+				Global.piedras += 1
 		else:
-			_recoger_bebe()
+			var cueva := get_tree().get_first_node_in_group("zona_segura")
+			var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
+
+			if Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and cueva != null:
+				if Global.lleva_bebe:
+					cueva.dejar_bebe_con_zorro()
+				elif bebe_con_zorro:
+					cueva.recoger_bebe_del_zorro()
+			elif Global.lleva_bebe:
+				_dejar_bebe()
+			elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
+				pass # Hablar con el zorro se activa únicamente con F.
+			else:
+				_recoger_bebe()
 
 	if Input.is_action_just_pressed("hablar_zorro") and Global.zorro_cerca:
 		var zorro := get_tree().get_first_node_in_group("zorro")
@@ -645,8 +651,30 @@ func _actualizar_prompt():
 		Global.prompt_interaccion = "E  Atacar"
 	elif Global.loro_cerca:
 		Global.prompt_interaccion = "F  Hablar con loro"
+	elif _jarron_mas_cercano() != null:
+		Global.prompt_interaccion = "E  Recolectar"
 	else:
 		Global.prompt_interaccion = ""
+
+
+func registrar_contacto_jarron(jarron: Node2D, dentro: bool) -> void:
+	if dentro:
+		if not jarrones_en_contacto.has(jarron):
+			jarrones_en_contacto.append(jarron)
+	else:
+		jarrones_en_contacto.erase(jarron)
+
+
+func _jarron_mas_cercano() -> Node2D:
+	var mas_cercano: Node2D = null
+	for jarron in jarrones_en_contacto:
+		if not is_instance_valid(jarron):
+			continue
+		if not jarron.call("puede_recolectar_piedra"):
+			continue
+		if mas_cercano == null or global_position.distance_squared_to(jarron.global_position) < global_position.distance_squared_to(mas_cercano.global_position):
+			mas_cercano = jarron
+	return mas_cercano
 
 
 func _actualizar_carga_visual():

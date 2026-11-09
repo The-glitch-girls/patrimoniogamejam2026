@@ -4,12 +4,13 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
-const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
 const RUTA_OVERLAY_AJUSTES := "res://scenes/componentes/OverlayAjustes.tscn"
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
 const PROMPT_CARGAR := preload("res://assets/ui/botones/cargar_btn.png")
 const PROMPT_CARGAR_PRESIONADO := preload("res://assets/ui/botones/cargar_btn_pressed.png")
+const PROMPT_RECOLECTAR := preload("res://assets/ui/botones/recolectar_btn.png")
+const PROMPT_RECOLECTAR_PRESIONADO := preload("res://assets/ui/botones/recolectar_btn_pressed.png")
 const PROMPT_CONVERSAR := preload("res://assets/ui/botones/conversar_btn.png")
 const PROMPT_CONVERSAR_PRESIONADO := preload("res://assets/ui/botones/conversar_btn_pressed.png")
 const PROMPT_DEJAR := preload("res://assets/ui/botones/dejar_btn.png")
@@ -61,6 +62,7 @@ var icono_presencia: TextureRect
 var barra_energia: TextureRect
 var material_relleno_energia: ShaderMaterial
 var barra_presencia_texture: TextureProgressBar
+@onready var contador_piedras: Label = $ContadorPiedras/CantidadPiedras
 var overlay_ajustes: Control
 var pausa_previa_ajustes := false
 var marcas_recuerdo: Array[Panel] = []
@@ -141,6 +143,7 @@ func _estilar_panel():
 	barra_presencia_texture = $PanelEstado/PresenciaBarTexture
 	_mostrar_presencia(true)
 	_poner_recuerdos()
+	_actualizar_contador_piedras()
 	add_child(preload("res://scripts/componentes/etiquetas_barras.gd").new())
 
 
@@ -297,7 +300,7 @@ func _tipo_prompt_con_imagen() -> String:
 		return "rest" if texto.begins_with("r ") else ""
 	if texto.contains("atacar"):
 		return "attack"
-	if texto.contains("recoger"):
+	if texto.contains("recoger") or texto.contains("recolectar"):
 		return "pickup"
 	if texto.contains("dejar") or texto.contains("deja al bebé"):
 		return "leave"
@@ -334,8 +337,13 @@ func _actualizar_prompt_visual() -> void:
 			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
 			prompt_titulo.text = Traducciones.obtener("attack")
 		"pickup":
-			prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
-			prompt_titulo.text = Traducciones.obtener("pickup")
+			var es_recolectar := Global.prompt_interaccion.to_lower().contains("recolectar")
+			if es_recolectar:
+				prompt_icono.texture = PROMPT_RECOLECTAR_PRESIONADO if presionado else PROMPT_RECOLECTAR
+			else:
+				prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
+			var clave_recogida := "collect" if es_recolectar else "pickup"
+			prompt_titulo.text = Traducciones.obtener(clave_recogida)
 		"converse":
 			prompt_icono.texture = PROMPT_CONVERSAR_PRESIONADO if presionado else PROMPT_CONVERSAR
 			prompt_titulo.text = Traducciones.obtener("converse_action")
@@ -365,15 +373,12 @@ func _mostrar_presencia(es_visible: bool) -> void:
 
 
 func _poner_recuerdos() -> void:
-	var recuerdos_container := $RecuerdosContainer
-	recuerdos_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	var viewport_size := get_viewport().get_visible_rect().size
-
-	recuerdos_container.position = Vector2(
-		viewport_size.x - 320,
-		20
-	)
 	add_child(preload("res://scripts/componentes/objetivo_hud.gd").new())
+
+
+func _actualizar_contador_piedras() -> void:
+	if is_instance_valid(contador_piedras):
+		contador_piedras.text = "× %d" % Global.piedras
 
 func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -561,22 +566,7 @@ func _borde_de(origen: Vector2, destino: Vector2, zona: Rect2) -> Vector2:
 
 
 func _poner_ajustes() -> void:
-	var boton := BotonCirculo.new()
-	boton.name = "BotonAjustes"
-	boton.color_fondo = VERDE_ARBOL
-	boton.icono = ICONO_AJUSTES
-	boton.tamano = 48.0
-	boton.ancho_borde = 3
-	boton.color_borde = BORDE_ENERGIA
-	boton.z_index = 100
-	boton.pressed.connect(_alternar_ajustes)
-	add_child(boton)
-	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	boton.offset_left = -84
-	boton.offset_top = 26
-	boton.offset_right = -32
-	boton.offset_bottom = 68
-
+	$BotonAjustes.pressed.connect(_alternar_ajustes)
 	add_child(preload("res://scripts/componentes/menu_pausa.gd").new())
 
 
@@ -660,6 +650,7 @@ func _process(delta):
 	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
 	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
 	barra_presencia_texture.value = Global.presencia_cuniraya
+	_actualizar_contador_piedras()
 	_actualizar_recuerdos()
 	_actualizar_guia_bebe(delta)
 	_actualizar_guia_cueva(delta)

@@ -87,6 +87,7 @@ var controles_mostrados: bool = false
 
 # Sistema de Recuerdos
 var recuerdos_obtenidos: int = 0
+var piedras: int = 0
 const RECUERDOS_TOTALES: int = 3
 const RECUERDOS := {
 	1: {
@@ -253,6 +254,7 @@ func resetear():
 	descanso_con_zorro = false
 	cuidado_bebe_desbloqueado = false
 	recuerdos_obtenidos = 0
+	piedras = 0
 	aviso_temporizador = 0.0
 	partida_terminada = false
 	hacia_el_mar = false

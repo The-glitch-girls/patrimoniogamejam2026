@@ -1,3 +1,4 @@
+@tool
 class_name BotonCirculo
 extends Control
 
@@ -24,6 +25,7 @@ func _ready() -> void:
 	pivot_offset = Vector2(tamano * 0.5, tamano * 0.5)
 	_fase = randf() * TAU
 	_armar()
+	set_process(not Engine.is_editor_hint())
 
 
 func _armar() -> void:
