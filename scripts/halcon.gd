@@ -510,7 +510,6 @@ func _victoria():
 
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
 		Musica.terminar_combate()
-		Global.mostrar_aviso("Victoria")
 		respawn_t = TIEMPO_RESPAWN
 		return
 	var indice := Global.obtener_recuerdo()

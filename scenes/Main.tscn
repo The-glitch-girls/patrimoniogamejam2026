@@ -81,51 +81,8 @@ z_index = 10
 offset_left = 16.0
 offset_top = 16.0
 offset_right = 428.0
-offset_bottom = 252.0
+offset_bottom = 131.0
 mouse_filter = 2
-
-[node name="Encabezado" type="Panel" parent="HUD/PanelEstado"]
-layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 408.0
-offset_bottom = 44.0
-mouse_filter = 2
-
-[node name="Titulo" type="Label" parent="HUD/PanelEstado/Encabezado"]
-layout_mode = 0
-offset_left = 16.0
-offset_top = 6.0
-offset_right = 388.0
-offset_bottom = 34.0
-text = "ESTADO"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Label" type="Label" parent="HUD/PanelEstado"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 56.0
-offset_right = 160.0
-offset_bottom = 79.0
-text = "ENERGIA"
-
-[node name="EnergiaBar" type="ProgressBar" parent="HUD/PanelEstado"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 80.0
-offset_right = 392.0
-offset_bottom = 98.0
-value = 100.0
-show_percentage = false
-
-[node name="PresenciaLabel" type="Label" parent="HUD/PanelEstado"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 106.0
-offset_right = 160.0
-offset_bottom = 129.0
-text = "PRESENCIA"
 
 [node name="PresenciaBarTexture" type="TextureProgressBar" parent="HUD/PanelEstado"]
 layout_mode = 0
@@ -147,22 +104,6 @@ mouse_filter = 2
 texture = ExtResource("27_presence_icon")
 expand_mode = 1
 stretch_mode = 5
-
-[node name="TiempoLabel" type="Label" parent="HUD/PanelEstado"]
-layout_mode = 0
-offset_left = 20.0
-offset_top = 164.0
-offset_right = 200.0
-offset_bottom = 187.0
-text = "Tiempo  0 s"
-
-[node name="BebeLabel" type="Label" parent="HUD/PanelEstado"]
-layout_mode = 0
-offset_left = 210.0
-offset_top = 164.0
-offset_right = 392.0
-offset_bottom = 187.0
-text = "Bebe  en el suelo"
 
 [node name="PromptFondo" type="Panel" parent="HUD"]
 z_index = 10
@@ -215,11 +156,6 @@ offset_bottom = 72.0
 text = "Victoria"
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="PresenciaLabel" type="Label" parent="HUD"]
-visible = false
-offset_right = 40.0
-offset_bottom = 23.0
 
 [node name="PeakTension" type="AudioStreamPlayer2D" parent="HUD"]
 stream = ExtResource("14_5vhjm")

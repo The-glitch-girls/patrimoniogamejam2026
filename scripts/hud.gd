@@ -127,17 +127,16 @@ func _mostrar_controles_una_vez() -> void:
 func _estilar_panel():
 	$PanelEstado.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	$PanelEstado.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for nodo in [
-		$PanelEstado/Encabezado,
-		$PanelEstado/Label,
-		$PanelEstado/PresenciaLabel,
-		$PanelEstado/TiempoLabel,
-		$PanelEstado/BebeLabel,
-	]:
-		nodo.visible = false
-	if has_node("PresenciaLabel"):
-		$PresenciaLabel.visible = false
-	$PanelEstado/EnergiaBar.hide()
+	for nombre in ["Encabezado", "Label", "PresenciaLabel", "TiempoLabel", "BebeLabel"]:
+		var nodo := $PanelEstado.get_node_or_null(nombre)
+		if nodo is CanvasItem:
+			nodo.hide()
+	var barra_antigua := $PanelEstado.get_node_or_null("EnergiaBar")
+	if barra_antigua is CanvasItem:
+		barra_antigua.hide()
+	var presencia_antigua := get_node_or_null("PresenciaLabel")
+	if presencia_antigua is CanvasItem:
+		presencia_antigua.hide()
 	_configurar_barra_energia()
 	icono_presencia = $PanelEstado/PresenciaIcono
 	barra_presencia_texture = $PanelEstado/PresenciaBarTexture
@@ -429,44 +428,6 @@ func _ajustar_banner_aviso() -> void:
 	label.offset_bottom = label.offset_top + alto_texto
 
 
-func _ajustar_banner_consejo() -> void:
-	var label := $AvisoLabel as Label
-	var fondo := $AvisoFondo as Panel
-	label.add_theme_font_size_override("font_size", 22)
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	var tamano_fuente := label.get_theme_font_size("font_size")
-	var fuente := label.get_theme_font("font")
-	var ancho_texto := fuente.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano_fuente).x
-	var ancho_vista := get_viewport().get_visible_rect().size.x
-	var ancho_maximo := maxf(280.0, ancho_vista - 120.0)
-	var ancho_banner := minf(maxf(ancho_texto + 320.0, 560.0), ancho_maximo)
-	var ancho_label := ancho_banner - 112.0
-	var alto_texto := fuente.get_multiline_string_size(label.text, HORIZONTAL_ALIGNMENT_CENTER, ancho_label, tamano_fuente).y
-	var alto_banner := maxf(alto_texto + 48.0, 96.0)
-
-	fondo.anchor_left = 0.5
-	fondo.anchor_right = 0.5
-	fondo.anchor_top = 0.32
-	fondo.anchor_bottom = 0.32
-	fondo.offset_left = -ancho_banner * 0.5
-	fondo.offset_right = ancho_banner * 0.5
-	fondo.offset_top = -alto_banner * 0.5
-	fondo.offset_bottom = alto_banner * 0.5
-	label.anchor_left = 0.5
-	label.anchor_right = 0.5
-	label.anchor_top = 0.32
-	label.anchor_bottom = 0.32
-	label.offset_left = -ancho_label * 0.5
-	label.offset_right = ancho_label * 0.5
-	label.offset_top = -alto_banner * 0.5 + 16.0
-	label.offset_bottom = alto_banner * 0.5 - 16.0
-	_actualizar_ornamentos_aviso(ancho_banner, alto_banner)
-	for linea in ornamentos_aviso:
-		linea.visible = true
-
-
 func _crear_ornamentos_aviso() -> void:
 	for _indice in range(4):
 		var linea := Line2D.new()
@@ -499,16 +460,6 @@ func _actualizar_ornamentos_aviso(ancho: float, alto: float) -> void:
 		Vector2(ancho, 2.0), Vector2(ancho + 20.0, 13.0),
 		Vector2(ancho + 28.0, 25.0), Vector2(ancho + 26.0, 34.0),
 	])
-
-
-func _estilar_banner_consejo() -> void:
-	var caja := StyleBoxFlat.new()
-	caja.bg_color = Color(0.035, 0.03, 0.085, 0.78)
-	caja.set_corner_radius_all(48)
-	caja.shadow_color = Color(0.0, 0.0, 0.0, 0.28)
-	caja.shadow_size = 10
-	caja.shadow_offset = Vector2(0, 4)
-	$AvisoFondo.add_theme_stylebox_override("panel", caja)
 
 
 func _posicionar_aviso_descanso(es_descanso: bool) -> void:
@@ -680,8 +631,7 @@ func _process(delta):
 
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
-	var es_consejo_loro := CONSEJOS_LORO.has(Global.aviso_combate)
-	var usar_caja_dialogo := es_dialogo_zorro or es_consejo_loro
+	var usar_caja_dialogo := es_dialogo_zorro or CONSEJOS_LORO.has(Global.aviso_combate)
 	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
 	var mostrar_aviso_normal := hay_aviso and not usar_caja_dialogo
 	var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
@@ -694,20 +644,14 @@ func _process(delta):
 		dialogo_zorro_texto.text = texto_aviso
 		aviso_visible_actual = ""
 	if mostrar_aviso_normal:
-		if es_consejo_loro:
-			if texto_aviso != aviso_visible_actual:
-				aviso_visible_actual = texto_aviso
-				_ajustar_banner_consejo()
-				_estilar_banner_consejo()
-		else:
-			aviso_visible_actual = texto_aviso
-			$AvisoLabel.add_theme_font_size_override("font_size", 18)
-			for linea in ornamentos_aviso:
-				linea.visible = false
-			_posicionar_aviso_descanso(es_aviso_descanso)
-			_ajustar_banner_aviso()
-			var color_aviso := VERDE if Global.aviso_combate == "Victoria" else Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
-			_estilar_pildora($AvisoFondo, color_aviso)
+		aviso_visible_actual = texto_aviso
+		$AvisoLabel.add_theme_font_size_override("font_size", 18)
+		for linea in ornamentos_aviso:
+			linea.visible = false
+		_posicionar_aviso_descanso(es_aviso_descanso)
+		_ajustar_banner_aviso()
+		var color_aviso := Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
+		_estilar_pildora($AvisoFondo, color_aviso)
 	else:
 		aviso_visible_actual = ""
 
