@@ -1,7 +1,7 @@
 extends Node
 
 # Registro temporal para localizar cierres por memoria en escritorio y navegador.
-const INTERVALO := 2.0
+const INTERVALO := 5.0
 const UMBRAL_CAMBIO_TEXTURA_MIB := 1.0
 const RUTA_LOG := "user://diagnostico/navegador_memoria.jsonl"
 const CLAVE_LOG_NAVEGADOR := "manchari_diagnostico_v1"
@@ -10,7 +10,7 @@ var _acumulado := 0.0
 var _archivo: FileAccess
 var _ultima_escena := ""
 var _ultima_textura_mib := -1.0
-var _activo := false
+var _muestras_sin_guardar := 0
 var _inicio_msec := 0
 var _rutas_candidatas_textura := PackedStringArray()
 var _actualizacion_panel := 0.0
@@ -20,9 +20,8 @@ var _texto_panel: Label
 
 
 func _ready() -> void:
-	_activo = OS.has_feature("web") or OS.is_debug_build()
-	if not _activo:
-		set_process(false)
+	if not OS.is_debug_build():
+		queue_free()
 		return
 	_inicio_msec = Time.get_ticks_msec()
 	_listar_texturas_del_proyecto("res://assets")
@@ -43,10 +42,13 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_actualizacion_panel += delta
-	if _actualizacion_panel >= 1.0:
+	if is_instance_valid(_panel) and _panel.visible:
+		_actualizacion_panel += delta
+		if _actualizacion_panel >= 1.0:
+			_actualizacion_panel = 0.0
+			_actualizar_panel_diagnostico()
+	else:
 		_actualizacion_panel = 0.0
-		_actualizar_panel_diagnostico()
 	var escena_actual := _ruta_escena_actual()
 	if not escena_actual.is_empty() and escena_actual != _ultima_escena:
 		_ultima_escena = escena_actual
@@ -123,8 +125,12 @@ func _registrar(motivo: String, incluir_detalle: bool) -> void:
 	else:
 		if _archivo != null:
 			_archivo.store_line(linea)
-			_archivo.flush()
-	print("[MonitorEscenas] ", linea)
+			_muestras_sin_guardar += 1
+			if motivo != "muestra" or _muestras_sin_guardar >= 3:
+				_archivo.flush()
+				_muestras_sin_guardar = 0
+	if motivo != "muestra":
+		print("[MonitorEscenas] ", linea)
 
 
 func _memoria_mib(monitor: int) -> float:
@@ -343,7 +349,6 @@ func _crear_interfaz_diagnostico() -> void:
 	_texto_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_texto_panel.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	desplazamiento.add_child(_texto_panel)
-	_actualizar_panel_diagnostico()
 
 
 func _alternar_panel_diagnostico() -> void:

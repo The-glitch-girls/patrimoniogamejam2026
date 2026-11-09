@@ -215,6 +215,7 @@ anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
 [node name="recuerdos_x" type="TextureRect" parent="HUD/RecuerdosContainer"]
+visible = false
 layout_mode = 0
 offset_left = 124.0
 offset_top = 20.0
