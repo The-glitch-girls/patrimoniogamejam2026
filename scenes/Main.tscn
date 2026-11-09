@@ -48,7 +48,7 @@ script = ExtResource("5_j0k1a")
 position = Vector2(1088, -1000)
 
 [node name="Halcon" parent="." instance=ExtResource("7_v2keh")]
-z_index = 1
+z_index = 5
 position = Vector2(1088, -1920)
 scale = Vector2(1.5, 1.5)
 

@@ -294,7 +294,7 @@ func _physics_process(delta):
 	_limitar_movimiento_al_suelo(delta)
 	move_and_slide()
 	
-	# El suelo vive en z negativo. La Y del mapa tambien, asi que no se puede usar como z.
+	# Main usa Y-sort para ordenar personajes y animales según el punto de apoyo.
 	z_index = 0
 
 	if cam.global_position.y <= cam.limit_top:

@@ -16,6 +16,7 @@ func _ready():
 func _process(delta):
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	if Global.lleva_bebe:
+		z_index = 1
 		_seguir_carga(cavillaca, delta)
 		return
 
@@ -34,6 +35,7 @@ func _process(delta):
 
 func recoger():
 	_sonar_accion(SFX_RECOGER)
+	$CollisionShape2D.set_deferred("disabled", true)
 	Global.lleva_bebe = true
 	llorando = false
 	$AnimatedSprite2D.play("normal")
