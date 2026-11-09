@@ -289,7 +289,7 @@ func _physics_process(delta):
 	move_and_slide()
 	
 	# El suelo vive en z negativo. La Y del mapa tambien, asi que no se puede usar como z.
-	z_index = 1
+	z_index = 0
 
 	if cam.global_position.y <= cam.limit_top:
 		global_position.y = min(global_position.y, cam.global_position.y)

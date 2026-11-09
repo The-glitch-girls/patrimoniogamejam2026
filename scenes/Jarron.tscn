@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://d1wp73jw5hqis"]
+
+[ext_resource type="Texture2D" uid="uid://b1qtkbgolc2co" path="res://assets/tiles/jarron1.png" id="1_jarron"]
+[ext_resource type="Script" path="res://scripts/jarron.gd" id="2_script"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_cilda"]
+height = 54.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_jarron"]
+radius = 42.0119
+
+[node name="Jarron" type="StaticBody2D"]
+collision_mask = 0
+script = ExtResource("2_script")
+imagen = ExtResource("1_jarron")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.11, 0.11)
+texture = ExtResource("1_jarron")
+
+[node name="CollisionPico" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -22)
+shape = SubResource("CapsuleShape2D_cilda")
+
+[node name="CollisionCuerpo" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 28)
+shape = SubResource("CircleShape2D_jarron")
