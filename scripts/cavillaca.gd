@@ -60,8 +60,6 @@ func _ready():
 	_aplicar_animaciones_cargadas()
 
 	$Sprite.scale = Vector2(0.215, 0.215)
-	$Sprite.position.y = 0
-	$CollisionShape2D.position.y = 60
 	suelo_tiles = get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
 	
 	cam = Camera2D.new()

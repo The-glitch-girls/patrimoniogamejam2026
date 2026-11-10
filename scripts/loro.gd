@@ -4,6 +4,7 @@ const DURACION_HABLA := 2.2
 const ESCALA_SPRITE := Vector2(0.12, 0.12)
 const CAPA_COLISION_SOLIDA := 4
 const MASCARA_COLISION_SOLIDA := 1
+# Referencias desde el origen de cada personaje hasta sus pies; solo orden visual (Z), no colisión.
 const OFFSET_PIES_CAVILLACA_Y := 103.0
 const OFFSET_PIES_LORO_Y := 49.0
 const RANGO_ORDEN_X := 90.0
