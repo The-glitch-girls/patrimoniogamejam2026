@@ -59,7 +59,6 @@ func _ready():
 	_armar_sprite()
 	_aplicar_animaciones_cargadas()
 
-	$Sprite.scale = Vector2(0.215, 0.215)
 	suelo_tiles = get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
 	
 	cam = Camera2D.new()

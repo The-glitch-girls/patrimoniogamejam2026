@@ -5,7 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://yjwv7vn5gi6k" path="res://sfx/animales/loro/aa_loro1.ogg" id="3_mv6f4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_deteccion_loro"]
-radius = 52.2398
+radius = 59.0
 
 [node name="Loro" type="StaticBody2D"]
 collision_layer = 4
@@ -26,7 +26,7 @@ frame_progress = 0.879892
 collision_layer = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Deteccion"]
-position = Vector2(0, -5)
+position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_deteccion_loro")
 
 [node name="SonidoMensaje" type="AudioStreamPlayer2D" parent="."]

@@ -15,9 +15,10 @@ shape = SubResource("RectangleShape2D_th60e")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 4
+scale = Vector2(0.215, 0.215)
 sprite_frames = ExtResource("1_werjt")
 animation = &"lado_bebe"
 frame_progress = 0.449417
 
 [node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
-position = Vector2(0, -265)
+position = Vector2(0, -80)
