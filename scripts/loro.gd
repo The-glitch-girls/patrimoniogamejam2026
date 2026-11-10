@@ -1,7 +1,5 @@
 extends StaticBody2D
 
-const DURACION_HABLA := 2.2
-const ESCALA_SPRITE := Vector2(0.12, 0.12)
 const CAPA_COLISION_SOLIDA := 4
 const MASCARA_COLISION_SOLIDA := 1
 # Referencias desde el origen de cada personaje hasta sus pies; solo orden visual (Z), no colisión.
@@ -15,13 +13,19 @@ const AUDIOS_MENSAJE: Array[AudioStream] = [
 	preload("res://sfx/animales/loro/aa_loro3.ogg"),
 ]
 
+var indice_audio_mensaje := 0
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var deteccion: Area2D = $Deteccion
+@onready var deteccion: Area2D = $RangoHablar
 @onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
+# diff
 var tiempo_hablando := 0.0
 var ya_hablo := false
 
+const DURACION_HABLA := 2.2
+const ESCALA_SPRITE := Vector2(0.12, 0.12)
+# end diff 
 
 func _ready() -> void:
 	add_to_group("loro")

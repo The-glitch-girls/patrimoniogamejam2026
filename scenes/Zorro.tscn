@@ -22,7 +22,7 @@ polygon = PackedVector2Array(-15, 26, -11, 26, -12, 20, -6, 5, -3, 6, 4, 25, 10,
 position = Vector2(0, 6)
 shape = SubResource("RectangleShape2D_pies")
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 scale = Vector2(0.16, 0.16)
 sprite_frames = ExtResource("2_fn83u")

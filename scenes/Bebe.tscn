@@ -4,8 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://vsyqxkgaf3nq" path="res://assets/person/bebe_llorando.png" id="2_kvb4v"]
 [ext_resource type="Texture2D" uid="uid://cy6sss6gmw5gh" path="res://assets/person/bebe_normal.png" id="3_inh41"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_inh41"]
-size = Vector2(2420, 340)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_colision_bebe"]
+size = Vector2(120, 36)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xoaaa"]
 atlas = ExtResource("2_kvb4v")
@@ -90,26 +90,20 @@ animations = [{
 }]
 
 [node name="Bebe" type="StaticBody2D"]
-scale = Vector2(0.05, 0.05)
+collision_layer = 4
 script = ExtResource("1_script")
 
-[node name="Sombra" type="ColorRect" parent="."]
-z_index = -1
-offset_left = -11.0
-offset_top = 8.0
-offset_right = 11.0
-offset_bottom = 14.0
-mouse_filter = 2
-color = Color(0, 0, 0, 0.3)
+[node name="ColisionCuerpo" type="CollisionPolygon2D" parent="."]
+scale = Vector2(67.366, -554.044)
+polygon = PackedVector2Array(-0.385951, 0.0108295, -0.564083, -0.00902456, -0.578927, -0.0234638, -0.697681, -0.0324884, -0.771903, -0.0360982, -0.875813, -0.041513, -0.875813, -0.0487326, -0.72737, -0.0559523, -0.504706, -0.0595621, -0.400796, -0.061367, -0.282041, -0.0523424, -0.118754, -0.0559523, 0, -0.0541473, 0.0593771, -0.041513, 0.0890657, -0.0487326, 0.296886, -0.0541473, 0.31173, -0.0379031, 0.489861, -0.0379031, 0.682837, -0.0379031, 0.816436, -0.0397081, 0.964879, -0.041513, 0.994567, -0.0288786, 0.757059, -0.00902456, 0.578927, -0.0162442, 0.445329, 0, 0.578927, 0.0451228, 0.31173, 0.0776112, 0.148443, 0.0830259, -0.118754, 0.0721965, -0.267197, 0.0595621, -0.296886, 0.0379031)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(50, 470)
-scale = Vector2(0.999999, 0.999999)
-shape = SubResource("RectangleShape2D_inh41")
+[node name="BloqueoPies" type="CollisionShape2D" parent="."]
+position = Vector2(1, 48)
+shape = SubResource("RectangleShape2D_colision_bebe")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-position = Vector2(20, -100)
-scale = Vector2(4, 4)
+position = Vector2(1, -5)
+scale = Vector2(0.2, 0.2)
 sprite_frames = SubResource("SpriteFrames_inh41")
 animation = &"llorando"
 frame_progress = 0.752481

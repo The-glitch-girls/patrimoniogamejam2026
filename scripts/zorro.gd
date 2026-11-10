@@ -12,9 +12,10 @@ const AUDIOS_MENSAJE: Array[AudioStream] = [
 	preload("res://sfx/animales/zorro/aa_zorro2.ogg"),
 	preload("res://sfx/animales/zorro/aa_zorro3.ogg"),
 ]
+
 var indice_audio_mensaje := 0
 
-@onready var sprite: AnimatedSprite2D = $Sprite
+@onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var deteccion: Area2D = $RangoHablar
 @onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
@@ -26,9 +27,9 @@ func _ready() -> void:
 	collision_mask = MASCARA_COLISION_SOLIDA
 	deteccion.body_entered.connect(_on_body_entered)
 	deteccion.body_exited.connect(_on_body_exited)
-	sprite.flip_h = false
-	sprite.animation_finished.connect(_al_terminar_animacion)
-	sprite.play("idle")
+	animated_sprite.flip_h = false
+	animated_sprite.animation_finished.connect(_al_terminar_animacion)
+	animated_sprite.play("idle")
 
 
 func _process(_delta: float) -> void:
@@ -38,7 +39,7 @@ func _process(_delta: float) -> void:
 func _actualizar_orden_visual() -> void:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	if cavillaca == null:
-		sprite.z_index = 0
+		animated_sprite.z_index = 0
 		return
 
 	var diferencia := cavillaca.global_position - global_position
@@ -47,18 +48,18 @@ func _actualizar_orden_visual() -> void:
 		and absf(diferencia.y) < RANGO_ORDEN_Y
 	)
 	if not se_solapan:
-		sprite.z_index = 0
+		animated_sprite.z_index = 0
 		return
 
 	var pies_cavillaca_y := cavillaca.global_position.y + OFFSET_PIES_CAVILLACA_Y
 	var pies_zorro_y := global_position.y + OFFSET_PIES_ZORRO_Y
 	# Godot dibuja un z_index mayor delante. Si Cavillaca está más abajo,
 	# el zorro queda detrás; si está más arriba, el zorro queda delante.
-	sprite.z_index = 1 if pies_cavillaca_y < pies_zorro_y else -1
+	animated_sprite.z_index = 1 if pies_cavillaca_y < pies_zorro_y else -1
 
 
 func hablar() -> void:
-	sprite.play("talk")
+	animated_sprite.play("talk")
 	if Global.recuerdos_obtenidos == 0:
 		Global.mostrar_aviso("Con un recuerdo, la cueva recarga tu energía")
 	elif Global.recuerdos_obtenidos == 1:
@@ -75,8 +76,8 @@ func reproducir_sonido_mensaje() -> void:
 	indice_audio_mensaje = (indice_audio_mensaje + 1) % AUDIOS_MENSAJE.size()
 
 func _al_terminar_animacion() -> void:
-	if sprite.animation == "talk":
-		sprite.play("idle")
+	if animated_sprite.animation == "talk":
+		animated_sprite.play("idle")
 
 
 func _on_body_entered(body: Node2D) -> void:

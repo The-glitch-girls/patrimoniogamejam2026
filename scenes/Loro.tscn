@@ -11,7 +11,7 @@ radius = 59.0
 collision_layer = 4
 script = ExtResource("2_loro")
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
+[node name="ColisionCuerpo" type="CollisionPolygon2D" parent="."]
 position = Vector2(-1, 2)
 build_mode = 1
 polygon = PackedVector2Array(-7, -13, -4, -9, 0, -6, 4, -3, 7, 1, 17, 11, 28, 15, 43, 21, 47, 23, 48, 27, 39, 31, 29, 33, 18, 33, 6, 30, 1, 32, -6, 39, -11, 41, -17, 41, -22, 39, -21, 33, -18, 30, -23, 29, -27, 34, -31, 36, -38, 36, -42, 33, -41, 28, -36, 25, -38, 17, -41, 7, -41, -2, -40, -7, -44, -12, -46, -19, -44, -26, -42, -33, -32, -37, -22, -37, -16, -34, -12, -29, -8, -20, -8, -16)
@@ -22,10 +22,10 @@ sprite_frames = ExtResource("1_5jmam")
 animation = &"idle"
 frame_progress = 0.879892
 
-[node name="Deteccion" type="Area2D" parent="."]
+[node name="RangoHablar" type="Area2D" parent="."]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Deteccion"]
+[node name="RadioInteraccion" type="CollisionShape2D" parent="RangoHablar"]
 position = Vector2(-1, 0)
 shape = SubResource("CircleShape2D_deteccion_loro")
 
