@@ -46,7 +46,7 @@ const LILA := Color(0.67, 0.62, 0.93, 1)
 const DORADO := Color(0.86, 0.7, 0.2, 1)
 const BORDO := Color(0.62, 0.24, 0.36, 1)
 const AZUL_GUIA := Color(0.31, 0.53, 0.82, 1)
-const MORADO_GUIA := Color(0.48, 0.36, 0.72, 1)
+const COLOR_GUIA_ZORRO := Color(0.78, 0.33, 0.92, 1)
 const VERDE_ARBOL := Color(0.16, 0.49, 0.49, 1)
 const BORDE_ENERGIA := Color(0.9, 0.84, 1.0, 1)
 
@@ -61,6 +61,7 @@ var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var barra_energia: TextureRect
 var material_relleno_energia: ShaderMaterial
+var etiqueta_energia_debug: Label
 var barra_presencia_texture: TextureProgressBar
 @onready var contador_piedras: Label = $ContadorPiedras/CantidadPiedras
 var overlay_ajustes: Control
@@ -167,7 +168,12 @@ func _configurar_barra_energia() -> void:
 		vec4 color = texture(TEXTURE, UV);
 		float diferencia_morada = min(color.r - color.g, color.b - color.g);
 		color.a *= smoothstep(0.06, 0.2, diferencia_morada);
-		if (UV.x > porcentaje) {
+		// El relleno de la barra empieza después del adorno circular, no en UV.x = 0.
+		// Remapear el porcentaje a la pista real hace visibles también los valores bajos.
+		float inicio_barra = 0.13;
+		float fin_barra = 0.88;
+		float limite_relleno = mix(inicio_barra, fin_barra, porcentaje);
+		if (UV.x > limite_relleno) {
 			color.a = 0.0;
 		}
 		COLOR = color;
@@ -185,6 +191,18 @@ func _configurar_barra_energia() -> void:
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	contenedor.add_child(marco)
+
+	# Valor real para depurar casos en que la barra parece vacía antes de llegar a 0.
+	etiqueta_energia_debug = Label.new()
+	etiqueta_energia_debug.name = "EnergiaDebug"
+	etiqueta_energia_debug.position = Vector2(270, 20)
+	etiqueta_energia_debug.size = Vector2(138, 32)
+	etiqueta_energia_debug.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	etiqueta_energia_debug.add_theme_font_override("font", FUENTE)
+	etiqueta_energia_debug.add_theme_font_size_override("font_size", 16)
+	etiqueta_energia_debug.add_theme_color_override("font_color", CREMA)
+	etiqueta_energia_debug.visible = OS.is_debug_build()
+	$PanelEstado.add_child(etiqueta_energia_debug)
 
 func _circulo(color: Color, radio: int = 36) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -600,6 +618,8 @@ func _capturar_flashback() -> void:
 func _process(delta):
 	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
 	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
+	if etiqueta_energia_debug != null:
+		etiqueta_energia_debug.text = "%.2f / %.0f" % [Global.energia, Global.ENERGIA_MAX]
 	barra_presencia_texture.value = Global.presencia_cuniraya
 	_actualizar_contador_piedras()
 	_actualizar_recuerdos()
@@ -715,7 +735,7 @@ func _poner_guia_cueva() -> void:
 	guia_cueva = GuiaNavegacion.new()
 
 	guia_cueva.configurar(
-		_tarjeta(MORADO_GUIA, 22),
+		_tarjeta(COLOR_GUIA_ZORRO, 22),
 		Traducciones.obtener("cave"),
 		Vector2(150, 44),
 		FUENTE,
