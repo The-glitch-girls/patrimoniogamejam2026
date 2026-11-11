@@ -64,24 +64,45 @@ func recoger() -> void:
 	sprite.play("normal")
 
 
-func dejar(_posicion: Vector2) -> void:
+func dejar(_posicion: Vector2) -> bool:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	
 	if cavillaca == null:
-		return
+		return false
 
-	_sonar_accion(SFX_DEJAR)
 	# Usa la posición frontal solicitada por Cavillaca. Al dejarlo hacia abajo,
 	# lo aleja un poco más para que su nueva colisión no aparezca dentro del jugador.
 	var destino := _posicion
 	if cavillaca.facing.y > 0.0:
 		destino += Vector2.DOWN * 72.0
+	if not _hay_suelo_suficiente(destino):
+		return false
+
+	_sonar_accion(SFX_DEJAR)
 	global_position = destino
 
 	Global.lleva_bebe = false
 	sprite.position = Vector2(0, -14)
 	sprite.modulate = Color.WHITE
 	_sincronizar_colisiones()
+	return true
+
+
+func _hay_suelo_suficiente(posicion_bebe: Vector2) -> bool:
+	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	if suelo == null:
+		return false
+
+	# Comprueba la huella de los pies, no solo el centro del bebé, para que no
+	# pueda quedar parcialmente suspendido en el borde de un hueco.
+	var centro_pies := posicion_bebe + Vector2(0.0, OFFSET_PIES_BEBE_Y)
+	for desplazamiento_y in [-10.0, 0.0, 10.0]:
+		for desplazamiento_x in [-48.0, -24.0, 0.0, 24.0, 48.0]:
+			var punto_global := centro_pies + Vector2(desplazamiento_x, desplazamiento_y)
+			var celda := suelo.local_to_map(suelo.to_local(punto_global))
+			if suelo.get_cell_source_id(celda) == -1:
+				return false
+	return true
 
 
 func _sincronizar_colisiones() -> void:

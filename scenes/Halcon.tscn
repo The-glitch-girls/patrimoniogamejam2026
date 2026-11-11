@@ -159,7 +159,7 @@ animations = [{
 
 [node name="Halcon" type="CharacterBody2D"]
 collision_layer = 0
-collision_mask = 5
+collision_mask = 7
 motion_mode = 1
 script = ExtResource("1_script")
 

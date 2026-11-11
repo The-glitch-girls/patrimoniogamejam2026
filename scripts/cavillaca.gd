@@ -701,7 +701,9 @@ func _dejar_bebe():
 	var bebe := _obtener_bebe()
 	if bebe == null:
 		return
-	bebe.dejar(global_position + facing * DISTANCIA_DEJAR)
+	if not bebe.dejar(global_position + facing * DISTANCIA_DEJAR):
+		Global.mostrar_aviso("No hay suelo suficiente para dejar al bebé aquí")
+		return
 	Global.lleva_bebe = false
 	cambiar_sprite_bebe(false)
 	
