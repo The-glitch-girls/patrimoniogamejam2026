@@ -42,6 +42,8 @@ var jarrones_en_contacto: Array[Node2D] = []
 var mar_t := 0.0
 var cam: Camera2D
 var suelo_tiles: TileMapLayer
+var suelo_nuevo: TileMapLayer
+var ultima_colision_reportada := ""
 var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
@@ -59,7 +61,9 @@ func _ready():
 	_armar_sprite()
 	_aplicar_animaciones_cargadas()
 
-	suelo_tiles = get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	var escena := get_tree().current_scene
+	suelo_tiles = escena.get_node_or_null("SueloTiles") as TileMapLayer
+	suelo_nuevo = escena.get_node_or_null("Capas/Suelo") as TileMapLayer
 	
 	cam = Camera2D.new()
 	cam.zoom = Vector2(1.0, 1.0)
@@ -71,26 +75,37 @@ func _ready():
 
 
 func _configurar_limites_camara() -> void:
-	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
-	if suelo == null or suelo.tile_set == null:
-		return
+	# El mapa nuevo puede extenderse más allá del TileMap antiguo, que se conserva
+	# solo como referencia. Usa la unión de ambos para que el límite de cámara no
+	# corte el seguimiento al llegar al borde de la capa vieja.
+	var limites_inicio := Vector2(INF, INF)
+	var limites_fin := Vector2(-INF, -INF)
+	var hay_limites := false
+	for suelo: TileMapLayer in [suelo_tiles, suelo_nuevo]:
+		if suelo == null or suelo.tile_set == null:
+			continue
+		var celdas := suelo.get_used_rect()
+		if celdas.size == Vector2i.ZERO:
+			continue
+		if suelo == suelo_tiles:
+			_rellenar_huecos.call_deferred(suelo, celdas)
+		var tamano_celda := Vector2(suelo.tile_set.tile_size)
+		var esquina_superior_izquierda := suelo.to_global(
+			suelo.map_to_local(celdas.position) - tamano_celda * 0.5
+		)
+		var esquina_inferior_derecha := suelo.to_global(
+			suelo.map_to_local(celdas.end - Vector2i.ONE) + tamano_celda * 0.5
+		)
+		limites_inicio = limites_inicio.min(esquina_superior_izquierda)
+		limites_fin = limites_fin.max(esquina_inferior_derecha)
+		hay_limites = true
 
-	var celdas := suelo.get_used_rect()
-	if celdas.size == Vector2i.ZERO:
+	if not hay_limites:
 		return
-	_rellenar_huecos.call_deferred(suelo, celdas)
-
-	var tamano_celda := Vector2(suelo.tile_set.tile_size)
-	var esquina_superior_izquierda := suelo.to_global(
-		suelo.map_to_local(celdas.position) - tamano_celda * 0.5
-	)
-	var esquina_inferior_derecha := suelo.to_global(
-		suelo.map_to_local(celdas.end - Vector2i.ONE) + tamano_celda * 0.5
-	)
-	cam.limit_left = floori(esquina_superior_izquierda.x)
-	cam.limit_top = floori(esquina_superior_izquierda.y)
-	cam.limit_right = ceili(esquina_inferior_derecha.x)
-	cam.limit_bottom = ceili(esquina_inferior_derecha.y)
+	cam.limit_left = floori(limites_inicio.x)
+	cam.limit_top = floori(limites_inicio.y)
+	cam.limit_right = ceili(limites_fin.x)
+	cam.limit_bottom = ceili(limites_fin.y)
 
 
 
@@ -288,8 +303,10 @@ func _physics_process(delta):
 		aceleracion = ACELERACION_CON_BEBE
 
 	velocity = velocity.move_toward(direccion * velocidad_objetivo, aceleracion * delta)
-	_limitar_movimiento_al_suelo(delta)
+	# Temporalmente omitido para probar las colisiones físicas de las capas nuevas.
+	# _limitar_movimiento_al_suelo(delta)
 	move_and_slide()
+	_registrar_colision_bloqueo()
 	
 	# Main usa Y-sort para ordenar personajes y animales según el punto de apoyo.
 	z_index = 0
@@ -303,11 +320,7 @@ func _physics_process(delta):
 		Global.LIMITE_MAPA.end.x - 20.0
 	)
 
-	global_position.y = clamp(
-		global_position.y,
-		Global.LIMITE_MAPA.position.y + LIMITE_ARRIBA_JUGADOR,
-		Global.LIMITE_MAPA.end.y - LIMITE_ABAJO_JUGADOR
-	)
+	# El suelo real limita el avance vertical; un clamp global bloqueaba una fila completa del mapa.
 
 	var esta_caminando := velocity.length() > 12.0
 	_animar_caminata(delta, esta_caminando, esta_corriendo)
@@ -580,8 +593,32 @@ func _actualizar_camara(_delta: float):
 	cam.offset = Vector2.ZERO
 
 
+func _registrar_colision_bloqueo() -> void:
+	if get_slide_collision_count() == 0:
+		return
+
+	var colision: KinematicCollision2D = get_slide_collision(0)
+	var bloqueador: Object = colision.get_collider()
+	var detalle := "Bloqueador desconocido"
+	var id_bloqueador := 0
+	if bloqueador != null:
+		id_bloqueador = bloqueador.get_instance_id()
+	if bloqueador is TileMapLayer:
+		var capa := bloqueador as TileMapLayer
+		var celda: Vector2i = capa.get_coords_for_body_rid(colision.get_collider_rid())
+		detalle = "Capa %s, celda %s" % [capa.name, celda]
+	elif bloqueador != null:
+		detalle = "Nodo %s (%s)" % [bloqueador.name, bloqueador.get_class()]
+
+	var clave := "%s:%s" % [id_bloqueador, detalle]
+	if clave == ultima_colision_reportada:
+		return
+	ultima_colision_reportada = clave
+	print("[Bloqueo Cavillaca] %s | posición %s" % [detalle, global_position])
+
+
 func _limitar_movimiento_al_suelo(delta: float) -> void:
-	if suelo_tiles == null or velocity == Vector2.ZERO:
+	if (suelo_tiles == null and suelo_nuevo == null) or velocity == Vector2.ZERO:
 		return
 
 	var desplazamiento := velocity * delta
@@ -608,15 +645,22 @@ func _limitar_movimiento_al_suelo(delta: float) -> void:
 
 
 func _hay_suelo_bajo_pies(posicion: Vector2) -> bool:
-	if suelo_tiles == null:
+	if suelo_tiles == null and suelo_nuevo == null:
 		return true
 
 	var ancho_pies := 16.0
 	var centro_pies: Vector2 = posicion + $CollisionShape2D.position
 	for desplazamiento_x in [-ancho_pies, 0.0, ancho_pies]:
 		var punto_global: Vector2 = centro_pies + Vector2(desplazamiento_x, 0.0)
-		var celda := suelo_tiles.local_to_map(suelo_tiles.to_local(punto_global))
-		if suelo_tiles.get_cell_source_id(celda) == -1:
+		var hay_suelo_en_punto := false
+		for capa_suelo: TileMapLayer in [suelo_tiles, suelo_nuevo]:
+			if capa_suelo == null:
+				continue
+			var celda: Vector2i = capa_suelo.local_to_map(capa_suelo.to_local(punto_global))
+			if capa_suelo.get_cell_source_id(celda) != -1:
+				hay_suelo_en_punto = true
+				break
+		if not hay_suelo_en_punto:
 			return false
 	return true
 
