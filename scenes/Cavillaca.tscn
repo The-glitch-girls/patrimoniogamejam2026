@@ -3,14 +3,17 @@
 [ext_resource type="SpriteFrames" uid="uid://yu8sdinxc6p2" path="res://resources/cavillaca.tres" id="1_werjt"]
 
 [node name="Cavillaca" type="CharacterBody2D"]
+y_sort_enabled = true
 collision_mask = 7
 motion_mode = 1
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 4
+position = Vector2(0, 103)
 scale = Vector2(0.215, 0.215)
 sprite_frames = ExtResource("1_werjt")
 animation = &"lado"
+offset = Vector2(0, -479.07)
 
 [node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
 position = Vector2(0, -80)

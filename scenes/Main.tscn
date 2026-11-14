@@ -38,20 +38,15 @@ shader_parameter/radio_sombra = 0.55
 [sub_resource type="GDScript" id="GDScript_ma7h6"]
 script/source = "extends TileMapLayer
 
-@onready var punto_pies: Marker2D = $\"../Cavillaca/PuntoPies\"
-
-
 func _ready() -> void:
 	notify_runtime_tile_data_update()
 
 
 func _use_tile_data_runtime_update(_celda: Vector2i) -> bool:
-	return is_instance_valid(punto_pies)
+	return true
 
 
 func _tile_data_runtime_update(_celda: Vector2i, tile_data: TileData) -> void:
-	# Y-sort compara el origen de Cavillaca. Compensamos la distancia a los pies.
-	tile_data.y_sort_origin -= roundi(punto_pies.position.y)
 	# El contorno personalizado tiene prioridad sobre las formas de respaldo.
 	if tile_data.get_collision_polygons_count(0) == 0:
 		return
@@ -86,7 +81,6 @@ position = Vector2(1283, -808)
 position = Vector2(2469, 773)
 
 [node name="Refugio" parent="." instance=ExtResource("9_jqivg")]
-z_index = 100
 position = Vector2(2625, 575)
 
 [node name="Cuniraya" parent="." instance=ExtResource("10_1s7ia")]

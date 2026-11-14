@@ -2,9 +2,6 @@ extends StaticBody2D
 
 const CAPA_COLISION_SOLIDA := 4
 const MASCARA_COLISION_SOLIDA := 1
-# Referencias desde el origen de cada personaje hasta sus pies; solo orden visual (Z), no colisión.
-const OFFSET_PIES_ZORRO_Y := 49.0
-const ORDEN_VISUAL := preload("res://scripts/componentes/orden_visual.gd")
 const AUDIOS_MENSAJE: Array[AudioStream] = [
 	preload("res://sfx/animales/zorro/aa_zorro1.ogg"),
 	preload("res://sfx/animales/zorro/aa_zorro2.ogg"),
@@ -28,15 +25,6 @@ func _ready() -> void:
 	sprite.flip_h = false
 	sprite.animation_finished.connect(_al_terminar_animacion)
 	sprite.play("idle")
-
-
-func _process(_delta: float) -> void:
-	_actualizar_orden_visual()
-
-
-func _actualizar_orden_visual() -> void:
-	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-	ORDEN_VISUAL.actualizar_sprite(sprite, self, cavillaca, OFFSET_PIES_ZORRO_Y)
 
 
 func hablar() -> void:

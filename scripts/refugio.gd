@@ -14,7 +14,7 @@ var descanso_activo := false
 var escala_puerta := Vector2.ONE
 var animacion_puerta: Tween
 
-@onready var puerta: Sprite2D = $Puerta
+@onready var puerta: Sprite2D = $Visual/Puerta
 @onready var punto_descanso: Marker2D = $PuntoDescanso
 @onready var sonido_puerta: AudioStreamPlayer2D = $SonidoPuerta
 @onready var sonido_energia_cargando: AudioStreamPlayer = $SonidoEnergiaCargando

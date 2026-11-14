@@ -8,22 +8,30 @@
 [ext_resource type="AudioStream" uid="uid://ij23tsrkannr" path="res://sfx/interaccion/energia_full.ogg" id="6_energia_full"]
 
 [node name="Refugio" type="Node2D"]
-z_index = 5
+y_sort_enabled = true
 script = ExtResource("1_script")
 
-[node name="TextureRect" type="TextureRect" parent="."]
+[node name="Visual" type="Node2D" parent="."]
+position = Vector2(0, 184)
+
+[node name="TextureRect" type="TextureRect" parent="Visual"]
 offset_left = -192.0
-offset_top = -192.0
+offset_top = -376.0
 offset_right = 192.0
-offset_bottom = 192.0
+offset_bottom = 8.0
 texture = ExtResource("2_enwi8")
 
-[node name="Puerta" type="Sprite2D" parent="."]
-z_index = 1
-position = Vector2(-2, 59)
+[node name="Puerta" type="Sprite2D" parent="Visual"]
+position = Vector2(-2, -125)
 texture = ExtResource("3_gate")
 region_enabled = true
 region_rect = Rect2(2432, 128, 128, 256)
+
+[node name="BaseSolida" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="BaseSolida"]
+polygon = PackedVector2Array(-107, 74, 109, 74, 144, 117, 139, 166, 88, 181, -88, 181, -149, 171, -145, 129)
 
 [node name="PuntoDescanso" type="Marker2D" parent="."]
 position = Vector2(0, 70)
