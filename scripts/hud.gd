@@ -21,9 +21,9 @@ const PROMPT_DESCANSAR := preload("res://assets/ui/botones/descansar_btn.png")
 const PROMPT_DESCANSAR_PRESIONADO := preload("res://assets/ui/botones/descansar_btn_pressed.png")
 const TEXTURA_CAJA_DIALOGO := preload("res://assets/ui/dialogo/dialogo_caja.png")
 const MENSAJES_DIALOGO_ZORRO: Array[String] = [
-	"Con un recuerdo, la cueva recarga tu energía",
-	"El zorro parece reconocer el recuerdo que encontraste",
-	"El zorro confía en ti y está dispuesto a cuidar al bebé",
+	"fox_dialogue_no_memories",
+	"fox_dialogue_refuge",
+	"fox_dialogue_baby_care",
 	"El zorro aún no te ofrece descanso",
 	"Necesitas el Recuerdo 2 para esto",
 	"El zorro no está cerca",
@@ -32,12 +32,9 @@ const MENSAJES_DIALOGO_ZORRO: Array[String] = [
 	"Bebé recogido del zorro",
 ]
 const CONSEJOS_LORO: Array[String] = [
-	"¡Escucha al bebé si sientes que Cuniraya se acerca!",
-	"Listen to the baby when you feel Cuniraya drawing near!",
-	"Écoute le bébé si tu sens Cuniraya s'approcher !",
-	"¡Cuniraya está cerca! Protege al bebé.",
-	"Cuniraya is near! Protect the baby.",
-	"Cuniraya est proche ! Protège le bébé.",
+	"parrot_tip_danger",
+	"parrot_tip_refuge",
+	"parrot_tip_memories",
 ]
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
@@ -652,9 +649,10 @@ func _process(delta):
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
 	var usar_caja_dialogo := es_dialogo_zorro or CONSEJOS_LORO.has(Global.aviso_combate)
+	var es_dialogo_localizado := Global.aviso_combate.begins_with("fox_dialogue_") or CONSEJOS_LORO.has(Global.aviso_combate)
 	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
 	var mostrar_aviso_normal := hay_aviso and not usar_caja_dialogo
-	var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
+	var texto_aviso := Traducciones.obtener(Global.aviso_combate) if es_dialogo_localizado else Traducciones.obtener_frase(Global.aviso_combate)
 	$AvisoLabel.text = texto_aviso
 	$AvisoFondo.visible = mostrar_aviso_normal
 	$AvisoLabel.visible = mostrar_aviso_normal

@@ -5,6 +5,7 @@ const MASCARA_COLISION_SOLIDA := 1
 # Referencias desde el origen de cada personaje hasta sus pies; solo orden visual (Z), no colisión.
 const OFFSET_PIES_LORO_Y := 49.0
 const ORDEN_VISUAL := preload("res://scripts/componentes/orden_visual.gd")
+const CONSEJOS: Array[String] = ["parrot_tip_danger", "parrot_tip_refuge", "parrot_tip_memories"]
 const AUDIOS_MENSAJE: Array[AudioStream] = [
 	preload("res://sfx/animales/loro/aa_loro1.ogg"),
 	preload("res://sfx/animales/loro/aa_loro2.ogg"),
@@ -12,13 +13,13 @@ const AUDIOS_MENSAJE: Array[AudioStream] = [
 ]
 
 var indice_audio_mensaje := 0
+var indice_consejo := 0
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var rango_hablar: Area2D = $RangoHablar
 @onready var sonido_mensaje: AudioStreamPlayer2D = $SonidoMensaje
 
 var tiempo_hablando := 0.0
-var ya_hablo := false
 
 const DURACION_HABLA := 2.2
 const ESCALA_SPRITE := Vector2(0.12, 0.12)
@@ -52,15 +53,12 @@ func _actualizar_orden_visual() -> void:
 
 
 func hablar() -> void:
-	if tiempo_hablando > 0.0:
+	if not Global.loro_cerca:
 		return
-	ya_hablo = true
 	tiempo_hablando = DURACION_HABLA
 	sprite.play("hablando")
-	var frase := "parrot_baby_warning"
-	if Global.presencia_cuniraya >= Global.PRESENCIA_CRITICA:
-		frase = "parrot_cuniraya_near"
-	Global.mostrar_aviso(Traducciones.obtener(frase))
+	Global.mostrar_aviso(CONSEJOS[indice_consejo])
+	indice_consejo = (indice_consejo + 1) % CONSEJOS.size()
 	reproducir_sonido_mensaje()
 
 
@@ -73,9 +71,6 @@ func reproducir_sonido_mensaje() -> void:
 func _al_entrar_en_rango(cuerpo: Node2D) -> void:
 	if cuerpo.is_in_group("cavillaca"):
 		Global.loro_cerca = true
-		# La primera vez que Cavillaca se acerca, el loro da su consejo sin pulsar F.
-		if not ya_hablo:
-			hablar()
 
 
 func _al_salir_del_rango(cuerpo: Node2D) -> void:
