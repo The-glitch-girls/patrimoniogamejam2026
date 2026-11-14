@@ -260,8 +260,8 @@ func _physics_process(delta):
 		match prompt_e:
 			"E  Recolectar":
 				var jarron := _jarron_mas_cercano()
-				if jarron != null and jarron.call("recolectar_piedra"):
-					Global.piedras += 1
+				if jarron != null:
+					Global.piedras += int(jarron.call("recolectar_piedra"))
 			"E  Dejar con zorro":
 				cueva.dejar_bebe_con_zorro()
 			"E  Recoger del zorro":

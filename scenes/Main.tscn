@@ -1,7 +1,6 @@
-[gd_scene load_steps=31 format=4 uid="uid://qfhefd6lfvpa"]
+[gd_scene load_steps=30 format=4 uid="uid://qfhefd6lfvpa"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_fijlm"]
-[ext_resource type="Texture2D" uid="uid://cn34f1stl4wxg" path="res://assets/tiles/jarron2.png" id="3_xjkgv"]
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="4_dn1l6"]
 [ext_resource type="Script" uid="uid://cg6vopafgjn66" path="res://scripts/cavillaca.gd" id="5_j0k1a"]
 [ext_resource type="PackedScene" uid="uid://cfa3mx2kxpkdp" path="res://scenes/Bebe.tscn" id="6_i5dge"]
@@ -394,60 +393,60 @@ position = Vector2(1472.32, -1775.36)
 
 [node name="jarron2" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(2368.32, -623.36)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron3" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(576.32, 400.64)
 
 [node name="jarron4" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(960.32, 1680.64)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron5" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(3392.32, 16.64)
 
 [node name="jarron6" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(704.32, -1391.36)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron7" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(3648, -880)
 
 [node name="jarron8" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(4288, 528)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron9" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(4160, 976)
 
 [node name="jarron10" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(320, 1040)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron11" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(1984, -752)
 
 [node name="jarron12" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(3008, 464)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron13" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(2496, 16)
 
 [node name="jarron14" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(1728, 656)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron15" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(64, 2064)
 
 [node name="jarron16" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(4800, 1424)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
 
 [node name="jarron17" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(3008, 1616)
 
 [node name="jarron18" parent="." instance=ExtResource("28_jarron")]
 position = Vector2(64, 144)
-imagen = ExtResource("3_xjkgv")
+tipo = 2
