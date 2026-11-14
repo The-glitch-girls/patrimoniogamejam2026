@@ -8,7 +8,7 @@
 [ext_resource type="AudioStream" uid="uid://ij23tsrkannr" path="res://sfx/interaccion/energia_full.ogg" id="6_energia_full"]
 
 [node name="Refugio" type="Node2D"]
-z_index = -1
+z_index = 5
 script = ExtResource("1_script")
 
 [node name="TextureRect" type="TextureRect" parent="."]

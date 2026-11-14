@@ -1,0 +1,40 @@
+[gd_resource type="SpriteFrames" load_steps=5 format=3 uid="uid://blcr8akopbg4x"]
+
+[ext_resource type="Texture2D" uid="uid://dju453ghv0krw" path="res://assets/amigos/zorro.png" id="1_8u71x"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fn83u"]
+atlas = ExtResource("1_8u71x")
+region = Rect2(1253, 360, 675, 600)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_d57gl"]
+atlas = ExtResource("1_8u71x")
+region = Rect2(66, 360, 570, 600)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fwlk3"]
+atlas = ExtResource("1_8u71x")
+region = Rect2(648, 360, 616, 600)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_fn83u")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_d57gl")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_fwlk3")
+}, {
+"duration": 1.5,
+"texture": SubResource("AtlasTexture_fn83u")
+}],
+"loop": false,
+"name": &"talk",
+"speed": 5.0
+}]

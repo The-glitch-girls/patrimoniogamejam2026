@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://jjn8br7lne0t"
-path="res://.godot/imported/btn_pasar_pressed.png-5935de4c2e88fc8d6b9b58fbe35551f0.ctex"
+path.s3tc="res://.godot/imported/btn_pasar_pressed.png-5935de4c2e88fc8d6b9b58fbe35551f0.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/ui/botones/btn_pasar_pressed.png"
-dest_files=["res://.godot/imported/btn_pasar_pressed.png-5935de4c2e88fc8d6b9b58fbe35551f0.ctex"]
+dest_files=["res://.godot/imported/btn_pasar_pressed.png-5935de4c2e88fc8d6b9b58fbe35551f0.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

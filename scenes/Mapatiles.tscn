@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=4 uid="uid://bj3ct4en6xk4d"]
+[gd_scene load_steps=22 format=4 uid="uid://bj3ct4en6xk4d"]
 
 [ext_resource type="Script" uid="uid://b4ysfjkt34v6y" path="res://scripts/suelo.gd" id="1_6dwb3"]
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="2_3xrtf"]
@@ -20,7 +20,6 @@
 [ext_resource type="LabelSettings" uid="uid://divcgq2kq0y5y" path="res://resources/recuerdo_act.tres" id="18_lnug8"]
 [ext_resource type="LabelSettings" uid="uid://cp8vd81qh71o8" path="res://resources/recuerdo_tot.tres" id="19_b8xfu"]
 [ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="20_oo64g"]
-[ext_resource type="PackedScene" uid="uid://ctipp4cjs4yuu" path="res://scenes/CombateHalcon.tscn" id="21_lo5o3"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_q8u5g"]
 shader = ExtResource("10_ngf25")
@@ -216,6 +215,7 @@ anchors_preset = 0
 scale = Vector2(0.5, 0.5)
 
 [node name="recuerdos_x" type="TextureRect" parent="HUD/RecuerdosContainer"]
+visible = false
 layout_mode = 0
 offset_left = 124.0
 offset_top = 20.0
@@ -299,6 +299,3 @@ z_index = 10
 y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAAAAEAAAAJAA4AAAADAAEAAAAJAA4AAAADAAAAAAAJAA0AAAAAAAAAAAAJAA0AAAACAAAAAAAIAA0AAAABAAAAAAAHAA0AAAABAAEAAAAHAA4AAAACAAEAAAAIAA4AAAAIAAQAAAAAAA0AAAALAAQAAAAAAA0AAAACAAYAAAAKAA0AAAADAAYAAAALAA0AAAAEAAYAAAAMAA0AAAAEAAcAAAAMAA4AAAADAAcAAAALAA4AAAACAAcAAAAKAA4AAAAAAAwAAAAIAA0AAAAfAA0AAAAHAA0AAAAfAA4AAAAHAA4AAAAEAA0AAAAKAA0AAAAFAA0AAAALAA0AAAAGAA0AAAAMAA0AAAAEAA4AAAAKAA4AAAAYAAcAAAAAAA0AAAANAAoAAAAJAAAAAAAOAAoAAAAKAAAAAAAPAAoAAAALAAAAAAAaAA4AAAAFAAUAAAAaAAAAAAAJAA0AAAAbAAAAAAAHAA4AAAANAAsAAAAJAAEAAAAOAAsAAAAKAAEAAAAPAAsAAAALAAEAAAA=")
 tile_set = ExtResource("20_oo64g")
-
-[node name="CombateHalcon" parent="." instance=ExtResource("21_lo5o3")]
-visible = false

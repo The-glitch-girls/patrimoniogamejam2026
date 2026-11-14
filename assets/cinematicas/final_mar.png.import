@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://o7yisw4epgqq"
-path="res://.godot/imported/final_mar.png-00d3e62b5bc667a808fabe4622569fe3.ctex"
+path.s3tc="res://.godot/imported/final_mar.png-00d3e62b5bc667a808fabe4622569fe3.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/cinematicas/final_mar.png"
-dest_files=["res://.godot/imported/final_mar.png-00d3e62b5bc667a808fabe4622569fe3.ctex"]
+dest_files=["res://.godot/imported/final_mar.png-00d3e62b5bc667a808fabe4622569fe3.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

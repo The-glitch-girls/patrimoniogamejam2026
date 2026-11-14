@@ -13,6 +13,7 @@ const FRASES := {
 	"E  Recoger del zorro": "prompt_pickup_from_fox",
 	"E  Dejar": "prompt_leave",
 	"E  Recoger": "prompt_pickup",
+	"E  Recolectar": "prompt_collect",
 	"E  Atacar": "prompt_attack",
 	"E  Deja al bebé para luchar": "prompt_drop_baby_to_fight",
 	"Victoria": "victory",

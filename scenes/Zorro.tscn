@@ -1,30 +1,38 @@
-[gd_scene load_steps=4 format=3 uid="uid://b8x3k2nan5p7q"]
+[gd_scene load_steps=5 format=3 uid="uid://b8x3k2nan5p7q"]
 
 [ext_resource type="Script" uid="uid://bcbmxhpaqjgwk" path="res://scripts/zorro.gd" id="1_script"]
+[ext_resource type="SpriteFrames" uid="uid://blcr8akopbg4x" path="res://resources/zorro.tres" id="2_fn83u"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_zorro"]
-radius = 13.0
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pies"]
+size = Vector2(72, 18)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_deteccion"]
-radius = 78.0
+radius = 64.0078
 
-[node name="Zorro" type="CharacterBody2D"]
-collision_layer = 8
-collision_mask = 0
+[node name="Zorro" type="StaticBody2D"]
+collision_layer = 4
 script = ExtResource("1_script")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource("CircleShape2D_zorro")
+[node name="ColisionCuerpo" type="CollisionPolygon2D" parent="."]
+position = Vector2(0, 11)
+build_mode = 1
+polygon = PackedVector2Array(-15, 26, -11, 26, -12, 20, -6, 5, -3, 6, 4, 25, 10, 27, 16, 27, 15, 20, 10, 17, 7, 4, 14, 3, 19, 13, 24, 25, 30, 28, 39, 28, 38, 22, 33, 13, 43, 25, 50, 26, 53, 25, 53, 20, 49, 15, 39, -5, 43, -18, 47, -22, 42, -32, 40, -45, 34, -56, 25, -61, 23, -57, 14, -58, 15, -52, 15, -45, 6, -39, 12, -30, -1, -25, -8, -25, -26, -41, -43, -40, -54, -27, -54, -15, -50, -3, -45, 2, -42, 12, -41, 22, -35, 23, -23, 14, -23, 25)
 
-[node name="Sprite" type="AnimatedSprite2D" parent="."]
+[node name="BloqueoPies" type="CollisionShape2D" parent="."]
+position = Vector2(0, 6)
+shape = SubResource("RectangleShape2D_pies")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
-position = Vector2(0, -42)
 scale = Vector2(0.16, 0.16)
+sprite_frames = ExtResource("2_fn83u")
+animation = &"idle"
+frame_progress = 0.214481
 
-[node name="Deteccion" type="Area2D" parent="."]
+[node name="RangoHablar" type="Area2D" parent="."]
 collision_layer = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Deteccion"]
+[node name="RadioInteraccion" type="CollisionShape2D" parent="RangoHablar"]
 shape = SubResource("CircleShape2D_deteccion")
 
 [node name="SonidoMensaje" type="AudioStreamPlayer2D" parent="."]

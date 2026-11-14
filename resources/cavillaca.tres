@@ -1,11 +1,11 @@
 [gd_resource type="SpriteFrames" load_steps=35 format=3 uid="uid://yu8sdinxc6p2"]
 
-[ext_resource type="Texture2D" uid="uid://bwo1ymw6pt3ph" path="res://assets/person/cavillaca_espaldas2bebe.png" id="2_s14nc"]
-[ext_resource type="Texture2D" uid="uid://bt857y0al1cwq" path="res://assets/person/cavillaca_espaldas2.png" id="2_tx1ky"]
-[ext_resource type="Texture2D" uid="uid://byjw4jwu510gf" path="res://assets/person/cavillaca_frente2.png" id="4_t7cm7"]
-[ext_resource type="Texture2D" uid="uid://c16p71xfx4181" path="res://assets/person/cavillaca_frente2bebe.png" id="6_p8mrm"]
-[ext_resource type="Texture2D" uid="uid://o48dqmiinpl6" path="res://assets/person/cavillaca_lateral2.png" id="6_pfrmo"]
-[ext_resource type="Texture2D" uid="uid://dd2wwvy5tuwkc" path="res://assets/person/cavillaca_lateral2bebe.png" id="8_h0335"]
+[ext_resource type="Texture2D" uid="uid://bwo1ymw6pt3ph" path="res://assets/person/cavillaca_espaldasbebe.png" id="2_s14nc"]
+[ext_resource type="Texture2D" uid="uid://bt857y0al1cwq" path="res://assets/person/cavillaca_espaldas.png" id="2_tx1ky"]
+[ext_resource type="Texture2D" uid="uid://byjw4jwu510gf" path="res://assets/person/cavillaca_frente.png" id="4_t7cm7"]
+[ext_resource type="Texture2D" uid="uid://c16p71xfx4181" path="res://assets/person/cavillaca_frentebebe.png" id="6_p8mrm"]
+[ext_resource type="Texture2D" uid="uid://o48dqmiinpl6" path="res://assets/person/cavillaca_lateral.png" id="6_pfrmo"]
+[ext_resource type="Texture2D" uid="uid://dd2wwvy5tuwkc" path="res://assets/person/cavillaca_lateralbebe.png" id="8_h0335"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pfrmo"]
 atlas = ExtResource("2_tx1ky")

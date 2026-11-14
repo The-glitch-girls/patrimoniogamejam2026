@@ -4,12 +4,13 @@ const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const FUENTE_PROMPT := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf")
 const MARCO_ENERGIA := preload("res://assets/ui/energy.png")
 const REFERENCIA_ENERGIA := preload("res://assets/ui/energy reference.png")
-const ICONO_AJUSTES := preload("res://assets/icons/ajustes.svg")
-const ESCENA_OVERLAY_AJUSTES: PackedScene = preload("res://scenes/componentes/OverlayAjustes.tscn")
+const RUTA_OVERLAY_AJUSTES := "res://scenes/componentes/OverlayAjustes.tscn"
 const PROMPT_ATACAR := preload("res://assets/ui/botones/atacar_btn.png")
 const PROMPT_ATACAR_PRESIONADO := preload("res://assets/ui/botones/atacar_btn_pressed.png")
 const PROMPT_CARGAR := preload("res://assets/ui/botones/cargar_btn.png")
 const PROMPT_CARGAR_PRESIONADO := preload("res://assets/ui/botones/cargar_btn_pressed.png")
+const PROMPT_RECOLECTAR := preload("res://assets/ui/botones/recolectar_btn.png")
+const PROMPT_RECOLECTAR_PRESIONADO := preload("res://assets/ui/botones/recolectar_btn_pressed.png")
 const PROMPT_CONVERSAR := preload("res://assets/ui/botones/conversar_btn.png")
 const PROMPT_CONVERSAR_PRESIONADO := preload("res://assets/ui/botones/conversar_btn_pressed.png")
 const PROMPT_DEJAR := preload("res://assets/ui/botones/dejar_btn.png")
@@ -45,7 +46,7 @@ const LILA := Color(0.67, 0.62, 0.93, 1)
 const DORADO := Color(0.86, 0.7, 0.2, 1)
 const BORDO := Color(0.62, 0.24, 0.36, 1)
 const AZUL_GUIA := Color(0.31, 0.53, 0.82, 1)
-const MORADO_GUIA := Color(0.48, 0.36, 0.72, 1)
+const COLOR_GUIA_ZORRO := Color(0.78, 0.33, 0.92, 1)
 const VERDE_ARBOL := Color(0.16, 0.49, 0.49, 1)
 const BORDE_ENERGIA := Color(0.9, 0.84, 1.0, 1)
 
@@ -60,7 +61,9 @@ var material_oscuridad: ShaderMaterial
 var icono_presencia: TextureRect
 var barra_energia: TextureRect
 var material_relleno_energia: ShaderMaterial
+var etiqueta_energia_debug: Label
 var barra_presencia_texture: TextureProgressBar
+@onready var contador_piedras: Label = $ContadorPiedras/CantidadPiedras
 var overlay_ajustes: Control
 var pausa_previa_ajustes := false
 var marcas_recuerdo: Array[Panel] = []
@@ -125,22 +128,22 @@ func _mostrar_controles_una_vez() -> void:
 func _estilar_panel():
 	$PanelEstado.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	$PanelEstado.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	for nodo in [
-		$PanelEstado/Encabezado,
-		$PanelEstado/Label,
-		$PanelEstado/PresenciaLabel,
-		$PanelEstado/TiempoLabel,
-		$PanelEstado/BebeLabel,
-	]:
-		nodo.visible = false
-	if has_node("PresenciaLabel"):
-		$PresenciaLabel.visible = false
-	$PanelEstado/EnergiaBar.hide()
+	for nombre in ["Encabezado", "Label", "PresenciaLabel", "TiempoLabel", "BebeLabel"]:
+		var nodo := $PanelEstado.get_node_or_null(nombre)
+		if nodo is CanvasItem:
+			nodo.hide()
+	var barra_antigua := $PanelEstado.get_node_or_null("EnergiaBar")
+	if barra_antigua is CanvasItem:
+		barra_antigua.hide()
+	var presencia_antigua := get_node_or_null("PresenciaLabel")
+	if presencia_antigua is CanvasItem:
+		presencia_antigua.hide()
 	_configurar_barra_energia()
 	icono_presencia = $PanelEstado/PresenciaIcono
 	barra_presencia_texture = $PanelEstado/PresenciaBarTexture
 	_mostrar_presencia(true)
 	_poner_recuerdos()
+	_actualizar_contador_piedras()
 	add_child(preload("res://scripts/componentes/etiquetas_barras.gd").new())
 
 
@@ -165,7 +168,12 @@ func _configurar_barra_energia() -> void:
 		vec4 color = texture(TEXTURE, UV);
 		float diferencia_morada = min(color.r - color.g, color.b - color.g);
 		color.a *= smoothstep(0.06, 0.2, diferencia_morada);
-		if (UV.x > porcentaje) {
+		// El relleno de la barra empieza después del adorno circular, no en UV.x = 0.
+		// Remapear el porcentaje a la pista real hace visibles también los valores bajos.
+		float inicio_barra = 0.13;
+		float fin_barra = 0.88;
+		float limite_relleno = mix(inicio_barra, fin_barra, porcentaje);
+		if (UV.x > limite_relleno) {
 			color.a = 0.0;
 		}
 		COLOR = color;
@@ -183,6 +191,18 @@ func _configurar_barra_energia() -> void:
 	marco.stretch_mode = TextureRect.STRETCH_SCALE
 	marco.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	contenedor.add_child(marco)
+
+	# Valor real para depurar casos en que la barra parece vacía antes de llegar a 0.
+	etiqueta_energia_debug = Label.new()
+	etiqueta_energia_debug.name = "EnergiaDebug"
+	etiqueta_energia_debug.position = Vector2(270, 20)
+	etiqueta_energia_debug.size = Vector2(138, 32)
+	etiqueta_energia_debug.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	etiqueta_energia_debug.add_theme_font_override("font", FUENTE)
+	etiqueta_energia_debug.add_theme_font_size_override("font_size", 16)
+	etiqueta_energia_debug.add_theme_color_override("font_color", CREMA)
+	etiqueta_energia_debug.visible = OS.is_debug_build()
+	$PanelEstado.add_child(etiqueta_energia_debug)
 
 func _circulo(color: Color, radio: int = 36) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -297,7 +317,7 @@ func _tipo_prompt_con_imagen() -> String:
 		return "rest" if texto.begins_with("r ") else ""
 	if texto.contains("atacar"):
 		return "attack"
-	if texto.contains("recoger"):
+	if texto.contains("recoger") or texto.contains("recolectar"):
 		return "pickup"
 	if texto.contains("dejar") or texto.contains("deja al bebé"):
 		return "leave"
@@ -334,8 +354,13 @@ func _actualizar_prompt_visual() -> void:
 			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
 			prompt_titulo.text = Traducciones.obtener("attack")
 		"pickup":
-			prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
-			prompt_titulo.text = Traducciones.obtener("pickup")
+			var es_recolectar := Global.prompt_interaccion.to_lower().contains("recolectar")
+			if es_recolectar:
+				prompt_icono.texture = PROMPT_RECOLECTAR_PRESIONADO if presionado else PROMPT_RECOLECTAR
+			else:
+				prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
+			var clave_recogida := "collect" if es_recolectar else "pickup"
+			prompt_titulo.text = Traducciones.obtener(clave_recogida)
 		"converse":
 			prompt_icono.texture = PROMPT_CONVERSAR_PRESIONADO if presionado else PROMPT_CONVERSAR
 			prompt_titulo.text = Traducciones.obtener("converse_action")
@@ -365,15 +390,12 @@ func _mostrar_presencia(es_visible: bool) -> void:
 
 
 func _poner_recuerdos() -> void:
-	var recuerdos_container := $RecuerdosContainer
-	recuerdos_container.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	var viewport_size := get_viewport().get_visible_rect().size
-
-	recuerdos_container.position = Vector2(
-		viewport_size.x - 320,
-		20
-	)
 	add_child(preload("res://scripts/componentes/objetivo_hud.gd").new())
+
+
+func _actualizar_contador_piedras() -> void:
+	if is_instance_valid(contador_piedras):
+		contador_piedras.text = "× %d" % Global.piedras
 
 func _marca_recuerdo(lleno: bool) -> StyleBoxFlat:
 	var caja := StyleBoxFlat.new()
@@ -424,44 +446,6 @@ func _ajustar_banner_aviso() -> void:
 	label.offset_bottom = label.offset_top + alto_texto
 
 
-func _ajustar_banner_consejo() -> void:
-	var label := $AvisoLabel as Label
-	var fondo := $AvisoFondo as Panel
-	label.add_theme_font_size_override("font_size", 22)
-	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	var tamano_fuente := label.get_theme_font_size("font_size")
-	var fuente := label.get_theme_font("font")
-	var ancho_texto := fuente.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, tamano_fuente).x
-	var ancho_vista := get_viewport().get_visible_rect().size.x
-	var ancho_maximo := maxf(280.0, ancho_vista - 120.0)
-	var ancho_banner := minf(maxf(ancho_texto + 320.0, 560.0), ancho_maximo)
-	var ancho_label := ancho_banner - 112.0
-	var alto_texto := fuente.get_multiline_string_size(label.text, HORIZONTAL_ALIGNMENT_CENTER, ancho_label, tamano_fuente).y
-	var alto_banner := maxf(alto_texto + 48.0, 96.0)
-
-	fondo.anchor_left = 0.5
-	fondo.anchor_right = 0.5
-	fondo.anchor_top = 0.32
-	fondo.anchor_bottom = 0.32
-	fondo.offset_left = -ancho_banner * 0.5
-	fondo.offset_right = ancho_banner * 0.5
-	fondo.offset_top = -alto_banner * 0.5
-	fondo.offset_bottom = alto_banner * 0.5
-	label.anchor_left = 0.5
-	label.anchor_right = 0.5
-	label.anchor_top = 0.32
-	label.anchor_bottom = 0.32
-	label.offset_left = -ancho_label * 0.5
-	label.offset_right = ancho_label * 0.5
-	label.offset_top = -alto_banner * 0.5 + 16.0
-	label.offset_bottom = alto_banner * 0.5 - 16.0
-	_actualizar_ornamentos_aviso(ancho_banner, alto_banner)
-	for linea in ornamentos_aviso:
-		linea.visible = true
-
-
 func _crear_ornamentos_aviso() -> void:
 	for _indice in range(4):
 		var linea := Line2D.new()
@@ -494,16 +478,6 @@ func _actualizar_ornamentos_aviso(ancho: float, alto: float) -> void:
 		Vector2(ancho, 2.0), Vector2(ancho + 20.0, 13.0),
 		Vector2(ancho + 28.0, 25.0), Vector2(ancho + 26.0, 34.0),
 	])
-
-
-func _estilar_banner_consejo() -> void:
-	var caja := StyleBoxFlat.new()
-	caja.bg_color = Color(0.035, 0.03, 0.085, 0.78)
-	caja.set_corner_radius_all(48)
-	caja.shadow_color = Color(0.0, 0.0, 0.0, 0.28)
-	caja.shadow_size = 10
-	caja.shadow_offset = Vector2(0, 4)
-	$AvisoFondo.add_theme_stylebox_override("panel", caja)
 
 
 func _posicionar_aviso_descanso(es_descanso: bool) -> void:
@@ -561,40 +535,29 @@ func _borde_de(origen: Vector2, destino: Vector2, zona: Rect2) -> Vector2:
 
 
 func _poner_ajustes() -> void:
-	var boton := BotonCirculo.new()
-	boton.name = "BotonAjustes"
-	boton.color_fondo = VERDE_ARBOL
-	boton.icono = ICONO_AJUSTES
-	boton.tamano = 48.0
-	boton.ancho_borde = 3
-	boton.color_borde = BORDE_ENERGIA
-	boton.z_index = 100
-	boton.pressed.connect(_alternar_ajustes)
-	add_child(boton)
-	boton.set_anchors_preset(Control.PRESET_TOP_RIGHT)
-	boton.offset_left = -84
-	boton.offset_top = 26
-	boton.offset_right = -32
-	boton.offset_bottom = 68
-
-	overlay_ajustes = ESCENA_OVERLAY_AJUSTES.instantiate() as Control
-	overlay_ajustes.visible = false
-	overlay_ajustes.set("desde_juego", true)
-	overlay_ajustes.z_index = 101
-	overlay_ajustes.process_mode = Node.PROCESS_MODE_ALWAYS
-	overlay_ajustes.connect("cerrar", Callable(self, "_cerrar_ajustes"))
-	add_child(overlay_ajustes)
+	$BotonAjustes.pressed.connect(_alternar_ajustes)
 	add_child(preload("res://scripts/componentes/menu_pausa.gd").new())
 
 
 func _alternar_ajustes() -> void:
-	if overlay_ajustes.visible:
+	if is_instance_valid(overlay_ajustes) and overlay_ajustes.visible:
 		_cerrar_ajustes()
 	else:
 		_abrir_ajustes()
 
 
 func _abrir_ajustes() -> void:
+	if not is_instance_valid(overlay_ajustes):
+		var escena := load(RUTA_OVERLAY_AJUSTES) as PackedScene
+		if escena == null:
+			push_error("No se pudo cargar OverlayAjustes.tscn")
+			return
+		overlay_ajustes = escena.instantiate() as Control
+		overlay_ajustes.set("desde_juego", true)
+		overlay_ajustes.z_index = 101
+		overlay_ajustes.process_mode = Node.PROCESS_MODE_ALWAYS
+		overlay_ajustes.connect("cerrar", Callable(self, "_cerrar_ajustes"))
+		add_child(overlay_ajustes)
 	pausa_previa_ajustes = get_tree().paused
 	get_node("BotonAjustes").visible = false
 	overlay_ajustes.visible = true
@@ -603,7 +566,8 @@ func _abrir_ajustes() -> void:
 
 func _cerrar_ajustes() -> void:
 	if is_instance_valid(overlay_ajustes):
-		overlay_ajustes.visible = false
+		overlay_ajustes.queue_free()
+		overlay_ajustes = null
 	get_node("BotonAjustes").visible = true
 	get_tree().paused = pausa_previa_ajustes
 
@@ -638,7 +602,11 @@ func _capturar_guia() -> void:
 
 
 func _capturar_flashback() -> void:
-	var flashback := preload("res://scenes/Flashback.tscn").instantiate()
+	var escena_flashback := load("res://scenes/Flashback.tscn") as PackedScene
+	if escena_flashback == null:
+		push_error("No se pudo cargar Flashback.tscn")
+		return
+	var flashback := escena_flashback.instantiate()
 	flashback.configurar(1)
 	add_child(flashback)
 	await get_tree().create_timer(0.5).timeout
@@ -650,7 +618,10 @@ func _capturar_flashback() -> void:
 func _process(delta):
 	var porcentaje_energia := clampf(Global.energia / Global.ENERGIA_MAX, 0.0, 1.0)
 	material_relleno_energia.set_shader_parameter("porcentaje", porcentaje_energia)
+	if etiqueta_energia_debug != null:
+		etiqueta_energia_debug.text = "%.2f / %.0f" % [Global.energia, Global.ENERGIA_MAX]
 	barra_presencia_texture.value = Global.presencia_cuniraya
+	_actualizar_contador_piedras()
 	_actualizar_recuerdos()
 	_actualizar_guia_bebe(delta)
 	_actualizar_guia_cueva(delta)
@@ -680,8 +651,7 @@ func _process(delta):
 
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
-	var es_consejo_loro := CONSEJOS_LORO.has(Global.aviso_combate)
-	var usar_caja_dialogo := es_dialogo_zorro or es_consejo_loro
+	var usar_caja_dialogo := es_dialogo_zorro or CONSEJOS_LORO.has(Global.aviso_combate)
 	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
 	var mostrar_aviso_normal := hay_aviso and not usar_caja_dialogo
 	var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
@@ -694,20 +664,14 @@ func _process(delta):
 		dialogo_zorro_texto.text = texto_aviso
 		aviso_visible_actual = ""
 	if mostrar_aviso_normal:
-		if es_consejo_loro:
-			if texto_aviso != aviso_visible_actual:
-				aviso_visible_actual = texto_aviso
-				_ajustar_banner_consejo()
-				_estilar_banner_consejo()
-		else:
-			aviso_visible_actual = texto_aviso
-			$AvisoLabel.add_theme_font_size_override("font_size", 18)
-			for linea in ornamentos_aviso:
-				linea.visible = false
-			_posicionar_aviso_descanso(es_aviso_descanso)
-			_ajustar_banner_aviso()
-			var color_aviso := VERDE if Global.aviso_combate == "Victoria" else Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
-			_estilar_pildora($AvisoFondo, color_aviso)
+		aviso_visible_actual = texto_aviso
+		$AvisoLabel.add_theme_font_size_override("font_size", 18)
+		for linea in ornamentos_aviso:
+			linea.visible = false
+		_posicionar_aviso_descanso(es_aviso_descanso)
+		_ajustar_banner_aviso()
+		var color_aviso := Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
+		_estilar_pildora($AvisoFondo, color_aviso)
 	else:
 		aviso_visible_actual = ""
 
@@ -771,7 +735,7 @@ func _poner_guia_cueva() -> void:
 	guia_cueva = GuiaNavegacion.new()
 
 	guia_cueva.configurar(
-		_tarjeta(MORADO_GUIA, 22),
+		_tarjeta(COLOR_GUIA_ZORRO, 22),
 		Traducciones.obtener("cave"),
 		Vector2(150, 44),
 		FUENTE,

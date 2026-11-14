@@ -3,19 +3,20 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c1vm540x3rn5l"
-path="res://.godot/imported/energy.png-2306a30f190a47163f5e7b1dbccf33cb.ctex"
+path.s3tc="res://.godot/imported/energy.png-2306a30f190a47163f5e7b1dbccf33cb.s3tc.ctex"
 metadata={
-"vram_texture": false
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
 }
 
 [deps]
 
 source_file="res://assets/ui/energy.png"
-dest_files=["res://.godot/imported/energy.png-2306a30f190a47163f5e7b1dbccf33cb.ctex"]
+dest_files=["res://.godot/imported/energy.png-2306a30f190a47163f5e7b1dbccf33cb.s3tc.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=2
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

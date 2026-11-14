@@ -3,7 +3,6 @@ extends Control
 const FUENTE := preload("res://assets/fonts/Fredoka-SemiBold.ttf")
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 @onready var version_label := $Version
-const ESCENA_MAIN := "res://scenes/Main.tscn"
 const ESCENA_LEYENDA := "res://scenes/Leyenda.tscn"
 var iniciando_juego := false
 
@@ -13,7 +12,6 @@ func _ready() -> void:
 	_conectar()
 	_set_version()
 	_mostrar_inicio()
-	ResourceLoader.load_threaded_request(ESCENA_MAIN) # Cargar en segundo plano
 	ResourceLoader.load_threaded_request(ESCENA_LEYENDA)
 	Musica.tocar("menu")
 	if OS.get_cmdline_user_args().has("--shot"):

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cc0ccn7hx4g54"
-path="res://.godot/imported/cavillaca_bebe_espalda.png-fa74f5b4033d2af34bfdd75c7cc18fed.ctex"
+uid="uid://uhdqox5t7dcq"
+path="res://.godot/imported/recolectar_btn_pressed.png-bf4b79e9b9d37e34b2f2c2c7b8384011.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/person/cavillaca_bebe_espalda.png"
-dest_files=["res://.godot/imported/cavillaca_bebe_espalda.png-fa74f5b4033d2af34bfdd75c7cc18fed.ctex"]
+source_file="res://assets/ui/botones/recolectar_btn_pressed.png"
+dest_files=["res://.godot/imported/recolectar_btn_pressed.png-bf4b79e9b9d37e34b2f2c2c7b8384011.ctex"]
 
 [params]
 
@@ -21,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

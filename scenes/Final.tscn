@@ -1,7 +1,6 @@
-[gd_scene load_steps=13 format=3 uid="uid://hal2ns27l1ej"]
+[gd_scene load_steps=12 format=3 uid="uid://hal2ns27l1ej"]
 
 [ext_resource type="Script" uid="uid://cc74jj4g4tf2n" path="res://scripts/final.gd" id="1_final"]
-[ext_resource type="Texture2D" uid="uid://dgf8f0jx6ashw" path="res://assets/cinematicas/final_cuniraya.png" id="2_xiy6r"]
 [ext_resource type="Texture2D" uid="uid://exd5sas1i8a6" path="res://assets/ui/ajustes/reiniciar_normal.png" id="3_dexd0"]
 [ext_resource type="Texture2D" uid="uid://bhqfwhjhyifnf" path="res://assets/ui/recuerdos/recuerdo_caja.png" id="3_f3pyh"]
 [ext_resource type="LabelSettings" uid="uid://bm1tqv5ct8jes" path="res://resources/recuerdo_texto.tres" id="4_nlwcw"]
@@ -29,7 +28,6 @@ offset_top = -7.2
 offset_right = 1907.2
 offset_bottom = 1072.8
 scale = Vector2(0.68, 0.68)
-texture = ExtResource("2_xiy6r")
 
 [node name="CajaTexto" type="TextureRect" parent="."]
 layout_mode = 0
