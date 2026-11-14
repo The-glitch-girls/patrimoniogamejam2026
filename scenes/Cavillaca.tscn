@@ -16,7 +16,7 @@ animation = &"lado"
 position = Vector2(0, -80)
 
 [node name="PuntoPies" type="Marker2D" parent="."]
-position = Vector2(0, 60)
+position = Vector2(0, 103)
 
 [node name="CollisionPolygon2D_Frente" type="CollisionPolygon2D" parent="."]
 visible = false
