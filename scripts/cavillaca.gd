@@ -46,7 +46,6 @@ var suelo_nuevo: TileMapLayer
 var ultima_colision_reportada := ""
 var sfx_paso: AudioStreamPlayer
 var sfx_ataque: AudioStreamPlayer
-var ataques_combate := 0
 var preparando_caminata_mar := false
 var caminata_mar_preparada := false
 var colision_lado_espejada := false
@@ -724,10 +723,10 @@ func _prompt_tecla_e(cueva: Node) -> String:
 		return "E  Deja al bebé para luchar" if Global.halcon_cerca else "E  Dejar"
 	if esta_cerca_del_bebe():
 		return "E  Recoger"
-	if Global.halcon_cerca:
-		return "E  Atacar"
 	if _jarron_mas_cercano() != null:
 		return "E  Recolectar"
+	if Global.halcon_cerca:
+		return "E  Atacar"
 	return ""
 
 
@@ -834,15 +833,15 @@ func cambiar_sprite_bebe(cargado: bool) -> void:
 
 # Funciones en combate
 func _arrojar_en_combate():
-	var combate := get_tree().current_scene.get_node("CombateHalcon")
-	var punto := combate.get_node("PuntoLanzamiento") as Node2D
+	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
 	var halcon := get_tree().get_first_node_in_group("halcon") as Node2D
-	
-	if halcon == null:
+	if combate == null or halcon == null or Global.piedras <= 0:
 		return
-	
+
+	var punto := combate.get_node("PuntoLanzamiento") as Node2D
 	var destino := halcon.global_position
 	var piedra := PIEDRA_ESCENA.instantiate()
+	Global.piedras -= 1
 	combate.add_child(piedra)
 
 	piedra.global_position = punto.global_position
@@ -888,6 +887,9 @@ func _arrojar_en_combate():
 	if is_instance_valid(piedra):
 		piedra.queue_free()
 
+	if is_instance_valid(halcon) and not halcon.derrotado and Global.piedras == 0:
+		halcon.terminar_combate_sin_municion()
+
 # Funciones de input
 func _controlar_ataque(prompt_e: String) -> bool:
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
@@ -899,18 +901,19 @@ func _controlar_ataque(prompt_e: String) -> bool:
 
 		if halcon != null:
 			if halcon.en_combate:
-				if not halcon.derrotado and not halcon.en_muerte and lock_arrojar <= 0.0:
+				if not halcon.derrotado and not halcon.en_muerte and lock_arrojar <= 0.0 and Global.piedras > 0:
 					lock_arrojar = COOLDOWN_ARROJAR
-					ataques_combate += 1
 					_arrojar_en_combate()
 			elif prompt_e == "E  Atacar":
+				if Global.piedras <= 0:
+					Global.mostrar_aviso(Traducciones.obtener("out_of_ammo"))
+					return true
 				var escena_actual := get_tree().current_scene
 				var combate_halcon := escena_actual.call("obtener_combate_halcon") as CanvasLayer
 				if combate_halcon == null:
 					return false
 				combate_halcon.show()
 				combate = combate_halcon
-				ataques_combate = 0
 				lock_arrojar = 0.0
 				halcon.entrar_en_combate()
 				

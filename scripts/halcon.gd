@@ -5,8 +5,9 @@ const RANGO_DETECCION := 300.0
 const RANGO_CORTE := 400.0
 const RADIO_REVOLOTEO := 72.0
 const AMPLITUD_REVOLOTEO := 36.0
+const ALTURA_REVOLOTEO := 100.0
 const RANGO_GOLPE := 52.0
-const VELOCIDAD_REVOLOTEO := 110.0
+const VELOCIDAD_REVOLOTEO := 380.0
 const VELOCIDAD_PATRULLA := 36.0
 const VELOCIDAD_RETIRADA := 110.0
 const DESCANSO_PERSECUCION := 1.4
@@ -306,11 +307,12 @@ func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	angulo += delta * 2.4
 	var objetivo := _obtener_punto_objetivo(cavillaca)
 	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
-	var desplazamiento_orbita := Vector2(cos(angulo) * radio, sin(angulo) * radio * 0.35)
-	var destino := objetivo + desplazamiento_orbita
+	var desplazamiento_orbita := Vector2(cos(angulo) * radio, -absf(sin(angulo)) * radio * 0.35)
+	var destino := objetivo + Vector2.UP * ALTURA_REVOLOTEO + desplazamiento_orbita
 	var antes := global_position
 	var desplazamiento := (destino - global_position).limit_length(VELOCIDAD_REVOLOTEO * delta)
-	_mover_con_colision(desplazamiento, delta)
+	# Durante la persecución vuela por encima de los obstáculos del suelo.
+	global_position += desplazamiento
 	
 	var hacia := global_position - antes
 	if abs(hacia.x) > 0.2:
@@ -442,6 +444,27 @@ func salir_de_combate():
 	frames_combate = null
 	
 	$AnimatedSprite2D.play("lado")
+
+func terminar_combate_sin_municion() -> void:
+	if not en_combate or derrotado or Global.partida_terminada:
+		return
+
+	Global.prompts_interaccion.clear()
+	Global.mostrar_aviso(Traducciones.obtener("out_of_ammo"))
+	await get_tree().create_timer(Global.DURACION_AVISO, false).timeout
+	if not is_inside_tree() or not en_combate or derrotado or Global.partida_terminada:
+		return
+
+	var escena := get_tree().current_scene
+	var combate := escena.get_node_or_null("CombateHalcon") as CanvasLayer
+	if combate != null:
+		combate.hide()
+	salir_de_combate()
+	escena.liberar_combate_halcon(combate)
+	$Detector.set_deferred("monitoring", true)
+	_empezar_descanso()
+	Musica.terminar_combate()
+
 
 func _actualizar_vidas():
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
