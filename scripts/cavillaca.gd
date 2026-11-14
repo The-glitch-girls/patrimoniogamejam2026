@@ -68,6 +68,8 @@ func _ready():
 	_aplicar_animaciones_cargadas()
 	colision_frente.set_deferred("disabled", true)
 	colision_lado.set_deferred("disabled", false)
+	colision_frente.hide()
+	colision_lado.show()
 
 	var escena := get_tree().current_scene
 	suelo_tiles = escena.get_node_or_null("SueloTiles") as TileMapLayer
@@ -576,11 +578,14 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 
 
 func _actualizar_colision_sprite(animacion: StringName) -> void:
-	var usa_frente := animacion in [&"frente", &"frente_bebe"]
-	var usaba_frente: bool = $Sprite.animation in [&"frente", &"frente_bebe"]
+	var animaciones_verticales := [&"frente", &"frente_bebe", &"espalda", &"espalda_bebe"]
+	var usa_frente := animacion in animaciones_verticales
+	var usaba_frente: bool = $Sprite.animation in animaciones_verticales
 	if usa_frente != usaba_frente:
 		colision_frente.set_deferred("disabled", not usa_frente)
 		colision_lado.set_deferred("disabled", usa_frente)
+		colision_frente.visible = usa_frente
+		colision_lado.visible = not usa_frente
 
 	var espejar: bool = not usa_frente and $Sprite.flip_h
 	if espejar == colision_lado_espejada:
