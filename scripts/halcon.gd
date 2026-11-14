@@ -183,20 +183,46 @@ func debug_aparecer_al_lado(posicion: Vector2) -> void:
 
 func _armar_puntos() -> void:
 	puntos_abiertos.clear()
-	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	var suelo := _suelo_aparicion()
 	if suelo == null:
 		return
-	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
+	var obstaculos := _capas_bloqueo_aparicion(suelo)
 	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
 	for celda in suelo.get_used_cells():
 		if not Geometry2D.is_point_in_polygon(Vector2(celda), zona_aparicion_celdas):
 			continue
-		if bordes != null and bordes.get_cell_source_id(celda) != -1:
-			continue
 		var punto := suelo.to_global(suelo.map_to_local(celda))
-		if _esta_en_exclusion_tronco(punto, cueva):
+		if _esta_en_exclusion_tronco(punto, cueva) or _esta_sobre_obstaculo(punto, obstaculos):
 			continue
 		puntos_abiertos.append(punto)
+
+
+func _suelo_aparicion() -> TileMapLayer:
+	var escena := get_tree().current_scene
+	var suelo := escena.get_node_or_null("Capas/Suelo") as TileMapLayer
+	if suelo != null:
+		return suelo
+	return escena.get_node_or_null("SueloTiles") as TileMapLayer
+
+
+func _capas_bloqueo_aparicion(suelo: TileMapLayer) -> Array[TileMapLayer]:
+	var escena := get_tree().current_scene
+	var rutas := ["Bordes"]
+	if suelo.name == &"Suelo":
+		rutas = ["Capas/ObstaculosSolidos", "Capas/PiedrasSolidas", "Capas/PrimerPlano", "ObstaculosUnidireccionales"]
+	var capas: Array[TileMapLayer] = []
+	for ruta in rutas:
+		var capa := escena.get_node_or_null(ruta) as TileMapLayer
+		if capa != null:
+			capas.append(capa)
+	return capas
+
+
+func _esta_sobre_obstaculo(punto: Vector2, capas: Array[TileMapLayer]) -> bool:
+	for capa in capas:
+		if capa.get_cell_source_id(capa.local_to_map(capa.to_local(punto))) != -1:
+			return true
+	return false
 
 
 func _esta_en_exclusion_tronco(punto: Vector2, refugio: Node2D) -> bool:
@@ -210,14 +236,13 @@ func _esta_en_exclusion_tronco(punto: Vector2, refugio: Node2D) -> bool:
 
 
 func _posicion_es_spawn_valido(punto: Vector2) -> bool:
-	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	var suelo := _suelo_aparicion()
 	if suelo == null:
 		return false
 	var celda := suelo.local_to_map(suelo.to_local(punto))
 	if suelo.get_cell_source_id(celda) == -1:
 		return false
-	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
-	if bordes != null and bordes.get_cell_source_id(celda) != -1:
+	if _esta_sobre_obstaculo(punto, _capas_bloqueo_aparicion(suelo)):
 		return false
 	if not Geometry2D.is_point_in_polygon(Vector2(celda), zona_aparicion_celdas):
 		return false
