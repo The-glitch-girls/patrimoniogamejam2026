@@ -49,6 +49,12 @@ var sfx_ataque: AudioStreamPlayer
 var ataques_combate := 0
 var preparando_caminata_mar := false
 var caminata_mar_preparada := false
+var colision_lado_espejada := false
+
+@onready var colision_frente: CollisionPolygon2D = $CollisionPolygon2D_Frente
+@onready var colision_lado: CollisionPolygon2D = $CollisionPolygon2D_Lado
+@onready var poligono_lado_derecho: PackedVector2Array = colision_lado.polygon
+@onready var posicion_lado_derecho: Vector2 = colision_lado.position
 
 func _ready():
 	_asegurar_tecla_dialogo_zorro()
@@ -60,6 +66,8 @@ func _ready():
 	_armar_sfx()
 	_armar_sprite()
 	_aplicar_animaciones_cargadas()
+	colision_frente.set_deferred("disabled", true)
+	colision_lado.set_deferred("disabled", false)
 
 	var escena := get_tree().current_scene
 	suelo_tiles = escena.get_node_or_null("SueloTiles") as TileMapLayer
@@ -567,7 +575,32 @@ func _animar_caminata(delta: float, esta_caminando: bool, esta_corriendo: bool):
 		paso_acum = 0.0
 
 
+func _actualizar_colision_sprite(animacion: StringName) -> void:
+	var usa_frente := animacion in [&"frente", &"frente_bebe"]
+	var usaba_frente: bool = $Sprite.animation in [&"frente", &"frente_bebe"]
+	if usa_frente != usaba_frente:
+		colision_frente.set_deferred("disabled", not usa_frente)
+		colision_lado.set_deferred("disabled", usa_frente)
+
+	var espejar: bool = not usa_frente and $Sprite.flip_h
+	if espejar == colision_lado_espejada:
+		return
+
+	colision_lado_espejada = espejar
+	var puntos := poligono_lado_derecho.duplicate()
+	var posicion := posicion_lado_derecho
+	if espejar:
+		for indice in puntos.size():
+			var punto := puntos[indice]
+			puntos[indice] = Vector2(-punto.x, punto.y)
+		puntos.reverse()
+		posicion.x = -posicion.x
+	colision_lado.set_deferred("polygon", puntos)
+	colision_lado.set_deferred("position", posicion)
+
+
 func _cambiar_animacion(nueva: StringName, conservar_fase: bool) -> void:
+	_actualizar_colision_sprite(nueva)
 	if $Sprite.animation == nueva:
 		return
 
@@ -649,7 +682,7 @@ func _hay_suelo_bajo_pies(posicion: Vector2) -> bool:
 		return true
 
 	var ancho_pies := 16.0
-	var centro_pies: Vector2 = posicion + $CollisionShape2D.position
+	var centro_pies: Vector2 = posicion + $PuntoPies.position
 	for desplazamiento_x in [-ancho_pies, 0.0, ancho_pies]:
 		var punto_global: Vector2 = centro_pies + Vector2(desplazamiento_x, 0.0)
 		var hay_suelo_en_punto := false
