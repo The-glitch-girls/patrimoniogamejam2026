@@ -386,7 +386,7 @@ func entrar_en_combate():
 	vida = VIDA_MAX
 	en_combate = true
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = "E  Atacar"
+	Global.prompts_interaccion = ["E  Atacar"]
 	combate.get_node("VidasHalcon").show()
 	_actualizar_vidas()
 	Musica.iniciar_combate()
@@ -405,7 +405,7 @@ func salir_de_combate():
 	en_combate = false
 	Musica.detener_pista_combate()
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = ""
+	Global.prompts_interaccion.clear()
 	$AnimatedSprite2D.scale = escala_original
 	if frames_vuelo != null:
 		$AnimatedSprite2D.sprite_frames = frames_vuelo
@@ -470,7 +470,7 @@ func _victoria():
 	derrotado = true
 	en_muerte = true
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = ""
+	Global.prompts_interaccion.clear()
 	var hud := get_tree().current_scene.get_node_or_null("HUD")
 	if hud != null and hud.has_method("ocultar_prompt_interaccion"):
 		hud.ocultar_prompt_interaccion()

@@ -70,7 +70,7 @@ var tiempo_juego: float = 0.0
 var presencia_cuniraya: float = 0.0
 var presencia_activa: bool = false
 var flashbacks_desbloqueados: Array[String] = []
-var prompt_interaccion: String = ""
+var prompts_interaccion: Array[String] = []
 var zona_actual: String = "Plaza"
 var halcon_cerca: bool = false
 var zorro_cerca: bool = false
@@ -225,7 +225,7 @@ func iniciar_hacia_el_mar() -> void:
 		return
 	hacia_el_mar = true
 	partida_terminada = true
-	prompt_interaccion = ""
+	prompts_interaccion.clear()
 
 
 func abrir_final(tipo: String) -> void:
@@ -245,7 +245,7 @@ func resetear():
 	presencia_cuniraya = 0.0
 	presencia_activa = false
 	flashbacks_desbloqueados.clear()
-	prompt_interaccion = ""
+	prompts_interaccion.clear()
 	zona_actual = "Plaza"
 	halcon_cerca = false
 	zorro_cerca = false

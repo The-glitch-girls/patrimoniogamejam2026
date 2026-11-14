@@ -239,8 +239,10 @@ func _poner_anim(hojas: SpriteFrames, nombre: String, texturas: Array, velocidad
 func _physics_process(delta):
 	if lock_arrojar > 0.0:
 		lock_arrojar = max(lock_arrojar - delta, 0.0)
-	_reproducir_clic_accion_teclado()
-	if _controlar_ataque():
+	var cueva := get_tree().get_first_node_in_group("zona_segura")
+	var prompt_e := _prompt_tecla_e(cueva)
+	_reproducir_clic_accion_teclado(prompt_e)
+	if _controlar_ataque(prompt_e):
 		return
 		
 	if Global.hacia_el_mar:
@@ -255,24 +257,18 @@ func _physics_process(delta):
 		lock_interaccion = max(lock_interaccion - delta, 0.0)
 
 	if Input.is_action_just_pressed("interactuar") and lock_interaccion <= 0.0:
-		var jarron := _jarron_mas_cercano()
-		if jarron != null and not Global.lleva_bebe and Global.prompt_interaccion == "E  Recolectar":
-			if jarron.call("recolectar_piedra"):
-				Global.piedras += 1
-		else:
-			var cueva := get_tree().get_first_node_in_group("zona_segura")
-			var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
-
-			if Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and cueva != null:
-				if Global.lleva_bebe:
-					cueva.dejar_bebe_con_zorro()
-				elif bebe_con_zorro:
-					cueva.recoger_bebe_del_zorro()
-			elif Global.lleva_bebe:
+		match prompt_e:
+			"E  Recolectar":
+				var jarron := _jarron_mas_cercano()
+				if jarron != null and jarron.call("recolectar_piedra"):
+					Global.piedras += 1
+			"E  Dejar con zorro":
+				cueva.dejar_bebe_con_zorro()
+			"E  Recoger del zorro":
+				cueva.recoger_bebe_del_zorro()
+			"E  Dejar", "E  Deja al bebé para luchar":
 				_dejar_bebe()
-			elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-				pass # Hablar con el zorro se activa únicamente con F.
-			else:
+			"E  Recoger":
 				_recoger_bebe()
 
 	if Input.is_action_just_pressed("hablar_zorro") and Global.zorro_cerca:
@@ -447,7 +443,7 @@ func _caminar_al_mar(delta: float) -> void:
 	_animar_caminata(delta, velocity.length() > 12.0, false)
 	_actualizar_camara(delta)
 	_actualizar_carga_visual()
-	Global.prompt_interaccion = ""
+	Global.prompts_interaccion.clear()
 
 
 func _cardinal(hacia: Vector2) -> Vector2:
@@ -703,37 +699,36 @@ func _hay_suelo_bajo_pies(posicion: Vector2) -> bool:
 	return true
 
 
-func _actualizar_prompt():
+func _actualizar_prompt() -> void:
 	var cueva := get_tree().get_first_node_in_group("zona_segura")
-	var bebe_con_zorro: bool = cueva != null and bool(cueva.get("bebe_con_zorro"))
-	var puede_descansar: bool = false
-	if cueva != null:
-		puede_descansar = bool(cueva.call("puede_descansar"))
-	
-	if puede_descansar:
-		Global.prompt_interaccion = "R  Descansar"
-	elif Global.zorro_cerca and Global.cuidado_bebe_desbloqueado and Global.lleva_bebe:
-		Global.prompt_interaccion = "E  Dejar con zorro"
-	elif Global.zorro_cerca and bebe_con_zorro:
-		Global.prompt_interaccion = "E  Recoger del zorro"
-	elif Global.zorro_cerca and Global.recuerdos_obtenidos > 0 and not Global.lleva_bebe:
-		Global.prompt_interaccion = "F Hablar"
-	elif Global.zorro_cerca and Global.recuerdos_obtenidos == 0:
-		Global.prompt_interaccion = "F  Hablar con zorro"
-	elif Global.halcon_cerca and Global.lleva_bebe:
-		Global.prompt_interaccion = "E  Deja al bebé para luchar"
-	elif Global.lleva_bebe:
-		Global.prompt_interaccion = "E  Dejar"
-	elif esta_cerca_del_bebe():
-		Global.prompt_interaccion = "E  Recoger" #Aqui mostrar boton
-	elif Global.halcon_cerca and not Global.lleva_bebe:
-		Global.prompt_interaccion = "E  Atacar"
+	var prompts: Array[String] = []
+	var prompt_e := _prompt_tecla_e(cueva)
+	if not prompt_e.is_empty():
+		prompts.append(prompt_e)
+	if Global.zorro_cerca:
+		prompts.append("F  Hablar con zorro")
 	elif Global.loro_cerca:
-		Global.prompt_interaccion = "F  Hablar con loro"
-	elif _jarron_mas_cercano() != null:
-		Global.prompt_interaccion = "E  Recolectar"
-	else:
-		Global.prompt_interaccion = ""
+		prompts.append("F  Hablar con loro")
+	if cueva != null and cueva.puede_descansar():
+		prompts.append("R  Descansar")
+	Global.prompts_interaccion = prompts
+
+
+func _prompt_tecla_e(cueva: Node) -> String:
+	if Global.zorro_cerca and cueva != null:
+		if Global.cuidado_bebe_desbloqueado and Global.lleva_bebe:
+			return "E  Dejar con zorro"
+		if cueva.get("bebe_con_zorro") and not Global.lleva_bebe:
+			return "E  Recoger del zorro"
+	if Global.lleva_bebe:
+		return "E  Deja al bebé para luchar" if Global.halcon_cerca else "E  Dejar"
+	if esta_cerca_del_bebe():
+		return "E  Recoger"
+	if Global.halcon_cerca:
+		return "E  Atacar"
+	if _jarron_mas_cercano() != null:
+		return "E  Recolectar"
+	return ""
 
 
 func registrar_contacto_jarron(jarron: Node2D, dentro: bool) -> void:
@@ -894,7 +889,7 @@ func _arrojar_en_combate():
 		piedra.queue_free()
 
 # Funciones de input
-func _controlar_ataque() -> bool:
+func _controlar_ataque(prompt_e: String) -> bool:
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
 	
 	# Ataque: funciona tanto para entrar al combate
@@ -908,7 +903,7 @@ func _controlar_ataque() -> bool:
 					lock_arrojar = COOLDOWN_ARROJAR
 					ataques_combate += 1
 					_arrojar_en_combate()
-			elif Global.halcon_cerca and not Global.lleva_bebe:
+			elif prompt_e == "E  Atacar":
 				var escena_actual := get_tree().current_scene
 				var combate_halcon := escena_actual.call("obtener_combate_halcon") as CanvasLayer
 				if combate_halcon == null:
@@ -927,17 +922,12 @@ func _controlar_ataque() -> bool:
 	return false
 
 
-func _reproducir_clic_accion_teclado() -> void:
-	var prompt := Global.prompt_interaccion
-	if Input.is_action_just_pressed("hablar_zorro") and Global.zorro_cerca and prompt.begins_with("F "):
+func _reproducir_clic_accion_teclado(prompt_e: String) -> void:
+	if Input.is_action_just_pressed("hablar_zorro") and (Global.zorro_cerca or Global.loro_cerca):
 		Global.reproducir_clic()
-	elif Input.is_action_just_pressed("descansar") and prompt.begins_with("R "):
+	elif Input.is_action_just_pressed("descansar") and Global.prompts_interaccion.has("R  Descansar"):
 		Global.reproducir_clic()
-	elif (
-		Input.is_action_just_pressed("interactuar")
-		and prompt.begins_with("E ")
-	) or (
-		Input.is_action_just_pressed("atacar")
-		and prompt.to_lower().contains("atacar")
+	elif Input.is_action_just_pressed("interactuar") and (
+		not prompt_e.is_empty() or Global.prompts_interaccion.has("E  Atacar")
 	):
 		Global.reproducir_clic()
