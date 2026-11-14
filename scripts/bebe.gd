@@ -89,7 +89,10 @@ func dejar(_posicion: Vector2) -> bool:
 
 
 func _hay_suelo_suficiente(posicion_bebe: Vector2) -> bool:
-	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	var escena := get_tree().current_scene
+	var suelo := escena.get_node_or_null("Capas/Suelo") as TileMapLayer
+	if suelo == null:
+		suelo = escena.get_node_or_null("SueloTiles") as TileMapLayer
 	if suelo == null:
 		return false
 
