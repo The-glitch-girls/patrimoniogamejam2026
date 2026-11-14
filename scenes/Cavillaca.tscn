@@ -1,24 +1,29 @@
-[gd_scene load_steps=3 format=3 uid="uid://cqgtkxob80eht"]
+[gd_scene load_steps=2 format=3 uid="uid://cqgtkxob80eht"]
 
 [ext_resource type="SpriteFrames" uid="uid://yu8sdinxc6p2" path="res://resources/cavillaca.tres" id="1_werjt"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_th60e"]
-size = Vector2(36, 14)
 
 [node name="Cavillaca" type="CharacterBody2D"]
 collision_mask = 7
 motion_mode = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 60)
-shape = SubResource("RectangleShape2D_th60e")
-
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 texture_filter = 4
 scale = Vector2(0.215, 0.215)
 sprite_frames = ExtResource("1_werjt")
-animation = &"lado_bebe"
-frame_progress = 0.449417
+animation = &"lado"
 
 [node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
 position = Vector2(0, -80)
+
+[node name="PuntoPies" type="Marker2D" parent="."]
+position = Vector2(0, 103)
+
+[node name="CollisionPolygon2D_Frente" type="CollisionPolygon2D" parent="."]
+visible = false
+position = Vector2(-1, 0)
+polygon = PackedVector2Array(-37, 54, 42, 55, 47, 70, 29, 83, 37, 95, 34, 99, -24, 101, -36, 98, -33, 84, -45, 69)
+disabled = true
+
+[node name="CollisionPolygon2D_Lado" type="CollisionPolygon2D" parent="."]
+position = Vector2(-1, 0)
+polygon = PackedVector2Array(-27, 54, 33, 56, 35, 72, 20, 79, 28, 96, 19, 99, 0, 99, -8, 95, -7, 80, -29, 69)
