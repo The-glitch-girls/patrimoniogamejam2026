@@ -15,7 +15,7 @@ var bob_t := 0.0
 var llorando := false
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var colision_cuerpo: CollisionPolygon2D = $ColisionCuerpo
-@onready var bloqueo_pies: CollisionShape2D = $BloqueoPies
+@onready var bloqueo_pies: CollisionPolygon2D = $BloqueoPies
 @onready var sonido_accion: AudioStreamPlayer = $SonidoAccion
 
 func _ready() -> void:

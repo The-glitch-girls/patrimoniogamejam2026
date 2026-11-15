@@ -10,7 +10,9 @@ motion_mode = 1
 texture_filter = 4
 scale = Vector2(0.215, 0.215)
 sprite_frames = ExtResource("1_werjt")
-animation = &"lado"
+animation = &"frente"
+frame = 1
+frame_progress = 0.332312
 
 [node name="PuntoObjetivoHalcon" type="Marker2D" parent="."]
 position = Vector2(0, -80)
@@ -18,12 +20,26 @@ position = Vector2(0, -80)
 [node name="PuntoPies" type="Marker2D" parent="."]
 position = Vector2(0, 103)
 
-[node name="CollisionPolygon2D_Frente" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D_Frente1" type="CollisionPolygon2D" parent="."]
 visible = false
 position = Vector2(-1, 0)
 polygon = PackedVector2Array(-37, 54, 42, 55, 47, 70, 29, 83, 37, 95, 34, 99, -24, 101, -36, 98, -33, 84, -45, 69)
 disabled = true
 
-[node name="CollisionPolygon2D_Lado" type="CollisionPolygon2D" parent="."]
+[node name="CollisionPolygon2D_Frente" type="CollisionPolygon2D" parent="."]
+position = Vector2(-0.978259, 0)
+scale = Vector2(0.978261, 1)
+polygon = PackedVector2Array(-15.3556, 56, 17.3556, 56, 33.7111, 64, 41.8889, 72, 41.8889, 88, 33.7111, 96, 17.3556, 104, -15.3556, 104, -31.7111, 96, -39.8889, 88, -39.8889, 72, -31.7111, 64)
+disabled = true
+
+[node name="CollisionPolygon2D_Lado1" type="CollisionPolygon2D" parent="."]
+visible = false
 position = Vector2(-1, 0)
 polygon = PackedVector2Array(-27, 54, 33, 56, 35, 72, 20, 79, 28, 96, 19, 99, 0, 99, -8, 95, -7, 80, -29, 69)
+disabled = true
+
+[node name="CollisionPolygon2D_Lado" type="CollisionPolygon2D" parent="."]
+position = Vector2(-3.28125, 0)
+scale = Vector2(1.09375, 1)
+polygon = PackedVector2Array(-11.6286, 56, 17.6286, 56, 32.2571, 64, 39.5714, 72, 39.5714, 88, 32.2571, 96, 17.6286, 104, -11.6286, 104, -26.2571, 96, -33.5714, 88, -33.5714, 72, -26.2571, 64)
+disabled = true
