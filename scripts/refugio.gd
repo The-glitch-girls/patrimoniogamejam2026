@@ -1,7 +1,6 @@
 extends Node2D
 
 const STREAM_ENERGIA_CARGANDO: AudioStreamOggVorbis = preload("res://sfx/interaccion/energia_cargando.ogg")
-const RECUPERACION_ENERGIA_POR_SEGUNDO := 8.0
 const RANGO_INTERACCION := 40.0
 const RANGO_ENTRADA := 150.0
 const DURACION_ANIMACION_PUERTA := 0.32
@@ -40,7 +39,7 @@ func _process(delta: float) -> void:
 	if descanso_activo:
 		if not sonido_energia_cargando.playing:
 			sonido_energia_cargando.play()
-		Global.recuperar_energia(RECUPERACION_ENERGIA_POR_SEGUNDO * delta)
+		Global.recuperar_energia(Global.RECUPERACION_ENERGIA_POR_SEGUNDO * delta)
 		if Global.energia >= Global.ENERGIA_MAX:
 			descanso_activo = false
 			sonido_energia_cargando.stop()
@@ -51,11 +50,10 @@ func _process(delta: float) -> void:
 
 
 func descansar() -> void:
+	if not _cavillaca_en_entrada():
+		return
 	if Global.recuerdos_obtenidos < 1:
 		_mostrar_aviso_zorro("El zorro aún no te ofrece descanso")
-		return
-	if not _cavillaca_en_entrada():
-		Global.mostrar_aviso("Acércate al tronco para descansar")
 		return
 	if Global.energia >= Global.ENERGIA_MAX:
 		Global.mostrar_aviso("Tu energía ya está completa")

@@ -64,7 +64,7 @@ var idioma_actual := "es"
 # =========================
 # ESTADO DEL JUEGO
 # =========================
-var energia: float = 100.0
+var energia: float = ENERGIA_MAX
 var lleva_bebe: bool = false
 var tiempo_juego: float = 0.0
 var presencia_cuniraya: float = 0.0
@@ -127,17 +127,17 @@ const VELOCIDAD_PRESENCIA := 5.0
 const ALIVIO_PRESENCIA := 3.0
 # COSTOS Y DAÑOS
 const COSTO_CAMINAR: float = 0.5
-const COSTO_CORRER: float = 2.0
+const COSTO_CORRER: float = 1.5
 const COSTO_CARGAR_BEBE: float = 2.0
-const COSTO_ARROJAR: float = 1.0
-const DANIO_ENERGIA_DERROTA: float = 15.0
-const DANIO_PRESENCIA_DERROTA: float = 1
+const COSTO_ARROJAR_ACIERTO: float = 1.0
+const COSTO_ARROJAR_FALLO: float = 3.0
 const PRESENCIA_CRITICA: float = 75.0
 const DRENAJE_CRITICO: float = 4.0
+const RECUPERACION_ENERGIA_POR_SEGUNDO: float = 8.0
 # RECOMPENSA
-const RECOMPENSA_VICTORIA: float = 12.0
+const RECOMPENSA_VICTORIA: float = 8.0
 # AVISOS: tiempo mínimo para poder leerlos
-const DURACION_AVISO: float = 4.0
+const DURACION_AVISO: float = 5.0
 
 # =========================
 # PROCESO

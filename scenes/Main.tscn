@@ -23,7 +23,7 @@
 [ext_resource type="Texture2D" uid="uid://clpieon8ugbc2" path="res://assets/ui/barras/presencia_borde.png" id="25_presence_border"]
 [ext_resource type="Texture2D" uid="uid://cp7kdeeerwtje" path="res://assets/ui/barras/presencia_fill.png" id="26_presence_fill"]
 [ext_resource type="Texture2D" uid="uid://g1f71dpakuca" path="res://assets/ui/barras/presencia_icono.png" id="27_presence_icon"]
-[ext_resource type="PackedScene" uid="uid://d1wp73jw5hqis" path="res://scenes/Jarron.tscn" id="28_jarron"]
+[ext_resource type="PackedScene" uid="uid://d1wp73jw5hqis" path="res://scenes/componentes/Jarron.tscn" id="28_jarron"]
 [ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="29_contador_font"]
 [ext_resource type="Script" uid="uid://g5xyunpibift" path="res://scripts/boton_circulo.gd" id="30_boton_circulo"]
 [ext_resource type="Texture2D" uid="uid://gbwql0ke3dn0" path="res://assets/icons/ajustes.svg" id="31_icono_ajustes"]

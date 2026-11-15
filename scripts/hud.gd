@@ -613,7 +613,7 @@ func _capturar_guia() -> void:
 
 
 func _capturar_flashback() -> void:
-	var escena_flashback := load("res://scenes/Flashback.tscn") as PackedScene
+	var escena_flashback := load("res://scenes/componentes/Flashback.tscn") as PackedScene
 	if escena_flashback == null:
 		push_error("No se pudo cargar Flashback.tscn")
 		return

@@ -880,9 +880,9 @@ func _arrojar_en_combate():
 		var distancia : float = piedra.global_position.distance_to(halcon.global_position)
 		if distancia < 30.0:
 			halcon.recibir_golpe(Vector2.UP)
-			Global.perder_energia(2.0)
+			Global.perder_energia(Global.COSTO_ARROJAR_ACIERTO)
 		else:
-			Global.perder_energia(5.0)
+			Global.perder_energia(Global.COSTO_ARROJAR_FALLO)
 
 	if is_instance_valid(piedra):
 		piedra.queue_free()

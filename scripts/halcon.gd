@@ -6,6 +6,7 @@ const RANGO_CORTE := 400.0
 const RADIO_REVOLOTEO := 72.0
 const AMPLITUD_REVOLOTEO := 36.0
 const ALTURA_REVOLOTEO := 100.0
+const MARGEN_GIRO_REVOLOTEO := 24.0
 const RANGO_GOLPE := 52.0
 const VELOCIDAD_REVOLOTEO := 380.0
 const VELOCIDAD_PATRULLA := 36.0
@@ -60,7 +61,7 @@ var en_muerte := false
 var padre_original: Node
 var posicion_original := Vector2.ZERO
 	
-const RUTA_FLASHBACK_ESCENA := "res://scenes/Flashback.tscn"
+const RUTA_FLASHBACK_ESCENA := "res://scenes/componentes/Flashback.tscn"
 const RUTA_TEXTURA_COMBATE := "res://assets/enemigos/halcon-pelea-idle.png"
 
 var frames_vuelo: SpriteFrames
@@ -309,14 +310,14 @@ func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
 	var desplazamiento_orbita := Vector2(cos(angulo) * radio, -absf(sin(angulo)) * radio * 0.35)
 	var destino := objetivo + Vector2.UP * ALTURA_REVOLOTEO + desplazamiento_orbita
-	var antes := global_position
 	var desplazamiento := (destino - global_position).limit_length(VELOCIDAD_REVOLOTEO * delta)
 	# Durante la persecución vuela por encima de los obstáculos del suelo.
 	global_position += desplazamiento
 	
-	var hacia := global_position - antes
-	if abs(hacia.x) > 0.2:
-		$AnimatedSprite2D.flip_h = hacia.x < 0.0
+	# Mira hacia Cavillaca y conserva la orientación al pasar sobre su cabeza.
+	var distancia_horizontal := objetivo.x - global_position.x
+	if absf(distancia_horizontal) > MARGEN_GIRO_REVOLOTEO:
+		$AnimatedSprite2D.flip_h = distancia_horizontal < 0.0
 	
 	if lock_golpe <= 0.0 and $AnimatedSprite2D.animation != "lado":
 		$AnimatedSprite2D.play("lado")
@@ -556,6 +557,7 @@ func _victoria():
 	$Detector.set_deferred("monitoring", false)
 	$Detector.set_deferred("monitorable", false)
 
+	Global.recuperar_energia(Global.RECOMPENSA_VICTORIA)
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
 		Musica.terminar_combate()
 		respawn_t = TIEMPO_RESPAWN
