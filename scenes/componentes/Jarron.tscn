@@ -15,7 +15,6 @@ radius = 50.0
 [node name="Jarron" type="StaticBody2D"]
 collision_mask = 0
 script = ExtResource("2_script")
-imagen = ExtResource("1_jarron")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.11, 0.11)

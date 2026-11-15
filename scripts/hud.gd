@@ -21,9 +21,9 @@ const PROMPT_DESCANSAR := preload("res://assets/ui/botones/descansar_btn.png")
 const PROMPT_DESCANSAR_PRESIONADO := preload("res://assets/ui/botones/descansar_btn_pressed.png")
 const TEXTURA_CAJA_DIALOGO := preload("res://assets/ui/dialogo/dialogo_caja.png")
 const MENSAJES_DIALOGO_ZORRO: Array[String] = [
-	"Con un recuerdo, la cueva recarga tu energía",
-	"El zorro parece reconocer el recuerdo que encontraste",
-	"El zorro confía en ti y está dispuesto a cuidar al bebé",
+	"fox_dialogue_no_memories",
+	"fox_dialogue_refuge",
+	"fox_dialogue_baby_care",
 	"El zorro aún no te ofrece descanso",
 	"Necesitas el Recuerdo 2 para esto",
 	"El zorro no está cerca",
@@ -32,12 +32,9 @@ const MENSAJES_DIALOGO_ZORRO: Array[String] = [
 	"Bebé recogido del zorro",
 ]
 const CONSEJOS_LORO: Array[String] = [
-	"¡Escucha al bebé si sientes que Cuniraya se acerca!",
-	"Listen to the baby when you feel Cuniraya drawing near!",
-	"Écoute le bébé si tu sens Cuniraya s'approcher !",
-	"¡Cuniraya está cerca! Protege al bebé.",
-	"Cuniraya is near! Protect the baby.",
-	"Cuniraya est proche ! Protège le bébé.",
+	"parrot_tip_danger",
+	"parrot_tip_refuge",
+	"parrot_tip_memories",
 ]
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const MORADO := Color(0.22, 0.2, 0.42, 0.92)
@@ -51,10 +48,8 @@ const VERDE_ARBOL := Color(0.16, 0.49, 0.49, 1)
 const BORDE_ENERGIA := Color(0.9, 0.84, 1.0, 1)
 
 var prompt_alpha := 0.0
-var prompt_texto := ""
-var prompt_idioma := ""
-var prompt_icono: TextureRect
-var prompt_titulo: Label
+var prompt_iconos: Array[TextureRect] = []
+var prompt_titulos: Array[Label] = []
 var dialogo_zorro_fondo: TextureRect
 var dialogo_zorro_texto: Label
 var material_oscuridad: ShaderMaterial
@@ -226,49 +221,54 @@ func _estilar_prompt() -> void:
 	
 	$PromptFondo.add_theme_stylebox_override("panel", _circulo(VERDE, 56))
 	_texto($PromptLabel, 22)
-	$PromptLabel.text = Traducciones.obtener_frase(Global.prompt_interaccion)
+	$PromptFondo.hide()
+	$PromptLabel.hide()
 
 
 func _crear_prompt_icono() -> void:
-	prompt_icono = TextureRect.new()
-	prompt_icono.name = "PromptAccionIcono"
-	prompt_icono.z_index = 10
-	prompt_icono.visible = false
-	prompt_icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	prompt_icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	prompt_icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	prompt_icono.scale = Vector2(1.5, 1.5)
-	prompt_icono.pivot_offset = Vector2(42, 42)
-	prompt_icono.anchor_left = 0.5
-	prompt_icono.anchor_right = 0.5
-	prompt_icono.anchor_top = 1.0
-	prompt_icono.anchor_bottom = 1.0
-	prompt_icono.offset_left = -42
-	prompt_icono.offset_top = -176
-	prompt_icono.offset_right = 42
-	prompt_icono.offset_bottom = -92
-	add_child(prompt_icono)
+	# Una posición disponible por cada tecla de interacción: E, F y R.
+	for _indice in range(3):
+		var prompt_icono := TextureRect.new()
+		prompt_icono.name = "PromptAccionIcono"
+		prompt_icono.z_index = 10
+		prompt_icono.visible = false
+		prompt_icono.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		prompt_icono.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		prompt_icono.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		prompt_icono.scale = Vector2(1.5, 1.5)
+		prompt_icono.pivot_offset = Vector2(42, 42)
+		prompt_icono.anchor_left = 0.5
+		prompt_icono.anchor_right = 0.5
+		prompt_icono.anchor_top = 1.0
+		prompt_icono.anchor_bottom = 1.0
+		prompt_icono.offset_left = -42
+		prompt_icono.offset_top = -176
+		prompt_icono.offset_right = 42
+		prompt_icono.offset_bottom = -92
+		add_child(prompt_icono)
 
-	prompt_titulo = Label.new()
-	prompt_titulo.name = "PromptAccionTitulo"
-	prompt_titulo.z_index = 10
-	prompt_titulo.visible = false
-	prompt_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	prompt_titulo.anchor_left = 0.5
-	prompt_titulo.anchor_right = 0.5
-	prompt_titulo.anchor_top = 1.0
-	prompt_titulo.anchor_bottom = 1.0
-	prompt_titulo.offset_left = -79
-	prompt_titulo.offset_top = -56
-	prompt_titulo.offset_right = 79
-	prompt_titulo.offset_bottom = -28
-	_texto(prompt_titulo, 18)
-	prompt_titulo.add_theme_font_override("font", FUENTE_PROMPT)
-	prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	add_child(prompt_titulo)
+		var prompt_titulo := Label.new()
+		prompt_titulo.name = "PromptAccionTitulo"
+		prompt_titulo.z_index = 10
+		prompt_titulo.visible = false
+		prompt_titulo.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		prompt_titulo.anchor_left = 0.5
+		prompt_titulo.anchor_right = 0.5
+		prompt_titulo.anchor_top = 1.0
+		prompt_titulo.anchor_bottom = 1.0
+		prompt_titulo.offset_left = -79
+		prompt_titulo.offset_top = -56
+		prompt_titulo.offset_right = 79
+		prompt_titulo.offset_bottom = -28
+		_texto(prompt_titulo, 18)
+		prompt_titulo.add_theme_font_override("font", FUENTE_PROMPT)
+		prompt_titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		prompt_titulo.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		add_child(prompt_titulo)
+		prompt_iconos.append(prompt_icono)
+		prompt_titulos.append(prompt_titulo)
 
 
 func _crear_dialogo_zorro() -> void:
@@ -307,12 +307,8 @@ func _crear_dialogo_zorro() -> void:
 	dialogo_zorro_texto.add_theme_color_override("font_color", CREMA)
 	add_child(dialogo_zorro_texto)
 
-func _es_prompt_luchar() -> bool:
-	return Global.prompt_interaccion == "E  Deja al bebé para luchar"
-
-
-func _tipo_prompt_con_imagen() -> String:
-	var texto := Global.prompt_interaccion.to_lower()
+func _tipo_prompt_con_imagen(prompt: String) -> String:
+	var texto := prompt.to_lower()
 	if texto.contains("descansar"):
 		return "rest" if texto.begins_with("r ") else ""
 	if texto.contains("atacar"):
@@ -329,22 +325,32 @@ func _tipo_prompt_con_imagen() -> String:
 
 
 func _actualizar_prompt_visual() -> void:
-	# Mantiene el último prompt mientras se desvanece para evitar que aparezca
-	# el botón de texto antiguo por un instante al salir del rango o del combate.
-	if Global.prompt_interaccion.is_empty():
+	var prompts := Global.prompts_interaccion
+	# Conserva el último dibujo mientras se desvanece.
+	if prompts.is_empty():
 		return
 
-	var tipo := _tipo_prompt_con_imagen()
-	var usa_imagen := tipo != ""
-	$PromptFondo.visible = not usa_imagen
-	$PromptLabel.visible = not usa_imagen
-	prompt_icono.visible = usa_imagen
-	prompt_titulo.visible = usa_imagen
-	if not usa_imagen:
-		return
+	$PromptFondo.visible = false
+	$PromptLabel.visible = false
+	for indice in prompt_iconos.size():
+		var mostrar := indice < prompts.size()
+		prompt_iconos[indice].visible = mostrar
+		prompt_titulos[indice].visible = mostrar
+		if mostrar:
+			var desplazamiento := (indice - (prompts.size() - 1) * 0.5) * 170.0
+			_dibujar_prompt(prompts[indice], prompt_iconos[indice], prompt_titulos[indice], desplazamiento)
 
+
+func _dibujar_prompt(prompt: String, prompt_icono: TextureRect, prompt_titulo: Label, desplazamiento: float) -> void:
+	prompt_icono.offset_left = -42.0 + desplazamiento
+	prompt_icono.offset_right = 42.0 + desplazamiento
+	prompt_titulo.offset_left = -79.0 + desplazamiento
+	prompt_titulo.offset_right = 79.0 + desplazamiento
+	var es_dejar_para_luchar := prompt == "E  Deja al bebé para luchar"
+	prompt_titulo.offset_bottom = -8.0 if es_dejar_para_luchar else -28.0
+	var tipo := _tipo_prompt_con_imagen(prompt)
 	var accion := "atacar" if tipo == "attack" else "descansar" if tipo == "rest" else "interactuar"
-	if tipo == "talk" and Global.prompt_interaccion.to_lower().begins_with("f "):
+	if tipo == "talk" and prompt.to_lower().begins_with("f "):
 		accion = "hablar_zorro"
 	var presionado := Input.is_action_pressed(accion)
 	if tipo == "rest" and Global.descanso_con_zorro:
@@ -354,7 +360,7 @@ func _actualizar_prompt_visual() -> void:
 			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
 			prompt_titulo.text = Traducciones.obtener("attack")
 		"pickup":
-			var es_recolectar := Global.prompt_interaccion.to_lower().contains("recolectar")
+			var es_recolectar := prompt.to_lower().contains("recolectar")
 			if es_recolectar:
 				prompt_icono.texture = PROMPT_RECOLECTAR_PRESIONADO if presionado else PROMPT_RECOLECTAR
 			else:
@@ -366,7 +372,7 @@ func _actualizar_prompt_visual() -> void:
 			prompt_titulo.text = Traducciones.obtener("converse_action")
 		"leave":
 			prompt_icono.texture = PROMPT_DEJAR_PRESIONADO if presionado else PROMPT_DEJAR
-			var clave_titulo := "drop_baby_to_fight_action" if _es_prompt_luchar() else "leave_with_fox_action" if Global.prompt_interaccion.to_lower().contains("con zorro") else "leave_action"
+			var clave_titulo := "drop_baby_to_fight_action" if es_dejar_para_luchar else "leave_with_fox_action" if prompt.to_lower().contains("con zorro") else "leave_action"
 			prompt_titulo.text = Traducciones.obtener(clave_titulo)
 		"talk":
 			prompt_icono.texture = PROMPT_HABLAR_PRESIONADO if presionado else PROMPT_HABLAR
@@ -377,11 +383,16 @@ func _actualizar_prompt_visual() -> void:
 
 
 func ocultar_prompt_interaccion() -> void:
-	Global.prompt_interaccion = ""
-	prompt_alpha = 0.0
-	for nodo in [$PromptFondo, $PromptLabel, prompt_icono, prompt_titulo]:
-		nodo.visible = false
-		nodo.modulate.a = 0.0
+	Global.prompts_interaccion.clear()
+	_actualizar_prompts_alpha(0.0)
+
+
+func _actualizar_prompts_alpha(alpha: float) -> void:
+	prompt_alpha = alpha
+	for nodo in prompt_iconos + prompt_titulos:
+		nodo.modulate.a = alpha
+		if alpha <= 0.0:
+			nodo.visible = false
 
 
 func _mostrar_presencia(es_visible: bool) -> void:
@@ -602,7 +613,7 @@ func _capturar_guia() -> void:
 
 
 func _capturar_flashback() -> void:
-	var escena_flashback := load("res://scenes/Flashback.tscn") as PackedScene
+	var escena_flashback := load("res://scenes/componentes/Flashback.tscn") as PackedScene
 	if escena_flashback == null:
 		push_error("No se pudo cargar Flashback.tscn")
 		return
@@ -626,35 +637,17 @@ func _process(delta):
 	_actualizar_guia_bebe(delta)
 	_actualizar_guia_cueva(delta)
 
-	if Global.prompt_interaccion != "":
-		if prompt_texto != Global.prompt_interaccion:
-			var es_ataque := Global.prompt_interaccion.to_lower().contains("atacar")
-			$PromptFondo.add_theme_stylebox_override("panel", _circulo(BORDO if es_ataque else VERDE, 56))
-			$PromptLabel.text = Traducciones.obtener_frase(Global.prompt_interaccion)
-		prompt_texto = Global.prompt_interaccion
-	if prompt_idioma != Global.idioma_actual:
-		prompt_idioma = Global.idioma_actual
-		prompt_texto = ""
 	_actualizar_prompt_visual()
-
-	var destino_alpha := 1.0 if Global.prompt_interaccion != "" else 0.0
-	prompt_alpha = move_toward(prompt_alpha, destino_alpha, delta * 8.0)
-	$PromptLabel.modulate.a = prompt_alpha
-	$PromptFondo.modulate.a = prompt_alpha
-	prompt_icono.modulate.a = prompt_alpha
-	prompt_titulo.modulate.a = prompt_alpha
-	if destino_alpha == 0.0 and prompt_alpha <= 0.0:
-		$PromptFondo.visible = false
-		$PromptLabel.visible = false
-		prompt_icono.visible = false
-		prompt_titulo.visible = false
+	var destino_alpha := 0.0 if Global.prompts_interaccion.is_empty() else 1.0
+	_actualizar_prompts_alpha(move_toward(prompt_alpha, destino_alpha, delta * 8.0))
 
 	var hay_aviso := Global.aviso_combate != ""
 	var es_dialogo_zorro := MENSAJES_DIALOGO_ZORRO.has(Global.aviso_combate)
 	var usar_caja_dialogo := es_dialogo_zorro or CONSEJOS_LORO.has(Global.aviso_combate)
+	var es_dialogo_localizado := Global.aviso_combate.begins_with("fox_dialogue_") or CONSEJOS_LORO.has(Global.aviso_combate)
 	var es_aviso_descanso := Global.aviso_combate == "Descansando junto al tronco"
 	var mostrar_aviso_normal := hay_aviso and not usar_caja_dialogo
-	var texto_aviso := Traducciones.obtener_frase(Global.aviso_combate)
+	var texto_aviso := Traducciones.obtener(Global.aviso_combate) if es_dialogo_localizado else Traducciones.obtener_frase(Global.aviso_combate)
 	$AvisoLabel.text = texto_aviso
 	$AvisoFondo.visible = mostrar_aviso_normal
 	$AvisoLabel.visible = mostrar_aviso_normal

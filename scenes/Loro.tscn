@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://co2r06qo7gdji"]
+[gd_scene load_steps=5 format=3 uid="uid://cmopp7feirlo8"]
 
 [ext_resource type="SpriteFrames" uid="uid://ddrg0vafhbmho" path="res://resources/loro.tres" id="1_5jmam"]
 [ext_resource type="Script" uid="uid://dqjxcbpl7apdj" path="res://scripts/loro.gd" id="2_loro"]

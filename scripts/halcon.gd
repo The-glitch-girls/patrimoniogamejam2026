@@ -5,8 +5,10 @@ const RANGO_DETECCION := 300.0
 const RANGO_CORTE := 400.0
 const RADIO_REVOLOTEO := 72.0
 const AMPLITUD_REVOLOTEO := 36.0
+const ALTURA_REVOLOTEO := 100.0
+const MARGEN_GIRO_REVOLOTEO := 24.0
 const RANGO_GOLPE := 52.0
-const VELOCIDAD_REVOLOTEO := 110.0
+const VELOCIDAD_REVOLOTEO := 380.0
 const VELOCIDAD_PATRULLA := 36.0
 const VELOCIDAD_RETIRADA := 110.0
 const DESCANSO_PERSECUCION := 1.4
@@ -59,7 +61,7 @@ var en_muerte := false
 var padre_original: Node
 var posicion_original := Vector2.ZERO
 	
-const RUTA_FLASHBACK_ESCENA := "res://scenes/Flashback.tscn"
+const RUTA_FLASHBACK_ESCENA := "res://scenes/componentes/Flashback.tscn"
 const RUTA_TEXTURA_COMBATE := "res://assets/enemigos/halcon-pelea-idle.png"
 
 var frames_vuelo: SpriteFrames
@@ -183,20 +185,46 @@ func debug_aparecer_al_lado(posicion: Vector2) -> void:
 
 func _armar_puntos() -> void:
 	puntos_abiertos.clear()
-	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	var suelo := _suelo_aparicion()
 	if suelo == null:
 		return
-	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
+	var obstaculos := _capas_bloqueo_aparicion(suelo)
 	var cueva := get_tree().get_first_node_in_group("zona_segura") as Node2D
 	for celda in suelo.get_used_cells():
 		if not Geometry2D.is_point_in_polygon(Vector2(celda), zona_aparicion_celdas):
 			continue
-		if bordes != null and bordes.get_cell_source_id(celda) != -1:
-			continue
 		var punto := suelo.to_global(suelo.map_to_local(celda))
-		if _esta_en_exclusion_tronco(punto, cueva):
+		if _esta_en_exclusion_tronco(punto, cueva) or _esta_sobre_obstaculo(punto, obstaculos):
 			continue
 		puntos_abiertos.append(punto)
+
+
+func _suelo_aparicion() -> TileMapLayer:
+	var escena := get_tree().current_scene
+	var suelo := escena.get_node_or_null("Capas/Suelo") as TileMapLayer
+	if suelo != null:
+		return suelo
+	return escena.get_node_or_null("SueloTiles") as TileMapLayer
+
+
+func _capas_bloqueo_aparicion(suelo: TileMapLayer) -> Array[TileMapLayer]:
+	var escena := get_tree().current_scene
+	var rutas := ["Bordes"]
+	if suelo.name == &"Suelo":
+		rutas = ["Capas/ObstaculosSolidos", "Capas/PiedrasSolidas", "Capas/PrimerPlano", "ObstaculosUnidireccionales"]
+	var capas: Array[TileMapLayer] = []
+	for ruta in rutas:
+		var capa := escena.get_node_or_null(ruta) as TileMapLayer
+		if capa != null:
+			capas.append(capa)
+	return capas
+
+
+func _esta_sobre_obstaculo(punto: Vector2, capas: Array[TileMapLayer]) -> bool:
+	for capa in capas:
+		if capa.get_cell_source_id(capa.local_to_map(capa.to_local(punto))) != -1:
+			return true
+	return false
 
 
 func _esta_en_exclusion_tronco(punto: Vector2, refugio: Node2D) -> bool:
@@ -210,14 +238,13 @@ func _esta_en_exclusion_tronco(punto: Vector2, refugio: Node2D) -> bool:
 
 
 func _posicion_es_spawn_valido(punto: Vector2) -> bool:
-	var suelo := get_tree().current_scene.get_node_or_null("SueloTiles") as TileMapLayer
+	var suelo := _suelo_aparicion()
 	if suelo == null:
 		return false
 	var celda := suelo.local_to_map(suelo.to_local(punto))
 	if suelo.get_cell_source_id(celda) == -1:
 		return false
-	var bordes := get_tree().current_scene.get_node_or_null("Bordes") as TileMapLayer
-	if bordes != null and bordes.get_cell_source_id(celda) != -1:
+	if _esta_sobre_obstaculo(punto, _capas_bloqueo_aparicion(suelo)):
 		return false
 	if not Geometry2D.is_point_in_polygon(Vector2(celda), zona_aparicion_celdas):
 		return false
@@ -281,15 +308,16 @@ func _revolotear(delta: float, cavillaca: Node2D) -> void:
 	angulo += delta * 2.4
 	var objetivo := _obtener_punto_objetivo(cavillaca)
 	var radio := RADIO_REVOLOTEO + sin(vuelo_t * 1.6) * AMPLITUD_REVOLOTEO
-	var desplazamiento_orbita := Vector2(cos(angulo) * radio, sin(angulo) * radio * 0.35)
-	var destino := objetivo + desplazamiento_orbita
-	var antes := global_position
+	var desplazamiento_orbita := Vector2(cos(angulo) * radio, -absf(sin(angulo)) * radio * 0.35)
+	var destino := objetivo + Vector2.UP * ALTURA_REVOLOTEO + desplazamiento_orbita
 	var desplazamiento := (destino - global_position).limit_length(VELOCIDAD_REVOLOTEO * delta)
-	_mover_con_colision(desplazamiento, delta)
+	# Durante la persecución vuela por encima de los obstáculos del suelo.
+	global_position += desplazamiento
 	
-	var hacia := global_position - antes
-	if abs(hacia.x) > 0.2:
-		$AnimatedSprite2D.flip_h = hacia.x < 0.0
+	# Mira hacia Cavillaca y conserva la orientación al pasar sobre su cabeza.
+	var distancia_horizontal := objetivo.x - global_position.x
+	if absf(distancia_horizontal) > MARGEN_GIRO_REVOLOTEO:
+		$AnimatedSprite2D.flip_h = distancia_horizontal < 0.0
 	
 	if lock_golpe <= 0.0 and $AnimatedSprite2D.animation != "lado":
 		$AnimatedSprite2D.play("lado")
@@ -386,7 +414,7 @@ func entrar_en_combate():
 	vida = VIDA_MAX
 	en_combate = true
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = "E  Atacar"
+	Global.prompts_interaccion = ["E  Atacar"]
 	combate.get_node("VidasHalcon").show()
 	_actualizar_vidas()
 	Musica.iniciar_combate()
@@ -405,7 +433,7 @@ func salir_de_combate():
 	en_combate = false
 	Musica.detener_pista_combate()
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = ""
+	Global.prompts_interaccion.clear()
 	$AnimatedSprite2D.scale = escala_original
 	if frames_vuelo != null:
 		$AnimatedSprite2D.sprite_frames = frames_vuelo
@@ -417,6 +445,27 @@ func salir_de_combate():
 	frames_combate = null
 	
 	$AnimatedSprite2D.play("lado")
+
+func terminar_combate_sin_municion() -> void:
+	if not en_combate or derrotado or Global.partida_terminada:
+		return
+
+	Global.prompts_interaccion.clear()
+	Global.mostrar_aviso(Traducciones.obtener("out_of_ammo"))
+	await get_tree().create_timer(Global.DURACION_AVISO, false).timeout
+	if not is_inside_tree() or not en_combate or derrotado or Global.partida_terminada:
+		return
+
+	var escena := get_tree().current_scene
+	var combate := escena.get_node_or_null("CombateHalcon") as CanvasLayer
+	if combate != null:
+		combate.hide()
+	salir_de_combate()
+	escena.liberar_combate_halcon(combate)
+	$Detector.set_deferred("monitoring", true)
+	_empezar_descanso()
+	Musica.terminar_combate()
+
 
 func _actualizar_vidas():
 	var combate := get_tree().current_scene.get_node_or_null("CombateHalcon")
@@ -470,7 +519,7 @@ func _victoria():
 	derrotado = true
 	en_muerte = true
 	Global.halcon_cerca = false
-	Global.prompt_interaccion = ""
+	Global.prompts_interaccion.clear()
 	var hud := get_tree().current_scene.get_node_or_null("HUD")
 	if hud != null and hud.has_method("ocultar_prompt_interaccion"):
 		hud.ocultar_prompt_interaccion()
@@ -508,6 +557,7 @@ func _victoria():
 	$Detector.set_deferred("monitoring", false)
 	$Detector.set_deferred("monitorable", false)
 
+	Global.recuperar_energia(Global.RECOMPENSA_VICTORIA)
 	if Global.recuerdos_obtenidos >= Global.RECUERDOS_TOTALES:
 		Musica.terminar_combate()
 		respawn_t = TIEMPO_RESPAWN

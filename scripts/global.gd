@@ -64,13 +64,13 @@ var idioma_actual := "es"
 # =========================
 # ESTADO DEL JUEGO
 # =========================
-var energia: float = 100.0
+var energia: float = ENERGIA_MAX
 var lleva_bebe: bool = false
 var tiempo_juego: float = 0.0
 var presencia_cuniraya: float = 0.0
 var presencia_activa: bool = false
 var flashbacks_desbloqueados: Array[String] = []
-var prompt_interaccion: String = ""
+var prompts_interaccion: Array[String] = []
 var zona_actual: String = "Plaza"
 var halcon_cerca: bool = false
 var zorro_cerca: bool = false
@@ -127,17 +127,17 @@ const VELOCIDAD_PRESENCIA := 5.0
 const ALIVIO_PRESENCIA := 3.0
 # COSTOS Y DAÑOS
 const COSTO_CAMINAR: float = 0.5
-const COSTO_CORRER: float = 2.0
+const COSTO_CORRER: float = 1.5
 const COSTO_CARGAR_BEBE: float = 2.0
-const COSTO_ARROJAR: float = 1.0
-const DANIO_ENERGIA_DERROTA: float = 15.0
-const DANIO_PRESENCIA_DERROTA: float = 1
+const COSTO_ARROJAR_ACIERTO: float = 1.0
+const COSTO_ARROJAR_FALLO: float = 3.0
 const PRESENCIA_CRITICA: float = 75.0
 const DRENAJE_CRITICO: float = 4.0
+const RECUPERACION_ENERGIA_POR_SEGUNDO: float = 8.0
 # RECOMPENSA
-const RECOMPENSA_VICTORIA: float = 12.0
+const RECOMPENSA_VICTORIA: float = 8.0
 # AVISOS: tiempo mínimo para poder leerlos
-const DURACION_AVISO: float = 4.0
+const DURACION_AVISO: float = 5.0
 
 # =========================
 # PROCESO
@@ -225,7 +225,7 @@ func iniciar_hacia_el_mar() -> void:
 		return
 	hacia_el_mar = true
 	partida_terminada = true
-	prompt_interaccion = ""
+	prompts_interaccion.clear()
 
 
 func abrir_final(tipo: String) -> void:
@@ -245,7 +245,7 @@ func resetear():
 	presencia_cuniraya = 0.0
 	presencia_activa = false
 	flashbacks_desbloqueados.clear()
-	prompt_interaccion = ""
+	prompts_interaccion.clear()
 	zona_actual = "Plaza"
 	halcon_cerca = false
 	zorro_cerca = false

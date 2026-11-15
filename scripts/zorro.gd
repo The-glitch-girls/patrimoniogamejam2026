@@ -2,9 +2,6 @@ extends StaticBody2D
 
 const CAPA_COLISION_SOLIDA := 4
 const MASCARA_COLISION_SOLIDA := 1
-# Referencias desde el origen de cada personaje hasta sus pies; solo orden visual (Z), no colisión.
-const OFFSET_PIES_ZORRO_Y := 49.0
-const ORDEN_VISUAL := preload("res://scripts/componentes/orden_visual.gd")
 const AUDIOS_MENSAJE: Array[AudioStream] = [
 	preload("res://sfx/animales/zorro/aa_zorro1.ogg"),
 	preload("res://sfx/animales/zorro/aa_zorro2.ogg"),
@@ -30,23 +27,14 @@ func _ready() -> void:
 	sprite.play("idle")
 
 
-func _process(_delta: float) -> void:
-	_actualizar_orden_visual()
-
-
-func _actualizar_orden_visual() -> void:
-	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-	ORDEN_VISUAL.actualizar_sprite(sprite, self, cavillaca, OFFSET_PIES_ZORRO_Y)
-
-
 func hablar() -> void:
 	sprite.play("talk")
 	if Global.recuerdos_obtenidos == 0:
-		Global.mostrar_aviso("Con un recuerdo, la cueva recarga tu energía")
+		Global.mostrar_aviso("fox_dialogue_no_memories")
 	elif Global.recuerdos_obtenidos == 1:
-		Global.mostrar_aviso("El zorro parece reconocer el recuerdo que encontraste")
+		Global.mostrar_aviso("fox_dialogue_refuge")
 	else:
-		Global.mostrar_aviso("El zorro confía en ti y está dispuesto a cuidar al bebé")
+		Global.mostrar_aviso("fox_dialogue_baby_care")
 	reproducir_sonido_mensaje()
 
 
