@@ -2,8 +2,8 @@ extends Node
 ## Señales visuales de la presencia de Cuniraya:
 ## - muesca en la barra en Global.PRESENCIA_CRITICA,
 ## - aviso único al cruzarla,
-## - la barra de energía parpadea mientras se drena (presencia crítica sin bebé),
-## - flecha ▼ cuando la presencia baja (al cargar al bebé).
+## - la barra de energía parpadea mientras se drena,
+## - flecha ▼ cuando la presencia baja (con el bebé protegido).
 
 const TINTE_CRITICO := Color(1.0, 0.42, 0.5, 1)
 const CREMA := Color(0.99, 0.96, 0.9, 1)
@@ -60,7 +60,7 @@ func _poner_flecha() -> void:
 
 
 func _drenando() -> bool:
-	return Global.presencia_cuniraya >= Global.PRESENCIA_CRITICA and not Global.lleva_bebe \
+	return Global.presencia_cuniraya >= Global.PRESENCIA_CRITICA and not Global.bebe_protegido() \
 		and not (Global.hacia_el_mar or Global.flashback_abierto or Global.partida_terminada) \
 		and not get_tree().paused
 
@@ -70,7 +70,7 @@ func _process(delta: float) -> void:
 	var presencia := Global.presencia_cuniraya
 	var critica := presencia >= Global.PRESENCIA_CRITICA
 	barra.tint_progress = TINTE_CRITICO if critica else Color.WHITE
-	if critica and not aviso_dado and not Global.partida_terminada:
+	if critica and not aviso_dado and not Global.bebe_protegido() and not Global.partida_terminada:
 		aviso_dado = true
 		Global.mostrar_aviso(Traducciones.obtener("presence_critical_warning"))
 	if is_instance_valid(flecha):

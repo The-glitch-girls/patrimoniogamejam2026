@@ -14,8 +14,6 @@ const SEGUIMIENTO := 14.0
 var bob_t := 0.0
 var llorando := false
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var colision_cuerpo: CollisionPolygon2D = $ColisionCuerpo
-@onready var bloqueo_pies: CollisionPolygon2D = $BloqueoPies
 @onready var sonido_accion: AudioStreamPlayer = $SonidoAccion
 
 func _ready() -> void:
@@ -24,13 +22,12 @@ func _ready() -> void:
 	# Usa la misma pareja de capa/máscara que el loro y el zorro.
 	collision_layer = CAPA_COLISION_SOLIDA
 	collision_mask = MASCARA_COLISION_SOLIDA
-	colision_cuerpo.disabled = Global.lleva_bebe
-	bloqueo_pies.disabled = Global.lleva_bebe
+	_sincronizar_colisiones()
 	sprite.play("normal")
 
 func _process(delta: float) -> void:
 	# Global.lleva_bebe también cambia desde Refugio y desde las transiciones.
-	# Mantener ambos colliders sincronizados evita formas activas mientras lo cargan.
+	# Mantener todas las formas sincronizadas evita colisiones mientras lo cargan.
 	_sincronizar_colisiones()
 
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
@@ -110,10 +107,11 @@ func _hay_suelo_suficiente(posicion_bebe: Vector2) -> bool:
 
 func _sincronizar_colisiones() -> void:
 	var deshabilitar := Global.lleva_bebe
-	if colision_cuerpo.disabled != deshabilitar:
-		colision_cuerpo.set_deferred("disabled", deshabilitar)
-	if bloqueo_pies.disabled != deshabilitar:
-		bloqueo_pies.set_deferred("disabled", deshabilitar)
+	# Recoger ocurre antes de move_and_slide() en el mismo paso de física.
+	for hijo in get_children():
+		if hijo is CollisionPolygon2D or hijo is CollisionShape2D:
+			if hijo.disabled != deshabilitar:
+				hijo.disabled = deshabilitar
 
 
 func reproducir_sonido_dejar() -> void:
