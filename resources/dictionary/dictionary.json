@@ -291,5 +291,9 @@
 	"tutorial_move": {"es": "Camina un poco usando WASD o las flechas.", "en": "Walk around using WASD or the arrow keys.", "fr": "Marche un peu avec WASD ou les flèches."},
 	"tutorial_move_complete": {"es": "Ya puedes moverte. Continúa cuando quieras empezar.", "en": "You can move now. Continue when you're ready to begin.", "fr": "Tu sais maintenant te déplacer. Continue quand tu es prête."},
 	"tutorial_continue": {"es": "Comenzar partida", "en": "Start game", "fr": "Commencer la partie"},
-	"tutorial_skip": {"es": "Omitir tutorial", "en": "Skip tutorial", "fr": "Passer le tutoriel"}
+	"tutorial_skip": {"es": "Omitir tutorial", "en": "Skip tutorial", "fr": "Passer le tutoriel"},
+	"tutorial_pickup": {"es": "Acércate a tu bebé y pulsa B para llevarlo en brazos.", "en": "Approach your baby and press B to pick him up.", "fr": "Approche-toi de ton bébé et appuie sur B pour le porter."},
+	"tutorial_drop": {"es": "Ahora pulsa B para dejar a tu bebé en el suelo.", "en": "Now press B to put your baby down.", "fr": "Appuie maintenant sur B pour poser ton bébé au sol."},
+	"tutorial_drop_space": {"es": "Busca espacio en el suelo y vuelve a pulsar B para dejar al bebé.", "en": "Find space on the ground and press B again to put your baby down.", "fr": "Trouve de la place au sol et appuie à nouveau sur B pour poser ton bébé."},
+	"tutorial_baby_complete": {"es": "¡Muy bien! Ya sabes caminar, cargar y dejar a tu bebé.", "en": "Well done! You can now walk, carry your baby and put him down.", "fr": "Très bien ! Tu sais marcher, porter et poser ton bébé."}
 }

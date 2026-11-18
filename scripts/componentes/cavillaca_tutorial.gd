@@ -9,11 +9,15 @@ func _ready() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	lock_interaccion = maxf(0.0, lock_interaccion - delta)
+	if Input.is_action_just_pressed("interactuar_bebe") and lock_interaccion <= 0.0:
+		get_parent().interactuar_bebe()
 	var direccion := _direccion_cuatro()
 	if direccion != Vector2.ZERO:
 		facing = direccion
 	var aceleracion := FRENADO if direccion == Vector2.ZERO else ACELERACION
-	velocity = velocity.move_toward(direccion * VELOCIDAD_CAMINAR, aceleracion * delta)
+	var velocidad := VELOCIDAD_CON_BEBE if Global.lleva_bebe else VELOCIDAD_CAMINAR
+	velocity = velocity.move_toward(direccion * velocidad, aceleracion * delta)
 	var anterior := global_position
 	move_and_slide()
 	_animar_caminata(delta, velocity.length() > 0.01, false)

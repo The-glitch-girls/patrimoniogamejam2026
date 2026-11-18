@@ -51,6 +51,26 @@ offset_bottom = 126.0
 position = Vector2(230, 32)
 scale = Vector2(0.5, 0.5)
 
+[node name="BotonBebe" type="TextureRect" parent="Interfaz"]
+visible = false
+offset_left = 1030.0
+offset_top = 300.0
+offset_right = 1156.0
+offset_bottom = 426.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AccionBebe" type="Label" parent="Interfaz"]
+visible = false
+offset_left = 1000.0
+offset_top = 436.0
+offset_right = 1186.0
+offset_bottom = 476.0
+theme = SubResource("Theme_tutorial")
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="Continuar" type="Button" parent="Interfaz"]
 anchors_preset = 7
 anchor_left = 0.5
