@@ -1,0 +1,77 @@
+[gd_scene load_steps=9 format=3 uid="uid://doarlkdsaelci"]
+
+[ext_resource type="Script" uid="uid://nkd1ohyu41ff" path="res://scripts/tutorial_movimiento.gd" id="1_tutorial"]
+[ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="2_personaje"]
+[ext_resource type="Script" uid="uid://b0xf553l26led" path="res://scripts/componentes/cavillaca_tutorial.gd" id="3_movimiento"]
+[ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="4_tiles"]
+[ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="5_fuente"]
+[ext_resource type="PackedScene" uid="uid://cmopp7feirlo8" path="res://scenes/Loro.tscn" id="6_loro"]
+[ext_resource type="PackedScene" path="res://scenes/componentes/BurbujaDialogo.tscn" id="7_burbuja"]
+
+[sub_resource type="Theme" id="Theme_tutorial"]
+default_font = ExtResource("5_fuente")
+default_font_size = 22
+
+[node name="TutorialMovimiento" type="Node2D"]
+script = ExtResource("1_tutorial")
+
+[node name="Fondo" type="CanvasLayer" parent="."]
+layer = -1
+
+[node name="ColorRect" type="ColorRect" parent="Fondo"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.12, 0.08, 0.22, 1)
+
+[node name="Capas" type="Node2D" parent="."]
+
+[node name="Suelo" type="TileMapLayer" parent="Capas"]
+position = Vector2(320, 128)
+tile_set = ExtResource("4_tiles")
+collision_enabled = false
+
+[node name="Cavillaca" parent="." instance=ExtResource("2_personaje")]
+position = Vector2(640, 281)
+script = ExtResource("3_movimiento")
+
+[node name="Interfaz" type="CanvasLayer" parent="."]
+
+[node name="DialogoLoro" parent="Interfaz" instance=ExtResource("7_burbuja")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -463.0
+offset_top = 40.0
+offset_right = 463.0
+offset_bottom = 126.0
+
+[node name="Loro" parent="Interfaz" instance=ExtResource("6_loro")]
+position = Vector2(230, 32)
+scale = Vector2(0.5, 0.5)
+
+[node name="Continuar" type="Button" parent="Interfaz"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -66.0
+offset_right = 140.0
+offset_bottom = -20.0
+theme = SubResource("Theme_tutorial")
+
+[node name="Omitir" type="Button" parent="Interfaz"]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -66.0
+offset_right = -28.0
+offset_bottom = -20.0
+theme = SubResource("Theme_tutorial")
+flat = true

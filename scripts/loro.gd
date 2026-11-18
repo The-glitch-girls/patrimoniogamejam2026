@@ -55,10 +55,14 @@ func _actualizar_orden_visual() -> void:
 func hablar() -> void:
 	if not Global.loro_cerca:
 		return
-	tiempo_hablando = DURACION_HABLA
-	sprite.play("hablando")
+	acompanar_indicacion()
 	Global.mostrar_aviso(CONSEJOS[indice_consejo])
 	indice_consejo = (indice_consejo + 1) % CONSEJOS.size()
+
+
+func acompanar_indicacion() -> void:
+	tiempo_hablando = DURACION_HABLA
+	sprite.play("hablando")
 	reproducir_sonido_mensaje()
 
 
