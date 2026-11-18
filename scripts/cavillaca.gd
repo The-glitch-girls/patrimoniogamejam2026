@@ -18,7 +18,7 @@ const FRENADO := 1200.0
 const ACELERACION_CON_BEBE := 420.0
 const LOCK_TRAS_DEJAR := 0.35
 const COOLDOWN_ARROJAR := 0.35
-const ORIGEN_CAVILLACA := Vector2(13, 11)
+const ORIGEN_CAVILLACA := Vector2i(13, 11)
 
 const PIEDRA_ESCENA := preload("res://scenes/Piedra.tscn")
 const PASOS := [
@@ -41,6 +41,7 @@ var ataque_solicitado := false
 var paso_acum := 0.0
 var jarrones_en_contacto: Array[Node2D] = []
 var mar_t := 0.0
+var destino_mar := Vector2.ZERO
 var cam: Camera2D
 var suelo_tiles: TileMapLayer
 var suelo_nuevo: TileMapLayer
@@ -349,6 +350,13 @@ func _input(event: InputEvent) -> void:
 func _transicionar_al_origen_mar() -> void:
 	preparando_caminata_mar = true
 	velocity = Vector2.ZERO
+	var suelo := suelo_nuevo if is_instance_valid(suelo_nuevo) else suelo_tiles
+	if not is_instance_valid(suelo):
+		push_warning("No se encontró la capa de suelo para la caminata al mar.")
+		Global.abrir_final("mar")
+		return
+	var origen_mar := suelo.to_global(suelo.map_to_local(ORIGEN_CAVILLACA))
+	destino_mar = suelo.to_global(suelo.map_to_local(Vector2i(Global.DESTINO_MAR)))
 	var capa_transicion := CanvasLayer.new()
 	capa_transicion.layer = 20
 	var fundido := ColorRect.new()
@@ -364,14 +372,15 @@ func _transicionar_al_origen_mar() -> void:
 	await fundir_a_violeta.finished
 	if not is_inside_tree():
 		return
+	Global.bebe_con_zorro = false
 	Global.lleva_bebe = true
 	_ocultar_sprite_bebe()
 	if cam != null:
 		cam.position_smoothing_enabled = false
-	global_position = _posicion_celda_mapa(ORIGEN_CAVILLACA)
+	global_position = origen_mar
 	velocity = Vector2.ZERO
 	mar_t = 0.0
-	facing = _cardinal(_posicion_celda_mapa(Global.DESTINO_MAR) - global_position)
+	facing = _cardinal(destino_mar - global_position)
 	_animar_caminata(0.0, false, false)
 	_actualizar_carga_visual()
 	if cam != null:
@@ -395,32 +404,17 @@ func _transicionar_al_origen_mar() -> void:
 	caminata_mar_preparada = true
 
 
-func _posicion_celda_mapa(coordenadas: Vector2) -> Vector2:
-	var suelo := get_tree().current_scene.get_node("SueloTiles") as TileMapLayer
-	return suelo.to_global(suelo.map_to_local(Vector2i(coordenadas)))
-
-
 func _caminar_al_mar(delta: float) -> void:
 	mar_t += delta
-	var destino := _posicion_celda_mapa(Global.DESTINO_MAR)
-	var hacia := destino - global_position
+	var hacia := destino_mar - global_position
 	if hacia.length() < 70.0 or mar_t > 8.0:
 		Global.abrir_final("mar")
 		return
 	var direccion := _cardinal(hacia)
 	facing = direccion
 	velocity = velocity.move_toward(direccion * VELOCIDAD_CON_BEBE, ACELERACION_CON_BEBE * delta)
+	# El recorrido final se extiende más allá del límite del movimiento manual.
 	move_and_slide()
-	global_position.x = clamp(
-		global_position.x,
-		Global.LIMITE_MAPA.position.x + 20.0,
-		Global.LIMITE_MAPA.end.x - 20.0
-	)
-	global_position.y = clamp(
-		global_position.y,
-		Global.LIMITE_MAPA.position.y + 20.0,
-		Global.LIMITE_MAPA.end.y - 20.0
-	)
 	_animar_caminata(delta, velocity.length() > 12.0, false)
 	_actualizar_camara(delta)
 	_actualizar_carga_visual()
@@ -700,9 +694,9 @@ func _actualizar_prompt() -> void:
 
 
 func _prompt_bebe(cueva: Node) -> String:
-	if Global.zorro_cerca and cueva != null:
-		if Global.cuidado_bebe_desbloqueado and Global.lleva_bebe:
-			return "B  Dejar con zorro"
+	if cueva != null and cueva.en_zona_de_cuidado():
+		if Global.lleva_bebe:
+			return "B  Dejar con zorro" if Global.cuidado_bebe_desbloqueado else ""
 		if Global.bebe_con_zorro and not Global.lleva_bebe:
 			return "B  Recoger del zorro"
 	if Global.lleva_bebe:

@@ -55,8 +55,11 @@ func reproducir_clic() -> void:
 # INPUT MAP
 # =========================
 # "correr": Shift
-# "interactuar": E
-# "atacar": E
+# "interactuar_bebe": B
+# "recolectar": E
+# "hablar_zorro": F
+# "descansar": R
+# "atacar": Espacio (SPC)
 # "mover_*": flechas o WASD
 
 var idioma_actual := "es"
@@ -66,6 +69,7 @@ var idioma_actual := "es"
 # =========================
 var energia: float = ENERGIA_MAX
 var lleva_bebe: bool = false
+var bebe_con_zorro: bool = false
 var tiempo_juego: float = 0.0
 var presencia_cuniraya: float = 0.0
 var presencia_activa: bool = false
@@ -123,12 +127,12 @@ const ENERGIA_MAX: float = 100.0
 # PRESENCIA CUNIRAYA
 const PRESENCIA_MAX := 100.0
 const VELOCIDAD_PRESENCIA := 5.0
-# Cargar al bebé calma a Cuniraya
+# La presencia baja mientras el bebé está protegido.
 const ALIVIO_PRESENCIA := 3.0
 # COSTOS Y DAÑOS
-const COSTO_CAMINAR: float = 0.5
-const COSTO_CORRER: float = 1.5
-const COSTO_CARGAR_BEBE: float = 2.0
+const COSTO_CAMINAR: float = 0.25
+const COSTO_CORRER: float = 0.75
+const COSTO_CARGAR_BEBE: float = 1
 const COSTO_ARROJAR_ACIERTO: float = 1.0
 const COSTO_ARROJAR_FALLO: float = 3.0
 const PRESENCIA_CRITICA: float = 75.0
@@ -153,7 +157,7 @@ func _process(delta):
 
 	if hacia_el_mar or flashback_abierto or partida_terminada:
 		return
-	if lleva_bebe:
+	if bebe_protegido():
 		reducir_presencia(ALIVIO_PRESENCIA * delta)
 	elif presencia_cuniraya >= PRESENCIA_CRITICA:
 		perder_energia(DRENAJE_CRITICO * delta)
@@ -175,6 +179,10 @@ func recuperar_energia(cantidad: float):
 # =========================
 # PRESENCIA DE CUNIRAYA
 # =========================
+
+func bebe_protegido() -> bool:
+	return lleva_bebe or bebe_con_zorro
+
 
 func aumentar_presencia(cantidad: float = 1.0):
 	presencia_cuniraya = min(presencia_cuniraya + cantidad, PRESENCIA_MAX)
@@ -241,6 +249,7 @@ func resetear():
 	pausado = false
 	energia = ENERGIA_MAX
 	lleva_bebe = false
+	bebe_con_zorro = false
 	tiempo_juego = 0.0
 	presencia_cuniraya = 0.0
 	presencia_activa = false

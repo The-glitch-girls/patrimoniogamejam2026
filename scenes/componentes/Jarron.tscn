@@ -20,6 +20,10 @@ script = ExtResource("2_script")
 scale = Vector2(0.11, 0.11)
 texture = ExtResource("1_jarron")
 
+[node name="IndicadorRecarga" type="Node2D" parent="."]
+z_index = 6
+position = Vector2(0, -76)
+
 [node name="CollisionPico" type="CollisionShape2D" parent="."]
 position = Vector2(-1, -22)
 shape = SubResource("CapsuleShape2D_cilda")
