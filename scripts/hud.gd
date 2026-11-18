@@ -87,6 +87,7 @@ var volumen_normal_peak: float = 0.0
 var volumen_normal_llanto: float = 3.0
 var temporizador_peak: float = 0.0
 var temporizador_llanto: float = 0.0
+var fundidos_sfx: Dictionary[Node, Tween] = {}
 # Mientras la presencia está activa, el bebé llora cada ~10 s como pista sonora.
 const INTERVALO_LLANTO := 10.0
 var aviso_visible_actual := ""
@@ -665,6 +666,7 @@ func _process(delta):
 	material_oscuridad.set_shader_parameter("intensidad", nivel_presencia / 100.0)
 
 	if Global.presencia_activa:
+		_cancelar_fundido_sfx(peak_tension, volumen_normal_peak)
 		temporizador_peak -= delta
 		if temporizador_peak <= 0.0 and not peak_tension.playing:
 			peak_tension.volume_db = volumen_normal_peak
@@ -675,6 +677,7 @@ func _process(delta):
 		temporizador_peak = 0.0
 
 	if Global.presencia_activa:
+		_cancelar_fundido_sfx(llanto_bebe, volumen_normal_llanto)
 		temporizador_llanto -= delta
 		if temporizador_llanto <= 0.0 and not llanto_bebe.playing:
 			llanto_bebe.volume_db = volumen_normal_llanto
@@ -693,11 +696,23 @@ func _process(delta):
 		$Guias.visible = true
 
 func fade_out_audio(audio: Node, duracion: float) -> void:
-	if not audio.get("playing"):
+	if not audio.playing or fundidos_sfx.has(audio):
 		return
 	var tween := create_tween()
+	fundidos_sfx[audio] = tween
 	tween.tween_property(audio, "volume_db", -40.0, duracion)
-	tween.tween_callback(Callable(audio, "stop"))
+	tween.tween_callback(func():
+		audio.stop()
+		fundidos_sfx.erase(audio)
+	)
+
+
+func _cancelar_fundido_sfx(audio: Node, volumen_normal: float) -> void:
+	var tween: Tween = fundidos_sfx.get(audio)
+	if tween != null:
+		tween.kill()
+		fundidos_sfx.erase(audio)
+		audio.volume_db = volumen_normal
 
 # Guias de bebe y cueva utilizando la clase GuiaNavegacion
 func _poner_guia_bebe() -> void:

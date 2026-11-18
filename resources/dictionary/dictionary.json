@@ -287,5 +287,9 @@
 	"drop_baby_to_fight_action": {"es": "Deja al bebé\npara luchar", "en": "Put the baby\ndown to fight", "fr": "Pose le bébé\npour combattre"},
 	"out_of_ammo": {"es": "Te quedaste sin municiones, vuélvelo a intentar.", "en": "You're out of ammo. Try again.", "fr": "Tu n’as plus de munitions. Réessaie."},
 	"prompt_drop_baby_to_fight": {"es": "B  Deja al bebé para luchar", "en": "B  Put the baby down to fight", "fr": "B  Pose le bébé pour combattre"},
-	"controls_hint": {"es": "Mover WASD · Correr Shift · Acción E · Hablar F · Descansar R", "en": "Move WASD · Run Shift · Action E · Talk F · Rest R", "fr": "Bouger ZQSD · Courir Maj · Action E · Parler F · Repos R"}
+	"controls_hint": {"es": "Mover WASD · Correr Shift · Acción E · Hablar F · Descansar R", "en": "Move WASD · Run Shift · Action E · Talk F · Rest R", "fr": "Bouger ZQSD · Courir Maj · Action E · Parler F · Repos R"},
+	"tutorial_move": {"es": "Camina un poco usando WASD o las flechas.", "en": "Walk around using WASD or the arrow keys.", "fr": "Marche un peu avec WASD ou les flèches."},
+	"tutorial_move_complete": {"es": "Ya puedes moverte. Continúa cuando quieras empezar.", "en": "You can move now. Continue when you're ready to begin.", "fr": "Tu sais maintenant te déplacer. Continue quand tu es prête."},
+	"tutorial_continue": {"es": "Comenzar partida", "en": "Start game", "fr": "Commencer la partie"},
+	"tutorial_skip": {"es": "Omitir tutorial", "en": "Skip tutorial", "fr": "Passer le tutoriel"}
 }

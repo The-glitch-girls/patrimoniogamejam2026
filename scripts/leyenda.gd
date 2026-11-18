@@ -4,7 +4,7 @@ const FUENTE := preload("res://assets/fonts/chelsea-market/ChelseaMarket-Regular
 const TEXTURA_ZORRO: Texture2D = preload("res://assets/amigos/zorro.png")
 const COLOR_TEXTO := Color("f4e9ff")
 const COLOR_MARCO := Color("c1a4ea")
-const ESCENA_MAIN := "res://scenes/Main.tscn"
+const ESCENA_TUTORIAL := "res://scenes/TutorialMovimiento.tscn"
 const COLOR_LUZ := Color("b9a2ff")
 
 @onready var sombra: ColorRect = $Sombra
@@ -491,4 +491,4 @@ func _continuar() -> void:
 	var tween := create_tween()
 	tween.tween_property(fundido, "color:a", 1.0, 0.65)
 	await tween.finished
-	get_tree().change_scene_to_file(ESCENA_MAIN)
+	get_tree().change_scene_to_file(ESCENA_TUTORIAL)

@@ -564,6 +564,11 @@ func _victoria():
 		return
 	var indice := Global.obtener_recuerdo()
 	respawn_t = 99999.0 if indice >= Global.RECUERDOS_TOTALES else TIEMPO_RESPAWN
+	# El combate se libera al final del fotograma. Cargar el recuerdo después
+	# evita mantener a la vez sus texturas y las del combate.
+	await get_tree().process_frame
+	if not is_instance_valid(hud) or Global.partida_terminada:
+		return
 	var escena_flashback := load(RUTA_FLASHBACK_ESCENA) as PackedScene
 	if escena_flashback == null:
 		push_error("No se pudo cargar Flashback.tscn")
