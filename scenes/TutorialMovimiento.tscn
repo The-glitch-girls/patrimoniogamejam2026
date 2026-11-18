@@ -48,6 +48,13 @@ offset_top = 40.0
 offset_right = 463.0
 offset_bottom = 126.0
 
+[node name="Texto" parent="Interfaz/DialogoLoro" index="0"]
+layout_mode = 1
+offset_top = 10.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Loro" parent="Interfaz" instance=ExtResource("6_loro")]
 position = Vector2(230, 32)
 scale = Vector2(0.5, 0.5)
@@ -55,9 +62,9 @@ scale = Vector2(0.5, 0.5)
 [node name="BotonBebe" type="TextureRect" parent="Interfaz"]
 visible = false
 offset_left = 1030.0
-offset_top = 300.0
+offset_top = 230.0
 offset_right = 1156.0
-offset_bottom = 426.0
+offset_bottom = 356.0
 mouse_filter = 2
 expand_mode = 1
 stretch_mode = 5
@@ -65,12 +72,40 @@ stretch_mode = 5
 [node name="AccionBebe" type="Label" parent="Interfaz"]
 visible = false
 offset_left = 1000.0
-offset_top = 436.0
+offset_top = 366.0
 offset_right = 1186.0
-offset_bottom = 476.0
+offset_bottom = 406.0
 theme = SubResource("Theme_tutorial")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BotonRecolectar" type="TextureRect" parent="Interfaz"]
+visible = false
+offset_left = 1030.0
+offset_top = 425.0
+offset_right = 1156.0
+offset_bottom = 551.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="AccionRecolectar" type="Label" parent="Interfaz"]
+visible = false
+offset_left = 1000.0
+offset_top = 561.0
+offset_right = 1186.0
+offset_bottom = 601.0
+theme = SubResource("Theme_tutorial")
+horizontal_alignment = 1
+
+[node name="ContadorPiedras" type="Label" parent="Interfaz"]
+visible = false
+offset_left = 980.0
+offset_top = 608.0
+offset_right = 1220.0
+offset_bottom = 644.0
+theme = SubResource("Theme_tutorial")
+horizontal_alignment = 1
 
 [node name="Continuar" type="Button" parent="Interfaz"]
 anchors_preset = 7
@@ -96,3 +131,5 @@ offset_right = -28.0
 offset_bottom = -20.0
 theme = SubResource("Theme_tutorial")
 flat = true
+
+[editable path="Interfaz/DialogoLoro"]

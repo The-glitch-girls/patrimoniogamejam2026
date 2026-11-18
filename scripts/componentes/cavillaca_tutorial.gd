@@ -12,6 +12,8 @@ func _physics_process(delta: float) -> void:
 	lock_interaccion = maxf(0.0, lock_interaccion - delta)
 	if Input.is_action_just_pressed("interactuar_bebe") and lock_interaccion <= 0.0:
 		get_parent().interactuar_bebe()
+	if Input.is_action_just_pressed("recolectar"):
+		get_parent().recolectar()
 	var direccion := _direccion_cuatro()
 	if direccion != Vector2.ZERO:
 		facing = direccion

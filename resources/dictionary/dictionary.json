@@ -295,5 +295,10 @@
 	"tutorial_pickup": {"es": "Acércate a tu bebé y pulsa B para llevarlo en brazos.", "en": "Approach your baby and press B to pick him up.", "fr": "Approche-toi de ton bébé et appuie sur B pour le porter."},
 	"tutorial_drop": {"es": "Ahora pulsa B para dejar a tu bebé en el suelo.", "en": "Now press B to put your baby down.", "fr": "Appuie maintenant sur B pour poser ton bébé au sol."},
 	"tutorial_drop_space": {"es": "Busca espacio en el suelo y vuelve a pulsar B para dejar al bebé.", "en": "Find space on the ground and press B again to put your baby down.", "fr": "Trouve de la place au sol et appuie à nouveau sur B pour poser ton bébé."},
-	"tutorial_baby_complete": {"es": "¡Muy bien! Ya sabes caminar, cargar y dejar a tu bebé.", "en": "Well done! You can now walk, carry your baby and put him down.", "fr": "Très bien ! Tu sais marcher, porter et poser ton bébé."}
+	"tutorial_baby_complete": {"es": "¡Muy bien! Ya sabes caminar, cargar y dejar a tu bebé.", "en": "Well done! You can now walk, carry your baby and put him down.", "fr": "Très bien ! Tu sais marcher, porter et poser ton bébé."},
+	"tutorial_next": {"es": "Continuar", "en": "Continue", "fr": "Continuer"},
+	"tutorial_collect": {"es": "Puedes recoger piedras con tu bebé en brazos. Acércate a un jarrón y pulsa E. Consigue 10 piedras.", "en": "You can collect stones while carrying your baby. Approach a jar and press E. Collect 10 stones.", "fr": "Tu peux ramasser des pierres en portant ton bébé. Approche-toi d’une jarre et appuie sur E. Obtiens 10 pierres."},
+	"tutorial_jar_cooldown": {"es": "Los jarrones necesitan recargarse. Espera a que se complete el círculo para recoger más. Reúne 10 piedras.", "en": "Jars need time to recharge. Wait for the circle to fill before collecting again. Gather 10 stones.", "fr": "Les jarres se rechargent. Attends que le cercle soit rempli pour en reprendre. Obtiens 10 pierres."},
+	"tutorial_collect_complete": {"es": "¡Ya tienes al menos 10 piedras! Estás lista para comenzar.", "en": "You have at least 10 stones! You're ready to begin.", "fr": "Tu as au moins 10 pierres ! Tu es prête à commencer."},
+	"tutorial_stone_count": {"es": "Piedras %d / %d", "en": "Stones %d / %d", "fr": "Pierres %d / %d"}
 }
