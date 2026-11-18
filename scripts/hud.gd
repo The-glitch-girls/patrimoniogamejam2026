@@ -19,6 +19,13 @@ const PROMPT_HABLAR := preload("res://assets/ui/botones/hablar_btn.png")
 const PROMPT_HABLAR_PRESIONADO := preload("res://assets/ui/botones/hablar_btn_pressed.png")
 const PROMPT_DESCANSAR := preload("res://assets/ui/botones/descansar_btn.png")
 const PROMPT_DESCANSAR_PRESIONADO := preload("res://assets/ui/botones/descansar_btn_pressed.png")
+const ACCIONES_PROMPT := {
+	"B": "interactuar_bebe",
+	"E": "recolectar",
+	"F": "hablar_zorro",
+	"R": "descansar",
+	"SPC": "atacar",
+}
 const TEXTURA_CAJA_DIALOGO := preload("res://assets/ui/dialogo/dialogo_caja.png")
 const MENSAJES_DIALOGO_ZORRO: Array[String] = [
 	"fox_dialogue_no_memories",
@@ -226,8 +233,8 @@ func _estilar_prompt() -> void:
 
 
 func _crear_prompt_icono() -> void:
-	# Una posición disponible por cada tecla de interacción: E, F y R.
-	for _indice in range(3):
+	# Una posición por tecla de interacción: B, E, F, R y SPC.
+	for _indice in range(5):
 		var prompt_icono := TextureRect.new()
 		prompt_icono.name = "PromptAccionIcono"
 		prompt_icono.z_index = 10
@@ -313,7 +320,9 @@ func _tipo_prompt_con_imagen(prompt: String) -> String:
 		return "rest" if texto.begins_with("r ") else ""
 	if texto.contains("atacar"):
 		return "attack"
-	if texto.contains("recoger") or texto.contains("recolectar"):
+	if texto.contains("recolectar"):
+		return "collect"
+	if texto.contains("recoger"):
 		return "pickup"
 	if texto.contains("dejar") or texto.contains("deja al bebé"):
 		return "leave"
@@ -346,27 +355,23 @@ func _dibujar_prompt(prompt: String, prompt_icono: TextureRect, prompt_titulo: L
 	prompt_icono.offset_right = 42.0 + desplazamiento
 	prompt_titulo.offset_left = -79.0 + desplazamiento
 	prompt_titulo.offset_right = 79.0 + desplazamiento
-	var es_dejar_para_luchar := prompt == "E  Deja al bebé para luchar"
+	var es_dejar_para_luchar := prompt == "B  Deja al bebé para luchar"
 	prompt_titulo.offset_bottom = -8.0 if es_dejar_para_luchar else -28.0
 	var tipo := _tipo_prompt_con_imagen(prompt)
-	var accion := "atacar" if tipo == "attack" else "descansar" if tipo == "rest" else "interactuar"
-	if tipo == "talk" and prompt.to_lower().begins_with("f "):
-		accion = "hablar_zorro"
-	var presionado := Input.is_action_pressed(accion)
+	var accion: String = ACCIONES_PROMPT.get(prompt.get_slice(" ", 0), "")
+	var presionado := not accion.is_empty() and Input.is_action_pressed(accion)
 	if tipo == "rest" and Global.descanso_con_zorro:
 		presionado = true
 	match tipo:
 		"attack":
 			prompt_icono.texture = PROMPT_ATACAR_PRESIONADO if presionado else PROMPT_ATACAR
 			prompt_titulo.text = Traducciones.obtener("attack")
+		"collect":
+			prompt_icono.texture = PROMPT_RECOLECTAR_PRESIONADO if presionado else PROMPT_RECOLECTAR
+			prompt_titulo.text = Traducciones.obtener("collect")
 		"pickup":
-			var es_recolectar := prompt.to_lower().contains("recolectar")
-			if es_recolectar:
-				prompt_icono.texture = PROMPT_RECOLECTAR_PRESIONADO if presionado else PROMPT_RECOLECTAR
-			else:
-				prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
-			var clave_recogida := "collect" if es_recolectar else "pickup"
-			prompt_titulo.text = Traducciones.obtener(clave_recogida)
+			prompt_icono.texture = PROMPT_CARGAR_PRESIONADO if presionado else PROMPT_CARGAR
+			prompt_titulo.text = Traducciones.obtener("pickup")
 		"converse":
 			prompt_icono.texture = PROMPT_CONVERSAR_PRESIONADO if presionado else PROMPT_CONVERSAR
 			prompt_titulo.text = Traducciones.obtener("converse_action")
@@ -489,18 +494,6 @@ func _actualizar_ornamentos_aviso(ancho: float, alto: float) -> void:
 		Vector2(ancho, 2.0), Vector2(ancho + 20.0, 13.0),
 		Vector2(ancho + 28.0, 25.0), Vector2(ancho + 26.0, 34.0),
 	])
-
-
-func _posicionar_aviso_descanso(es_descanso: bool) -> void:
-	var fondo := $AvisoFondo as Panel
-	var label := $AvisoLabel as Label
-	var ancla_vertical := 1.0 if es_descanso else 0.0
-	fondo.anchor_top = ancla_vertical
-	fondo.anchor_bottom = ancla_vertical
-	label.anchor_top = ancla_vertical
-	label.anchor_bottom = ancla_vertical
-	# El estado de descanso aparece sobre el botón R, sin tapar la escena.
-	fondo.offset_top = -246.0 if es_descanso else 28.0
 
 
 func _tarjeta(color: Color, radio: int) -> StyleBoxFlat:
@@ -661,7 +654,6 @@ func _process(delta):
 		$AvisoLabel.add_theme_font_size_override("font_size", 18)
 		for linea in ornamentos_aviso:
 			linea.visible = false
-		_posicionar_aviso_descanso(es_aviso_descanso)
 		_ajustar_banner_aviso()
 		var color_aviso := Color(0.34, 0.25, 0.52, 0.96) if es_aviso_descanso else BORDO
 		_estilar_pildora($AvisoFondo, color_aviso)

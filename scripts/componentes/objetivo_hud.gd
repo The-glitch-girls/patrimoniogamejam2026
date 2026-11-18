@@ -156,6 +156,8 @@ func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") \
 			or (event is InputEventMouseButton and event.is_pressed()):
 		_cerrar_tarjeta()
+		if event.is_action_pressed("atacar"):
+			get_viewport().set_input_as_handled()
 
 
 func _cerrar_tarjeta() -> void:

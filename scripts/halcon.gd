@@ -414,7 +414,7 @@ func entrar_en_combate():
 	vida = VIDA_MAX
 	en_combate = true
 	Global.halcon_cerca = false
-	Global.prompts_interaccion = ["E  Atacar"]
+	Global.prompts_interaccion = ["SPC  Atacar"]
 	combate.get_node("VidasHalcon").show()
 	_actualizar_vidas()
 	Musica.iniciar_combate()

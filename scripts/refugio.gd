@@ -1,12 +1,10 @@
 extends Node2D
 
 const STREAM_ENERGIA_CARGANDO: AudioStreamOggVorbis = preload("res://sfx/interaccion/energia_cargando.ogg")
-const RANGO_INTERACCION := 40.0
 const RANGO_ENTRADA := 150.0
 const DURACION_ANIMACION_PUERTA := 0.32
 const ANCHO_PUERTA_ABIERTA := 0.06
 
-var bebe_con_zorro := false
 var jugador_en_entrada := false
 var puerta_abierta := false
 var descanso_activo := false
@@ -66,6 +64,10 @@ func puede_descansar() -> bool:
 	return _cavillaca_en_entrada() and Global.recuerdos_obtenidos > 0
 
 
+func en_zona_de_cuidado() -> bool:
+	return Global.zorro_cerca or _cavillaca_en_entrada()
+
+
 func _cavillaca_en_entrada() -> bool:
 	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
 	return (
@@ -115,12 +117,7 @@ func dejar_bebe_con_zorro():
 		return
 	
 	var zorro := get_tree().get_first_node_in_group("zorro") as Node2D
-	var cavillaca := get_tree().get_first_node_in_group("cavillaca") as Node2D
-	if (
-		zorro == null
-		or cavillaca == null
-		or cavillaca.global_position.distance_to(zorro.global_position) >= RANGO_INTERACCION
-	):
+	if zorro == null or not en_zona_de_cuidado():
 		_mostrar_aviso_zorro("El zorro no está cerca")
 		return
 	
@@ -128,27 +125,29 @@ func dejar_bebe_con_zorro():
 		_mostrar_aviso_zorro("No llevas al bebé")
 		return
 	
-	bebe_con_zorro = true
+	var bebe := get_tree().get_first_node_in_group("bebe") as Node2D
+	if bebe == null:
+		return
+
+	Global.bebe_con_zorro = true
 	Global.lleva_bebe = false
+	Global.presencia_activa = false
+	bebe.cambiar_llanto(false)
+	bebe.reproducir_sonido_dejar()
+	bebe.global_position = zorro.global_position
 	_mostrar_aviso_zorro("Bebé dejado con el zorro")
-	
-	var bebe := get_tree().get_first_node_in_group("bebe")
-	if bebe != null:
-		bebe.call("reproducir_sonido_dejar")
-		bebe.global_position = zorro.global_position
 
 
 func recoger_bebe_del_zorro():
-	if not bebe_con_zorro:
+	if not Global.bebe_con_zorro or not en_zona_de_cuidado():
 		return
-	
-	bebe_con_zorro = false
-	Global.lleva_bebe = true
-	_mostrar_aviso_zorro("Bebé recogido del zorro")
-	
+
 	var bebe := get_tree().get_first_node_in_group("bebe")
-	if bebe != null:
-		bebe.recoger()
+	if bebe == null:
+		return
+	Global.bebe_con_zorro = false
+	bebe.recoger()
+	_mostrar_aviso_zorro("Bebé recogido del zorro")
 
 
 func _mostrar_aviso_zorro(texto: String) -> void:

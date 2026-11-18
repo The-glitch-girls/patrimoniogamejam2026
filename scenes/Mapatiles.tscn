@@ -163,7 +163,7 @@ offset_left = -110.0
 offset_top = -84.0
 offset_right = 110.0
 offset_bottom = -40.0
-text = "E  Recoger"
+text = "B  Recoger"
 horizontal_alignment = 1
 vertical_alignment = 1
 
