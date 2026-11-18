@@ -2,12 +2,13 @@ extends Node
 ## Señales visuales de la presencia de Cuniraya:
 ## - muesca en la barra en Global.PRESENCIA_CRITICA,
 ## - aviso único al cruzarla,
-## - la barra de energía parpadea mientras se drena,
+## - la barra de energía parpadea y suena el latido mientras se drena,
 ## - flecha ▼ cuando la presencia baja (con el bebé protegido).
 
 const TINTE_CRITICO := Color(1.0, 0.42, 0.5, 1)
 const CREMA := Color(0.99, 0.96, 0.9, 1)
 const CONTORNO := Color(0.1, 0.07, 0.2, 0.95)
+const SFX_LATIDO: AudioStreamOggVorbis = preload("res://sfx/interaccion/latido.ogg")
 
 var hud: CanvasLayer
 var barra: TextureProgressBar
@@ -15,11 +16,19 @@ var flecha: Node2D
 var aviso_dado := false
 var presencia_previa := 0.0
 var tiempo := 0.0
+var latido: AudioStreamPlayer
 
 
 func _ready() -> void:
 	hud = get_parent()
 	barra = hud.barra_presencia_texture
+	var bucle_latido := SFX_LATIDO.duplicate() as AudioStreamOggVorbis
+	bucle_latido.loop = true
+	latido = AudioStreamPlayer.new()
+	latido.name = "Latido"
+	latido.stream = bucle_latido
+	latido.bus = "SFX"
+	add_child(latido)
 	_poner_muesca.call_deferred()
 	_poner_flecha.call_deferred()
 	presencia_previa = Global.presencia_cuniraya
@@ -79,7 +88,11 @@ func _process(delta: float) -> void:
 
 	var energia: Control = hud.barra_energia.get_parent()
 	if _drenando():
+		if not latido.playing:
+			latido.play()
 		var pulso := 0.5 + 0.5 * sin(tiempo * 9.0)
 		energia.modulate = Color(1, 0.45 + 0.55 * pulso, 0.5 + 0.5 * pulso, 0.55 + 0.45 * pulso)
 	else:
+		if latido.playing:
+			latido.stop()
 		energia.modulate = Color.WHITE
