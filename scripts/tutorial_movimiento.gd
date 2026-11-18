@@ -9,7 +9,7 @@ var completado := false
 var saliendo := false
 
 @onready var jugador: CharacterBody2D = $Cavillaca
-@onready var instruccion: Label = $Interfaz/Instruccion
+@onready var instruccion: Label = $Interfaz/DialogoLoro/Texto
 @onready var continuar: Button = $Interfaz/Continuar
 @onready var omitir: Button = $Interfaz/Omitir
 @onready var loro: StaticBody2D = $Interfaz/Loro

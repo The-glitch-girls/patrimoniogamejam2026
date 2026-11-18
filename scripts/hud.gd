@@ -26,7 +26,7 @@ const ACCIONES_PROMPT := {
 	"R": "descansar",
 	"SPC": "atacar",
 }
-const TEXTURA_CAJA_DIALOGO := preload("res://assets/ui/dialogo/dialogo_caja.png")
+const BURBUJA_DIALOGO := preload("res://scenes/componentes/BurbujaDialogo.tscn")
 const MENSAJES_DIALOGO_ZORRO: Array[String] = [
 	"fox_dialogue_no_memories",
 	"fox_dialogue_refuge",
@@ -280,12 +280,8 @@ func _crear_prompt_icono() -> void:
 
 
 func _crear_dialogo_zorro() -> void:
-	dialogo_zorro_fondo = TextureRect.new()
+	dialogo_zorro_fondo = BURBUJA_DIALOGO.instantiate() as TextureRect
 	dialogo_zorro_fondo.name = "DialogoZorroFondo"
-	dialogo_zorro_fondo.texture = TEXTURA_CAJA_DIALOGO
-	dialogo_zorro_fondo.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	dialogo_zorro_fondo.stretch_mode = TextureRect.STRETCH_SCALE
-	dialogo_zorro_fondo.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	dialogo_zorro_fondo.visible = false
 	dialogo_zorro_fondo.z_index = 20
 	dialogo_zorro_fondo.anchor_left = 0.5
@@ -295,25 +291,8 @@ func _crear_dialogo_zorro() -> void:
 	dialogo_zorro_fondo.offset_right = 463.0
 	dialogo_zorro_fondo.offset_bottom = 298.0
 	add_child(dialogo_zorro_fondo)
+	dialogo_zorro_texto = dialogo_zorro_fondo.get_node("Texto") as Label
 
-	dialogo_zorro_texto = Label.new()
-	dialogo_zorro_texto.name = "DialogoZorroTexto"
-	dialogo_zorro_texto.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	dialogo_zorro_texto.visible = false
-	dialogo_zorro_texto.z_index = 21
-	dialogo_zorro_texto.anchor_left = 0.5
-	dialogo_zorro_texto.anchor_right = 0.5
-	dialogo_zorro_texto.offset_left = -405.0
-	dialogo_zorro_texto.offset_top = 188.0
-	dialogo_zorro_texto.offset_right = 405.0
-	dialogo_zorro_texto.offset_bottom = 274.0
-	dialogo_zorro_texto.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	dialogo_zorro_texto.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	dialogo_zorro_texto.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	dialogo_zorro_texto.add_theme_font_override("font", FUENTE)
-	dialogo_zorro_texto.add_theme_font_size_override("font_size", 23)
-	dialogo_zorro_texto.add_theme_color_override("font_color", CREMA)
-	add_child(dialogo_zorro_texto)
 
 func _tipo_prompt_con_imagen(prompt: String) -> String:
 	var texto := prompt.to_lower()

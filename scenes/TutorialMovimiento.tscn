@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://doarlkdsaelci"]
+[gd_scene load_steps=9 format=3 uid="uid://doarlkdsaelci"]
 
 [ext_resource type="Script" uid="uid://nkd1ohyu41ff" path="res://scripts/tutorial_movimiento.gd" id="1_tutorial"]
 [ext_resource type="PackedScene" uid="uid://cqgtkxob80eht" path="res://scenes/Cavillaca.tscn" id="2_personaje"]
@@ -6,8 +6,7 @@
 [ext_resource type="TileSet" uid="uid://c3xvjwjlpi80w" path="res://resources/tileset.tres" id="4_tiles"]
 [ext_resource type="FontFile" uid="uid://okca1jp413t5" path="res://assets/fonts/chelsea-market/ChelseaMarket-Regular.ttf" id="5_fuente"]
 [ext_resource type="PackedScene" uid="uid://cmopp7feirlo8" path="res://scenes/Loro.tscn" id="6_loro"]
-[ext_resource type="Texture2D" uid="uid://o6op336vugma" path="res://assets/ui/dialogo/dialogo_caja.png" id="7_dialogo"]
-[ext_resource type="FontFile" uid="uid://cshmoodhso330" path="res://assets/fonts/Fredoka-SemiBold.ttf" id="8_dialogo_fuente"]
+[ext_resource type="PackedScene" path="res://scenes/componentes/BurbujaDialogo.tscn" id="7_burbuja"]
 
 [sub_resource type="Theme" id="Theme_tutorial"]
 default_font = ExtResource("5_fuente")
@@ -39,29 +38,18 @@ script = ExtResource("3_movimiento")
 
 [node name="Interfaz" type="CanvasLayer" parent="."]
 
-[node name="Loro" parent="Interfaz" instance=ExtResource("6_loro")]
-position = Vector2(150, 70)
-
-[node name="DialogoLoro" type="TextureRect" parent="Interfaz"]
-offset_left = 227.0
-offset_top = 18.0
-offset_right = 1153.0
+[node name="DialogoLoro" parent="Interfaz" instance=ExtResource("7_burbuja")]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -463.0
+offset_top = 40.0
+offset_right = 463.0
 offset_bottom = 126.0
-mouse_filter = 2
-texture = ExtResource("7_dialogo")
-expand_mode = 1
 
-[node name="Instruccion" type="Label" parent="Interfaz"]
-offset_left = 285.0
-offset_top = 35.0
-offset_right = 1095.0
-offset_bottom = 109.0
-theme_override_colors/font_color = Color(0.99, 0.96, 0.9, 1)
-theme_override_fonts/font = ExtResource("8_dialogo_fuente")
-theme_override_font_sizes/font_size = 23
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 3
+[node name="Loro" parent="Interfaz" instance=ExtResource("6_loro")]
+position = Vector2(230, 32)
+scale = Vector2(0.5, 0.5)
 
 [node name="Continuar" type="Button" parent="Interfaz"]
 anchors_preset = 7
