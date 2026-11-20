@@ -2,294 +2,337 @@
   "play": {
 	"es": "Jugar",
 	"en": "Play",
-	"fr": "Jouer"
+	"fr": "Jouer",
+	"qu": "Pukllay"
   },
 	"loading": {
 	  "es": "Cargando...",
 	  "en": "Loading...",
-	  "fr": "Chargement..."
+	  "fr": "Chargement...",
+	  "qu": "Suyaykuy..."
 	},
   "settings": {
 	"es": "Ajustes",
 	"en": "Settings",
-	"fr": "Paramètres"
+	"fr": "Paramètres",
+	"qu": "Allichanakuna"
   },
   "credits": {
 	"es": "Créditos",
 	"en": "Credits",
-	"fr": "Crédits"
+	"fr": "Crédits",
+	"qu": "Ruraqkuna"
   },
   "legend_title": {
 	"es": "La leyenda",
 	"en": "The Legend",
-	"fr": "La légende"
+	"fr": "La légende",
+	"qu": "Willakuy"
   },
   "legend_text": {
 	"es": "Cuenta la leyenda que, en tiempos antiguos, vivía Cavillaca, una diosa de extraordinaria belleza, admirada y deseada por todos. Dioses y seres poderosos buscaban conquistarla, pero ella los rechazaba a todos, pues no deseaba casarse.\n\n Entre quienes la admiraban se encontraba Cuniraya Huiracocha, un dios todopoderoso que deseaba acercarse a ella. Sin embargo, consciente de que Cavillaca no aceptaría a ninguno de sus pretendientes, decidió ocultar su verdadera identidad y adoptar la apariencia de un pobre mendigo.",
 	"en": "Legend has it that, in ancient times, there lived Cavillaca, a goddess of extraordinary beauty, admired and desired by all. Gods and powerful beings sought to win her over, but she rejected them all, for she had no wish to marry.\n\n Among those who admired her was Cuniraya Huiracocha, an all-powerful god who longed to approach her. Yet, knowing Cavillaca would accept none of her suitors, he decided to conceal his true identity and take the appearance of a poor beggar.",
-	"fr": "La légende raconte qu'autrefois vivait Cavillaca, une déesse d'une beauté extraordinaire, admirée et désirée de tous. Des dieux et des êtres puissants cherchaient à la conquérir, mais elle les repoussait tous, car elle ne voulait pas se marier.\n\n Parmi ses admirateurs se trouvait Cuniraya Huiracocha, un dieu tout-puissant qui souhaitait l'approcher. Cependant, sachant que Cavillaca n'accepterait aucun de ses prétendants, il décida de cacher sa véritable identité et de prendre l'apparence d'un pauvre mendiant."
+	"fr": "La légende raconte qu'autrefois vivait Cavillaca, une déesse d'une beauté extraordinaire, admirée et désirée de tous. Des dieux et des êtres puissants cherchaient à la conquérir, mais elle les repoussait tous, car elle ne voulait pas se marier.\n\n Parmi ses admirateurs se trouvait Cuniraya Huiracocha, un dieu tout-puissant qui souhaitait l'approcher. Cependant, sachant que Cavillaca n'accepterait aucun de ses prétendants, il décida de cacher sa véritable identité et de prendre l'apparence d'un pauvre mendiant.",
+	"qu": "Ñawpa pachakunapi Cavillaca sutiyuq huk ancha sumaq diosa kawsasqa, llapanpa admirasqan, munasqan. Dioskunapas, atiyniyuq kaqkunapas payta munakurqanku, paytaq llapantapas mana chaskirqanchu, manam casarakuyta munarqanchu.\n\nPayta admiraqkuna ukhupi karqan Cuniraya Huiracocha, llapa atiyniyuq dios, payman asuykuyta munaq. Ichaqa Cavillaca mana pitapas chaskinanta yachaspa, cheqaq kayninta pakayta yuyaykurqan, huk wakcha mañakuq runaman tukurqan."
 	},
   "special_thanks": {
 	"es": "Agradecimientos\nespeciales",
 	"en": "Special\nThanks",
-	"fr": "Remerciements\nspéciaux"
+	"fr": "Remerciements\nspéciaux",
+	"qu": "Sapaq\nañaychaykuna"
   },
   "credits_scroll_hint": {
 	"es": "v Desliza",
 	"en": "v Scroll",
-	"fr": "v Défiler"
+	"fr": "v Défiler",
+	"qu": "v Uraykachiy"
   },
   "credits_continue": {
 	"es": "Presione cualquier tecla para continuar",
 	"en": "Press any key to continue",
-	"fr": "Appuyez sur une touche pour continuer"
+	"fr": "Appuyez sur une touche pour continuer",
+	"qu": "Ima teclatapas ñit'iy qatipanaykipaq"
   },
   "credit_ariadna_mestanza_name": {
 	"es": "Ariadna Mestanza",
 	"en": "Ariadna Mestanza",
-	"fr": "Ariadna Mestanza"
+	"fr": "Ariadna Mestanza",
+	"qu": "Ariadna Mestanza"
   },
   "credit_andres_porras_name": {
 	"es": "Andrés Porras",
 	"en": "Andrés Porras",
-	"fr": "Andrés Porras"
+	"fr": "Andrés Porras",
+	"qu": "Andrés Porras"
   },
   "credit_selene_negron_name": {
 	"es": "Selene Negrón",
 	"en": "Selene Negrón",
-	"fr": "Selene Negrón"
+	"fr": "Selene Negrón",
+	"qu": "Selene Negrón"
   },
   "credit_malu_munayco_name": {
 	"es": "Malu Munayco",
 	"en": "Malu Munayco",
-	"fr": "Malu Munayco"
+	"fr": "Malu Munayco",
+	"qu": "Malu Munayco"
   },
   "credit_melissa_huerta_name": {
 	"es": "Melissa Huerta",
 	"en": "Melissa Huerta",
-	"fr": "Melissa Huerta"
+	"fr": "Melissa Huerta",
+	"qu": "Melissa Huerta"
   },
   "credit_shiara_arauzo_name": {
 	"es": "Shiara Arauzo",
 	"en": "Shiara Arauzo",
-	"fr": "Shiara Arauzo"
+	"fr": "Shiara Arauzo",
+	"qu": "Shiara Arauzo"
   },
   "credit_adrian_gutierrez_name": {
 	"es": "Adrián Gutiérrez",
 	"en": "Adrián Gutiérrez",
-	"fr": "Adrián Gutiérrez"
+	"fr": "Adrián Gutiérrez",
+	"qu": "Adrián Gutiérrez"
   },
   "credit_sumiko_de_los_santos_name": {
 	"es": "Sumiko De Los Santos",
 	"en": "Sumiko De Los Santos",
-	"fr": "Sumiko De Los Santos"
+	"fr": "Sumiko De Los Santos",
+	"qu": "Sumiko De Los Santos"
   },
   "credit_role_art": {
 	"es": "Arte",
 	"en": "Art",
-	"fr": "Art"
+	"fr": "Art",
+	"qu": "Siq'iy"
   },
   "credit_role_ariadna": {
 	"es": "Concept Art, Arte 2D, Animación 2D",
 	"en": "Concept Art, 2D Art, 2D Animation",
-	"fr": "Concept art, art 2D, animation 2D"
+	"fr": "Concept art, art 2D, animation 2D",
+	"qu": "Concept Art, 2D Siq'iy, 2D Kuyuchiy"
   },
   "credit_role_selene": {
 	"es": "Concept Art, Arte 2D, Animación 2D",
 	"en": "Concept Art, 2D Art, 2D Animation",
-	"fr": "Concept art, art 2D, animation 2D"
+	"fr": "Concept art, art 2D, animation 2D",
+	"qu": "Concept Art, 2D Siq'iy, 2D Kuyuchiy"
   },
   "credit_role_andres": {
 	"es": "Arte 2D, Animación 2D, Arte ambiental/escenarios",
 	"en": "2D Art, 2D Animation, Environment/Levels Art",
-	"fr": "Art 2D, animation 2D, art d’environnement/décors"
+	"fr": "Art 2D, animation 2D, art d’environnement/décors",
+	"qu": "2D Siq'iy, 2D Kuyuchiy, Pacha siq'iy"
   },
   "credit_role_game_developer": {
 	"es": "Desarrollo de videojuegos",
 	"en": "Game Developer",
-	"fr": "Développeur de jeux vidéo"
+	"fr": "Développeur de jeux vidéo",
+	"qu": "Videojuego ruray"
 	},
 	"credit_role_music_composition": {
 	"es": "Composición musical",
 	"en": "Music Composition",
-	"fr": "Composition musicale"
+	"fr": "Composition musicale",
+	"qu": "Taki qillqay"
 	},
   "credit_role_music": {
 	"es": "Música",
 	"en": "Music",
-	"fr": "Musique"
+	"fr": "Musique",
+	"qu": "Taki"
   },
   "credit_role_ui_assets": {
 	"es": "Recursos de interfaz",
 	"en": "UI Assets",
-	"fr": "Ressources d’interface"
+	"fr": "Ressources d’interface",
+	"qu": "Interfaz siq'ikuna"
   },
   "back": {
 	"es": "Volver",
 	"en": "Back",
-	"fr": "Retour"
+	"fr": "Retour",
+	"qu": "Kutiy"
   },
-	"energy_label": {"es": "Energía", "en": "Energy", "fr": "Énergie"},
-	"energy_baby_label": {"es": "Cargar al bebé gasta %d× más energía que caminar", "en": "Carrying the baby drains %d× more energy than walking", "fr": "Porter le bébé use %d× plus d’énergie que marcher"},
-	"presence_label": {"es": "Presencia de Cuniraya", "en": "Cuniraya’s presence", "fr": "Présence de Cuniraya"},
-	"energy_tooltip": {"es": "Energía: caminar y correr la gastan. Cargar al bebé la gasta %d× más rápido que caminar. Si llega a 0, Cuniraya te alcanza.", "en": "Energy: walking and running use it. Carrying the baby drains it %d× faster than walking. At 0, Cuniraya catches you.", "fr": "Énergie : marcher et courir la consomment. Porter le bébé l’use %d× plus vite que marcher. À 0, Cuniraya te rattrape."},
-	"presence_tooltip": {"es": "Presencia de Cuniraya: crece con el tiempo y baja mientras cargas al bebé. Desde %d, sin el bebé en brazos, pierdes energía.", "en": "Cuniraya’s presence: grows over time and drops while you carry the baby. From %d on, without the baby in your arms, you lose energy.", "fr": "Présence de Cuniraya : elle grandit avec le temps et baisse quand tu portes le bébé. À partir de %d, sans le bébé dans les bras, tu perds de l’énergie."},
+	"energy_label": {"es": "Energía", "en": "Energy", "fr": "Énergie", "qu": "Kallpa"},
+	"energy_baby_label": {"es": "Cargar al bebé gasta %d× más energía que caminar", "en": "Carrying the baby drains %d× more energy than walking", "fr": "Porter le bébé use %d× plus d’énergie que marcher", "qu": "Wawata apaspaqa puriymantaqa %d kutita aswan kallpata tukunki"},
+	"presence_label": {"es": "Presencia de Cuniraya", "en": "Cuniraya’s presence", "fr": "Présence de Cuniraya", "qu": "Cunirayaq kaynin"},
+	"energy_tooltip": {"es": "Energía: caminar y correr la gastan. Cargar al bebé la gasta %d× más rápido que caminar. Si llega a 0, Cuniraya te alcanza.", "en": "Energy: walking and running use it. Carrying the baby drains it %d× faster than walking. At 0, Cuniraya catches you.", "fr": "Énergie : marcher et courir la consomment. Porter le bébé l’use %d× plus vite que marcher. À 0, Cuniraya te rattrape.", "qu": "Kallpa: puriypas phawaypas tukun. Wawata apayqa puriymantaqa %d kutita aswan utqaylla tukun. 0-man chayaptinqa, Cunirayam aypasunki."},
+	"presence_tooltip": {"es": "Presencia de Cuniraya: crece con el tiempo y baja mientras cargas al bebé. Desde %d, sin el bebé en brazos, pierdes energía.", "en": "Cuniraya’s presence: grows over time and drops while you carry the baby. From %d on, without the baby in your arms, you lose energy.", "fr": "Présence de Cuniraya : elle grandit avec le temps et baisse quand tu portes le bébé. À partir de %d, sans le bébé dans les bras, tu perds de l’énergie.", "qu": "Cunirayaq kaynin: pachawan wiñan, wawata apachkaptiykitaq pisiyan. %d-manta, wawa mana marq'ayniykipi kaptinqa, kallpata chinkachinki."},
   "restart": {
 	"es": "Reiniciar",
 	"en": "Restart",
-	"fr": "Recommencer"
+	"fr": "Recommencer",
+	"qu": "Musuqmanta qallariy"
   },
   "music": {
 	"es": "Música",
 	"en": "Music",
-	"fr": "Musique"
+	"fr": "Musique",
+	"qu": "Taki"
   },
   "sfx": {
 	"es": "SFX",
 	"en": "SFX",
-	"fr": "SFX"
+	"fr": "SFX",
+	"qu": "SFX"
   },
   "pause": {
 	"es": "Pausa",
 	"en": "Pause",
-	"fr": "Pause"
+	"fr": "Pause",
+	"qu": "Sayachiy"
   },
   "start": {
 	"es": "Inicio",
 	"en": "Start",
-	"fr": "Démarrer"
+	"fr": "Démarrer",
+	"qu": "Qallariy"
   },
   "attack": {
 	"es": "Atacar",
 	"en": "Attack",
-	"fr": "Attaquer"
+	"fr": "Attaquer",
+	"qu": "Maqay"
   },
   "carry_baby": {
 	"es": "Cargar",
 	"en": "Carry",
-	"fr": "Porter"
+	"fr": "Porter",
+	"qu": "Apay"
   },
 	"pickup": {
 	  "es": "Recoger",
 	  "en": "Pick up",
-	  "fr": "Ramasser"
+	  "fr": "Ramasser",
+	  "qu": "Huqariy"
 	},
-	"collect": {"es": "Recolectar", "en": "Collect", "fr": "Collecter"},
+	"collect": {"es": "Recolectar", "en": "Collect", "fr": "Collecter", "qu": "Pallay"},
 	"exit": {
 	  "es": "Salir",
 	  "en": "Exit",
-	  "fr": "Quitter"
+	  "fr": "Quitter",
+	  "qu": "Lluqsiy"
 	},
-	"controls": {"es": "Controles", "en": "Controls", "fr": "Commandes"},
-	"quit_to_menu": {"es": "Salir al menú", "en": "Quit to menu", "fr": "Quitter vers le menu"},
-	"pause_hint": {"es": "Esc o P para volver", "en": "Esc or P to resume", "fr": "Échap ou P pour reprendre"},
+	"controls": {"es": "Controles", "en": "Controls", "fr": "Commandes", "qu": "Kamachinakuna"},
+	"quit_to_menu": {"es": "Salir al menú", "en": "Quit to menu", "fr": "Quitter vers le menu", "qu": "Menuman lluqsiy"},
+	"pause_hint": {"es": "Esc o P para volver", "en": "Esc or P to resume", "fr": "Échap ou P pour reprendre", "qu": "Esc utaq P kutinaykipaq"},
 	"memory_1_title": {
 	  "es": "El que observaba",
 	  "en": "The One Who Watched",
-	  "fr": "Celui qui observait"
+	  "fr": "Celui qui observait",
+	  "qu": "Qhawaq"
 	},
 	"memory_1_text": {
 	  "es": "Cuniraya tomaba la forma de distintos animales para acercarse sin ser visto.\nÉl lo llamaba amor. Cavillaca nunca lo pidió.",
 	  "en": "Cuniraya took the shape of different animals to approach without being seen.\nHe called it love. Cavillaca never asked for it.",
-	  "fr": "Cuniraya prenait la forme de différents animaux pour s'approcher sans être vu.\nIl appelait cela de l'amour. Cavillaca ne l'avait jamais demandé."
+	  "fr": "Cuniraya prenait la forme de différents animaux pour s'approcher sans être vu.\nIl appelait cela de l'amour. Cavillaca ne l'avait jamais demandé.",
+	  "qu": "Cunirayaqa imaymana uywakunaman tukurqan, mana rikusqa asuykunanpaq.\nPayqa munakuy nirqan. Cavillacaqa manam hayk'appas mañakurqanchu."
 	},
 	"memory_2_title": {
 	  "es": "La semilla del engaño",
 	  "en": "The Seed of Deceit",
-	  "fr": "La graine de la tromperie"
+	  "fr": "La graine de la tromperie",
+	  "qu": "Llullakuypa muhun"
 	},
 	"memory_2_text": {
 	  "es": "Cuniraya dejó una lúcuma entre las ramas.\nCavillaca la comió sin saber lo que llevaba dentro.",
 	  "en": "Cuniraya left a lúcuma among the branches.\nCavillaca ate it without knowing what it held inside.",
-	  "fr": "Cuniraya déposa une lúcuma parmi les branches.\nCavillaca la mangea sans savoir ce qu'elle renfermait."
+	  "fr": "Cuniraya déposa une lúcuma parmi les branches.\nCavillaca la mangea sans savoir ce qu'elle renfermait.",
+	  "qu": "Cunirayaqa huk lucumata k'allmakuna chawpipi saqirqan.\nCavillacaqa mikhurqan, ukhunpi ima kasqanta mana yachaspa."
 	},
 	"memory_3_title": {
 	  "es": "Ya no había duda",
 	  "en": "There Was No Doubt",
-	  "fr": "Il n'y avait plus de doute"
+	  "fr": "Il n'y avait plus de doute",
+	  "qu": "Manañam iskayrayay karqanchu"
 	},
 	"memory_3_text": {
 	  "es": "El bebé gateó hacia él.\nCavillaca comprendió quién era su padre.",
 	  "en": "The baby crawled toward him.\nCavillaca understood who his father was.",
-	  "fr": "Le bébé rampa vers lui.\nCavillaca comprit qui était son père."
+	  "fr": "Le bébé rampa vers lui.\nCavillaca comprit qui était son père.",
+	  "qu": "Wawaqa paymanmi lluk'ispa rirqan.\nCavillacaqa hamut'arqan pim taytan kasqanta."
 	},
-	"objective_title": {"es": "Tu objetivo", "en": "Your goal", "fr": "Ton objectif"},
-	"objective_text": {"es": "Lleva al bebé hasta el mar. En el camino, vence al halcón para recuperar 3 recuerdos.", "en": "Carry the baby to the sea. On the way, defeat the hawk to recover 3 memories.", "fr": "Porte le bébé jusqu’à la mer. En chemin, bats le faucon pour retrouver 3 souvenirs."},
-	"objective_dismiss": {"es": "Espacio, Enter o clic para cerrar", "en": "Space, Enter or click to close", "fr": "Espace, Entrée ou clic pour fermer"},
-	"memories_hint": {"es": "Los recuerdos los guarda el halcón", "en": "The hawk holds the memories", "fr": "Le faucon garde les souvenirs"},
-	"language": {"es": "Idioma", "en": "Language", "fr": "Langue"},
-	"close": {"es": "Cerrar", "en": "Close", "fr": "Fermer"},
-	"continue": {"es": "Continuar", "en": "Continue", "fr": "Continuer"},
-	"press_space": {"es": "Pulsa espacio", "en": "Press space", "fr": "Appuyez sur espace"},
-	"sound": {"es": "Sonido", "en": "Sound", "fr": "Son"},
-	"master": {"es": "General", "en": "Master", "fr": "Principal"},
-	"ambience": {"es": "Ambiente", "en": "Ambience", "fr": "Ambiance"},
-	"cave": {"es": "Cueva", "en": "Cave", "fr": "Grotte"},
-	"final_sea_title": {"es": "El mar", "en": "The Sea", "fr": "La mer"},
+	"objective_title": {"es": "Tu objetivo", "en": "Your goal", "fr": "Ton objectif", "qu": "Ruranayki"},
+	"objective_text": {"es": "Lleva al bebé hasta el mar. En el camino, vence al halcón para recuperar 3 recuerdos.", "en": "Carry the baby to the sea. On the way, defeat the hawk to recover 3 memories.", "fr": "Porte le bébé jusqu’à la mer. En chemin, bats le faucon pour retrouver 3 souvenirs.", "qu": "Wawata mama quchakama apay. Ñanpi, wamanta atiy kimsa yuyarikuykunata kutichinaykipaq."},
+	"objective_dismiss": {"es": "Espacio, Enter o clic para cerrar", "en": "Space, Enter or click to close", "fr": "Espace, Entrée ou clic pour fermer", "qu": "Espacio, Enter utaq clic wichq'anaykipaq"},
+	"memories_hint": {"es": "Los recuerdos los guarda el halcón", "en": "The hawk holds the memories", "fr": "Le faucon garde les souvenirs", "qu": "Yuyarikuykunataqa wamanmi waqaychan"},
+	"language": {"es": "Idioma", "en": "Language", "fr": "Langue", "qu": "Simi"},
+	"close": {"es": "Cerrar", "en": "Close", "fr": "Fermer", "qu": "Wichq'ay"},
+	"continue": {"es": "Continuar", "en": "Continue", "fr": "Continuer", "qu": "Qatipay"},
+	"press_space": {"es": "Pulsa espacio", "en": "Press space", "fr": "Appuyez sur espace", "qu": "Espacio ñit'iy"},
+	"sound": {"es": "Sonido", "en": "Sound", "fr": "Son", "qu": "Uyarikuy"},
+	"master": {"es": "General", "en": "Master", "fr": "Principal", "qu": "Llapan"},
+	"ambience": {"es": "Ambiente", "en": "Ambience", "fr": "Ambiance", "qu": "Muyuriq"},
+	"cave": {"es": "Cueva", "en": "Cave", "fr": "Grotte", "qu": "Mach'ay"},
+	"final_sea_title": {"es": "El mar", "en": "The Sea", "fr": "La mer", "qu": "Mama qucha"},
 	"final_sea_text": {
 	  "es": "Con cada recuerdo recuperado, la historia comenzó a revelarse ante ti. Ya no quedaban dudas sobre lo ocurrido ni sobre el destino que te esperaba.\n\nEsta vez, elegiste tu propio camino. Te adentraste en el mar, dejando atrás un mundo al que ya no querías pertenecer.",
 	  "en": "With each memory recovered, the story began to reveal itself to you. There was no longer any doubt about what had happened or about the fate that awaited you.\n\nThis time, you chose your own path. You ventured into the sea, leaving behind a world you no longer wished to belong to.",
-	  "fr": "À mesure que tu retrouvais les souvenirs, l’histoire commença à se révéler à toi. Il ne restait plus aucun doute sur ce qui s’était passé ni sur le destin qui t’attendait.\n\nCette fois, tu as choisi ton propre chemin. Tu t’es avancée dans la mer, laissant derrière toi un monde auquel tu ne voulais plus appartenir."
+	  "fr": "À mesure que tu retrouvais les souvenirs, l’histoire commença à se révéler à toi. Il ne restait plus aucun doute sur ce qui s’était passé ni sur le destin qui t’attendait.\n\nCette fois, tu as choisi ton propre chemin. Tu t’es avancée dans la mer, laissant derrière toi un monde auquel tu ne voulais plus appartenir.",
+	  "qu": "Sapa kutichisqa yuyarikuywan, willakuyqa ñawpaqniykipi rikhurirqan. Manañam iskayrayay karqanchu ima pasasqanmanta, nitaq ima suyasusqaykimantapas.\n\nKay kutipiqa, kikiyki ñanniykita akllarqanki. Mama quchaman yaykurqanki, manaña kanayta munasqayki pachata qhipaman saqispa."
 	},
-	"final_cuniraya_title": {"es": "Cuniraya", "en": "Cuniraya", "fr": "Cuniraya"},
+	"final_cuniraya_title": {"es": "Cuniraya", "en": "Cuniraya", "fr": "Cuniraya", "qu": "Cuniraya"},
 	"final_cuniraya_text": {
 	  "es": "Después de todo lo que habías atravesado, ya no te quedaban fuerzas para continuar.\n\nCuniraya, que te había perseguido durante todo el camino, finalmente te alcanzó.\n\nEsta vez, no hubo forma de escapar de él.",
 	  "en": "After everything you had been through, you no longer had the strength to go on.\n\nCuniraya, who had pursued you all along the way, finally caught up with you.\n\nThis time, there was no way to escape him.",
-	  "fr": "Après tout ce que tu avais traversé, tu n’avais plus la force de continuer.\n\nCuniraya, qui t’avait poursuivie tout au long du chemin, a fini par te rattraper.\n\nCette fois, tu n’as pas pu lui échapper."
+	  "fr": "Après tout ce que tu avais traversé, tu n’avais plus la force de continuer.\n\nCuniraya, qui t’avait poursuivie tout au long du chemin, a fini par te rattraper.\n\nCette fois, tu n’as pas pu lui échapper.",
+	  "qu": "Llapa ima pasasqaykimanta, manañam kallpayki karqanchu qatipanaykipaq.\n\nCuniraya, llapa ñanpi qatisuqniyki, tukukuypiqa aypasurqankim.\n\nKay kutipiqa, manam paymanta ayqekunayki karqanchu."
 	},
-	"defeat_title": {"es": "Te quedaste sin energía", "en": "You ran out of energy", "fr": "Tu n’as plus d’énergie"},
-	"defeat_cause_presence": {"es": "La presencia de Cuniraya te drenó mientras no llevabas al bebé.", "en": "Cuniraya’s presence drained you while you weren’t carrying the baby.", "fr": "La présence de Cuniraya t’a épuisée pendant que tu ne portais pas le bébé."},
-	"defeat_cause_baby": {"es": "Cargar al bebé agotó tu energía.", "en": "Carrying the baby wore out your energy.", "fr": "Porter le bébé a épuisé ton énergie."},
-	"defeat_cause_energy": {"es": "El camino agotó tu energía.", "en": "The journey wore out your energy.", "fr": "Le chemin a épuisé ton énergie."},
-	"defeat_memories": {"es": "Recuerdos: %d/%d", "en": "Memories: %d/%d", "fr": "Souvenirs : %d/%d"},
-	"defeat_tip_presence": {"es": "Consejo: cuando la presencia pase la marca, carga al bebé; eso calma a Cuniraya.", "en": "Tip: when the presence passes the mark, pick up the baby; it calms Cuniraya.", "fr": "Conseil : quand la présence dépasse le repère, prends le bébé ; cela apaise Cuniraya."},
-	"defeat_tip_baby": {"es": "Consejo: deja al bebé con el zorro o descansa en la cueva para recuperar energía.", "en": "Tip: leave the baby with the fox or rest in the cave to recover energy.", "fr": "Conseil : confie le bébé au renard ou repose-toi dans la grotte pour récupérer."},
-	"defeat_tip_energy": {"es": "Consejo: vence al halcón; con un recuerdo, la cueva te deja descansar y recuperar energía.", "en": "Tip: defeat the hawk; with one memory, the cave lets you rest and recover energy.", "fr": "Conseil : bats le faucon ; avec un souvenir, la grotte te permet de te reposer et de récupérer."},
-	"play_again": {"es": "Volver a jugar", "en": "Play again", "fr": "Rejouer"},
-	"victory": {"es": "Victoria", "en": "Victory", "fr": "Victoire"},
-	"prompt_talk_rest": {"es": "F Hablar  |  R Descansar", "en": "F Talk  |  R Rest", "fr": "F Parler  |  R Se reposer"},
-	"prompt_talk": {"es": "F Hablar", "en": "F Talk", "fr": "F Parler"},
-	"prompt_rest": {"es": "R  Descansar", "en": "R  Rest", "fr": "R  Se reposer"},
-	"prompt_talk_fox": {"es": "F  Hablar con el zorro", "en": "F  Talk to the fox", "fr": "F  Parler au renard"},
-	"prompt_talk_parrot": {"es": "F  Hablar con el loro", "en": "F  Talk to the parrot", "fr": "F  Parler au perroquet"},
-	"prompt_leave_with_fox": {"es": "B  Dejar al bebé con el zorro", "en": "B  Leave the baby with the fox", "fr": "B  Confier le bébé au renard"},
-	"prompt_pickup_from_fox": {"es": "B  Recoger del zorro", "en": "B  Pick up from fox", "fr": "B  Reprendre au renard"},
-	"prompt_leave": {"es": "B  Dejar", "en": "B  Put down", "fr": "B  Déposer"},
-	"prompt_pickup": {"es": "B  Recoger", "en": "B  Pick up", "fr": "B  Ramasser"},
-	"prompt_collect": {"es": "E  Recolectar", "en": "E  Collect", "fr": "E  Collecter"},
-	"prompt_attack": {"es": "SPC  Atacar", "en": "SPC  Attack", "fr": "SPC  Attaquer"},
-	"converse_action": {"es": "Conversar", "en": "Converse", "fr": "Converser"},
-	"leave_action": {"es": "Dejar", "en": "Put down", "fr": "Déposer"},
-	"leave_with_fox_action": {"es": "Confiar al zorro", "en": "Leave with fox", "fr": "Confier au renard"},
-	"talk_action": {"es": "Hablar", "en": "Talk", "fr": "Parler"},
-	"rest_action": {"es": "Descansar", "en": "Rest", "fr": "Se reposer"},
-	"cave_need_memory": {"es": "Con un recuerdo, la cueva recarga tu energía", "en": "With a memory, the cave restores your energy", "fr": "Avec un souvenir, la grotte restaure votre énergie"},
-	"cave_approach": {"es": "Acércate al tronco para descansar", "en": "Approach the trunk to rest", "fr": "Approchez-vous du tronc pour vous reposer"},
-	"fox_no_rest_yet": {"es": "El zorro aún no te ofrece descanso", "en": "The fox cannot offer you rest yet", "fr": "Le renard ne peut pas encore vous offrir de repos"},
-	"fox_approach_rest": {"es": "Acércate al zorro para descansar", "en": "Approach the fox to rest", "fr": "Approchez du renard pour vous reposer"},
-	"energy_full": {"es": "Tu energía ya está completa", "en": "Your energy is already full", "fr": "Votre énergie est déjà au maximum"},
-	"presence_critical_warning": {"es": "¡Cuniraya está muy cerca! Sin el bebé en brazos pierdes energía", "en": "Cuniraya is very close! Without the baby in your arms you lose energy", "fr": "Cuniraya est tout près ! Sans le bébé dans les bras, tu perds de l’énergie"},
-	"resting_fox": {"es": "Descansando junto al zorro", "en": "Resting beside the fox", "fr": "Repos auprès du renard"},
-	"resting_trunk": {"es": "Descansando junto al tronco", "en": "Resting by the tree trunk", "fr": "Repos près du tronc"},
-	"need_memory_2": {"es": "Necesitas el Recuerdo 2 para esto", "en": "You need Memory 2 for this", "fr": "Vous avez besoin du Souvenir 2 pour cela"},
-	"fox_not_near": {"es": "El zorro no está cerca", "en": "The fox is not nearby", "fr": "Le renard n'est pas à proximité"},
-	"not_carrying_baby": {"es": "No llevas al bebé", "en": "You are not carrying the baby", "fr": "Vous ne portez pas le bébé"},
-	"baby_left_with_fox": {"es": "Bebé dejado con el zorro", "en": "Baby left with the fox", "fr": "Bébé confié au renard"},
-	"baby_picked_up_from_fox": {"es": "Bebé recogido del zorro", "en": "Baby picked up from the fox", "fr": "Bébé repris au renard"},
-	"fox_recognizes_memory": {"es": "El zorro parece reconocer el recuerdo que encontraste", "en": "The fox seems to recognize the memory you found", "fr": "Le renard semble reconnaître le souvenir que vous avez trouvé"},
-	"fox_trusts_with_baby": {"es": "El zorro confía en ti y está dispuesto a cuidar al bebé", "en": "The fox trusts you and is willing to look after the baby", "fr": "Le renard vous fait confiance et est prêt à veiller sur le bébé"},
-	"parrot_tip_danger": {"es": "Cuniraya está al acecho. Busca a tu bebé y llévalo en brazos. Mientras lo cargues, la presencia de Cuniraya perderá fuerza.", "en": "Cuniraya is lurking. Find your baby and carry him in your arms. While you carry him, Cuniraya’s presence will weaken.", "fr": "Cuniraya est aux aguets. Retrouve ton bébé et prends-le dans tes bras. Tant que tu le porteras, la présence de Cuniraya faiblira."},
-	"parrot_tip_refuge": {"es": "Busca al más astuto de la huaca. Suele rondar un tronco hueco. Tal vez pueda ofrecerte refugio.", "en": "Find the cleverest one in the huaca. He often lingers near a hollow trunk. He might offer you shelter.", "fr": "Cherche le plus rusé de la huaca. Il rôde souvent près d’un tronc creux. Peut-être pourra-t-il t’offrir un refuge."},
-	"parrot_tip_memories": {"es": "Si el zorro te pide que recuerdes, sigue explorando. Con un recuerdo podrás descansar. Con dos, podrás dejar a tu bebé a su cuidado.", "en": "If the fox asks you to remember, keep exploring. With one memory, you can rest. With two, you can leave your baby in his care.", "fr": "Si le renard te demande de te souvenir, poursuis ton exploration. Avec un souvenir, tu pourras te reposer. Avec deux, tu pourras lui confier ton bébé."},
-	"fox_dialogue_no_memories": {"es": "Aún no recuerdas, Cavillaca. Vuelve cuando hayas recuperado al menos un recuerdo.", "en": "You don't remember yet, Cavillaca. Come back when you've recovered at least one memory.", "fr": "Tu ne te souviens pas encore, Cavillaca. Reviens quand tu auras retrouvé au moins un souvenir."},
-	"fox_dialogue_refuge": {"es": "Algo está volviendo a ti, Cavillaca. Ven, puedo ofrecerte refugio en este tronco. Descansa aquí hasta que recobres fuerzas.", "en": "Something is coming back to you, Cavillaca. Come, you can take shelter in this trunk. Rest here until you've regained your strength.", "fr": "Quelque chose te revient, Cavillaca. Viens, je peux t’offrir un refuge dans ce tronc. Repose-toi ici jusqu’à ce que tu reprennes des forces."},
-	"fox_dialogue_baby_care": {"es": "El tronco sigue abierto para ti, Cavillaca. Quédate a descansar si lo necesitas. Cuando estés lista para seguir, tu bebé puede quedarse conmigo. Lo cuidaré hasta que vuelvas.", "en": "The trunk is still open to you, Cavillaca. Stay and rest if you need to. When you're ready to move on, your baby can stay with me. I'll look after him until you return.", "fr": "Le tronc t’est toujours ouvert, Cavillaca. Reste te reposer si tu en as besoin. Quand tu seras prête à repartir, ton bébé pourra rester avec moi. Je veillerai sur lui jusqu’à ton retour."},
-	"drop_baby_to_fight_action": {"es": "Deja al bebé\npara luchar", "en": "Put the baby\ndown to fight", "fr": "Pose le bébé\npour combattre"},
-	"out_of_ammo": {"es": "Te quedaste sin municiones, vuélvelo a intentar.", "en": "You're out of ammo. Try again.", "fr": "Tu n’as plus de munitions. Réessaie."},
-	"prompt_drop_baby_to_fight": {"es": "B  Deja al bebé para luchar", "en": "B  Put the baby down to fight", "fr": "B  Pose le bébé pour combattre"},
-	"controls_hint": {"es": "Mover WASD · Correr Shift · Acción E · Hablar F · Descansar R", "en": "Move WASD · Run Shift · Action E · Talk F · Rest R", "fr": "Bouger ZQSD · Courir Maj · Action E · Parler F · Repos R"},
-	"tutorial_move": {"es": "Camina un poco usando WASD o las flechas.", "en": "Walk around using WASD or the arrow keys.", "fr": "Marche un peu avec WASD ou les flèches."},
-	"tutorial_move_complete": {"es": "Ya puedes moverte. Continúa cuando quieras empezar.", "en": "You can move now. Continue when you're ready to begin.", "fr": "Tu sais maintenant te déplacer. Continue quand tu es prête."},
-	"tutorial_continue": {"es": "Comenzar partida", "en": "Start game", "fr": "Commencer la partie"},
-	"tutorial_skip": {"es": "Omitir tutorial", "en": "Skip tutorial", "fr": "Passer le tutoriel"}
+	"defeat_title": {"es": "Te quedaste sin energía", "en": "You ran out of energy", "fr": "Tu n’as plus d’énergie", "qu": "Kallpayki tukukurqan"},
+	"defeat_cause_presence": {"es": "La presencia de Cuniraya te drenó mientras no llevabas al bebé.", "en": "Cuniraya’s presence drained you while you weren’t carrying the baby.", "fr": "La présence de Cuniraya t’a épuisée pendant que tu ne portais pas le bébé.", "qu": "Cunirayaq kayninmi kallpaykita ch'akichirqan, wawata mana apachkaptiyki."},
+	"defeat_cause_baby": {"es": "Cargar al bebé agotó tu energía.", "en": "Carrying the baby wore out your energy.", "fr": "Porter le bébé a épuisé ton énergie.", "qu": "Wawata apaymi kallpaykita tukurqan."},
+	"defeat_cause_energy": {"es": "El camino agotó tu energía.", "en": "The journey wore out your energy.", "fr": "Le chemin a épuisé ton énergie.", "qu": "Ñanmi kallpaykita tukurqan."},
+	"defeat_memories": {"es": "Recuerdos: %d/%d", "en": "Memories: %d/%d", "fr": "Souvenirs : %d/%d", "qu": "Yuyarikuykuna: %d/%d"},
+	"defeat_tip_presence": {"es": "Consejo: cuando la presencia pase la marca, carga al bebé; eso calma a Cuniraya.", "en": "Tip: when the presence passes the mark, pick up the baby; it calms Cuniraya.", "fr": "Conseil : quand la présence dépasse le repère, prends le bébé ; cela apaise Cuniraya.", "qu": "Yuyaychay: kaynin señalta pasaptin, wawata apay; chaymi Cunirayata thak'yachin."},
+	"defeat_tip_baby": {"es": "Consejo: deja al bebé con el zorro o descansa en la cueva para recuperar energía.", "en": "Tip: leave the baby with the fox or rest in the cave to recover energy.", "fr": "Conseil : confie le bébé au renard ou repose-toi dans la grotte pour récupérer.", "qu": "Yuyaychay: wawata atuqwan saqiy utaq mach'aypi samay, kallpaykita kutichinaykipaq."},
+	"defeat_tip_energy": {"es": "Consejo: vence al halcón; con un recuerdo, la cueva te deja descansar y recuperar energía.", "en": "Tip: defeat the hawk; with one memory, the cave lets you rest and recover energy.", "fr": "Conseil : bats le faucon ; avec un souvenir, la grotte te permet de te reposer et de récupérer.", "qu": "Yuyaychay: wamanta atiy; huk yuyarikuywan, mach'aypi samaspa kallpaykita kutichinki."},
+	"play_again": {"es": "Volver a jugar", "en": "Play again", "fr": "Rejouer", "qu": "Wakmanta pukllay"},
+	"victory": {"es": "Victoria", "en": "Victory", "fr": "Victoire", "qu": "Atipay"},
+	"prompt_talk_rest": {"es": "F Hablar  |  R Descansar", "en": "F Talk  |  R Rest", "fr": "F Parler  |  R Se reposer", "qu": "F Rimay  |  R Samay"},
+	"prompt_talk": {"es": "F Hablar", "en": "F Talk", "fr": "F Parler", "qu": "F Rimay"},
+	"prompt_rest": {"es": "R  Descansar", "en": "R  Rest", "fr": "R  Se reposer", "qu": "R  Samay"},
+	"prompt_talk_fox": {"es": "F  Hablar con el zorro", "en": "F  Talk to the fox", "fr": "F  Parler au renard", "qu": "F  Atuqwan rimay"},
+	"prompt_talk_parrot": {"es": "F  Hablar con el loro", "en": "F  Talk to the parrot", "fr": "F  Parler au perroquet", "qu": "F  Urituwan rimay"},
+	"prompt_leave_with_fox": {"es": "B  Dejar al bebé con el zorro", "en": "B  Leave the baby with the fox", "fr": "B  Confier le bébé au renard", "qu": "B  Wawata atuqwan saqiy"},
+	"prompt_pickup_from_fox": {"es": "B  Recoger del zorro", "en": "B  Pick up from fox", "fr": "B  Reprendre au renard", "qu": "B  Atuqmanta huqariy"},
+	"prompt_leave": {"es": "B  Dejar", "en": "B  Put down", "fr": "B  Déposer", "qu": "B  Saqiy"},
+	"prompt_pickup": {"es": "B  Recoger", "en": "B  Pick up", "fr": "B  Ramasser", "qu": "B  Huqariy"},
+	"prompt_collect": {"es": "E  Recolectar", "en": "E  Collect", "fr": "E  Collecter", "qu": "E  Pallay"},
+	"prompt_attack": {"es": "SPC  Atacar", "en": "SPC  Attack", "fr": "SPC  Attaquer", "qu": "SPC  Maqay"},
+	"converse_action": {"es": "Conversar", "en": "Converse", "fr": "Converser", "qu": "Rimanakuy"},
+	"leave_action": {"es": "Dejar", "en": "Put down", "fr": "Déposer", "qu": "Saqiy"},
+	"leave_with_fox_action": {"es": "Confiar al zorro", "en": "Leave with fox", "fr": "Confier au renard", "qu": "Atuqman hap'ichiy"},
+	"talk_action": {"es": "Hablar", "en": "Talk", "fr": "Parler", "qu": "Rimay"},
+	"rest_action": {"es": "Descansar", "en": "Rest", "fr": "Se reposer", "qu": "Samay"},
+	"cave_need_memory": {"es": "Con un recuerdo, la cueva recarga tu energía", "en": "With a memory, the cave restores your energy", "fr": "Avec un souvenir, la grotte restaure votre énergie", "qu": "Huk yuyarikuywan, mach'ayqa kallpaykita hunt'achin"},
+	"cave_approach": {"es": "Acércate al tronco para descansar", "en": "Approach the trunk to rest", "fr": "Approchez-vous du tronc pour vous reposer", "qu": "Sach'a kurkuman asuykuy samanaykipaq"},
+	"fox_no_rest_yet": {"es": "El zorro aún no te ofrece descanso", "en": "The fox cannot offer you rest yet", "fr": "Le renard ne peut pas encore vous offrir de repos", "qu": "Atuqqa manaraqmi samayta qusunkichu"},
+	"fox_approach_rest": {"es": "Acércate al zorro para descansar", "en": "Approach the fox to rest", "fr": "Approchez du renard pour vous reposer", "qu": "Atuqman asuykuy samanaykipaq"},
+	"energy_full": {"es": "Tu energía ya está completa", "en": "Your energy is already full", "fr": "Votre énergie est déjà au maximum", "qu": "Kallpayki hunt'añam"},
+	"presence_critical_warning": {"es": "¡Cuniraya está muy cerca! Sin el bebé en brazos pierdes energía", "en": "Cuniraya is very close! Without the baby in your arms you lose energy", "fr": "Cuniraya est tout près ! Sans le bébé dans les bras, tu perds de l’énergie", "qu": "¡Cunirayaqa ancha qayllapim kachkan! Wawa mana marq'ayniykipi kaptinqa kallpata chinkachinki"},
+	"resting_fox": {"es": "Descansando junto al zorro", "en": "Resting beside the fox", "fr": "Repos auprès du renard", "qu": "Atuqpa waqtanpi samachkanki"},
+	"resting_trunk": {"es": "Descansando junto al tronco", "en": "Resting by the tree trunk", "fr": "Repos près du tronc", "qu": "Sach'a kurkupa waqtanpi samachkanki"},
+	"need_memory_2": {"es": "Necesitas el Recuerdo 2 para esto", "en": "You need Memory 2 for this", "fr": "Vous avez besoin du Souvenir 2 pour cela", "qu": "Kaypaqqa 2 ñiqi Yuyarikuytam taripanayki"},
+	"fox_not_near": {"es": "El zorro no está cerca", "en": "The fox is not nearby", "fr": "Le renard n'est pas à proximité", "qu": "Atuqqa manam qayllapichu"},
+	"not_carrying_baby": {"es": "No llevas al bebé", "en": "You are not carrying the baby", "fr": "Vous ne portez pas le bébé", "qu": "Manam wawata apachkankichu"},
+	"baby_left_with_fox": {"es": "Bebé dejado con el zorro", "en": "Baby left with the fox", "fr": "Bébé confié au renard", "qu": "Wawa atuqwan saqisqa"},
+	"baby_picked_up_from_fox": {"es": "Bebé recogido del zorro", "en": "Baby picked up from the fox", "fr": "Bébé repris au renard", "qu": "Wawa atuqmanta huqarisqa"},
+	"fox_recognizes_memory": {"es": "El zorro parece reconocer el recuerdo que encontraste", "en": "The fox seems to recognize the memory you found", "fr": "Le renard semble reconnaître le souvenir que vous avez trouvé", "qu": "Atuqqa tarisqayki yuyarikuyta riqsiq hinam"},
+	"fox_trusts_with_baby": {"es": "El zorro confía en ti y está dispuesto a cuidar al bebé", "en": "The fox trusts you and is willing to look after the baby", "fr": "Le renard vous fait confiance et est prêt à veiller sur le bébé", "qu": "Atuqqa qanpi iñin, wawaykita qhawayta munan"},
+	"parrot_tip_danger": {"es": "Cuniraya está al acecho. Busca a tu bebé y llévalo en brazos. Mientras lo cargues, la presencia de Cuniraya perderá fuerza.", "en": "Cuniraya is lurking. Find your baby and carry him in your arms. While you carry him, Cuniraya’s presence will weaken.", "fr": "Cuniraya est aux aguets. Retrouve ton bébé et prends-le dans tes bras. Tant que tu le porteras, la présence de Cuniraya faiblira.", "qu": "Cunirayam watiqamachkan. Wawaykita maskay, marq'ayniykipi apay. Apachkaptiykiqa, Cunirayaq kayninqa kallpanta chinkachinqa."},
+	"parrot_tip_refuge": {"es": "Busca al más astuto de la huaca. Suele rondar un tronco hueco. Tal vez pueda ofrecerte refugio.", "en": "Find the cleverest one in the huaca. He often lingers near a hollow trunk. He might offer you shelter.", "fr": "Cherche le plus rusé de la huaca. Il rôde souvent près d’un tronc creux. Peut-être pourra-t-il t’offrir un refuge.", "qu": "Huacapi aswan yachaysapata maskay. Huk t'uqu sach'a kurku muyuriqpi purikun. Paychá pakakunata qusunkiman."},
+	"parrot_tip_memories": {"es": "Si el zorro te pide que recuerdes, sigue explorando. Con un recuerdo podrás descansar. Con dos, podrás dejar a tu bebé a su cuidado.", "en": "If the fox asks you to remember, keep exploring. With one memory, you can rest. With two, you can leave your baby in his care.", "fr": "Si le renard te demande de te souvenir, poursuis ton exploration. Avec un souvenir, tu pourras te reposer. Avec deux, tu pourras lui confier ton bébé.", "qu": "Atuq yuyarinaykita mañasuptinqa, maskachkallay. Huk yuyarikuywan samakuyta atinki. Iskaywantaq, wawaykita paypa qhawayninpi saqiyta atinki."},
+	"fox_dialogue_no_memories": {"es": "Aún no recuerdas, Cavillaca. Vuelve cuando hayas recuperado al menos un recuerdo.", "en": "You don't remember yet, Cavillaca. Come back when you've recovered at least one memory.", "fr": "Tu ne te souviens pas encore, Cavillaca. Reviens quand tu auras retrouvé au moins un souvenir.", "qu": "Manaraqmi yuyarinkichu, Cavillaca. Kutimuy pisimanta huk yuyarikuyta kutichispa."},
+	"fox_dialogue_refuge": {"es": "Algo está volviendo a ti, Cavillaca. Ven, puedo ofrecerte refugio en este tronco. Descansa aquí hasta que recobres fuerzas.", "en": "Something is coming back to you, Cavillaca. Come, you can take shelter in this trunk. Rest here until you've regained your strength.", "fr": "Quelque chose te revient, Cavillaca. Viens, je peux t’offrir un refuge dans ce tronc. Repose-toi ici jusqu’à ce que tu reprennes des forces.", "qu": "Imallapas qanman kutimuchkan, Cavillaca. Hamuy, kay sach'a kurkupi pakakunata qusayki. Kaypi samay kallpaykita kutichinaykama."},
+	"fox_dialogue_baby_care": {"es": "El tronco sigue abierto para ti, Cavillaca. Quédate a descansar si lo necesitas. Cuando estés lista para seguir, tu bebé puede quedarse conmigo. Lo cuidaré hasta que vuelvas.", "en": "The trunk is still open to you, Cavillaca. Stay and rest if you need to. When you're ready to move on, your baby can stay with me. I'll look after him until you return.", "fr": "Le tronc t’est toujours ouvert, Cavillaca. Reste te reposer si tu en as besoin. Quand tu seras prête à repartir, ton bébé pourra rester avec moi. Je veillerai sur lui jusqu’à ton retour.", "qu": "Sach'a kurkuqa kicharisqallam qanpaq, Cavillaca. Munaspaqa kaypi samakuy. Qatipanaykipaq listo kaptiykiqa, wawaykiqa ñuqawanmi qhipakunman. Kutimunaykikama qhawasaq."},
+	"drop_baby_to_fight_action": {"es": "Deja al bebé\npara luchar", "en": "Put the baby\ndown to fight", "fr": "Pose le bébé\npour combattre", "qu": "Wawata saqiy\nmaqanakunaykipaq"},
+	"out_of_ammo": {"es": "Te quedaste sin municiones, vuélvelo a intentar.", "en": "You're out of ammo. Try again.", "fr": "Tu n’as plus de munitions. Réessaie.", "qu": "Rumiyki tukukurqan, wakmanta kallpachakuy."},
+	"prompt_drop_baby_to_fight": {"es": "B  Deja al bebé para luchar", "en": "B  Put the baby down to fight", "fr": "B  Pose le bébé pour combattre", "qu": "B  Wawata saqiy maqanakunaykipaq"},
+	"controls_hint": {"es": "Mover WASD · Correr Shift · Acción E · Hablar F · Descansar R", "en": "Move WASD · Run Shift · Action E · Talk F · Rest R", "fr": "Bouger ZQSD · Courir Maj · Action E · Parler F · Repos R", "qu": "Kuyuy WASD · Phaway Shift · Ruray E · Rimay F · Samay R"},
+	"tutorial_move": {"es": "Camina un poco usando WASD o las flechas.", "en": "Walk around using WASD or the arrow keys.", "fr": "Marche un peu avec WASD ou les flèches.", "qu": "Asllata puriy WASD utaq flechakunawan."},
+	"tutorial_move_complete": {"es": "Ya puedes moverte. Continúa cuando quieras empezar.", "en": "You can move now. Continue when you're ready to begin.", "fr": "Tu sais maintenant te déplacer. Continue quand tu es prête.", "qu": "Kunanqa kuyuyta atinkiñam. Qallariyta munaspa qatipay."},
+	"tutorial_continue": {"es": "Comenzar partida", "en": "Start game", "fr": "Commencer la partie", "qu": "Pukllayta qallariy"},
+	"tutorial_skip": {"es": "Omitir tutorial", "en": "Skip tutorial", "fr": "Passer le tutoriel", "qu": "Yachachiyta saqiy"}
 }
