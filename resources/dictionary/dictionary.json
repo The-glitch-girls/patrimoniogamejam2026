@@ -218,6 +218,7 @@
 	"controls": {"es": "Controles", "en": "Controls", "fr": "Commandes", "qu": "Kamachinakuna"},
 	"quit_to_menu": {"es": "Salir al menú", "en": "Quit to menu", "fr": "Quitter vers le menu", "qu": "Menuman lluqsiy"},
 	"pause_hint": {"es": "Esc o P para volver", "en": "Esc or P to resume", "fr": "Échap ou P pour reprendre", "qu": "Esc utaq P kutinaykipaq"},
+	"baby_no_ground": {"es": "No hay suelo suficiente para dejar al bebé aquí", "en": "There isn’t enough ground to set the baby down here", "fr": "Il n’y a pas assez de sol pour poser le bébé ici", "qu": "Kaypiqa manam wawata churanapaq allpa kanchu"},
 	"memory_1_title": {
 	  "es": "El que observaba",
 	  "en": "The One Who Watched",
