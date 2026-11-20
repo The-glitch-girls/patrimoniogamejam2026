@@ -72,6 +72,7 @@ func _poblar_idiomas() -> void:
 	idioma_popup.add_item("Español", 0)
 	idioma_popup.add_item("English", 1)
 	idioma_popup.add_item("Français", 2)
+	idioma_popup.add_item("Runasimi", 3)
 	idioma_label.text = _nombre_idioma(Global.idioma_actual)
 
 
@@ -81,12 +82,12 @@ func _abrir_popup_idioma() -> void:
 	var rect_idioma: Rect2 = $PanelAjustes/IdmaLabelContainer.get_global_rect()
 	var posicion := Vector2i(roundi(rect_idioma.position.x), roundi(rect_idioma.end.y))
 	var ancho := roundi(rect_idioma.size.x)
-	var alto := 100
+	var alto := 130
 	idioma_popup.popup(Rect2i(posicion, Vector2i(ancho, alto)))
 
 
 func _seleccionar_idioma(indice: int) -> void:
-	var codigos := ["es", "en", "fr"]
+	var codigos := ["es", "en", "fr", "qu"]
 	if indice < 0 or indice >= codigos.size():
 		return
 	Global.reproducir_clic()
@@ -100,6 +101,8 @@ func _nombre_idioma(codigo: String) -> String:
 			return "English"
 		"fr":
 			return "Français"
+		"qu":
+			return "Runasimi"
 		_:
 			return "Español"
 

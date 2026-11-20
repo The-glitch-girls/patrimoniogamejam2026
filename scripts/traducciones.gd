@@ -72,7 +72,7 @@ func obtener(clave: String) -> String:
 
 
 func cambiar_idioma(idioma: String) -> void:
-	if not idioma in ["es", "en", "fr"] or idioma == Global.idioma_actual:
+	if not idioma in ["es", "en", "fr", "qu"] or idioma == Global.idioma_actual:
 		return
 	Global.idioma_actual = idioma
 	Ajustes.set_idioma(idioma)

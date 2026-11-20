@@ -23,7 +23,7 @@ func cargar() -> void:
 	volumen_efectos = float(cfg.get_value("audio", "sfx", volumen_efectos))
 	volumen_ambiente = float(cfg.get_value("audio", "ambiente", volumen_ambiente))
 	idioma = str(cfg.get_value("idioma", "actual", idioma))
-	if not idioma in ["es", "en", "fr"]:
+	if not idioma in ["es", "en", "fr", "qu"]:
 		idioma = "es"
 
 
@@ -69,7 +69,7 @@ func set_volumen_ambiente(valor: float) -> void:
 
 
 func set_idioma(valor: String) -> void:
-	if not valor in ["es", "en", "fr"]:
+	if not valor in ["es", "en", "fr", "qu"]:
 		return
 	idioma = valor
 	guardar()
